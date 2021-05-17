@@ -11,14 +11,24 @@
 		5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F57C2263E3E92000AFA64 /* Ball.cpp */; };
 		5D3E7089264308C10071115A /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D3E7087264308C10071115A /* Camera.cpp */; };
 		5D426582263C8E7B0026C24D /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D426580263C8E7B0026C24D /* Shader.cpp */; };
+		5D479DBC264ED68500067E35 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D479DBB264ED68500067E35 /* libassimp.4.0.1.dylib */; };
+		5D479DBD264ED68500067E35 /* libassimp.4.0.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D479DBB264ED68500067E35 /* libassimp.4.0.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D479DBE264EDC2200067E35 /* Mesh.cpp */; };
+		5D479DC3264EE5A800067E35 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D479DC1264EE5A800067E35 /* Model.cpp */; };
 		5D65F5C92638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */; };
 		5D65F5CA2638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4882651EEB8006EA749 /* ice.jpeg */; };
+		5D66B48B2651EEC3006EA749 /* skybox in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B48A2651EEC3006EA749 /* skybox */; };
+		5D66B48D2651EED0006EA749 /* skybox in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B48C2651EED0006EA749 /* skybox */; };
+		5D66B4922651EF2E006EA749 /* phoenix in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4912651EF2E006EA749 /* phoenix */; };
+		5D66B4942651EF3D006EA749 /* juggernaut in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4932651EF3D006EA749 /* juggernaut */; };
 		5D9122BE2638BC7F0045937F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */; };
 		5D9122BF2638BC7F0045937F /* libglfw.3.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5D9122C52638BCFA0045937F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C4155263794AD005F64D0 /* OpenGL.framework */; };
 		5DA67C2726418A05005A7E74 /* PlayerHero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DA67C2526418A05005A7E74 /* PlayerHero.cpp */; };
 		5DA67C2A2641A482005A7E74 /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DA67C282641A482005A7E74 /* Actor.cpp */; };
 		5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE8573A2640E3210062DFC2 /* Renderer.cpp */; };
+		5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = 5DEC19B9264B69E20001ABAE /* stb_image.c */; };
 		5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF7A2362640E0FD004F05E2 /* World.cpp */; };
 /* End PBXBuildFile section */
 
@@ -26,8 +36,8 @@
 		5D0C41472637948B005F64D0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
@@ -38,6 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5D479DBD264ED68500067E35 /* libassimp.4.0.1.dylib in Embed Libraries */,
 				5D9122BF2638BC7F0045937F /* libglfw.3.3.dylib in Embed Libraries */,
 				5D65F5CA2638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Embed Libraries */,
 			);
@@ -47,25 +58,31 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5D0C41492637948B005F64D0 /* Pong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Pong; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D0C41492637948B005F64D0 /* Pong */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.bundle"; path = Pong; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D0C414C2637948B005F64D0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5D0C4155263794AD005F64D0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		5D0C4159263795F1005F64D0 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../../glfw-3.3.4.bin.MACOS/lib-arm64/libglfw3.a"; sourceTree = "<group>"; };
-		5D0C41632637974B005F64D0 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../../glfw-3.3.4.bin.MACOS/lib-x86_64/libglfw3.a"; sourceTree = "<group>"; };
 		5D0C416C2637984C005F64D0 /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.dylib; path = "../../glfw-3.3.4.bin.MACOS/lib-x86_64/libglfw.3.dylib"; sourceTree = "<group>"; };
-		5D0C417726379957005F64D0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		5D0C41792637995D005F64D0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5D0C41872637AB60005F64D0 /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.dylib; path = "../../glfw-3.3.4.bin.MACOS/lib-universal/libglfw.3.dylib"; sourceTree = "<group>"; };
 		5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
+		5D2BCFA7264BF9AB00383349 /* SkyFragmentShader.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = SkyFragmentShader.fs; sourceTree = "<group>"; };
+		5D2BCFA8264BF9B100383349 /* SkyVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = SkyVertexShader.vs; sourceTree = "<group>"; };
 		5D2F57C2263E3E92000AFA64 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		5D2F57C3263E3E92000AFA64 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		5D3E7087264308C10071115A /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		5D3E7088264308C10071115A /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		5D426580263C8E7B0026C24D /* Shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		5D426581263C8E7B0026C24D /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
-		5D426587263CA4BE0026C24D /* VertexShaderCode.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = VertexShaderCode.vs; sourceTree = "<group>"; };
-		5D426588263CA4C40026C24D /* FragmentShaderCode.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FragmentShaderCode.fs; sourceTree = "<group>"; };
+		5D479DBB264ED68500067E35 /* libassimp.4.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.0.1.dylib; path = ../build/code/Debug/libassimp.4.0.1.dylib; sourceTree = "<group>"; };
+		5D479DBE264EDC2200067E35 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		5D479DBF264EDC2200067E35 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		5D479DC1264EE5A800067E35 /* Model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		5D479DC2264EE5A800067E35 /* Model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
 		5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
+		5D66B4882651EEB8006EA749 /* ice.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpeg; sourceTree = "<group>"; };
+		5D66B48A2651EEC3006EA749 /* skybox */ = {isa = PBXFileReference; lastKnownFileType = folder; path = skybox; sourceTree = "<group>"; };
+		5D66B48C2651EED0006EA749 /* skybox */ = {isa = PBXFileReference; lastKnownFileType = folder; path = skybox; sourceTree = "<group>"; };
+		5D66B4912651EF2E006EA749 /* phoenix */ = {isa = PBXFileReference; lastKnownFileType = folder; path = phoenix; sourceTree = "<group>"; };
+		5D66B4932651EF3D006EA749 /* juggernaut */ = {isa = PBXFileReference; lastKnownFileType = folder; path = juggernaut; sourceTree = "<group>"; };
 		5D9122B22638BB9A0045937F /* Pong.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pong.entitlements; sourceTree = "<group>"; };
 		5DA67C2526418A05005A7E74 /* PlayerHero.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerHero.cpp; sourceTree = "<group>"; };
 		5DA67C2626418A05005A7E74 /* PlayerHero.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PlayerHero.hpp; sourceTree = "<group>"; };
@@ -73,6 +90,12 @@
 		5DA67C292641A482005A7E74 /* Actor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Actor.hpp; sourceTree = "<group>"; };
 		5DE8573A2640E3210062DFC2 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		5DE8573B2640E3210062DFC2 /* Renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Renderer.hpp; sourceTree = "<group>"; };
+		5DEC19B0264B4B370001ABAE /* MapFragmentShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MapFragmentShader.fs; sourceTree = "<group>"; };
+		5DEC19B1264B4B400001ABAE /* ActorFragmentShader.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ActorFragmentShader.fs; sourceTree = "<group>"; };
+		5DEC19B2264B4B490001ABAE /* MapVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = MapVertexShader.vs; sourceTree = "<group>"; };
+		5DEC19B4264B4B5E0001ABAE /* ActorVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ActorVertexShader.vs; sourceTree = "<group>"; };
+		5DEC19B7264B69B30001ABAE /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		5DEC19B9264B69E20001ABAE /* stb_image.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_image.c; sourceTree = "<group>"; };
 		5DF7A2362640E0FD004F05E2 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		5DF7A2372640E0FD004F05E2 /* World.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +107,7 @@
 			files = (
 				5D9122C52638BCFA0045937F /* OpenGL.framework in Frameworks */,
 				5D65F5C92638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Frameworks */,
+				5D479DBC264ED68500067E35 /* libassimp.4.0.1.dylib in Frameworks */,
 				5D9122BE2638BC7F0045937F /* libglfw.3.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,24 +135,11 @@
 		5D0C414B2637948B005F64D0 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				5D8D248426518BF0006EB9F0 /* Shaders */,
+				5D66B4872651EE94006EA749 /* Resources */,
+				5DEC19B6264B4BB10001ABAE /* src */,
+				5DEC19B5264B4BA80001ABAE /* include */,
 				5D9122B22638BB9A0045937F /* Pong.entitlements */,
-				5D0C414C2637948B005F64D0 /* main.cpp */,
-				5D426580263C8E7B0026C24D /* Shader.cpp */,
-				5D426587263CA4BE0026C24D /* VertexShaderCode.vs */,
-				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
-				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
-				5DA67C282641A482005A7E74 /* Actor.cpp */,
-				5DA67C292641A482005A7E74 /* Actor.hpp */,
-				5DF7A2362640E0FD004F05E2 /* World.cpp */,
-				5D3E7087264308C10071115A /* Camera.cpp */,
-				5D3E7088264308C10071115A /* Camera.hpp */,
-				5DA67C2526418A05005A7E74 /* PlayerHero.cpp */,
-				5DA67C2626418A05005A7E74 /* PlayerHero.hpp */,
-				5DF7A2372640E0FD004F05E2 /* World.hpp */,
-				5D426581263C8E7B0026C24D /* Shader.hpp */,
-				5D426588263CA4C40026C24D /* FragmentShaderCode.fs */,
-				5D2F57C3263E3E92000AFA64 /* Ball.hpp */,
-				5D2F57C2263E3E92000AFA64 /* Ball.cpp */,
 			);
 			path = Pong;
 			sourceTree = "<group>";
@@ -136,17 +147,90 @@
 		5D0C4154263794AD005F64D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5D479DBB264ED68500067E35 /* libassimp.4.0.1.dylib */,
 				5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */,
 				5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */,
 				5D0C41872637AB60005F64D0 /* libglfw.3.dylib */,
-				5D0C41792637995D005F64D0 /* Cocoa.framework */,
-				5D0C417726379957005F64D0 /* IOKit.framework */,
 				5D0C416C2637984C005F64D0 /* libglfw.3.dylib */,
-				5D0C4159263795F1005F64D0 /* libglfw3.a */,
-				5D0C41632637974B005F64D0 /* libglfw3.a */,
 				5D0C4155263794AD005F64D0 /* OpenGL.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5D66B4872651EE94006EA749 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5D66B4902651EF0E006EA749 /* Models */,
+				5D66B48F2651EF01006EA749 /* Map */,
+				5D66B48C2651EED0006EA749 /* skybox */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5D66B48F2651EF01006EA749 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				5D66B4882651EEB8006EA749 /* ice.jpeg */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		5D66B4902651EF0E006EA749 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5D66B4932651EF3D006EA749 /* juggernaut */,
+				5D66B4912651EF2E006EA749 /* phoenix */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5D8D248426518BF0006EB9F0 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5D66B48A2651EEC3006EA749 /* skybox */,
+				5DEC19B1264B4B400001ABAE /* ActorFragmentShader.fs */,
+				5D2BCFA8264BF9B100383349 /* SkyVertexShader.vs */,
+				5DEC19B2264B4B490001ABAE /* MapVertexShader.vs */,
+				5D2BCFA7264BF9AB00383349 /* SkyFragmentShader.fs */,
+				5DEC19B4264B4B5E0001ABAE /* ActorVertexShader.vs */,
+				5DEC19B0264B4B370001ABAE /* MapFragmentShader.fs */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		5DEC19B5264B4BA80001ABAE /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5DF7A2372640E0FD004F05E2 /* World.hpp */,
+				5DA67C2626418A05005A7E74 /* PlayerHero.hpp */,
+				5DEC19B7264B69B30001ABAE /* stb_image.h */,
+				5D479DC2264EE5A800067E35 /* Model.hpp */,
+				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
+				5D3E7088264308C10071115A /* Camera.hpp */,
+				5D426581263C8E7B0026C24D /* Shader.hpp */,
+				5D2F57C3263E3E92000AFA64 /* Ball.hpp */,
+				5DA67C292641A482005A7E74 /* Actor.hpp */,
+				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		5DEC19B6264B4BB10001ABAE /* src */ = {
+			isa = PBXGroup;
+			children = (
+				5DF7A2362640E0FD004F05E2 /* World.cpp */,
+				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5DA67C2526418A05005A7E74 /* PlayerHero.cpp */,
+				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
+				5D2F57C2263E3E92000AFA64 /* Ball.cpp */,
+				5DEC19B9264B69E20001ABAE /* stb_image.c */,
+				5D3E7087264308C10071115A /* Camera.cpp */,
+				5D479DC1264EE5A800067E35 /* Model.cpp */,
+				5D0C414C2637948B005F64D0 /* main.cpp */,
+				5D426580263C8E7B0026C24D /* Shader.cpp */,
+				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,6 +244,7 @@
 				5D0C41462637948B005F64D0 /* Frameworks */,
 				5D0C41472637948B005F64D0 /* CopyFiles */,
 				5D9122C02638BC7F0045937F /* Embed Libraries */,
+				5D8D2487265199BD006EB9F0 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -201,6 +286,21 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		5D8D2487265199BD006EB9F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D66B4942651EF3D006EA749 /* juggernaut in Resources */,
+				5D66B48B2651EEC3006EA749 /* skybox in Resources */,
+				5D66B48D2651EED0006EA749 /* skybox in Resources */,
+				5D66B4922651EF2E006EA749 /* phoenix in Resources */,
+				5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5D0C41452637948B005F64D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -210,10 +310,13 @@
 				5DA67C2726418A05005A7E74 /* PlayerHero.cpp in Sources */,
 				5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
+				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
+				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
 				5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */,
 				5D0C414D2637948B005F64D0 /* main.cpp in Sources */,
+				5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +440,7 @@
 				CODE_SIGN_ENTITLEMENTS = Pong/Pong.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GGXQ83JLY5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				"EXCLUDED_ARCHS[sdk=*]" = arm64;
@@ -344,11 +448,13 @@
 					/usr/local/Cellar/glm/0.9.9.8/include,
 					/usr/local/Cellar/glfw/3.3.4/include,
 					/usr/local/Cellar/glew/2.2.0_1/include,
+					"/Users/josephgu/Downloads/assimp-4.0.1/include",
+					/Users/josephgu/Documents/Code/build/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/usr/local/Cellar/glfw/3.3.4/lib,
 					/usr/local/Cellar/glew/2.2.0_1/lib,
+					/Users/josephgu/Documents/Code/build/code/Debug,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -361,6 +467,7 @@
 				CODE_SIGN_ENTITLEMENTS = Pong/Pong.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GGXQ83JLY5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				EXCLUDED_ARCHS = "";
@@ -369,11 +476,13 @@
 					/usr/local/Cellar/glew/2.2.0_1/include,
 					/usr/local/Cellar/glfw/3.3.4/include,
 					/usr/local/Cellar/glm/0.9.9.8/include,
+					"/Users/josephgu/Downloads/assimp-4.0.1/include",
+					/Users/josephgu/Documents/Code/build/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/usr/local/Cellar/glfw/3.3.4/lib,
 					/usr/local/Cellar/glew/2.2.0_1/lib,
+					/Users/josephgu/Documents/Code/build/code/Debug,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

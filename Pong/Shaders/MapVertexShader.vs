@@ -3,6 +3,7 @@
     layout (location = 1) in vec2 TexCoords_;
     
     out vec2 TexCoords;
+    out vec3 fragPos;
 
     uniform mat4 modelMat;
 
@@ -12,6 +13,7 @@
 
     void main()
     {
-        gl_Position =  projMat * viewMat * modelMat * vec4(aPos.x , aPos.y , aPos.z, 1.0);
+        gl_Position =  projMat * viewMat * modelMat * vec4(30*aPos, 1.0);
+        fragPos = vec3(modelMat*vec4(30*aPos, 1.0));
         TexCoords = TexCoords_;
     }

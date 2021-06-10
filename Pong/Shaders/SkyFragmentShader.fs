@@ -3,8 +3,9 @@
     in vec3 TexVec;
 
     uniform samplerCube skyBox;
+    uniform float brightness;
 
     void main()
     {
-        FragColor = texture(skyBox, TexVec);
+        FragColor = brightness * texture(skyBox, TexVec);
     }

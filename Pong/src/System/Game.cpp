@@ -1,0 +1,280 @@
+//
+//  Game.cpp
+//  Pong
+//
+//  Created by Joseph Gu on 6/3/21.
+//
+
+#include "Game.hpp"
+#include "FallingLetters.hpp"
+#include <iostream>
+#include <cctype>
+#include "Speech.hpp"
+#include "stb_image.h"
+
+extern void char_callback(GLFWwindow* window, unsigned int key);
+extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
+extern void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_);
+
+Game::Game() {
+    running = true;
+    
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    
+    window = glfwCreateWindow(1000, 800, "OpenGL", NULL, NULL);
+    glfwMakeContextCurrent(window);
+    
+    glewExperimental = GL_TRUE;
+    glewInit();
+    
+    glEnable(GL_DEPTH_TEST); // enable depth-testing
+    glDepthFunc(GL_LEQUAL);
+    
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetTime(0);
+    
+    glfwSetWindowUserPointer(window, this);
+    
+    inputHandler.setWindow(window);
+    
+    ball.loadModel();
+    pHero.loadModel();
+    billow.loadModel();
+    
+    billow.posVec = glm::vec3(0,5,0);
+    
+    camera.setActor(&pHero);
+    pHero.setWorld(&world);
+    world.insertCamera(&camera);
+    world.insertActor(&pHero);
+    world.insertActor(&ball);
+    world.insertActor(&billow);
+    world.insertParticleEffect(&(ball.getParticleEffect()));
+    
+    renderer = new Renderer;
+    renderer->setWorld(&world);
+    renderer->setCamera(&camera);
+    renderer->loadActorData();
+    renderer->loadMapData();
+    renderer->loadSkyBoxData();
+
+    stbi_set_flip_vertically_on_load(1);
+    blank = stbi_load("Resources/Models/Flag/yirou'sdrawing.jpg", &imageWidth, &imageHeight, &channels, 0);
+    
+    glGenTextures(1, &ftexture);
+    glBindTexture(GL_TEXTURE_2D, ftexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,blank);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
+}
+
+Game::~Game() {
+    
+}
+
+void Game::tick() {
+    if (scheme == 0) {
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        pHero.posDir(0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        pHero.posDir(-0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        pHero.posRight(0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        pHero.posRight(-0.04);
+    }
+    }
+    
+    inputHandler.tick();
+    
+    double mx, my;
+    if (scheme == 2)         glfwGetCursorPos(window, &mx, &my);
+    if (scheme == 2 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        //quad and framebuffer
+        //write to framebuffer at that position
+            for (int j = 0; j < 50; j++) {
+          //  glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-trail.at(i).x/1000), 800*(1-trail.at(i).y/800), imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, paint);
+                float ratio1 = (float)(j/50.0f);
+                float ratio2 = 1.0f - ratio1;
+                glBindTexture(GL_TEXTURE_2D, ftexture);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 3024*(1-(ratio2*lastMX+ratio1*mx)/1000), 4032*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
+        }
+    }
+    
+    if (scheme == 2) {
+    lastMY = my;
+    lastMX = mx;
+    }
+    
+    if(glfwWindowShouldClose(window)) {
+        running = false;
+    }
+    
+    if (abilities.size() > 0) {
+        for(int i = 0; i < abilities.size(); i++) {
+            if(abilities.at(i)->on == true) {
+                abilities.at(i)->tick();
+            }
+            if(abilities.at(i)->on == false) {
+                abilities.at(i)->~Ability();
+                abilities.erase(abilities.begin()+i);
+            }
+    }
+    }
+    world.tick();
+    glfwSetTime(0);
+    if(printing)
+    {print();}
+    renderer->render();
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+}
+
+
+void Game::moveMouse(double mouseX_, double mouseY_) {
+    if (scheme != 2) {
+    if (firstMouse) {
+        lastMX = mouseX_;
+        lastMY = mouseY_;
+        firstMouse = false;
+    }
+    xOffset = mouseX_ - lastMX;
+    yOffset = lastMY - mouseY_;
+    lastMX = mouseX_;
+    lastMY = mouseY_;
+    camera.incYaw(xOffset*0.03);
+    camera.incPitch(yOffset*0.03);
+    xOffset = 0;
+    yOffset = 0;
+    }
+}
+
+int Game::processInput(int key, int action, int mods) {
+//    unique_lock<mutex> lock()
+    if (scheme == 1) {
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_SPACE)
+        {
+          //  input.put(' ');
+            i.append(" ");
+        }
+    const char* key_name = glfwGetKeyName((key), 0);
+    if (key_name != NULL)
+       // input << (key_name);
+        if (mods == GLFW_MOD_SHIFT){
+        char c = toupper(*key_name);
+            if (key == GLFW_KEY_1) c = '!';
+            if (key == GLFW_KEY_SLASH) c = '?';
+            if (key == GLFW_KEY_APOSTROPHE) c = '\"';
+        i.append(std::string(1, c));
+        } else {
+            i.append(key_name);
+        }
+    }
+        
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+            scheme = 0;
+          //  std::string test;
+          //  input >> test;
+            std::cout << i;
+        printing = true;
+            return 1;
+        }
+    }
+    
+    if (scheme == 0) {
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        pHero.jump();
+    }
+    if (key == GLFW_KEY_G && action == GLFW_PRESS) {
+        FallingLetters* letters = new FallingLetters(&world, &pHero, 6);
+        letters->call();
+        abilities.push_back(letters);
+    }
+        if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+            Speech* speech = new Speech(renderer);
+            abilities.push_back(speech);
+            speech->call();
+        }
+        
+        if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+            int newScheme = (-1)*(scheme-2);
+            setActionScheme(newScheme);
+            if (activeSketch == NULL) {
+            Sketch* sketch = new Sketch(&world, &pHero, 6, ftexture);
+            activeSketch = sketch;
+            abilities.push_back(sketch);
+            sketch->call();
+            }
+            return 0;
+        }
+        
+        if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+            glBindTexture(GL_TEXTURE_2D, ftexture);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 3024, 4032, GL_RGB, GL_UNSIGNED_BYTE, blank);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            if (activeSketch != NULL) {
+            abilities.erase(std::remove(abilities.begin(), abilities.end(), activeSketch));
+            delete activeSketch;
+            activeSketch = NULL;
+            }
+        }
+        
+        if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+            if (activeSketch != NULL)
+            activeSketch->call2();
+        }
+    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
+        pHero.sheathSword();
+    }
+    if (key == GLFW_KEY_V && action == GLFW_PRESS) {
+        pHero.unsheathSword();
+    }
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+    //    inputHandler.setCharCallback(char_callback);
+ //       inputHandler.setKeyCallback(onetap_callback0);
+        scheme = 1;
+    }
+    }
+    if (scheme == 2) {
+    if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+        int newScheme = (-1)*(scheme-2);
+        setActionScheme(newScheme);
+        firstMouse = true;
+    }
+    }
+    return 0;
+}
+
+void Game::processInput2(int key, int action) {
+
+}
+
+void Game::print() {
+    renderer->print(i);
+    printing = false;
+    i = "";
+}
+
+void Game::setActionScheme(int id) {
+    if(id == 2) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetCursorPosCallback(window, mouse_callback);
+    }
+    if(scheme == 2 && id !=2) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    scheme = id;
+}

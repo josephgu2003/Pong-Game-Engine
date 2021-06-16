@@ -76,6 +76,7 @@ Game::Game() {
     glfwSwapBuffers(window);
     
     pHero.loadModel();
+    ball.posVec = glm::vec3(0,2,0);
    // billow.loadModel();
     
     screen.print("Putting on a fresh canvas...");

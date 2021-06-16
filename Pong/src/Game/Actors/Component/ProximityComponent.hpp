@@ -16,6 +16,7 @@ class World;
 
 class ProximityComponent : public Component {
     friend class World;
+protected:
     Actor* biggestTarget;
     bool somethingNear = false;
 public:

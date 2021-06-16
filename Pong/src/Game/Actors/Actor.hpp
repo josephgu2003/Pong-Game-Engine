@@ -34,7 +34,7 @@ class Actor {
    // GLuint indices [36] = {0};
 protected:
     Model* model;
-    float yaw;
+    float yaw = 0;
     float height = 0.0f;
    // glm::vec3 posVec;
     glm::vec3 velVec;

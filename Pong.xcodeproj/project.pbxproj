@@ -11,6 +11,7 @@
 		5D0C414D2637948B005F64D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D0C414C2637948B005F64D0 /* main.cpp */; };
 		5D25A041265C0E5500A780C6 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D25A040265C0E5500A780C6 /* libfreetype.dylib */; };
 		5D25A042265C0E5500A780C6 /* libfreetype.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D25A040265C0E5500A780C6 /* libfreetype.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */; };
 		5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F57C2263E3E92000AFA64 /* Ball.cpp */; };
 		5D33261A2676CFDD002F3D49 /* InkGlyphs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D3326182676CFDD002F3D49 /* InkGlyphs.cpp */; };
 		5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5D33261B2676F2A1002F3D49 /* Plan.rtf */; };
@@ -137,6 +138,8 @@
 		5D25A048265C2FA400A780C6 /* college.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = college.ttf; sourceTree = "<group>"; };
 		5D2BCFA7264BF9AB00383349 /* SkyFragmentShader.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = SkyFragmentShader.fs; sourceTree = "<group>"; };
 		5D2BCFA8264BF9B100383349 /* SkyVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = SkyVertexShader.vs; sourceTree = "<group>"; };
+		5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsComponent.cpp; sourceTree = "<group>"; };
+		5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsComponent.hpp; sourceTree = "<group>"; };
 		5D2F57C2263E3E92000AFA64 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		5D2F57C3263E3E92000AFA64 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		5D3326182676CFDD002F3D49 /* InkGlyphs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InkGlyphs.cpp; sourceTree = "<group>"; };
@@ -348,6 +351,8 @@
 				5D332629267934E4002F3D49 /* BossProximityComponent.hpp */,
 				5D332623267904E2002F3D49 /* ProximityComponent.cpp */,
 				5D332624267904E2002F3D49 /* ProximityComponent.hpp */,
+				5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */,
+				5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -760,6 +765,7 @@
 				5D332625267904E2002F3D49 /* ProximityComponent.cpp in Sources */,
 				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,
 				5D33262A267934E4002F3D49 /* BossProximityComponent.cpp in Sources */,
+				5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */,
 				5DEE58232666A99F0080446C /* TicTacToe.cpp in Sources */,
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,

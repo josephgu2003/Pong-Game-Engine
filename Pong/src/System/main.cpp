@@ -16,12 +16,14 @@ int main() {
     glfwInit();
     
     Game game;
-
+    
     while(game.running)
     {
         game.tick();
     }
+    
     glfwTerminate();
+
     return 0;
 }
 

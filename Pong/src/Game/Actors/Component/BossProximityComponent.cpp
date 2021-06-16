@@ -15,12 +15,11 @@
 void BossProximityComponent::trigger(Actor& actor, World& world) {
     if (cooldown <= 0) {
         transgressions++;
-    std::vector<std::string> newLines = {"Oh? So you are approaching me?", "This is transgression " + std::to_string(transgressions)};
+    std::vector<std::string> newLines = {"You shouldn't have come here...", "I will attack"};
     Speech* speech = new Speech(&world, &actor, 6, newLines);
     actor.abilityQ.push_back(speech);
-        cooldown = 13;
-        glm::vec2 xz = 
-        actor.orient();
+        cooldown = 8;
+        //glm::vec3 newDir = biggestTarget->getPos() - actor.getPos();
     } else {
         cooldown -= (float)glfwGetTime();
     }

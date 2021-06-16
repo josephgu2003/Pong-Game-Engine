@@ -218,7 +218,7 @@ void World::informProximityComponent(Actor& actor, ProximityComponent& pc) {
     allOtherActors.erase(std::remove(allOtherActors.begin(), allOtherActors.end(), &actor));
     for (int i = 0; i < allOtherActors.size(); i++) {
         float distance = glm::length(actor.getPos()-allOtherActors.at(i)->getPos());
-        if (distance <= 1) {
+        if (distance <= 5) {
             pc.somethingNear = true;
             pc.biggestTarget = allOtherActors.at(i);
         }

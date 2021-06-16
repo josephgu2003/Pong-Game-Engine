@@ -9,10 +9,14 @@
 /* Begin PBXBuildFile section */
 		5D0BF42E26557571000E6696 /* Skybox in Resources */ = {isa = PBXBuildFile; fileRef = 5D0BF42D26557571000E6696 /* Skybox */; };
 		5D0C414D2637948B005F64D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D0C414C2637948B005F64D0 /* main.cpp */; };
-		5D1EA357266FD0CF001FB338 /* mountains-free in Resources */ = {isa = PBXBuildFile; fileRef = 5D1EA356266FD0CF001FB338 /* mountains-free */; };
 		5D25A041265C0E5500A780C6 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D25A040265C0E5500A780C6 /* libfreetype.dylib */; };
 		5D25A042265C0E5500A780C6 /* libfreetype.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D25A040265C0E5500A780C6 /* libfreetype.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F57C2263E3E92000AFA64 /* Ball.cpp */; };
+		5D33261A2676CFDD002F3D49 /* InkGlyphs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D3326182676CFDD002F3D49 /* InkGlyphs.cpp */; };
+		5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5D33261B2676F2A1002F3D49 /* Plan.rtf */; };
+		5D332621267819EB002F3D49 /* yirou'sdrawing2 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D332620267819EB002F3D49 /* yirou'sdrawing2 copy.png */; };
+		5D332625267904E2002F3D49 /* ProximityComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D332623267904E2002F3D49 /* ProximityComponent.cpp */; };
+		5D33262A267934E4002F3D49 /* BossProximityComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D332628267934E4002F3D49 /* BossProximityComponent.cpp */; };
 		5D350619266D6B9A0038FBC3 /* TextFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D350618266D6B9A0038FBC3 /* TextFShader.fs */; };
 		5D35061B266D6B9E0038FBC3 /* TextVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D35061A266D6B9E0038FBC3 /* TextVShader.vs */; };
 		5D350623266ECB930038FBC3 /* Speech.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D350621266ECB930038FBC3 /* Speech.cpp */; };
@@ -27,23 +31,22 @@
 		5D65F5CA2638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4882651EEB8006EA749 /* ice.jpeg */; };
 		5D66B4922651EF2E006EA749 /* phoenix in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4912651EF2E006EA749 /* phoenix */; };
-		5D66B4942651EF3D006EA749 /* juggernaut in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4932651EF3D006EA749 /* juggernaut */; };
-		5D6931D12659BB9A00A7F46F /* flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D6931D02659BB9A00A7F46F /* flower.png */; };
 		5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7706282654B082002A0BB0 /* AssetManager.cpp */; };
 		5D7F6682267134E500B70DA7 /* pencil.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F6681267134E500B70DA7 /* pencil.jpg */; };
 		5D7F67212671880200B70DA7 /* journey5.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F6719267187FE00B70DA7 /* journey5.mtl */; };
 		5D7F67222671880200B70DA7 /* tmp47wcx84s in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671A267187FF00B70DA7 /* tmp47wcx84s */; };
 		5D7F67232671880200B70DA7 /* tmph9sc7c89 in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671B267187FF00B70DA7 /* tmph9sc7c89 */; };
 		5D7F67242671880200B70DA7 /* tmpugfolmqr in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671C267187FF00B70DA7 /* tmpugfolmqr */; };
-		5D7F67252671880200B70DA7 /* journey5.blend in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671D2671880000B70DA7 /* journey5.blend */; };
 		5D7F67262671880200B70DA7 /* journey5.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671E2671880100B70DA7 /* journey5.obj */; };
 		5D7F67272671880200B70DA7 /* tmp6rxwr4cq in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671F2671880100B70DA7 /* tmp6rxwr4cq */; };
 		5D7F67282671880200B70DA7 /* tmpz0kzbith in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F67202671880200B70DA7 /* tmpz0kzbith */; };
-		5D7F672A267188C200B70DA7 /* journey5.dae in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F6729267188C200B70DA7 /* journey5.dae */; };
 		5D7F672C26723A5200B70DA7 /* lambert1_baseColor.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */; };
 		5D9122BE2638BC7F0045937F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */; };
 		5D9122BF2638BC7F0045937F /* libglfw.3.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5D9122C52638BCFA0045937F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C4155263794AD005F64D0 /* OpenGL.framework */; };
+		5D98FBF226762E470048829D /* water2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5D98FBEF26762E470048829D /* water2.obj */; };
+		5D98FBF326762E470048829D /* water2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5D98FBF026762E470048829D /* water2.mtl */; };
+		5D98FBF426762E470048829D /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D98FBF126762E470048829D /* ice.jpeg */; };
 		5D9E5A062653440E00F39C19 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E5A042653440E00F39C19 /* Particle.cpp */; };
 		5D9E5A08265352A400F39C19 /* ParticleFragmentShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D9E5A07265352A400F39C19 /* ParticleFragmentShader.fs */; };
 		5D9E5A0A265352A900F39C19 /* ParticleVertexShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D9E5A09265352A900F39C19 /* ParticleVertexShader.vs */; };
@@ -78,15 +81,20 @@
 		5DEDAE592672B9990050F441 /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEDAE572672B9990050F441 /* Audio.cpp */; };
 		5DEDAE5C2672BC920050F441 /* Leaves.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEDAE5A2672BC920050F441 /* Leaves.cpp */; };
 		5DEE580E266292A40080446C /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE580C266292A40080446C /* Component.cpp */; };
-		5DEE58122663B6180080446C /* IMG_0373.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5DEE58112663B6170080446C /* IMG_0373.jpg */; };
-		5DEE58142663B6210080446C /* IMG_0378.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5DEE58132663B6210080446C /* IMG_0378.jpg */; };
 		5DEE581D2666A9290080446C /* GameStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE58172666A9280080446C /* GameStatus.cpp */; };
 		5DEE581E2666A9290080446C /* GameAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE58182666A9290080446C /* GameAI.cpp */; };
 		5DEE581F2666A9290080446C /* GameGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE581B2666A9290080446C /* GameGrid.cpp */; };
 		5DEE58232666A99F0080446C /* TicTacToe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE58212666A99F0080446C /* TicTacToe.cpp */; };
 		5DEE582C2667EB990080446C /* Ability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE582A2667EB990080446C /* Ability.cpp */; };
 		5DEE58302667EEC20080446C /* FallingLetters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE582E2667EEC20080446C /* FallingLetters.cpp */; };
+		5DF1E6D0267393F90035F723 /* yirou'sdrawing2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5DF1E6CF267393F90035F723 /* yirou'sdrawing2.jpg */; };
+		5DF1E6D32674F58D0035F723 /* LoadingScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */; };
+		5DF1E6D62674FB9C0035F723 /* LoadScreenF.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DF1E6D42674FB9C0035F723 /* LoadScreenF.fs */; };
+		5DF1E6D72674FB9C0035F723 /* LoadScreenV.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DF1E6D52674FB9C0035F723 /* LoadScreenV.vs */; };
 		5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF7A2362640E0FD004F05E2 /* World.cpp */; };
+		5DF9289E267A22E800D40CF2 /* inkpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5DF9289D267A22E800D40CF2 /* inkpaper.jpg */; };
+		5DF928A7267A30EC00D40CF2 /* ActorState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF928A5267A30EC00D40CF2 /* ActorState.cpp */; };
+		5DF928AA267A31D500D40CF2 /* EntranceState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF928A8267A31D500D40CF2 /* EntranceState.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -124,7 +132,6 @@
 		5D0C416C2637984C005F64D0 /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.dylib; path = "../../glfw-3.3.4.bin.MACOS/lib-x86_64/libglfw.3.dylib"; sourceTree = "<group>"; };
 		5D0C41872637AB60005F64D0 /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.dylib; path = "../../glfw-3.3.4.bin.MACOS/lib-universal/libglfw.3.dylib"; sourceTree = "<group>"; };
 		5D0C41912638A925005F64D0 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
-		5D1EA356266FD0CF001FB338 /* mountains-free */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mountains-free"; sourceTree = "<group>"; };
 		5D25A040265C0E5500A780C6 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = ../../../../../usr/local/Cellar/freetype/2.10.4/lib/libfreetype.dylib; sourceTree = "<group>"; };
 		5D25A045265C1B5900A780C6 /* minecraft-enchantment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "minecraft-enchantment.ttf"; sourceTree = "<group>"; };
 		5D25A048265C2FA400A780C6 /* college.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = college.ttf; sourceTree = "<group>"; };
@@ -132,6 +139,14 @@
 		5D2BCFA8264BF9B100383349 /* SkyVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = SkyVertexShader.vs; sourceTree = "<group>"; };
 		5D2F57C2263E3E92000AFA64 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		5D2F57C3263E3E92000AFA64 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
+		5D3326182676CFDD002F3D49 /* InkGlyphs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InkGlyphs.cpp; sourceTree = "<group>"; };
+		5D3326192676CFDD002F3D49 /* InkGlyphs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InkGlyphs.hpp; sourceTree = "<group>"; };
+		5D33261B2676F2A1002F3D49 /* Plan.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Plan.rtf; sourceTree = "<group>"; };
+		5D332620267819EB002F3D49 /* yirou'sdrawing2 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yirou'sdrawing2 copy.png"; sourceTree = "<group>"; };
+		5D332623267904E2002F3D49 /* ProximityComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProximityComponent.cpp; sourceTree = "<group>"; };
+		5D332624267904E2002F3D49 /* ProximityComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProximityComponent.hpp; sourceTree = "<group>"; };
+		5D332628267934E4002F3D49 /* BossProximityComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BossProximityComponent.cpp; sourceTree = "<group>"; };
+		5D332629267934E4002F3D49 /* BossProximityComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BossProximityComponent.hpp; sourceTree = "<group>"; };
 		5D350618266D6B9A0038FBC3 /* TextFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextFShader.fs; sourceTree = "<group>"; };
 		5D35061A266D6B9E0038FBC3 /* TextVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextVShader.vs; sourceTree = "<group>"; };
 		5D35061C266D6E9F0038FBC3 /* Philosopher-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Philosopher-Regular.ttf"; sourceTree = "<group>"; };
@@ -154,8 +169,6 @@
 		5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		5D66B4882651EEB8006EA749 /* ice.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpeg; sourceTree = "<group>"; };
 		5D66B4912651EF2E006EA749 /* phoenix */ = {isa = PBXFileReference; lastKnownFileType = folder; path = phoenix; sourceTree = "<group>"; };
-		5D66B4932651EF3D006EA749 /* juggernaut */ = {isa = PBXFileReference; lastKnownFileType = folder; path = juggernaut; sourceTree = "<group>"; };
-		5D6931D02659BB9A00A7F46F /* flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flower.png; sourceTree = "<group>"; };
 		5D7706282654B082002A0BB0 /* AssetManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetManager.cpp; sourceTree = "<group>"; };
 		5D7706292654B082002A0BB0 /* AssetManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssetManager.hpp; sourceTree = "<group>"; };
 		5D7F6681267134E500B70DA7 /* pencil.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pencil.jpg; sourceTree = "<group>"; };
@@ -163,13 +176,14 @@
 		5D7F671A267187FF00B70DA7 /* tmp47wcx84s */ = {isa = PBXFileReference; lastKnownFileType = file; path = tmp47wcx84s; sourceTree = "<group>"; };
 		5D7F671B267187FF00B70DA7 /* tmph9sc7c89 */ = {isa = PBXFileReference; lastKnownFileType = file; path = tmph9sc7c89; sourceTree = "<group>"; };
 		5D7F671C267187FF00B70DA7 /* tmpugfolmqr */ = {isa = PBXFileReference; lastKnownFileType = file; path = tmpugfolmqr; sourceTree = "<group>"; };
-		5D7F671D2671880000B70DA7 /* journey5.blend */ = {isa = PBXFileReference; lastKnownFileType = file; path = journey5.blend; sourceTree = "<group>"; };
 		5D7F671E2671880100B70DA7 /* journey5.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = journey5.obj; sourceTree = "<group>"; };
 		5D7F671F2671880100B70DA7 /* tmp6rxwr4cq */ = {isa = PBXFileReference; lastKnownFileType = file; path = tmp6rxwr4cq; sourceTree = "<group>"; };
 		5D7F67202671880200B70DA7 /* tmpz0kzbith */ = {isa = PBXFileReference; lastKnownFileType = file; path = tmpz0kzbith; sourceTree = "<group>"; };
-		5D7F6729267188C200B70DA7 /* journey5.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = journey5.dae; sourceTree = "<group>"; };
 		5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lambert1_baseColor.png; path = textures/lambert1_baseColor.png; sourceTree = "<group>"; };
 		5D9122B22638BB9A0045937F /* Pong.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pong.entitlements; sourceTree = "<group>"; };
+		5D98FBEF26762E470048829D /* water2.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = water2.obj; sourceTree = "<group>"; };
+		5D98FBF026762E470048829D /* water2.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = water2.mtl; sourceTree = "<group>"; };
+		5D98FBF126762E470048829D /* ice.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpeg; sourceTree = "<group>"; };
 		5D9E5A042653440E00F39C19 /* Particle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
 		5D9E5A052653440E00F39C19 /* Particle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Particle.hpp; sourceTree = "<group>"; };
 		5D9E5A07265352A400F39C19 /* ParticleFragmentShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParticleFragmentShader.fs; sourceTree = "<group>"; };
@@ -222,10 +236,6 @@
 		5DEDAE5B2672BC920050F441 /* Leaves.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Leaves.hpp; sourceTree = "<group>"; };
 		5DEE580C266292A40080446C /* Component.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Component.cpp; sourceTree = "<group>"; };
 		5DEE580D266292A40080446C /* Component.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Component.hpp; sourceTree = "<group>"; };
-		5DEE580F2663B5650080446C /* IMG_0373.HEIC */ = {isa = PBXFileReference; lastKnownFileType = file; path = IMG_0373.HEIC; sourceTree = "<group>"; };
-		5DEE58102663B5710080446C /* IMG_0378.HEIC */ = {isa = PBXFileReference; lastKnownFileType = file; path = IMG_0378.HEIC; sourceTree = "<group>"; };
-		5DEE58112663B6170080446C /* IMG_0373.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_0373.jpg; sourceTree = "<group>"; };
-		5DEE58132663B6210080446C /* IMG_0378.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_0378.jpg; sourceTree = "<group>"; };
 		5DEE58162666A9280080446C /* GameGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameGrid.hpp; sourceTree = "<group>"; };
 		5DEE58172666A9280080446C /* GameStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameStatus.cpp; sourceTree = "<group>"; };
 		5DEE58182666A9290080446C /* GameAI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameAI.cpp; sourceTree = "<group>"; };
@@ -238,8 +248,18 @@
 		5DEE582B2667EB990080446C /* Ability.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ability.hpp; sourceTree = "<group>"; };
 		5DEE582E2667EEC20080446C /* FallingLetters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FallingLetters.cpp; sourceTree = "<group>"; };
 		5DEE582F2667EEC20080446C /* FallingLetters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FallingLetters.hpp; sourceTree = "<group>"; };
+		5DF1E6CF267393F90035F723 /* yirou'sdrawing2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "yirou'sdrawing2.jpg"; sourceTree = "<group>"; };
+		5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScreen.cpp; sourceTree = "<group>"; };
+		5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LoadingScreen.hpp; sourceTree = "<group>"; };
+		5DF1E6D42674FB9C0035F723 /* LoadScreenF.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LoadScreenF.fs; sourceTree = "<group>"; };
+		5DF1E6D52674FB9C0035F723 /* LoadScreenV.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LoadScreenV.vs; sourceTree = "<group>"; };
 		5DF7A2362640E0FD004F05E2 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		5DF7A2372640E0FD004F05E2 /* World.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
+		5DF9289D267A22E800D40CF2 /* inkpaper.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = inkpaper.jpg; sourceTree = "<group>"; };
+		5DF928A5267A30EC00D40CF2 /* ActorState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ActorState.cpp; sourceTree = "<group>"; };
+		5DF928A6267A30EC00D40CF2 /* ActorState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ActorState.hpp; sourceTree = "<group>"; };
+		5DF928A8267A31D500D40CF2 /* EntranceState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntranceState.cpp; sourceTree = "<group>"; };
+		5DF928A9267A31D500D40CF2 /* EntranceState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EntranceState.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +304,7 @@
 				5DEC19B6264B4BB10001ABAE /* src */,
 				5DEE58202666A9820080446C /* TicTac */,
 				5D9122B22638BB9A0045937F /* Pong.entitlements */,
+				5D33261B2676F2A1002F3D49 /* Plan.rtf */,
 			);
 			path = Pong;
 			sourceTree = "<group>";
@@ -318,6 +339,32 @@
 			path = Glyphs;
 			sourceTree = "<group>";
 		};
+		5D33262226790444002F3D49 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				5DEE580D266292A40080446C /* Component.hpp */,
+				5DEE580C266292A40080446C /* Component.cpp */,
+				5D332628267934E4002F3D49 /* BossProximityComponent.cpp */,
+				5D332629267934E4002F3D49 /* BossProximityComponent.hpp */,
+				5D332623267904E2002F3D49 /* ProximityComponent.cpp */,
+				5D332624267904E2002F3D49 /* ProximityComponent.hpp */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		5D33262626791EB2002F3D49 /* World */ = {
+			isa = PBXGroup;
+			children = (
+				5DEDAE4D267266050050F441 /* Billow.hpp */,
+				5D3E7087264308C10071115A /* Camera.cpp */,
+				5DF7A2372640E0FD004F05E2 /* World.hpp */,
+				5D3E7088264308C10071115A /* Camera.hpp */,
+				5DEDAE4C267266050050F441 /* Billow.cpp */,
+				5DF7A2362640E0FD004F05E2 /* World.cpp */,
+			);
+			path = World;
+			sourceTree = "<group>";
+		};
 		5D46CDC9265D6DB800096EC7 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,6 +377,7 @@
 		5D66B4872651EE94006EA749 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5DF9289C267A22D900D40CF2 /* Textures */,
 				5D46CDC9265D6DB800096EC7 /* Utility */,
 				5D25A043265C1B3D00A780C6 /* Glyphs */,
 				5D0BF42D26557571000E6696 /* Skybox */,
@@ -343,10 +391,8 @@
 		5D66B48F2651EF01006EA749 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				5DEE58102663B5710080446C /* IMG_0378.HEIC */,
-				5D1EA356266FD0CF001FB338 /* mountains-free */,
-				5DEE58132663B6210080446C /* IMG_0378.jpg */,
 				5D66B4882651EEB8006EA749 /* ice.jpeg */,
+				5D98FBEE26762E470048829D /* textures */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -358,14 +404,11 @@
 				5D7F671A267187FF00B70DA7 /* tmp47wcx84s */,
 				5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */,
 				5D7F671B267187FF00B70DA7 /* tmph9sc7c89 */,
-				5D7F6729267188C200B70DA7 /* journey5.dae */,
 				5D7F671C267187FF00B70DA7 /* tmpugfolmqr */,
 				5D7F671F2671880100B70DA7 /* tmp6rxwr4cq */,
 				5D7F67202671880200B70DA7 /* tmpz0kzbith */,
-				5D7F671D2671880000B70DA7 /* journey5.blend */,
 				5D7F6719267187FE00B70DA7 /* journey5.mtl */,
 				5D7F671E2671880100B70DA7 /* journey5.obj */,
-				5D66B4932651EF3D006EA749 /* juggernaut */,
 				5D66B4912651EF2E006EA749 /* phoenix */,
 			);
 			path = Models;
@@ -378,10 +421,12 @@
 				5D2BCFA7264BF9AB00383349 /* SkyFragmentShader.fs */,
 				5DEC19B2264B4B490001ABAE /* MapVertexShader.vs */,
 				5DEC19B0264B4B370001ABAE /* MapFragmentShader.fs */,
-				5DAC17F7266866B00021DC31 /* GlyphParticleFShader.fs */,
 				5DAB0B632670FF1800BC1C93 /* SketchVShader.vs */,
 				5DAB0B622670FF1800BC1C93 /* SketchFShader.fs */,
 				5DAC17F9266866B70021DC31 /* GlyphParticleVShader.vs */,
+				5DAC17F7266866B00021DC31 /* GlyphParticleFShader.fs */,
+				5DF1E6D52674FB9C0035F723 /* LoadScreenV.vs */,
+				5DF1E6D42674FB9C0035F723 /* LoadScreenF.fs */,
 				5D350618266D6B9A0038FBC3 /* TextFShader.fs */,
 				5D35061A266D6B9E0038FBC3 /* TextVShader.vs */,
 				5DAC1809266A6DCB0021DC31 /* FBufferVShader.vs */,
@@ -394,14 +439,22 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		5D98FBEE26762E470048829D /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				5D98FBEF26762E470048829D /* water2.obj */,
+				5D98FBF026762E470048829D /* water2.mtl */,
+				5D98FBF126762E470048829D /* ice.jpeg */,
+			);
+			path = textures;
+			sourceTree = "<group>";
+		};
 		5D9E5A0B265356F200F39C19 /* Particles */ = {
 			isa = PBXGroup;
 			children = (
 				5D9E5A102653584F00F39C19 /* aura.png */,
-				5DEE580F2663B5650080446C /* IMG_0373.HEIC */,
 				5DAC17FF266874F00021DC31 /* fiery.png */,
 				5DEABA032659D2CF000C772F /* rosa.png */,
-				5DEE58112663B6170080446C /* IMG_0373.jpg */,
 				5DAB0B56267010A300BC1C93 /* download (1).jpg */,
 				5D7F6681267134E500B70DA7 /* pencil.jpg */,
 				5DAC1801266876050021DC31 /* download.png */,
@@ -409,7 +462,6 @@
 				5DAB0B5026700FC300BC1C93 /* images.jpg */,
 				5DAB0B522670105200BC1C93 /* download (1).png */,
 				5DEABA052659FC4E000C772F /* rosa copy.png */,
-				5D6931D02659BB9A00A7F46F /* flower.png */,
 				5D9E5A0C2653572E00F39C19 /* images.jpg */,
 			);
 			path = Particles;
@@ -429,6 +481,8 @@
 		5DEDAE47267262FE0050F441 /* Flag */ = {
 			isa = PBXGroup;
 			children = (
+				5DF1E6CF267393F90035F723 /* yirou'sdrawing2.jpg */,
+				5D332620267819EB002F3D49 /* yirou'sdrawing2 copy.png */,
 				5DEDAE4A267264FD0050F441 /* yirou'sdrawing.jpg */,
 				5DEDAE48267263180050F441 /* flag.obj */,
 			);
@@ -450,6 +504,8 @@
 			children = (
 				5D9E5A042653440E00F39C19 /* Particle.cpp */,
 				5D9E5A052653440E00F39C19 /* Particle.hpp */,
+				5D3326182676CFDD002F3D49 /* InkGlyphs.cpp */,
+				5D3326192676CFDD002F3D49 /* InkGlyphs.hpp */,
 				5DEDAE5A2672BC920050F441 /* Leaves.cpp */,
 				5DEDAE5B2672BC920050F441 /* Leaves.hpp */,
 			);
@@ -474,13 +530,11 @@
 		5DEE58242667E8FC0080446C /* System */ = {
 			isa = PBXGroup;
 			children = (
-				5DEE580C266292A40080446C /* Component.cpp */,
 				5DEC19B9264B69E20001ABAE /* stb_image.c */,
 				5DEC19B7264B69B30001ABAE /* stb_image.h */,
 				5D7706292654B082002A0BB0 /* AssetManager.hpp */,
 				5DAC1803266993C40021DC31 /* InputHandler.cpp */,
 				5DAC1804266993C40021DC31 /* InputHandler.hpp */,
-				5DEE580D266292A40080446C /* Component.hpp */,
 				5D7706282654B082002A0BB0 /* AssetManager.cpp */,
 				5DEDAE572672B9990050F441 /* Audio.cpp */,
 				5DEDAE582672B9990050F441 /* Audio.hpp */,
@@ -496,6 +550,8 @@
 			children = (
 				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
 				5D426580263C8E7B0026C24D /* Shader.cpp */,
+				5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */,
+				5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */,
 				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
 				5D426581263C8E7B0026C24D /* Shader.hpp */,
 			);
@@ -516,20 +572,10 @@
 		5DEE58292667E9CA0080446C /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				5DF9289F267A305700D40CF2 /* Actors */,
 				5DEDAE5D2672BC960050F441 /* ParticleEffects */,
 				5DEE582D2667EE9B0080446C /* Abilities */,
-				5DF7A2362640E0FD004F05E2 /* World.cpp */,
-				5D2F57C2263E3E92000AFA64 /* Ball.cpp */,
-				5DA67C2526418A05005A7E74 /* PlayerHero.cpp */,
-				5D3E7087264308C10071115A /* Camera.cpp */,
-				5DEDAE4C267266050050F441 /* Billow.cpp */,
-				5DEDAE4D267266050050F441 /* Billow.hpp */,
-				5DF7A2372640E0FD004F05E2 /* World.hpp */,
-				5D2F57C3263E3E92000AFA64 /* Ball.hpp */,
-				5DA67C2626418A05005A7E74 /* PlayerHero.hpp */,
-				5D3E7088264308C10071115A /* Camera.hpp */,
-				5DA67C292641A482005A7E74 /* Actor.hpp */,
-				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5D33262626791EB2002F3D49 /* World */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -547,6 +593,40 @@
 				5DEE582F2667EEC20080446C /* FallingLetters.hpp */,
 			);
 			path = Abilities;
+			sourceTree = "<group>";
+		};
+		5DF9289C267A22D900D40CF2 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				5DF9289D267A22E800D40CF2 /* inkpaper.jpg */,
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
+		5DF9289F267A305700D40CF2 /* Actors */ = {
+			isa = PBXGroup;
+			children = (
+				5DF928A4267A30E100D40CF2 /* ActorStates */,
+				5DA67C2626418A05005A7E74 /* PlayerHero.hpp */,
+				5DA67C2526418A05005A7E74 /* PlayerHero.cpp */,
+				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5DA67C292641A482005A7E74 /* Actor.hpp */,
+				5D2F57C2263E3E92000AFA64 /* Ball.cpp */,
+				5D2F57C3263E3E92000AFA64 /* Ball.hpp */,
+				5D33262226790444002F3D49 /* Component */,
+			);
+			path = Actors;
+			sourceTree = "<group>";
+		};
+		5DF928A4267A30E100D40CF2 /* ActorStates */ = {
+			isa = PBXGroup;
+			children = (
+				5DF928A5267A30EC00D40CF2 /* ActorState.cpp */,
+				5DF928A6267A30EC00D40CF2 /* ActorState.hpp */,
+				5DF928A8267A31D500D40CF2 /* EntranceState.cpp */,
+				5DF928A9267A31D500D40CF2 /* EntranceState.hpp */,
+			);
+			path = ActorStates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -608,7 +688,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DAC180E266A6EB40021DC31 /* FBufferFShader.fs in Resources */,
-				5D66B4942651EF3D006EA749 /* juggernaut in Resources */,
+				5DF1E6D0267393F90035F723 /* yirou'sdrawing2.jpg in Resources */,
 				5D7F672C26723A5200B70DA7 /* lambert1_baseColor.png in Resources */,
 				5D9E5A0A265352A900F39C19 /* ParticleVertexShader.vs in Resources */,
 				5D7F67242671880200B70DA7 /* tmpugfolmqr in Resources */,
@@ -616,37 +696,39 @@
 				5D66B4922651EF2E006EA749 /* phoenix in Resources */,
 				5D7F67212671880200B70DA7 /* journey5.mtl in Resources */,
 				5D7F67262671880200B70DA7 /* journey5.obj in Resources */,
-				5DEE58122663B6180080446C /* IMG_0373.jpg in Resources */,
 				5D7F6682267134E500B70DA7 /* pencil.jpg in Resources */,
 				5DAC1802266876050021DC31 /* download.png in Resources */,
 				5DAB0B642670FF1800BC1C93 /* SketchFShader.fs in Resources */,
 				5DAB0B532670105200BC1C93 /* download (1).png in Resources */,
 				5D35061B266D6B9E0038FBC3 /* TextVShader.vs in Resources */,
 				5DAC17F8266866B00021DC31 /* GlyphParticleFShader.fs in Resources */,
+				5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */,
 				5DEABA062659FC4E000C772F /* rosa copy.png in Resources */,
 				5DEDAE49267263180050F441 /* flag.obj in Resources */,
-				5D7F67252671880200B70DA7 /* journey5.blend in Resources */,
 				5D46CDCB265D6DC700096EC7 /* radial.png in Resources */,
 				5DAB0B5126700FC300BC1C93 /* images.jpg in Resources */,
-				5D7F672A267188C200B70DA7 /* journey5.dae in Resources */,
+				5D98FBF226762E470048829D /* water2.obj in Resources */,
+				5D98FBF426762E470048829D /* ice.jpeg in Resources */,
 				5DAB0B652670FF1800BC1C93 /* SketchVShader.vs in Resources */,
-				5D6931D12659BB9A00A7F46F /* flower.png in Resources */,
 				5DEABA042659D2CF000C772F /* rosa.png in Resources */,
+				5D98FBF326762E470048829D /* water2.mtl in Resources */,
 				5D7F67272671880200B70DA7 /* tmp6rxwr4cq in Resources */,
-				5DEE58142663B6210080446C /* IMG_0378.jpg in Resources */,
 				5D7F67232671880200B70DA7 /* tmph9sc7c89 in Resources */,
+				5DF1E6D72674FB9C0035F723 /* LoadScreenV.vs in Resources */,
 				5D9E5A0D2653572E00F39C19 /* images.jpg in Resources */,
 				5DAC17FA266866B70021DC31 /* GlyphParticleVShader.vs in Resources */,
+				5D332621267819EB002F3D49 /* yirou'sdrawing2 copy.png in Resources */,
 				5D9E5A08265352A400F39C19 /* ParticleFragmentShader.fs in Resources */,
 				5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */,
 				5DAC1810266A74470021DC31 /* noise.png in Resources */,
 				5D7F67222671880200B70DA7 /* tmp47wcx84s in Resources */,
+				5DF1E6D62674FB9C0035F723 /* LoadScreenF.fs in Resources */,
 				5DAB0B57267010A300BC1C93 /* download (1).jpg in Resources */,
 				5D0BF42E26557571000E6696 /* Skybox in Resources */,
 				5DAC180B266A6DCB0021DC31 /* FBufferVShader.vs in Resources */,
 				5DAB0B6126702D7A00BC1C93 /* BLANK_ICON3.png in Resources */,
 				5D7F67282671880200B70DA7 /* tmpz0kzbith in Resources */,
-				5D1EA357266FD0CF001FB338 /* mountains-free in Resources */,
+				5DF9289E267A22E800D40CF2 /* inkpaper.jpg in Resources */,
 				5DAC1800266874F00021DC31 /* fiery.png in Resources */,
 				5D350619266D6B9A0038FBC3 /* TextFShader.fs in Resources */,
 			);
@@ -667,13 +749,17 @@
 				5DAB0B4F266FF35900BC1C93 /* Sketch.cpp in Sources */,
 				5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */,
 				5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */,
+				5DF928AA267A31D500D40CF2 /* EntranceState.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
 				5DAC1808266994AE0021DC31 /* Game.cpp in Sources */,
+				5D33261A2676CFDD002F3D49 /* InkGlyphs.cpp in Sources */,
 				5DAC1805266993C40021DC31 /* InputHandler.cpp in Sources */,
 				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
 				5DEE581F2666A9290080446C /* GameGrid.cpp in Sources */,
+				5D332625267904E2002F3D49 /* ProximityComponent.cpp in Sources */,
 				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,
+				5D33262A267934E4002F3D49 /* BossProximityComponent.cpp in Sources */,
 				5DEE58232666A99F0080446C /* TicTacToe.cpp in Sources */,
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
@@ -681,8 +767,10 @@
 				5DEDAE4E267266050050F441 /* Billow.cpp in Sources */,
 				5DEDAE5C2672BC920050F441 /* Leaves.cpp in Sources */,
 				5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */,
+				5DF928A7267A30EC00D40CF2 /* ActorState.cpp in Sources */,
 				5DEE58302667EEC20080446C /* FallingLetters.cpp in Sources */,
 				5DEE581D2666A9290080446C /* GameStatus.cpp in Sources */,
+				5DF1E6D32674F58D0035F723 /* LoadingScreen.cpp in Sources */,
 				5DEE581E2666A9290080446C /* GameAI.cpp in Sources */,
 				5D0C414D2637948B005F64D0 /* main.cpp in Sources */,
 				5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */,

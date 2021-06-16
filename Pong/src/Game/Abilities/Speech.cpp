@@ -8,15 +8,20 @@
 #include "Speech.hpp"
 #include "Particle.hpp"
 
-Speech::Speech(Renderer* renderer_){
-    renderer = renderer_;
+
+Speech::Speech(World* world_, Actor* actor_, float duration_, std::vector<std::string> strings) : Ability(world_, actor_, duration_) {
+    counter = 0;
+    elapsetime = 0;
+    running = false;
+    lines = strings;
 }
 
-void Speech::call() {
-    renderer->print(lines.at(counter));
-    counter++;
+void Speech::call(void* pointer) {
     running = true;
     on = true;
+    renderer = static_cast<Renderer*>(pointer);
+    renderer->print(lines.at(counter));
+    counter++;
 }
 
 void Speech::tick() {

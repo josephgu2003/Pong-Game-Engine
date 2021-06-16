@@ -71,13 +71,13 @@ private:
     float lighting;
     
     void loadModelMatrix(int n); // finds the matrices for nth actor in world's actor vector
-    void renderSky();
     void renderMap();
     void renderActors();
     void renderParticles();
     void renderQuads();
 public:
     float time;
+    void renderSky();
     Renderer();
     ~Renderer();
     void setWorld(World* world_);

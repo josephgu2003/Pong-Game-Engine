@@ -33,6 +33,7 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, float x_, float y_, fl
     loadGlyphs("Resources/Glyphs/minecraft-enchantment.ttf", glyphs);
     std::srand(314159);
     posVec = posVec_;
+    force = glm::vec3(0,0,0);
     x = x_;
     y = y_;
     z = z_;
@@ -63,6 +64,9 @@ void ParticleEffect::tick() {
     cycle++;
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
+            particles[i].velVec += force;
+            particles[i].velVec *= 0.98;
+        if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
             particles[i].posVec.x += particles[i].velVec.x*dt;
             particles[i].posVec.y += particles[i].velVec.y*dt;
             particles[i].posVec.z += particles[i].velVec.z*dt;
@@ -105,6 +109,10 @@ float ParticleEffect::getSize() {
     return size;
 }
 
+void ParticleEffect::setForce(glm::vec3 force_) {
+    force = force_;
+}
+
 void ComplexParticles::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
     ParticleEffect::init(size_, posVec_, x_, y_, z_, numParticles_,cyclecount_);
     shader = 4;
@@ -127,7 +135,7 @@ particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
   //  if (a%2 ==1) a = a*(-1);
    // b = b*(-1);
  //   c = c*(-1);
-particles[firstUnused].velVec = (glm::vec3(a-0.5,-0.2,c-0.5));
+particles[firstUnused].velVec = (glm::vec3(a-0.5,-0.2,c-0.5))+force;
 particles[firstUnused].duration = 5;
 particles[firstUnused].texture = glyphs[(char)((firstUnused%25)+97)].id;
 }

@@ -12,7 +12,9 @@
 #include "Particle.hpp"
 
 class Leaves : public ParticleEffect {
-    virtual void refreshParticle();
+public:
+    void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
+    void tick();
 };
 
 #endif /* Leaves_hpp */

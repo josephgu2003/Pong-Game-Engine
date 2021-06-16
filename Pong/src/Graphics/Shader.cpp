@@ -10,6 +10,9 @@
 #include <sstream>
 #include <iostream>
 
+Shader::Shader () {
+    
+}
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
     //get code from file location

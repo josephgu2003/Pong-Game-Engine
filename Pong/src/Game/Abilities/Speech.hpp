@@ -16,6 +16,7 @@
 #include <vector>
 #include <string>
 
+
 class Speech: public Ability{
     Renderer* renderer;
    /** std::vector<std::string> lines = {"I was asked - \"Do you have dreams?\"",
@@ -33,15 +34,16 @@ class Speech: public Ability{
         "A brush, a canvas, a horizon",
         "An artist dreaming of the moon."
     };**/
-    std::vector<std::string> lines = { "This is a recitation", "Next line is this", "I would keep going but I'm too lazy to write"
-    };
-    int counter = 0;
-    float elapsetime=0;
-    bool running = false;
+    
+ //   std::vector<std::string> lines = { "Oh, so you are approaching me?", "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Joseph's Dad - Programming and Math Consultant"};
+    std::vector<std::string> lines;
+    int counter;
+    float elapsetime;
+    bool running;
 public:
-    Speech(Renderer* renderer_);
-    void call();
-    void tick();
+    Speech(World* world_, Actor* actor_, float duration_,std::vector<std::string> strings);
+    virtual void call(void* pointer);
+    virtual void tick();
 };
     
 #endif /* Speech_hpp */

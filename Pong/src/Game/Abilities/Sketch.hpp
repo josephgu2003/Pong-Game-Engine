@@ -23,8 +23,8 @@ class Sketch: public Ability {
 public:
     Sketch(World* world_, Actor* actor_, float duration_, GLuint texture_);
     ~Sketch();
-    void call();
-    void tick();
+    virtual void call(void* pointer);
+    virtual void tick();
     void call2();
 };
 #endif /* Sketch_hpp */

@@ -39,31 +39,55 @@ Game::Game() {
     
     glfwSetWindowUserPointer(window, this);
     
+    LoadingScreen screen;
+    
     inputHandler.setWindow(window);
     
-    ball.loadModel();
-    pHero.loadModel();
-    billow.loadModel();
+    //billow.posVec = glm::vec3(0,5,0);
     
-    billow.posVec = glm::vec3(0,5,0);
+    leaves.init(0.03, glm::vec3(0,0,0), 5, 0.5, 5, 250, 1);
+    inkGlyphs.init(0.05, glm::vec3(0,0,0), 10, 0.5, 10, 100, 1);
     
     camera.setActor(&pHero);
     pHero.setWorld(&world);
+    ball.setWorld(&world);
     world.insertCamera(&camera);
     world.insertActor(&pHero);
     world.insertActor(&ball);
-    world.insertActor(&billow);
-    world.insertParticleEffect(&(ball.getParticleEffect()));
+  //  world.insertActor(&billow);
+    world.insertParticleEffect(&inkGlyphs);
+    
+    screen.print("Grinding the inkstone...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
     
     renderer = new Renderer;
     renderer->setWorld(&world);
     renderer->setCamera(&camera);
+    
+    screen.print("Tuning the strings...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    ball.loadModel();
+    
+    screen.print("Opening the books...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    pHero.loadModel();
+   // billow.loadModel();
+    
+    screen.print("Putting on a fresh canvas...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
     renderer->loadActorData();
     renderer->loadMapData();
     renderer->loadSkyBoxData();
 
     stbi_set_flip_vertically_on_load(1);
-    blank = stbi_load("Resources/Models/Flag/yirou'sdrawing.jpg", &imageWidth, &imageHeight, &channels, 0);
+  /**  blank = stbi_load("Resources/Models/Flag/yirou'sdrawing.jpg", &imageWidth, &imageHeight, &channels, 0);
     
     glGenTextures(1, &ftexture);
     glBindTexture(GL_TEXTURE_2D, ftexture);
@@ -72,7 +96,18 @@ Game::Game() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);**/
+
+    blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
+     
+    glGenTextures(1, &ftexture);
+    glBindTexture(GL_TEXTURE_2D, ftexture);
+     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,blank);
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+     glBindTexture(GL_TEXTURE_2D, 0);
 
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
 }
@@ -100,26 +135,35 @@ void Game::tick() {
     inputHandler.tick();
     
     double mx, my;
-    if (scheme == 2)         glfwGetCursorPos(window, &mx, &my);
-    if (scheme == 2 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        //quad and framebuffer
-        //write to framebuffer at that position
-            for (int j = 0; j < 50; j++) {
-          //  glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-trail.at(i).x/1000), 800*(1-trail.at(i).y/800), imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, paint);
-                float ratio1 = (float)(j/50.0f);
-                float ratio2 = 1.0f - ratio1;
-                glBindTexture(GL_TEXTURE_2D, ftexture);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 3024*(1-(ratio2*lastMX+ratio1*mx)/1000), 4032*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
-        }
-    }
     
-    if (scheme == 2) {
+    if (scheme == 2)     {
+        glfwGetCursorPos(window, &mx, &my);
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+                //quad and framebuffer
+                //write to framebuffer at that position
+                for (int j = 0; j < 50; j++) {
+           //  glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-trail.at(i).x/1000), 800*(1-trail.at(i).y/800),      imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, paint);
+                    float ratio1 = (float)(j/50.0f);
+                    float ratio2 = 1.0f - ratio1;
+                    glBindTexture(GL_TEXTURE_2D, ftexture);
+                    //   glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-(ratio2*lastMX+ratio1*mx)/1000), 800*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 2342*(1-(ratio2*lastMX+ratio1*mx)/1000), 1982*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
+                }
+            }
     lastMY = my;
     lastMX = mx;
     }
-    
+
     if(glfwWindowShouldClose(window)) {
         running = false;
+    }
+    
+    if(ball.abilityQ.size()>0) {
+        for(int i = 0; i < ball.abilityQ.size(); i++) {
+            ball.abilityQ.at(i)->call(renderer);
+            abilities.push_back(ball.abilityQ.at(i));
+        }
+        ball.abilityQ.clear();
     }
     
     if (abilities.size() > 0) {
@@ -200,13 +244,14 @@ int Game::processInput(int key, int action, int mods) {
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         FallingLetters* letters = new FallingLetters(&world, &pHero, 6);
-        letters->call();
+        letters->call(nullptr);
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            Speech* speech = new Speech(renderer);
+            std::vector<std::string> lines = { "Oh, so you are approaching me?", "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Joseph's Dad - Programming and Math Consultant"};
+            Speech* speech = new Speech(&world, &pHero, 6, lines);
             abilities.push_back(speech);
-            speech->call();
+            speech->call(renderer);
         }
         
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {
@@ -216,14 +261,15 @@ int Game::processInput(int key, int action, int mods) {
             Sketch* sketch = new Sketch(&world, &pHero, 6, ftexture);
             activeSketch = sketch;
             abilities.push_back(sketch);
-            sketch->call();
+            sketch->call(nullptr);
             }
             return 0;
         }
         
         if (key == GLFW_KEY_R && action == GLFW_PRESS) {
             glBindTexture(GL_TEXTURE_2D, ftexture);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 3024, 4032, GL_RGB, GL_UNSIGNED_BYTE, blank);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2342, 1982, GL_RGB, GL_UNSIGNED_BYTE, blank);
+         //   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGBA, GL_UNSIGNED_BYTE, blank);
             glBindTexture(GL_TEXTURE_2D, 0);
             if (activeSketch != NULL) {
             abilities.erase(std::remove(abilities.begin(), abilities.end(), activeSketch));
@@ -236,12 +282,6 @@ int Game::processInput(int key, int action, int mods) {
             if (activeSketch != NULL)
             activeSketch->call2();
         }
-    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
-        pHero.sheathSword();
-    }
-    if (key == GLFW_KEY_V && action == GLFW_PRESS) {
-        pHero.unsheathSword();
-    }
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
     //    inputHandler.setCharCallback(char_callback);
  //       inputHandler.setKeyCallback(onetap_callback0);

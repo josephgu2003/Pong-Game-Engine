@@ -23,11 +23,10 @@
 #include "Ability.hpp"
 #include "Sketch.hpp"
 #include "Billow.hpp"
+#include "Leaves.hpp"
+#include "LoadingScreen.hpp"
+#include "InkGlyphs.hpp"
 
-struct XY {
-    double x;
-    double y;
-};
 
 class Game {
 GLFWwindow* window; // Windowed
@@ -35,6 +34,7 @@ Camera camera;
 World world;
 Renderer* renderer;
 InputHandler inputHandler;
+    
     std::stringstream input;
     std::string i;
     bool printing = false;
@@ -52,6 +52,8 @@ InputHandler inputHandler;
     Ball ball;
     PlayerHero pHero;
     Billow billow;
+    Leaves leaves;
+    InkGlyphs inkGlyphs;
     
     std::vector<Ability*> abilities;
     GLuint fbo, fvao, ftexture;

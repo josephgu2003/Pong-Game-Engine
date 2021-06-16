@@ -21,6 +21,12 @@ class Billow;
 
 struct Vertex {
     glm::vec3 Pos;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+};
+
+struct SimpleVertex {
+    glm::vec3 Pos;
     glm::vec2 TexCoords;
 };
 

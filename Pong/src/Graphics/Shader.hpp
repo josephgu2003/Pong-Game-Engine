@@ -20,6 +20,7 @@ public:
     GLuint ID;
     
     // constructor takes source files to build shader
+    Shader();
     Shader(const char* vertexPath, const char* fragmentPath);
     
     //use the shader

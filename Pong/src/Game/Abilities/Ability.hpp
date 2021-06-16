@@ -21,7 +21,7 @@ public:
     bool on;
     Ability();
     Ability(World* world_, Actor* actor_, float duration_);
-    virtual void call() = 0;
+    virtual void call(void* pointer) = 0;
     virtual void tick() = 0;
 };
 

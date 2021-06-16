@@ -20,7 +20,7 @@ Model::~Model() {
 
 void Model::loadModel(std::string filePath_) {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals );
     
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString();
@@ -29,6 +29,16 @@ void Model::loadModel(std::string filePath_) {
     
     directory = filePath_.substr(0, filePath_.find_last_of('/'));
     processNode(scene->mRootNode, scene);
+}
+void Model::setMeshTexture(int index, int type, std::vector<GLuint> newMaps) {
+
+        std::vector<Texture> newTextures;
+        for (int i = 0 ; i<newMaps.size();i++) {
+            Texture texture = {newMaps.at(i), "test","test"};
+            newTextures.push_back(texture);
+
+    meshes.at(index).textures = newTextures;
+    }
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene) {
@@ -57,6 +67,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
         pos_.y = mesh->mVertices[i].y;
         pos_.z = mesh->mVertices[i].z;
         vertex.Pos = pos_;
+        
+        glm::vec3 norm_;
+        norm_.x = mesh->mNormals[i].x;
+        norm_.y = mesh->mNormals[i].y;
+        norm_.z = mesh->mNormals[i].z;
+        vertex.Normal = norm_;
         
         if (mesh->mTextureCoords[0]) {
             glm::vec2 texCoords_;

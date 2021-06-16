@@ -25,6 +25,8 @@ struct Particle { // implies a set of vertices, don't store it or too much memor
     float duration;
 };
 
+struct Character;
+
 class ParticleEffect {
 protected:
     float size;
@@ -39,21 +41,24 @@ protected:
     int cycle;
     std::map<char, Character> glyphs;
     
+    glm::vec3 force = glm::vec3(0,0,0);
+    
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
     virtual void refreshParticle();
 public:
-    void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
+    virtual void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
     float getSize();
-    int shader;
+    unsigned int shader;
     glm::vec3 posVec;
     GLuint texture;
     ParticleEffect();
     ParticleEffect(glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
     ~ParticleEffect();
-    void tick();
+    virtual void tick();
     int getNumParticles();
     Particle& getNthParticle(int n);
+    void setForce(glm::vec3 force_);
 };
 
 class ComplexParticles : public ParticleEffect {

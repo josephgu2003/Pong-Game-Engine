@@ -11,11 +11,14 @@
 #define TEX_ENERGY "Resources/Particles/aura.png"
 #define TEX_PEACH "Resources/Particles/rosa copy.png"
 #define TEX_FIERY "Resources/Particles/download.png"
+#define TEX_EMPTY "Resources/Particles/BLANK_ICON3.png"
+#define TEX_INKPAPER "Resources/Textures/inkpaper.jpg"
 
 #define TEX_GRADIENT "Resources/Utility/radial.png"
 
 #define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
+#define MOD_HOODY "Resources/Models/journey5.obj"
 
 #define MOD_JUGGERNAUT_HBOX 0.5,-0.5,0.75,0.25,0.5,-0.5
 

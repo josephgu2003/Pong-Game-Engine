@@ -19,6 +19,8 @@
 #include <string>
 
 // is a model
+#define DIFFUSE 0
+#define SPECULAR 1
 
 struct Hitbox {
     float maxX, minX, maxY, minY, maxZ, minZ;
@@ -41,6 +43,7 @@ public:
     Model(const char* filePath);
     ~Model();
     void setMeshes(std::vector<Mesh> meshes_);
+    void setMeshTexture(int index, int type, std::vector<GLuint> newMaps);
     void setDirectory(const char* directory_);
     std::string getDirectory();
     std::vector<Mesh>* getMeshes();

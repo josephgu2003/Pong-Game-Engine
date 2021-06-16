@@ -17,14 +17,6 @@ void onetap_callback(GLFWwindow* window, int key, int scancode, int action, int 
     game->processInput(key, action, mods);
 }
 
-void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods) {
-}
-
-void char_callback(GLFWwindow* window, unsigned int key) {
-    Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));
-    //game->processInput2(key, action);
-}
-
 void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
     Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));
     game->moveMouse(mouseX_, mouseY_);
@@ -45,10 +37,6 @@ void InputHandler::setWindow(GLFWwindow *window_) {
 
 void InputHandler::setKeyCallback(GLFWkeyfun func) {
     glfwSetKeyCallback(window, func);
-}
-
-void InputHandler::setCharCallback(GLFWcharfun func) {
-    glfwSetCharCallback(window, func);
 }
 
 void InputHandler::tick() {

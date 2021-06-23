@@ -43,8 +43,14 @@ public:
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     
+    Mesh();
+    
     Mesh(std::vector<Vertex> vertices_,
          std::vector<GLuint> indices_,
          std::vector<Texture> textures_);
+    
+    void setVertexData(std::vector<Vertex> vertices_,
+                 std::vector<GLuint> indices_,
+                 std::vector<Texture> textures_);
 };
 #endif /* Mesh_hpp */

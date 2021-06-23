@@ -7,65 +7,367 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "18F52BE2-1DD1-4CD8-A67F-B11494AB6715"
-            shouldBeEnabled = "Yes"
+            uuid = "2A29B690-ECF1-436C-BEFA-10BD1BA429DB"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pong/src/Game/Ball.cpp"
+            filePath = "Pong/src/System/AssetManager.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "Ball::tick()"
-            landmarkType = "7">
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "2A29B690-ECF1-436C-BEFA-10BD1BA429DB - 29f11e256277e6a0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "1359">
+               </Location>
+               <Location
+                  uuid = "2A29B690-ECF1-436C-BEFA-10BD1BA429DB - 29f11e256277e6a0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "1359">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "256EB8CF-44AC-4D6E-9C84-F3EF1CCF96B3"
-            shouldBeEnabled = "Yes"
+            uuid = "EA70F22E-60B7-4E1F-93D5-01CE8368A38E"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pong/src/Game/Actor.cpp"
+            filePath = "Pong/src/System/AssetManager.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "Actor::tick()"
-            landmarkType = "7">
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "EA70F22E-60B7-4E1F-93D5-01CE8368A38E - 29f11e256277e4d3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "140"
+                  endingLineNumber = "140"
+                  offsetFromSymbolStart = "1068">
+               </Location>
+               <Location
+                  uuid = "EA70F22E-60B7-4E1F-93D5-01CE8368A38E - 29f11e256277e4d3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "140"
+                  endingLineNumber = "140"
+                  offsetFromSymbolStart = "1068">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E7B73CA3-73DC-43E3-96CD-7C2899CF2E84"
-            shouldBeEnabled = "Yes"
+            uuid = "981903EF-2551-4EAB-AADD-880747BBDCF5"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pong/src/Game/Actor.cpp"
+            filePath = "Pong/src/System/AssetManager.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "Actor::tick()"
-            landmarkType = "7">
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "981903EF-2551-4EAB-AADD-880747BBDCF5 - 29f11e256277e323"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "347">
+               </Location>
+               <Location
+                  uuid = "981903EF-2551-4EAB-AADD-880747BBDCF5 - 29f11e256277e323"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "347">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7ED92ABB-8027-4A36-9F07-F58F3839DFFD"
-            shouldBeEnabled = "Yes"
+            uuid = "209CD2FA-8A99-479C-88EE-1DA5B249CAE0"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pong/src/Game/Actors/Component/BossProximityComponent.cpp"
+            filePath = "Pong/src/System/AssetManager.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "BossProximityComponent::trigger(actor, world)"
-            landmarkType = "7">
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "209CD2FA-8A99-479C-88EE-1DA5B249CAE0 - 29f11e256277e398"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "159">
+               </Location>
+               <Location
+                  uuid = "209CD2FA-8A99-479C-88EE-1DA5B249CAE0 - 29f11e256277e398"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "159">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0438406A-267A-4034-82C8-8A7100A89EE4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/src/System/AssetManager.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "0438406A-267A-4034-82C8-8A7100A89EE4 - 29f11e256277e2e1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "126"
+                  endingLineNumber = "126"
+                  offsetFromSymbolStart = "635">
+               </Location>
+               <Location
+                  uuid = "0438406A-267A-4034-82C8-8A7100A89EE4 - 29f11e256277e2e1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "126"
+                  endingLineNumber = "126"
+                  offsetFromSymbolStart = "656">
+               </Location>
+               <Location
+                  uuid = "0438406A-267A-4034-82C8-8A7100A89EE4 - 29f11e256277e2e1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "126"
+                  endingLineNumber = "126"
+                  offsetFromSymbolStart = "635">
+               </Location>
+               <Location
+                  uuid = "0438406A-267A-4034-82C8-8A7100A89EE4 - 29f11e256277e2e1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "126"
+                  endingLineNumber = "126"
+                  offsetFromSymbolStart = "656">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "32CEBF47-2708-43F3-BF24-56EA7B203004"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/src/System/AssetManager.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "32CEBF47-2708-43F3-BF24-56EA7B203004 - 29f11e256277e35e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "121"
+                  endingLineNumber = "121"
+                  offsetFromSymbolStart = "201">
+               </Location>
+               <Location
+                  uuid = "32CEBF47-2708-43F3-BF24-56EA7B203004 - 29f11e256277e35e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "121"
+                  endingLineNumber = "121"
+                  offsetFromSymbolStart = "201">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "10EE0FE9-36D6-4092-8B0F-4B2B26A4F922"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/src/System/AssetManager.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "load3DTexture(filePath, id)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "10EE0FE9-36D6-4092-8B0F-4B2B26A4F922 - 29f11e256277e6a0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "1443">
+               </Location>
+               <Location
+                  uuid = "10EE0FE9-36D6-4092-8B0F-4B2B26A4F922 - 29f11e256277e6a0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "load3DTexture(char const*, unsigned int&amp;)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/src/System/AssetManager.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "1443">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

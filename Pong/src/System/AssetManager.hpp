@@ -36,11 +36,13 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <map>
+#include "Shader.hpp"
 
 //loads textures and assets
 
-static std::vector<Texture> loadedTextures;
-static std::vector<Model*> loadedModels;
+inline std::vector<Texture> loadedTextures;
+inline std::vector<Model*> loadedModels;
+inline std::vector<Shader> loadedShaders;
 
 struct Character {
     GLuint id;
@@ -48,6 +50,10 @@ struct Character {
     glm::ivec2   bearing;    // Offset from baseline to left/top of glyph
     GLuint advance; // advancing to next glph?
 };
+
+static void loadShader() {
+    
+}
 
 static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters) {
     FT_Library ft;
@@ -96,6 +102,99 @@ static int loadGlyphs(const char* filePath, std::map<char, Character>& Character
          FT_Done_Face(face);
          FT_Done_FreeType(ft);
     return 0;
+}
+
+static void load3DTexture(const char* filePath, GLuint& id) {
+    
+    stbi_set_flip_vertically_on_load(0);
+ 
+    for (int j = 0; j < loadedTextures.size(); j++) {
+        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
+            std::cout << loadedTextures[j].path.data() << "\n";
+            id = loadedTextures[j].id;
+        }
+    }
+
+    std::vector<unsigned char*> imageDatas;
+    
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, id);
+    
+    int counter = 0;
+    
+    int imageWidth = 0;
+    int imageHeight = 0;
+    int channels = 0;
+    
+    unsigned char* imageData;
+    
+    while(true) {
+        std::string framePath("blah");
+        if(counter > 0) {
+            std::string number= std::to_string(counter);
+            if (counter < 10) {
+                number = "";
+                number += "00";
+                number += std::to_string(counter);
+            } else if (counter < 100) {
+                number = "";
+                number += "0";
+                number += std::to_string(counter);
+            }
+            std::string filePath_ = std::string(filePath);
+            framePath = filePath_.replace(filePath_.begin()+filePath_.find('.')-3,filePath_.begin()+filePath_.find('.'),number);;
+           
+        } else {
+            framePath = std::string(filePath);
+        }
+    counter++;
+        
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    imageData = stbi_load(framePath.c_str(), &imageWidth, &imageHeight, &channels, 0);
+        
+    if (imageData) {
+        imageDatas.push_back(imageData);
+    } else {
+        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
+        stbi_image_free(imageData);
+        break;
+    }
+  //  stbi_image_free(imageData);
+    }
+
+    GLenum format;
+           if (channels == 1)
+               format = GL_RED;
+           else if (channels == 3)
+               format = GL_RGB;
+           else if (channels == 4)
+               format = GL_RGBA;
+
+      
+    
+   // glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, format, imageWidth, imageHeight, counter);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, format, imageWidth, imageHeight, counter-1, 0, format, GL_UNSIGNED_BYTE, NULL);
+    // Upload pixel data.
+    // The first 0 refers to the mipmap level (level 0, since there's only 1)
+    // The following 2 zeroes refers to the x and y offsets in case you only want to specify a subrectangle.
+    // The final 0 refers to the layer index offset (we start from index 0 and have 2 levels).
+    // Altogether you can specify a 3D box subset of the overall texture, but only one mip level at a time.
+    
+   for(int i = 0; i < imageDatas.size(); i++) {
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, imageWidth, imageHeight, 1, format, GL_UNSIGNED_BYTE, imageDatas.at(i));
+    }
+    glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+    // Always set reasonable texture parameters
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    Texture newTex;
+    newTex.id = id;
+    newTex.path = filePath;
+    loadedTextures.push_back(newTex);
+    stbi_set_flip_vertically_on_load(1);
+ 
 }
 
 static GLuint loadTexture(const char* filePath) {

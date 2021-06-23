@@ -11,6 +11,8 @@
 #include <cctype>
 #include "Speech.hpp"
 #include "stb_image.h"
+#include "Dialogue.hpp"
+#include "Fish.hpp"
 
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -44,9 +46,10 @@ Game::Game() {
     inputHandler.setWindow(window);
     
     //billow.posVec = glm::vec3(0,5,0);
-    
-    leaves.init(0.03, glm::vec3(0,0,0), 5, 0.5, 5, 250, 1);
-    inkGlyphs.init(0.05, glm::vec3(0,0,0), 10, 0.5, 10, 100, 1);
+    stbi_set_flip_vertically_on_load(1);
+
+    inkGlyphs.init(5, glm::vec3(0,0,0), 5, 1, 5, 100, 15);
+    effect.init(0.01, glm::vec3(0,20,0), 0.1, 0.2, 0.1, 1500, 1);
     
     camera.setActor(&pHero);
     pHero.setWorld(&world);
@@ -57,7 +60,10 @@ Game::Game() {
   //  world.insertActor(&billow);
     world.insertParticleEffect(&inkGlyphs);
     
-    screen.print("Grinding the inkstone...");
+    effect.setActor(&ball);
+    world.insertParticleEffect(&effect);
+    
+    screen.print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
@@ -65,20 +71,22 @@ Game::Game() {
     renderer->setWorld(&world);
     renderer->setCamera(&camera);
     
-    screen.print("Tuning the strings...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-    
-    ball.loadModel();
-    
     screen.print("Opening the books...");
     glfwPollEvents();
     glfwSwapBuffers(window);
+    stbi_set_flip_vertically_on_load(0);
     
-    pHero.loadModel();
-    ball.posVec = glm::vec3(0,2,0);
+    ball.loadModel();
+    
+    screen.print("Flipping the pages...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    pHero.init();
+    pHero.posVec = glm::vec3(10,50,10);
+    ball.posVec = glm::vec3(0,0.5,0);
    // billow.loadModel();
-    
+
     screen.print("Putting on a fresh canvas...");
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -86,8 +94,8 @@ Game::Game() {
     renderer->loadActorData();
     renderer->loadMapData();
     renderer->loadSkyBoxData();
-
     stbi_set_flip_vertically_on_load(1);
+
   /**  blank = stbi_load("Resources/Models/Flag/yirou'sdrawing.jpg", &imageWidth, &imageHeight, &channels, 0);
     
     glGenTextures(1, &ftexture);
@@ -98,6 +106,7 @@ Game::Game() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);**/
+    printf("%s\n", glGetString(GL_VERSION));
 
     blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
      
@@ -111,6 +120,8 @@ Game::Game() {
      glBindTexture(GL_TEXTURE_2D, 0);
 
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
+  //  audio.playMusic();
+
 }
 
 Game::~Game() {
@@ -120,16 +131,16 @@ Game::~Game() {
 void Game::tick() {
     if (scheme == 0) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        pHero.posDir(0.04);
+        pHero.posDir(0.015);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        pHero.posDir(-0.04);
+        pHero.posDir(-0.015);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        pHero.posRight(0.04);
+        pHero.posRight(0.015);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        pHero.posRight(-0.04);
+        pHero.posRight(-0.015);
     }
     }
     
@@ -161,24 +172,27 @@ void Game::tick() {
     
     if(ball.abilityQ.size()>0) {
         for(int i = 0; i < ball.abilityQ.size(); i++) {
-            ball.abilityQ.at(i)->call(renderer);
+            ball.abilityQ.at(i)->call(this);
             abilities.push_back(ball.abilityQ.at(i));
         }
         ball.abilityQ.clear();
     }
-    
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == true) {
                 abilities.at(i)->tick();
             }
+    }
+    }
+    world.tick();
+    if (abilities.size() > 0) {
+        for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == false) {
-                abilities.at(i)->~Ability();
+                delete abilities.at(i);
                 abilities.erase(abilities.begin()+i);
             }
     }
     }
-    world.tick();
     glfwSetTime(0);
     if(printing)
     {print();}
@@ -208,6 +222,18 @@ void Game::moveMouse(double mouseX_, double mouseY_) {
 
 int Game::processInput(int key, int action, int mods) {
 //    unique_lock<mutex> lock()
+    if (scheme == 3) {
+        if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+            nextBranch = 0;
+            if(activeDialogue != NULL) activeDialogue->branch(nextBranch);
+            setActionScheme(0);
+        }
+            if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+                nextBranch = 1;
+                if(activeDialogue != NULL) activeDialogue->branch(nextBranch);
+                setActionScheme(0);
+            }
+    }
     if (scheme == 1) {
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_SPACE)
@@ -245,14 +271,20 @@ int Game::processInput(int key, int action, int mods) {
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         FallingLetters* letters = new FallingLetters(&world, &pHero, 6);
-        letters->call(nullptr);
+        letters->call(this);
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            std::vector<std::string> lines = { "Oh, so you are approaching me?", "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Joseph's Dad - Programming and Math Consultant"};
+            std::vector<std::string> lines = { "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant"};
             Speech* speech = new Speech(&world, &pHero, 6, lines);
             abilities.push_back(speech);
-            speech->call(renderer);
+            speech->call(this);
+        }
+        
+        if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+            Fish* fish = new Fish(&world, &pHero, 6);
+            abilities.push_back(fish);
+            fish->call(this);
         }
         
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {
@@ -262,7 +294,7 @@ int Game::processInput(int key, int action, int mods) {
             Sketch* sketch = new Sketch(&world, &pHero, 6, ftexture);
             activeSketch = sketch;
             abilities.push_back(sketch);
-            sketch->call(nullptr);
+            sketch->call(this);
             }
             return 0;
         }
@@ -318,4 +350,8 @@ void Game::setActionScheme(int id) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     scheme = id;
+}
+
+void Game::newDialogue(Dialogue& dialogue_) {
+    activeDialogue = &dialogue_;
 }

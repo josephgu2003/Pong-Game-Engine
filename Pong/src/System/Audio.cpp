@@ -6,3 +6,11 @@
 //
 
 #include "Audio.hpp"
+
+Audio::Audio() {
+    SoundEngine = irrklang::createIrrKlangDevice();
+}
+
+void Audio::playMusic() {
+SoundEngine->play2D("Resources/Audio/Music/New Recording 41.wav", true);
+}

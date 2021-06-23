@@ -26,7 +26,9 @@
 #include "Leaves.hpp"
 #include "LoadingScreen.hpp"
 #include "InkGlyphs.hpp"
+#include "Audio.hpp"
 
+class Dialogue;
 
 class Game {
 GLFWwindow* window; // Windowed
@@ -34,9 +36,11 @@ Camera camera;
 World world;
 Renderer* renderer;
 InputHandler inputHandler;
+    Audio audio;
     
     std::stringstream input;
     std::string i;
+    int nextBranch;
     bool printing = false;
    // boost::mutex mutex;
     
@@ -48,12 +52,13 @@ InputHandler inputHandler;
     bool firstMouse = true;
     bool mouseMoved = false;
     Sketch* activeSketch = NULL;
+    Dialogue* activeDialogue = NULL;
     
     Ball ball;
     PlayerHero pHero;
     Billow billow;
-    Leaves leaves;
     InkGlyphs inkGlyphs;
+    ParticleEffect effect;
     
     std::vector<Ability*> abilities;
     GLuint fbo, fvao, ftexture;
@@ -73,6 +78,7 @@ public:
     void processInput2(int key, int action);
     void print();
     void setActionScheme(int id);
+    void newDialogue(Dialogue& dialogue_);
 };
 
 #endif /* Game_hpp */

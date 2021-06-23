@@ -10,5 +10,13 @@
 
 #include <stdio.h>
 #include <sndfile.h>
+#include <irrKlang.h>
+
+class Audio {
+    irrklang::ISoundEngine *SoundEngine;
+public:
+    Audio();
+    void playMusic();
+};
 
 #endif /* Audio_hpp */

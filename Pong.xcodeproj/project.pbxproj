@@ -32,6 +32,8 @@
 		5D65F5CA2638EDBB00A839D3 /* libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4882651EEB8006EA749 /* ice.jpeg */; };
 		5D66B4922651EF2E006EA749 /* phoenix in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4912651EF2E006EA749 /* phoenix */; };
+		5D670C9C2684D903000E179C /* Map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9A2684D903000E179C /* Map.cpp */; };
+		5D670C9F2684D90C000E179C /* Sky.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9D2684D90C000E179C /* Sky.cpp */; };
 		5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7706282654B082002A0BB0 /* AssetManager.cpp */; };
 		5D7F6682267134E500B70DA7 /* pencil.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F6681267134E500B70DA7 /* pencil.jpg */; };
 		5D7F67212671880200B70DA7 /* journey5.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F6719267187FE00B70DA7 /* journey5.mtl */; };
@@ -529,6 +531,10 @@
 		5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		5D66B4882651EEB8006EA749 /* ice.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpeg; sourceTree = "<group>"; };
 		5D66B4912651EF2E006EA749 /* phoenix */ = {isa = PBXFileReference; lastKnownFileType = folder; path = phoenix; sourceTree = "<group>"; };
+		5D670C9A2684D903000E179C /* Map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Map.cpp; sourceTree = "<group>"; };
+		5D670C9B2684D903000E179C /* Map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Map.hpp; sourceTree = "<group>"; };
+		5D670C9D2684D90C000E179C /* Sky.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sky.cpp; sourceTree = "<group>"; };
+		5D670C9E2684D90C000E179C /* Sky.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sky.hpp; sourceTree = "<group>"; };
 		5D7706282654B082002A0BB0 /* AssetManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetManager.cpp; sourceTree = "<group>"; };
 		5D7706292654B082002A0BB0 /* AssetManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssetManager.hpp; sourceTree = "<group>"; };
 		5D7F6681267134E500B70DA7 /* pencil.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pencil.jpg; sourceTree = "<group>"; };
@@ -1081,6 +1087,10 @@
 			children = (
 				5D3E7087264308C10071115A /* Camera.cpp */,
 				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5D670C9D2684D90C000E179C /* Sky.cpp */,
+				5D670C9E2684D90C000E179C /* Sky.hpp */,
+				5D670C9A2684D903000E179C /* Map.cpp */,
+				5D670C9B2684D903000E179C /* Map.hpp */,
 				5DA67C292641A482005A7E74 /* Actor.hpp */,
 				5DF7A2372640E0FD004F05E2 /* World.hpp */,
 				5D3E7088264308C10071115A /* Camera.hpp */,
@@ -2246,6 +2256,7 @@
 				5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */,
 				5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */,
 				5DF8B88526814541006AAC64 /* ComplexParticles.cpp in Sources */,
+				5D670C9C2684D903000E179C /* Map.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
 				5DAC1808266994AE0021DC31 /* Game.cpp in Sources */,
 				5DA7E2AD26801683008845AA /* Batch.cpp in Sources */,
@@ -2259,6 +2270,7 @@
 				5D33262A267934E4002F3D49 /* BossBehaviorComponent.cpp in Sources */,
 				5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */,
 				5D2E2D83267BB544007ADBF3 /* CombatComponent.cpp in Sources */,
+				5D670C9F2684D90C000E179C /* Sky.cpp in Sources */,
 				5DEE58232666A99F0080446C /* TicTacToe.cpp in Sources */,
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,

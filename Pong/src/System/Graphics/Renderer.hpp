@@ -35,8 +35,6 @@ private:
     screentext screenText = {0, ""};
     GLuint funtex1, funtex2;
     GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, pinstaVBO, fbo, ftexture, rbo, fvbo, fvao, tVBO, tVAO, qVBO, qVAO, qEBO;
-    
-    GLuint ubo;
 
     float screenquad[24] =
     {   -1.0f,  1.0f,  0.0f, 1.0f,
@@ -65,6 +63,8 @@ private:
     glm::mat4 modelMat;
     glm::mat4 viewMat;
     glm::mat4 projMat;
+    glm::mat4 viewMat2;
+    glm::mat4 projMat2;
     glm::mat4 specialMat;
     glm::vec3 pPositions[1000];
     float billowing[2500];
@@ -74,7 +74,7 @@ private:
     
     float lighting;
     
-    void loadModelMatrix(int n); // finds the matrices for nth actor in world's actor vector
+
     void renderMap();
     void renderActors();
     void renderParticles();
@@ -82,6 +82,9 @@ private:
     void renderUI();
     
     void updateUniformBlocks();
+    void updateViewProj();
+    void updateLights();
+    void updateViewPos();
 public:
     float time;
     void renderSky();

@@ -90,6 +90,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     
     glDeleteShader(vShader);
     glDeleteShader(fShader);
+
 }
 
 void Shader::use()
@@ -191,6 +192,10 @@ void Shader::setVec3(const std::string &name, glm::vec3 vector) const {
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vector));
 }
 
-void Shader::setMat4(const std::string &name, glm::mat4 matrix) const {
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+void Shader::setMat4(const std::string &name, glm::mat4 matrix) {
+    glm::mat4 test = matrix;
+    use();
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(test));
 }
+
+

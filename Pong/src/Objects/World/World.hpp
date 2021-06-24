@@ -18,6 +18,7 @@
 #include "Camera.hpp"
 #include "Model.hpp"
 #include "BehaviorComponent.hpp"
+#include "Map.hpp"
 
 #define ACTOR_UPDATE 0
 #define PARTICLE_UPDATE 1

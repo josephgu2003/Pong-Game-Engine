@@ -92,32 +92,23 @@ void Actor::turnTowards(glm::vec3 newDir) {
     rightVec = rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
     rightVec = glm::normalize(rightVec);
 }
-uniform float brightness;
-
-    uniform sampler2D texture0;
-    uniform sampler2D texture1;
-
-uniform vec3 viewPos;
 
 void Actor::tick() {
-    glm::mat4 modelMat = glm::mat4(1.0f);
-    modelMat = glm::translate(modelMat, posVec);
-    modelMat = glm::translate(modelMat, glm::vec3(0,-0.1,0));
-    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
-    glm::quat MyQuaternion = glm::quat(rotations);
-
-glm::mat4 RotationMatrix = toMat4(MyQuaternion);
-    modelMat = modelMat * RotationMatrix;
-    
-    shader.setMat4("modelMat", modelMat);
-    shader.setFloat("brightness", brightness);
-    shader
-    
     if (components.size() > 0) {
         for (int i = 0; i < components.size(); i++) {
             components.at(i)->tick(*this, *world);
         }
     }
+    modelMat = glm::mat4(1.0f);
+    modelMat = glm::translate(modelMat, posVec);
+    modelMat = glm::translate(modelMat, glm::vec3(0,-0.1,0));
+    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
+    glm::quat MyQuaternion = glm::quat(rotations);
+    
+glm::mat4 RotationMatrix = toMat4(MyQuaternion);
+    modelMat = modelMat * RotationMatrix;
+    
+    shader->setMat4("modelMat", modelMat);
 }
 
 
@@ -157,7 +148,21 @@ glm::vec3 Actor::getPos() {
 void Actor::init() {
     model = loadModels("Resources/Models/journey5.obj");
    // model = loadModels(MOD_JUGGERNAUT);
-    shader.init("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    extern GLuint uboLights;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+    GLuint lights  = glGetUniformBlockIndex(shader->ID, "Lights");
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void Actor::setWorld(World* world_) {

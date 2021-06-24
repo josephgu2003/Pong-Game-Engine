@@ -8,9 +8,12 @@ layout (location = 1) in vec2 TexCoords_;
     
     uniform mat4 modelMat;
 
-    uniform mat4 viewMat;
+layout(std140) uniform ViewProj
+{
+    mat4 viewMat;
 
-    uniform mat4 projMat;
+    mat4 projMat;
+};
     
     void main()
     {

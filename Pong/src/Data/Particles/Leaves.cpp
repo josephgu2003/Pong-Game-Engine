@@ -38,7 +38,6 @@ void Leaves::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, 
     cyclecount = cyclecount_;
     firstUnused = 0;
     distribution = std::uniform_int_distribution<int>(1,1000);
-    shader = 3;
 }
 
 void Leaves::tick() {

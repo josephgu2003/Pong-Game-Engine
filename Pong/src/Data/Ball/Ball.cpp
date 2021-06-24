@@ -52,8 +52,25 @@ Ball::Ball() {
     memcpy(indices, indicesCopy, sizeof(indicesCopy));**/
 }
 
-void Ball::loadModel() {
-    model = loadModels(MOD_HOODY);
+void Ball::init() {
+    model = loadModels("Resources/Models/journey5.obj");
+   // model = loadModels(MOD_JUGGERNAUT);
+    shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    
+    
+    extern GLuint uboLights;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+    GLuint lights  = glGetUniformBlockIndex(shader->ID, "Lights");
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+ //   GLuint lights  = glGetUniformBlockIndex(shader.ID, "Lights");
+   // glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
     std::vector<GLuint> newMaps = {loadTexture(TEX_INKPAPER)};
     for (int i = 0; i<model->getMeshes()->size(); i ++) {
         model->setMeshTexture(i, DIFFUSE, newMaps);

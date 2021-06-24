@@ -192,6 +192,9 @@ Weather World::getWeather() {
 void World::tick() {
     globalTime += glfwGetTime();
   //  weather.brightness = 0.5*(sin(globalTime)+1.3);
+    for(int i = 0; i < allCameraPtrs.size(); i++) {
+        allCameraPtrs[i]->tick();
+    }
     for(int i = 0; i < allActorPtrs.size(); i++) {
         if (allQuadPtrs.size()>0) {
             for (int j = 0; j < allQuadPtrs.size(); j++) {
@@ -202,7 +205,7 @@ void World::tick() {
         allActorPtrs[i]->tick();
     }
     for(int i = 0; i < allCameraPtrs.size(); i++) {
-        allCameraPtrs[i]->tick();
+        allCameraPtrs[i]->updateVecs();
     }
     for (int i = 0; i < allParticleEffects.size(); i++) {
         glm::vec3 newForce = glm::vec3(0,0,0);

@@ -19,6 +19,7 @@
 #include "AssetManager.hpp"
 #include <functional>
 #include "Actor.hpp"
+#include "Shader.hpp"
 
 struct Particle { // implies a set of vertices, don't store it or too much memory
     glm::vec3 posVec, velVec;
@@ -30,6 +31,7 @@ struct Character;
 
 class ParticleEffect {
 protected:
+    
     float size;
     
     std::vector<Particle> particles;
@@ -54,8 +56,8 @@ public:
     void setActor(Actor* actor);
     float getSize();
     
-    unsigned int shader;
     glm::vec3 posVec;
+    Shader shader;
     GLuint texture;
     GLenum textureTarget;
     

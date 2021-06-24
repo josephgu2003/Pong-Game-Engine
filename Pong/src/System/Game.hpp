@@ -58,7 +58,6 @@ InputHandler inputHandler;
     PlayerHero pHero;
     Billow billow;
     InkGlyphs inkGlyphs;
-    ParticleEffect effect;
     
     std::vector<Ability*> abilities;
     GLuint fbo, fvao, ftexture;

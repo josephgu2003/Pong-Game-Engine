@@ -23,16 +23,18 @@ vec3 specular;
     
 };
 
-uniform Light light;
+layout (std140) uniform Lights
+{
+   Light light;
 
-uniform DirLight dirLight;
-
-uniform float brightness;
+    DirLight dirLight;
+    
+    vec3 viewPos;
+};
 
     uniform sampler2D texture0;
     uniform sampler2D texture1;
 
-uniform vec3 viewPos;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 

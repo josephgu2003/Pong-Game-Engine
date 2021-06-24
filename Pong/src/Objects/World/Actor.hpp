@@ -44,7 +44,8 @@ class Actor {
 protected:
     Model* model;
     std::vector<Component*> components;
-    Shader shader;
+    Shader* shader;
+    glm::mat4 modelMat = glm::mat4(1.0f);
 public:
     std::vector<Ability*> abilityQ;
     glm::vec3 posVec;
@@ -62,7 +63,7 @@ public:
     ~Actor();
 
     virtual void tick();
-    void init();
+    virtual void init();
     void setWorld(World* world_);
     
     float getYaw();

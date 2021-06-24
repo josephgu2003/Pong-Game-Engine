@@ -3,9 +3,12 @@
     
     out vec3 TexVec;
 
-    uniform mat4 viewMat;
+layout(std140) uniform ViewProj
+{
+    mat4 viewMat;
 
-    uniform mat4 projMat;
+    mat4 projMat;
+};
 
     void main()
     {

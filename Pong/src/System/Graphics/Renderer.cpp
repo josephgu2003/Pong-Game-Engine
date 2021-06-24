@@ -13,6 +13,9 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+GLuint uboViewProj;
+GLuint uboLights;
+
 Renderer::Renderer() {
     actorShader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs"); // make own function later
     mapShader = new Shader("Shaders/MapVertexShader.vs", "Shaders/MapFragmentShader.fs");
@@ -34,6 +37,7 @@ Renderer::Renderer() {
     modelMat = glm::mat4(1);
     viewMat = glm::mat4(1);
     projMat = glm::perspective(glm::radians(50.0f), 1000.0f/800.0f, 0.01f, 100.0f);
+    projMat2 = glm::perspective(glm::radians(50.0f), 1000.0f/800.0f, 0.01f, 100.0f);
     time = 0;
     gradient = loadTexture(TEX_GRADIENT);
     funtex2 = loadTexture("Resources/Models/textures/lambert1_baseColor.png");
@@ -91,25 +95,67 @@ void Renderer::setWorld(World *world_) {
 void Renderer::setCamera(Camera *camera_) {
     camera = camera_;
 
-    glGenBuffers(1, &ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBindVertexArray(VAO);
+    glGenBuffers(1, &uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     glBufferData(GL_UNIFORM_BUFFER, 128, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo);
-    
-    
-    GLuint viewproj  = glGetUniformBlockIndex(actorShader->ID, "ViewProj");
-    glUniformBlockBinding(actorShader->ID, viewproj, 0);
     
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+
+    glGenBuffers(1, &uboLights);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+    glBufferData(GL_UNIFORM_BUFFER, 9*sizeof(glm::vec4), NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+    
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindVertexArray(0);
+    updateUniformBlocks();
 }
 
 void Renderer::updateUniformBlocks() {
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+
+    updateViewProj();
+    updateLights();
+    updateViewPos();
+
+}
+
+void Renderer::updateViewProj() {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(viewMat));
-    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(projMat));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewMat));
+    glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(projMat));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+void Renderer::updateLights() {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+     
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 16, glm::value_ptr(glm::vec4(0.1,0.1,0.1,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 16, 16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER,  2*16,16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 3*16, 16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
+     
+     glBufferSubData(GL_UNIFORM_BUFFER, 4*16,16,glm::value_ptr(glm::vec4(0,-1,-1,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 5*16, 16, glm::value_ptr(glm::vec4(0.1,0.1,0.1,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 6*16,16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 7*16, 16, glm::value_ptr(glm::vec4(1.0,1.0,1.0,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camera->posVec,0)));
+     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void Renderer::updateViewPos() {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
+    
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewMat));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
+    
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camera->posVec,0)));
+     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void Renderer::loadActorData() {
@@ -204,7 +250,6 @@ void Renderer::loadMapData() {
       glEnableVertexAttribArray(2);
       
     glBindVertexArray(0);
-
 }
 
 void Renderer::loadSkyBoxData() {
@@ -375,13 +420,14 @@ void Renderer::render() {
     } else {
         lighting = 1.0f;
     }
-    updateUniformBlocks();
+    updateViewPos();
   //  renderSky();
     renderMap();
     renderActors();
     renderParticles();
     renderQuads();
     renderUI();
+    
     if (screenText.duration > 0) {
         renderText();
     }
@@ -425,21 +471,7 @@ void Renderer::loadTextData() {
     glBindVertexArray(0);
 }
 
-void Renderer::loadModelMatrix(int n) {
-  /**  modelMat = glm::mat4(1.0f);
-    modelMat = glm::translate(modelMat, world->getNthActor(n)->getPos());
-    modelMat = glm::translate(modelMat, glm::vec3(0,-0.1,0));
-    modelMat = glm::rotate(modelMat, -glm::radians(-90+world->getNthActor(n)->getYaw()), glm::vec3(0,1,0));**/
-    
-    modelMat = glm::mat4(1.0f);
-    modelMat = glm::translate(modelMat, world->getNthActor(n)->getPos());
-    modelMat = glm::translate(modelMat, glm::vec3(0,-0.1,0));
-    glm::vec3 rotations = glm::vec3(glm::radians(world->getNthActor(n)->eulerAngles.x),glm::radians(90-world->getNthActor(n)->eulerAngles.y),glm::radians(world->getNthActor(n)->eulerAngles.z));
-    glm::quat MyQuaternion = glm::quat(rotations);
 
-glm::mat4 RotationMatrix = toMat4(MyQuaternion);
-    modelMat = modelMat * RotationMatrix;
-}
 
 void Renderer::renderSky() {
     //sky
@@ -524,46 +556,18 @@ void Renderer::renderMap() {
     glUniform1f(glGetUniformLocation(mapShader->ID, "time"), time);
     glBindTexture(GL_TEXTURE_2D, texture);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-/**    std::vector<Mesh>* meshes = world->getMap().getMeshes();
-    int indiceCount = 0;
-        for (int j = 0; j < meshes->size(); j++) {
-       //     GLuint id2 = meshes->at(j).textures.at(1).id;
-        glActiveTexture(GL_TEXTURE0); // accomodate more trextures later
-            glUniform1i(glGetUniformLocation(mapShader->ID, "mapTexture"), 0);
-          glBindTexture(GL_TEXTURE_2D, texture);
-            
-            glActiveTexture(GL_TEXTURE1);
-            glUniform1i(glGetUniformLocation(mapShader->ID, "texture1"), 1);
-            glBindTexture(GL_TEXTURE_2D, texture2);
-
-            glDrawElements(GL_TRIANGLES, meshes->at(j).indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
-            indiceCount += (meshes->at(j).indices.size())*sizeof(GLuint);
-            glBindTexture(GL_TEXTURE_2D, 0);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }**/
 }
 
 void Renderer::renderActors() {
     // actors
     glBindVertexArray(VAO);
-    actorShader->use();
-    glUniform3fv(glGetUniformLocation(actorShader->ID, "viewPos"), 1, glm::value_ptr(camera->posVec));
-  //  glUniform3fv(glGetUniformLocation(actorShader->ID, "light.pos"), 1,  glm::value_ptr(glm::vec3(10,5,0)));
-    glUniform3fv(glGetUniformLocation(actorShader->ID, "dirLight.dir"), 1,  glm::value_ptr(glm::vec3(0,-1,-1)));
-    glUniform3fv(glGetUniformLocation(actorShader->ID, "dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1,0.1,0.1)));
-    glUniform3fv(glGetUniformLocation(actorShader->ID, "dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.2,0.2,0.2)));
-    glUniform3fv(glGetUniformLocation(actorShader->ID, "dirLight.specular"), 1, glm::value_ptr(glm::vec3(1.0,1.0,1.0)));
-    viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     int indiceCount = 0;
     for (int i = 0; i<world->getActorsCount(); i++) {
-    loadModelMatrix(i);
     std::vector<Mesh>* meshes = world->getNthActor(i)->model->getMeshes();
+        Shader* shader = world->getNthActor(i)->shader;
+        shader->use();
         for (int j = 0; j < meshes->size(); j++) {
-                glUniformMatrix4fv(glGetUniformLocation(actorShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-        //    }
-          //  glUniform1f(glGetUniformLocation(actorShader->ID, "brightness"), world->getNthActor(i)->light.intensity);
-            glUniform1f(glGetUniformLocation(actorShader->ID, "brightness"), 0);
+            
             GLuint id1;
             if (meshes->at(j).textures.size() > 0) {
                 id1 = meshes->at(j).textures.at(0).id;
@@ -576,23 +580,20 @@ void Renderer::renderActors() {
                 id2 = texture;
             }
             
-            glActiveTexture(GL_TEXTURE0); // accomodate more trextures later
-            glUniform1i(glGetUniformLocation(actorShader->ID, "texture0"), 0);
+            glActiveTexture(GL_TEXTURE0);
+            glUniform1i(glGetUniformLocation(shader->ID, "texture0"), 0);
             glBindTexture(GL_TEXTURE_2D, id1);
             
           glActiveTexture(GL_TEXTURE1);
-            glUniform1i(glGetUniformLocation(actorShader->ID, "texture1"), 1);
-
+            glUniform1i(glGetUniformLocation(shader->ID, "texture1"), 1);
             glBindTexture(GL_TEXTURE_2D, id2);
             
-            glUniformMatrix4fv(glGetUniformLocation(actorShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-            glUniformMatrix4fv(glGetUniformLocation(actorShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
             glActiveTexture(GL_TEXTURE0);
 
             glDrawElements(GL_TRIANGLES, meshes->at(j).indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
-        
-
+            
             indiceCount += (meshes->at(j).indices.size())*sizeof(GLuint);
+        
             glBindTexture(GL_TEXTURE_2D, 0);
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, 0);
@@ -609,19 +610,16 @@ void Renderer::renderParticles() {
     int indiceCount = 0;
 
     for (int i = 0; i < world->getParticleEffects()->size(); i++) {
-
-         shaders.at(world->getParticleEffects()->at(i)->shader)->use();
-         GLuint shader = shaders.at(world->getParticleEffects()->at(i)->shader)->ID;
-        
+         Shader &shaderRef = (world->getParticleEffects()->at(i)->shader);
+        shaderRef.use();
+        GLuint shader = shaderRef.ID;
         glActiveTexture(GL_TEXTURE1);
         glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
         glBindTexture(GL_TEXTURE_2D, gradient);
-        
-         glUniformMatrix4fv(glGetUniformLocation(shader, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-         glUniformMatrix4fv(glGetUniformLocation(shader, "projMat"), 1, GL_FALSE,
-                     glm::value_ptr(projMat));
+ 
          glActiveTexture(GL_TEXTURE0);
-         glUniform1i(glGetUniformLocation(actorShader->ID, "texture0"), 0);
+         glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
+        
         for (int j = 0; j < world->getParticleEffects()->at(i)->getNumParticles(); j++) {
              if(world->getParticleEffects()->at(i)->getNthParticle(j).duration > 0) {
                  glBindTexture(world->getParticleEffects()->at(i)->textureTarget, world->getParticleEffects()->at(i)->getNthParticle(j).texture);

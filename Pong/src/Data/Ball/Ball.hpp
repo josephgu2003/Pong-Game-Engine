@@ -13,8 +13,8 @@
 class Ball: public Actor {
 public:
     Ball();
-    virtual void tick();
-    void loadModel();
+    virtual void tick() override;
+    virtual void init() override;
 };
 
 #endif /* Ball_hpp */

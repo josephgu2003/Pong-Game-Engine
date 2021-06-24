@@ -33,9 +33,16 @@ particles[firstUnused].duration = 5;
 void ComplexParticles::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
     load3DTexture("Resources/Particles/Inky/GWtc0.png", texture);
     ParticleEffect::init(size_, posVec_, x_, y_, z_, numParticles_,cyclecount_);
-    shader = 4;
     std::map<char,Character> glyphs;
     loadGlyphs("Resources/Glyphs/minecraft-enchantment.ttf", glyphs);
     textureTarget = GL_TEXTURE_2D_ARRAY;
+    shader.init("Shaders/GlyphParticleVShader.vs", "Shaders/GlyphParticleFShader.fs");
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    GLuint viewproj  = glGetUniformBlockIndex(shader.ID, "ViewProj");
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 

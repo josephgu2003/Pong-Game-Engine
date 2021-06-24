@@ -44,8 +44,16 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, float x_, float y_, fl
     firstUnused = 0;
     texture = loadTexture(TEX_PEACH); //***
     distribution = std::uniform_int_distribution<int>(1,1000);
-    shader = 3;
     textureTarget = GL_TEXTURE_2D;
+    shader.init("Shaders/ParticleVertexShader.vs", "Shaders/ParticleFragmentShader.fs");
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    GLuint viewproj  = glGetUniformBlockIndex(shader.ID, "ViewProj");
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 }
 
 void ParticleEffect::setActor(Actor* actor_) {

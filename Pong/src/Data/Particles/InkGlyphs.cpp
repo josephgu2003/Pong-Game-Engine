@@ -8,10 +8,30 @@
 #include "InkGlyphs.hpp"
 
 void InkGlyphs::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
-    ParticleEffect::init(size_, posVec_, x_, y_, z_, numParticles_,cyclecount_);
+    size = size_;
+    std::srand(314159);
+    posVec = posVec_;
+    force = glm::vec3(0,0,0);
+    x = x_;
+    y = y_;
+    z = z_;
+    numParticles = numParticles_;
+    for (int i = 0; i < numParticles; i++)
+        particles.push_back(Particle());
+    cycle = cyclecount_;
+    cyclecount = cyclecount_;
+    firstUnused = 0;
+    distribution = std::uniform_int_distribution<int>(1,1000);
     load3DTexture("Resources/Particles/Smoke/Smoke/frame_000.jpg", texture);
-    shader = 4;
     textureTarget = GL_TEXTURE_2D_ARRAY;
+    shader.init("Shaders/GlyphParticleVShader.vs", "Shaders/GlyphParticleFShader.fs");
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    GLuint viewproj  = glGetUniformBlockIndex(shader.ID, "ViewProj");
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void InkGlyphs::tick() {

@@ -49,7 +49,6 @@ Game::Game() {
     stbi_set_flip_vertically_on_load(1);
 
     inkGlyphs.init(5, glm::vec3(0,0,0), 5, 1, 5, 100, 15);
-    effect.init(0.01, glm::vec3(0,20,0), 0.1, 0.2, 0.1, 1500, 1);
     
     camera.setActor(&pHero);
     pHero.setWorld(&world);
@@ -60,9 +59,7 @@ Game::Game() {
   //  world.insertActor(&billow);
     world.insertParticleEffect(&inkGlyphs);
     
-    effect.setActor(&ball);
-    world.insertParticleEffect(&effect);
-    
+
     screen.print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -76,7 +73,7 @@ Game::Game() {
     glfwSwapBuffers(window);
     stbi_set_flip_vertically_on_load(0);
     
-    ball.loadModel();
+    ball.init();
     
     screen.print("Flipping the pages...");
     glfwPollEvents();
@@ -107,7 +104,7 @@ Game::Game() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);**/
     printf("%s\n", glGetString(GL_VERSION));
-
+    
     blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
      
     glGenTextures(1, &ftexture);

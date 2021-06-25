@@ -23,10 +23,11 @@
 #include "Ability.hpp"
 #include "Sketch.hpp"
 #include "Billow.hpp"
-#include "Leaves.hpp"
+#include "Mist.hpp"
 #include "LoadingScreen.hpp"
 #include "InkGlyphs.hpp"
 #include "Audio.hpp"
+#include "Map.hpp"
 
 class Dialogue;
 
@@ -34,6 +35,7 @@ class Game {
 GLFWwindow* window; // Windowed
 Camera camera;
 World world;
+    World realWorld;
 Renderer* renderer;
 InputHandler inputHandler;
     Audio audio;
@@ -56,8 +58,9 @@ InputHandler inputHandler;
     
     Ball ball;
     PlayerHero pHero;
-    Billow billow;
     InkGlyphs inkGlyphs;
+    Map map;
+    Mist mist;
     
     std::vector<Ability*> abilities;
     GLuint fbo, fvao, ftexture;

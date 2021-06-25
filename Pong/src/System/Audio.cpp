@@ -12,5 +12,6 @@ Audio::Audio() {
 }
 
 void Audio::playMusic() {
-SoundEngine->play2D("Resources/Audio/Music/New Recording 41.wav", true);
+SoundEngine->play2D("Resources/Audio/Music/New Recording 56.wav", true);
 }
+

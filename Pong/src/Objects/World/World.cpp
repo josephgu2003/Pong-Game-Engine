@@ -11,22 +11,8 @@
 #include "AssetManager.hpp"
 
 World::World() {
-//    Model* mapModel_ = loadModels("Resources/snowy-mountain-terrain/textures/SnowyMountainMesh.obj");
-   // Model* mapModel_ = loadModels("Resources/Map/textures/water2.obj");
-//    mapModel = *mapModel_;
-    //mapModel_->~Model();
-    float mapVerticesCopy [] = {
-        -100, 0, -100, 0,1,0, 0, 0,
-        100, 0, -100, 0,1,0, 1, 0,
-        100, 0, 100, 0,1,0, 1, 1,
-        -100, 0, 100, 0,1,0, 0, 1
-    };
-    
-    GLuint mapIndicesCopy [] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-    
+
+
     float skyVerticesCopy[] = {
         -1.0f,  1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
@@ -70,8 +56,6 @@ World::World() {
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
-    memcpy(mapVertices, mapVerticesCopy, sizeof(mapVerticesCopy));
-    memcpy(mapIndices, mapIndicesCopy, sizeof(mapIndicesCopy));
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
     
     skyTextureFiles.push_back("Resources/Skybox/right.png");
@@ -86,6 +70,10 @@ World::World() {
 
 World::~World() {
     
+}
+
+void World::setMap(Map &map_) {
+    map = &map_;
 }
 
 void World::insertCamera(Camera* camera) {
@@ -124,17 +112,9 @@ void World::setActiveText(const std::string& string) {
 std::string World::getActiveText() {
     return activeText;
 }
-mapMesh* World::getMapMesh() {
-    mapMesh* mesh = new mapMesh; //new mesh?
-    mesh->mapFirstVertex = &mapVertices[0];
-    mesh->mapVertexCount = sizeof(mapVertices)/sizeof(mapVertices[0]);
-    mesh->mapFirstIndex = &mapIndices[0];
-    mesh->mapIndexCount = sizeof(mapIndices)/sizeof(mapIndices[0]);
-    return mesh;
-}
 
-Model& World::getMap() {
-    return mapModel;
+Map& World::getMap() {
+    return *map;
 }
 
 int World::getActorsCount() {

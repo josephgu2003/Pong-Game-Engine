@@ -8,6 +8,8 @@
 #include "Map.hpp"
 #include <vector>
 #include "AssetManager.hpp"
+#include "glm/glm.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 void Map::init() {
     shader.init("Shaders/MapVertexShader.vs", "Shaders/MapFragmentShader.fs");
@@ -27,8 +29,30 @@ void Map::init() {
     Texture texture = {loadTexture(TEX_EMPTY),"blah","blah"};
     mapTextures.push_back(texture);
     mesh.setVertexData(mapVertices, mapIndices, mapTextures);
+    
+    shader.use();
+    glm::mat4 modelMat = glm::mat4(1.0f);
+   // modelMat = glm::rotate(modelMat, glm::radians(90.0f), glm::vec3(1,0,0));
+    modelMat= glm::translate(modelMat, glm::vec3(0,-0.14,0));
+    shader.setMat4("modelMat", modelMat);
+    
+    extern GLuint uboViewProj;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    extern GLuint uboLights;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 Shader& Map::getShader() {
     return shader;
+}
+
+Mesh& Map::getMesh() {
+    return mesh;
 }

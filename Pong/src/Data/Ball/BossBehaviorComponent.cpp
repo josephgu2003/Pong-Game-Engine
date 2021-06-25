@@ -33,7 +33,7 @@ void BossBehaviorComponent::trigger(Actor& actor, World& world) {
     switch (state) {
         case STATE_PASSIVE: {
         
-        actor.posVec += 0.01f*glm::vec3(0,sin(timeTransgressed),0);
+        actor.posVec += 0.003f*glm::vec3(0,sin(timeTransgressed),0);
     timeTransgressed += (float)glfwGetTime();
     
     if (timeTransgressed > 3) state = STATE_AGGRESSIVE;
@@ -42,7 +42,7 @@ void BossBehaviorComponent::trigger(Actor& actor, World& world) {
         
 case STATE_AGGRESSIVE:
         actor.turnTowards(biggestTarget->getPos()-actor.getPos());
-        actor.posVec += 0.01f*glm::vec3(0,sin(timeTransgressed),0);
+        actor.posVec += 0.003f*glm::vec3(0,sin(timeTransgressed),0);
         timeTransgressed += (float)glfwGetTime();
             
         if (step == 0 && !stepBegun) {
@@ -59,7 +59,7 @@ case STATE_AGGRESSIVE:
         }
             
         if (step == 1 && !stepBegun) {
-            FallingLetters* letters = new FallingLetters(&world, &actor, 15);
+            FallingLetters* letters = new FallingLetters(&world, &actor, 5);
             letters->setTarget(biggestTarget);
             actor.abilityQ.push_back(letters);
             currentAbility = letters;

@@ -13,6 +13,7 @@
 #define TEX_FIERY "Resources/Particles/download.png"
 #define TEX_EMPTY "Resources/Particles/BLANK_ICON3.png"
 #define TEX_INKPAPER "Resources/Textures/inkpaper.jpg"
+#define TEX_MIST "Resources/Particles/imageedit_7_4243532340.png"
 
 #define TEX_GRADIENT "Resources/Utility/radial.png"
 

@@ -17,5 +17,6 @@ class Map {
 public:
     void init();
     Shader& getShader();
+    Mesh& getMesh();
 };
 #endif /* Map_hpp */

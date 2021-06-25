@@ -12,6 +12,8 @@
 #include <map>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 GLuint uboViewProj;
 GLuint uboLights;
@@ -118,7 +120,7 @@ void Renderer::updateUniformBlocks() {
 
     updateViewProj();
     updateLights();
-    updateViewPos();
+    updateCamPos();
 
 }
 
@@ -146,7 +148,7 @@ void Renderer::updateLights() {
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void Renderer::updateViewPos() {
+void Renderer::updateCamPos() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     
@@ -197,50 +199,18 @@ void Renderer::loadActorData() {
 }
 
 void Renderer::loadMapData() {
-    std::vector<Vertex> mapVertices;
-    std::vector<GLuint> mapIndices;
-        std::vector<Mesh>* meshes = world->getMap().getMeshes();
-        for (int j = 0; j<meshes->size(); j++) { // iterate over meshes
-            int marker = mapIndices.size();
-            mapVertices.insert(mapVertices.end(), meshes->at(j).vertices.begin(), meshes->at(j).vertices.end());
-            mapIndices.insert(mapIndices.end(), meshes->at(j).indices.begin(), meshes->at(j).indices.end());
-            for (marker; marker != mapIndices.size(); marker++) {
-            mapIndices[marker] += mapVertices.size() - meshes->at(j).vertices.size();
-            }
-        }
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 
-  /**  glGenVertexArrays(1, &mVAO);
-    glBindVertexArray(mVAO);
-    
-    glGenBuffers(1, &mVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-
-    glBufferData(GL_ARRAY_BUFFER, mapVertices.size() * sizeof(Vertex), mapVertices.data(), GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &mEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mapIndices.size() * sizeof(GLuint), mapIndices.data(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2*sizeof(glm::vec3)));
-    glEnableVertexAttribArray(2);
-    
-    glBindVertexArray(0);**/
     glGenVertexArrays(1, &mVAO);
       glBindVertexArray(mVAO);
       
       glGenBuffers(1, &mVBO);
       glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-      glBufferData(GL_ARRAY_BUFFER, 32 * sizeof(float), world->getMapMesh()->mapFirstVertex, GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER,  sizeof(Vertex)*world->getMap().getMesh().vertices.size(), &world->getMap().getMesh().vertices.at(0), GL_STATIC_DRAW);
       
       glGenBuffers(1, &mEBO);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), world->getMapMesh()->mapFirstIndex, GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  world->getMap().getMesh().indices.size() * sizeof(GLuint), &world->getMap().getMesh().indices.at(0), GL_STATIC_DRAW);
       
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)0);
       glEnableVertexAttribArray(0);
@@ -327,11 +297,6 @@ void Renderer::loadParticleData() {
         particleIndices.insert(particleIndices.end(), newIndices.begin(), newIndices.end());
         }
     }
-  /**  for (int j = 0; j<particleData->size(); j++) {
-        for (int i = 0; i < particleData->at(j)->getNumParticles(); i++) {
-            particleInstances.push_back(particleData->at(j)->getNthParticle(i).posVec);
-        }
-    }**/
     glGenVertexArrays(1, &pVAO);
     glBindVertexArray(pVAO);
     
@@ -347,13 +312,6 @@ void Renderer::loadParticleData() {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex), (void*)(sizeof(glm::vec3)));
     glEnableVertexAttribArray(1);
-  /**  glGenBuffers(1, &pinstaVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, pinstaVBO);
-    glBufferData(GL_ARRAY_BUFFER, particleInstances.size() * sizeof(glm::vec3), particleInstances.data(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)(0));
-    glEnableVertexAttribArray(2);
-    glVertexAttribDivisor(2, 3);**/
     
     glBindVertexArray(0);
 }
@@ -366,7 +324,7 @@ void Renderer::loadQuadData() {
         quadVertices.insert(quadVertices.end(), world->getQuads()->at(i)->vertices.begin(), world->getQuads()->at(i)->vertices.end());
         quadIndices.insert(quadIndices.end(), world->getQuads()->at(i)->indices.begin(), world->getQuads()->at(i)->indices.end());
     }
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+
     glGenVertexArrays(1, &qVAO);
     glBindVertexArray(qVAO);
     
@@ -420,7 +378,7 @@ void Renderer::render() {
     } else {
         lighting = 1.0f;
     }
-    updateViewPos();
+    updateCamPos();
   //  renderSky();
     renderMap();
     renderActors();
@@ -530,20 +488,9 @@ void Renderer::renderMap() {
     //map
    // glActiveTexture(GL_TEXTURE0);
    // glBindTexture(GL_TEXTURE_2D, texture);
-    mapShader->use();
-    glUniform3fv(glGetUniformLocation(mapShader->ID, "viewPos"), 1, glm::value_ptr(camera->posVec));
-    glUniform3fv(glGetUniformLocation(mapShader->ID, "dirLight.dir"), 1,  glm::value_ptr(glm::vec3(0,-1,-1)));
-    glUniform3fv(glGetUniformLocation(mapShader->ID, "dirLight.ambient"), 1,
-                 glm::value_ptr(glm::vec3(0.1,0.1,0.1)));
-    glUniform3fv(glGetUniformLocation(mapShader->ID, "dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.2,0.2,0.2)));
-    glUniform3fv(glGetUniformLocation(mapShader->ID, "dirLight.specular"), 1, glm::value_ptr(glm::vec3(1,1,1)));
-    
-    modelMat = glm::mat4(1.0f);
-   // modelMat = glm::rotate(modelMat, glm::radians(90.0f), glm::vec3(1,0,0));
-    modelMat= glm::translate(modelMat, glm::vec3(0,-0.14,0));
-    glUniformMatrix4fv(glGetUniformLocation(mapShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-    glUniformMatrix4fv(glGetUniformLocation(mapShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-    glUniformMatrix4fv(glGetUniformLocation(mapShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
+    Map& map = world->getMap();
+    map.getShader().use();
+
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glBindVertexArray(mVAO);
@@ -554,6 +501,7 @@ void Renderer::renderMap() {
         glUniform1i(glGetUniformLocation(mapShader->ID, "texture1"), 1);
         glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1f(glGetUniformLocation(mapShader->ID, "time"), time);
+    
     glBindTexture(GL_TEXTURE_2D, texture);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -610,12 +558,14 @@ void Renderer::renderParticles() {
     int indiceCount = 0;
 
     for (int i = 0; i < world->getParticleEffects()->size(); i++) {
-         Shader &shaderRef = (world->getParticleEffects()->at(i)->shader);
+        Shader &shaderRef = world->getParticleEffects()->at(i)->shader;
         shaderRef.use();
         GLuint shader = shaderRef.ID;
         glActiveTexture(GL_TEXTURE1);
+        if (glGetUniformLocation(shader, "texture1") != -1) {
         glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
         glBindTexture(GL_TEXTURE_2D, gradient);
+        }
  
          glActiveTexture(GL_TEXTURE0);
          glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
@@ -635,6 +585,7 @@ void Renderer::renderParticles() {
                     indiceCount += 6*sizeof(GLuint);
                 }
         }
+        glBindTexture(world->getParticleEffects()->at(i)->textureTarget, 0);
     }
     glActiveTexture(0);
     glDepthMask(GL_TRUE);

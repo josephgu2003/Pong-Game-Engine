@@ -42,3 +42,7 @@ int main() {
  **/
 
 // design: game system (hold data of loaded models actors scene etc), graphics system (take the scene and draw it with all the right configurations), audio, assetmanager system, input system (i think this one should handle player actions instead of functions in playerhero class?)
+
+/**
+ 
+ */

@@ -29,6 +29,7 @@ public:
     virtual ~Ability();
     virtual void call(Game* game) = 0;
     virtual void tick() = 0;
+    virtual void dispel();
 };
 
 #endif /* Ability_hpp */

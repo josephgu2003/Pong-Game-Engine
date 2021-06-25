@@ -169,3 +169,9 @@ void Actor::setWorld(World* world_) {
     world = world_;
 }
 
+void Actor::setState(State state_) {
+    state = state_;
+}
+State Actor::getState() {
+    return state;
+}

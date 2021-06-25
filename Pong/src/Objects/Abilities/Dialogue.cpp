@@ -10,34 +10,32 @@
 #include "World.hpp"
 
 Dialogue::Dialogue(World* world_, Actor* actor_, float duration_) : Ability::Ability(world_, actor_, duration_) {
-    std::vector<std::string> endLeftLines = {"'Because I must try. At the very least'",
+    std::vector<std::string> endLeftLines = {"'I know that to fly means to risk falling'", "'But I have to try, at the very least.'",
 "But you failed, and now you are vulnerable.", "I won't let you leave here again."};
     DialogueTree* endLeft = new DialogueTree();
     *endLeft = {endLeftLines, nullptr, nullptr};
     
-    std::vector<std::string> endRightLines = { "'I don't know'","Poor bird, lost its will to fly.", "I won't let you leave here again."};
+    std::vector<std::string> endRightLines = { "'Black, white. Some people want to see a bit of color.'","'That's why I must go'", "You are a fool.","I won't let you leave here again."};
     DialogueTree* endRight = new DialogueTree();
     *endRight = {endRightLines, nullptr, nullptr};
 
-    std::vector<std::string> mainLines1 = {"'Why are you here?'","...","(And then...)","In a faraway land, there lives a bird.",
-        "Every twelves months, that bird spreads it's wings and flies North",
+    std::vector<std::string> mainLines1 = {"'Why are you here?'","...","(And then...)","There's a species of bird that lives near the sea.",
+        "Every year, that bird spreads its wings and flies North",
         "Seeking company, adventure, and summer.",
-        "But each year without fail, that bird returns",
+        "But every year without fail, that bird returns",
         "Needing shelter from the winters of that land of snow.",
         " Why don't you stay here forever?",
         " This is a world of black and white",
-        " Win, lose, good, evil.",
-        " Why do you try to fly North? (Type A/B)"};
+        " Win, lose, good, evil. No wondering, no pain. (Type A/B)"};
     
-    std::vector<std::string> mainLines2 = {"'I've returned'","...","(And then...)","In a faraway land, there lives a bird.",
-        "Every twelves months, that bird spreads it's wings and flies North",
+    std::vector<std::string> mainLines2 = {"'I've returned'","...","(And then...)","There's a species of bird that lives near the sea.",
+        "Every year, that bird spreads its wings and flies North",
         "Seeking company, adventure, and summer.",
-        "But each year without fail, that bird returns",
+        "But every year without fail, that bird returns",
         "Needing shelter from the winters of that land of snow.",
         " Why don't you stay here forever?",
         " This is a world of black and white",
-        " Win, lose, good, evil.",
-        " Why do you try to fly North? (Type A/B)"};
+        " Win, lose, good, evil. No wondering, no hurt. (Type A/B)"};
     
     DialogueTree* mainbody1 = new DialogueTree();
     *mainbody1 = {mainLines1, endLeft, endRight};
@@ -88,28 +86,3 @@ void Dialogue::branch(int direction) {
     if (direction==1) {currentTree = currentTree->right;}
     paused = false;
 }
-
-/**
- Dialogue::Dialogue(World* world_, Actor* actor_, float duration_) : Ability::Ability(world_, actor_, duration_) {
-     std::vector<std::string> endLeftLines = {"'Because I must try. At the very least'",
- "But you failed, and now you are vulnerable.", "I won't let you leave here again."};
-     DialogueTree* endLeft = new DialogueTree();
-     *endLeft = {endLeftLines, nullptr, nullptr};
-     
-     std::vector<std::string> endRightLines = { "'I don't know'","Poor bird, lost its will to fly.", "I won't let you leave here again."};
-     DialogueTree* endRight = new DialogueTree();
-     *endRight = {endRightLines, nullptr, nullptr};
-
-     std::vector<std::string> mainLines = {"In a faraway land, there lives a bird.",
-         "Every twelves months, that bird spreads it's wings and flies North",
-         "Seeking company, adventure, and summer.",
-         "But each year without fail, that bird returns",
-         "Needing shelter from the winters of that land of snow.",
-         " Why don't you stay here forever?",
-         " This is a world of black and white",
-         " Win, lose, good, evil.",
-         " Why do you try to fly North? (Type A/B)"};
-     dialogueTree = {mainLines, endLeft, endRight};
- }
- */
-

@@ -9,9 +9,13 @@ out vec3 Normals;
 
     uniform mat4 modelMat;
 
-    uniform mat4 viewMat;
 
-    uniform mat4 projMat;
+layout(std140) uniform ViewProj
+{
+    mat4 viewMat;
+
+    mat4 projMat;
+};
 
 
     void main()

@@ -10,4 +10,7 @@
 
 #include <stdio.h>
 
+class Sky {
+    
+};
 #endif /* Sky_hpp */

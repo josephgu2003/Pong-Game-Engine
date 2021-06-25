@@ -154,7 +154,8 @@ void Shader::init(const char *vertexPath, const char *fragmentPath) {
     if(!success)
     {
         glGetProgramInfoLog(fShader, 512, NULL, errorLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << errorLog << std::endl;
+        std::string error(fragmentPath);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << errorLog << error<< std::endl;
     }
     
     //make program

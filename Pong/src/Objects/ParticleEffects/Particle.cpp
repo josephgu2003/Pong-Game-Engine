@@ -12,21 +12,6 @@
 ParticleEffect::ParticleEffect() {
 }
 
-/**ParticleEffect::ParticleEffect(glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
-    loadGlyphs("Resources/Glyphs/minecraft-enchantment.ttf", glyphs);
-    std::srand(314159);
-    posVec = posVec_;
-    x = x_;
-    y = y_;
-    z = z_;
-    numParticles = numParticles_;
-    for (int i = 0; i < numParticles; i++)
-        particles.push_back(Particle());
-    cycle = cyclecount_;
-    cyclecount = cyclecount_;
-    firstUnused = 0;
-    distribution = std::uniform_int_distribution<int>(1,1000);
-}**/
 
 void ParticleEffect::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
     size = size_;
@@ -63,28 +48,24 @@ void ParticleEffect::setActor(Actor* actor_) {
 ParticleEffect::~ParticleEffect() {
 
 }
+
 void ParticleEffect::tick() {
     if (actor != NULL) {
     posVec = actor->getPos();
     }
+    
     float dt = glfwGetTime();
+    
     if (cycle == cyclecount) {
     cycle = 0;
-    refreshParticle();
-    if(firstUnused == (particles.size()-1)) {
-        firstUnused = 0;
+        
+        for (int i = 0; i < 3; i++) {
+        refreshParticle();
+        if(firstUnused == (particles.size()-1)) {
+            firstUnused = 0;
+        }
+        else if(particles[firstUnused+1].duration<=0) firstUnused++;
     }
-    else if(particles[firstUnused+1].duration<=0) firstUnused++;
-        refreshParticle();
-        if(firstUnused == (particles.size()-1)) {
-            firstUnused = 0;
-        }
-        else if(particles[firstUnused+1].duration<=0) firstUnused++;
-        refreshParticle();
-        if(firstUnused == (particles.size()-1)) {
-            firstUnused = 0;
-        }
-        else if(particles[firstUnused+1].duration<=0) firstUnused++;
     }
     cycle++;
     for (int i = 0; i < particles.size(); i++) {
@@ -137,5 +118,3 @@ float ParticleEffect::getSize() {
 void ParticleEffect::setForce(glm::vec3 force_) {
     force = force_;
 }
-
-

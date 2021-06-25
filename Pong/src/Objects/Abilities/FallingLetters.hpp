@@ -19,6 +19,7 @@ class FallingLetters: public Ability{
   //  ParticleEffect* flowers = new ParticleEffect;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
+    ~FallingLetters();
     virtual void call(Game* game);
     virtual void tick();
 };

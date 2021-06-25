@@ -24,32 +24,8 @@ Ball::Ball() {
     PhysicsComponent* pC = new PhysicsComponent(false);
     components.push_back(pC);
     state = STATE_FLYING;
-     /**   float verticesCopy [] = {
-            -0.125f, -0.125f, -0.125f,
-            -0.125f, -0.125f, 0.125f,
-            0.125f, -0.125f, 0.125f,
-            0.125f, -0.125f, -0.125f,
-            -0.125f, 0.125f, -0.125f,
-            -0.125f, 0.125f, 0.125f,
-            0.125f, 0.125f, 0.125f,
-            0.125f, 0.125f, -0.125f
-        };
-        memcpy(vertices, verticesCopy, sizeof(verticesCopy));
-        GLuint indicesCopy [] = {
-            0, 1, 2,
-            2, 3, 0,
-            4, 5, 6,
-            6, 7, 4,
-            0, 1, 5,
-            5, 4, 0,
-            3, 2, 6,
-            6, 7, 3,
-            1, 2, 5,
-            5, 6, 2,
-            0, 3, 7,
-            7, 4, 0
-        };
-    memcpy(indices, indicesCopy, sizeof(indicesCopy));**/
+
+
 }
 
 void Ball::init() {

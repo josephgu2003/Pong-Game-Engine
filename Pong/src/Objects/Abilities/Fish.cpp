@@ -88,8 +88,15 @@ void Fish::tick() {
         }
         quad.pos = quad.vertices.at(0).Pos;
     }
-
-
     duration += glfwGetTime();
+    if (duration > 0 && step == 0) {
+        freeActor();
+        step++;
+    }
 }
 
+void Fish::freeActor() {
+    actor->setState(STATE_NORMAL);
+    if (actor->affecting != NULL)
+    actor->affecting->dispel();
+}

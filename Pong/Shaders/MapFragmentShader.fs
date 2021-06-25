@@ -21,12 +21,19 @@ vec3 specular;
     
 };
 
-    uniform Light light;
-uniform DirLight dirLight;
+
+layout (std140) uniform Lights
+{
+   Light light;
+
+    DirLight dirLight;
+    
+    vec3 viewPos;
+};
 
     uniform sampler2D mapTexture;
     uniform sampler2D texture1;
-    uniform vec3 viewPos;
+
 uniform samplerCube skyBox;
 uniform float time;
 

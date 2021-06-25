@@ -9,7 +9,7 @@
 #include "Actor.hpp"
 
 void CombatComponent::tick(Actor& actor, World& world) {
-    switch (actor.state) {
+    switch (actor.getState()) {
         case STATE_NORMAL:
             // world->getfieldeffect->affect(actor)
             break;

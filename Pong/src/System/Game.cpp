@@ -48,7 +48,10 @@ Game::Game() {
     //billow.posVec = glm::vec3(0,5,0);
     stbi_set_flip_vertically_on_load(1);
 
-    inkGlyphs.init(5, glm::vec3(0,0,0), 5, 1, 5, 100, 15);
+  //  mist.init(3, glm::vec3(0,-0.5,0), 20, 0, 20, 400, 10);
+    inkGlyphs.init(3, glm::vec3(0,-0.5,0), 20, 2, 20, 400, 10);
+   // inkGlyphs.setActor(&ball);
+    map.init();
     
     camera.setActor(&pHero);
     pHero.setWorld(&world);
@@ -57,9 +60,13 @@ Game::Game() {
     world.insertActor(&pHero);
     world.insertActor(&ball);
   //  world.insertActor(&billow);
+  //  world.insertParticleEffect(&mist);
     world.insertParticleEffect(&inkGlyphs);
+    world.setMap(map);
     
-
+    realWorld.insertActor(&pHero);
+    realWorld.setMap(map);
+    
     screen.print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -93,16 +100,6 @@ Game::Game() {
     renderer->loadSkyBoxData();
     stbi_set_flip_vertically_on_load(1);
 
-  /**  blank = stbi_load("Resources/Models/Flag/yirou'sdrawing.jpg", &imageWidth, &imageHeight, &channels, 0);
-    
-    glGenTextures(1, &ftexture);
-    glBindTexture(GL_TEXTURE_2D, ftexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,blank);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindTexture(GL_TEXTURE_2D, 0);**/
     printf("%s\n", glGetString(GL_VERSION));
     
     blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
@@ -117,8 +114,7 @@ Game::Game() {
      glBindTexture(GL_TEXTURE_2D, 0);
 
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
-  //  audio.playMusic();
-
+    audio.playMusic();
 }
 
 Game::~Game() {
@@ -272,7 +268,7 @@ int Game::processInput(int key, int action, int mods) {
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            std::vector<std::string> lines = { "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant"};
+            std::vector<std::string> lines = { "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant"};
             Speech* speech = new Speech(&world, &pHero, 6, lines);
             abilities.push_back(speech);
             speech->call(this);

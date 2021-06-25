@@ -26,13 +26,6 @@
 #define TEXT_UPDATE 3
 //stores locations of everything
 
-struct mapMesh {
-    float* mapFirstVertex;
-    int mapVertexCount;
-    GLuint* mapFirstIndex;
-    int mapIndexCount;
-};
-
 struct Weather {
     bool brightnessExists;
     bool particlesExists;
@@ -57,7 +50,7 @@ struct Updates {
     bool textUpdate;
 };
 class World {
-    Model mapModel;
+    Map* map;
     Updates updates = {false,false,false,false};
     std::vector <Actor*> allActorPtrs;
     std::vector <ParticleEffect*> allParticleEffects;
@@ -67,8 +60,6 @@ class World {
 
     std::vector<std::string> skyTextureFiles;
     
-    float mapVertices [32] = {0.0};
-    GLuint mapIndices [6] = {0};
     
     float skyVertices [108] = {0};
     
@@ -81,6 +72,7 @@ public:
     World();
     ~World();
     
+    void setMap(Map& map);
     void insertCamera(Camera* camera);
     
     void insertActor(Actor* actor);
@@ -94,9 +86,7 @@ public:
     void setActiveText(const std::string& string);
     std::string getActiveText();
     
-    mapMesh* getMapMesh();
-    
-    Model& getMap();
+    Map& getMap();
     
     int getActorsCount();
     Actor* getNthActor(int n);

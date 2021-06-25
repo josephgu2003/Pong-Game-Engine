@@ -9,8 +9,6 @@
 #define Renderer_hpp
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
@@ -84,7 +82,7 @@ private:
     void updateUniformBlocks();
     void updateViewProj();
     void updateLights();
-    void updateViewPos();
+    void updateCamPos();
 public:
     float time;
     void renderSky();

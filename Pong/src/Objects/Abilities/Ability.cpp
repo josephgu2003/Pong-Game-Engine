@@ -24,3 +24,8 @@ Ability::~Ability() {
 void Ability::setTarget(Actor* actor_) {
     target = actor_;
 }
+
+void Ability::dispel() {
+    on = false;
+    target->affecting = NULL;
+}

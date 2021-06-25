@@ -16,7 +16,7 @@ PhysicsComponent::PhysicsComponent(bool gravityOn_) {
 }
 
 void PhysicsComponent::tick(Actor& actor, World& world) {
-    if (actor.state == STATE_NORMAL)
+    if (actor.getState() == STATE_NORMAL)
     actor.posVec += actor.velVec;
     handleGravity(actor);
     if (actor.velVec.x > 0) {
@@ -50,7 +50,7 @@ void PhysicsComponent::tick(Actor& actor, World& world) {
 }
 
 void PhysicsComponent::handleGravity(Actor& actor) {
-    switch(actor.state) {
+    switch(actor.getState()) {
         case STATE_PARALYZED:
             break;
         case STATE_NORMAL:

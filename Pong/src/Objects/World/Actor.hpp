@@ -46,8 +46,10 @@ protected:
     std::vector<Component*> components;
     Shader* shader;
     glm::mat4 modelMat = glm::mat4(1.0f);
+    State state;
 public:
     std::vector<Ability*> abilityQ;
+    Ability* affecting = NULL;
     glm::vec3 posVec;
     glm::vec3 dirVec;
     glm::vec3 eulerAngles;
@@ -57,7 +59,6 @@ public:
     glm::vec3 rightVec;
     World* world;
     glm::vec3 camFocus = glm::vec3(0,0.5,0);
-    State state;
     
     Actor();
     ~Actor();
@@ -76,6 +77,9 @@ public:
     void jump();
     void velRight(float speed);
     void velDir(float speed);
+
+    void setState(State state);
+    State getState();
 };
 
 #endif /* Actor_hpp */

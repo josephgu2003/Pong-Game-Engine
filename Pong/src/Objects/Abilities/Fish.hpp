@@ -22,6 +22,8 @@ class Fish: public Ability {
     Quad quad;
     bool mode2 = false;
     glm::vec3 dirFired;
+    void freeActor();
+    int step = 0;
 public:
     Fish(World* world_, Actor* actor_, float duration_);
     ~Fish();

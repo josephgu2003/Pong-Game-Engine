@@ -13,7 +13,7 @@
 #include "Particle.hpp"
 #include "ComplexParticles.hpp"
 
-class InkGlyphs : public ComplexParticles {
+class InkGlyphs : public ParticleEffect {
 public:
     virtual void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) override;
     virtual void tick() override;

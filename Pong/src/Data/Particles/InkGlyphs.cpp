@@ -35,14 +35,21 @@ void InkGlyphs::init(float size_, glm::vec3 posVec_, float x_, float y_, float z
 }
 
 void InkGlyphs::tick() {
+    if (actor != NULL) {
+    posVec = actor->getPos();
+    }
+    
     float dt = glfwGetTime();
     if (cycle == cyclecount) {
-    cycle = 0;
-    refreshParticle();
-    if(firstUnused == (particles.size()-1)) {
-        firstUnused = 0;
-    }
-    else if(particles[firstUnused+1].duration<=0) firstUnused++;
+        cycle = 0;
+            
+            for (int i = 0; i < 3; i++) {
+            refreshParticle();
+            if(firstUnused == (particles.size()-1)) {
+                firstUnused = 0;
+            }
+            else if(particles[firstUnused+1].duration<=0) firstUnused++;
+        }
     }
     cycle++;
     for (int i = 0; i < particles.size(); i++) {
@@ -68,13 +75,14 @@ void InkGlyphs::refreshParticle() {
     float n = y*k*0.01;
     float o = z*l*0.01;
 particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
-    float a = 0.01*(std::rand()%100);
+    float a = 0.003*(std::rand()%100);
     //int b = std::rand()%100;
-    float c = 0.01*(std::rand()%100);
+    float b = 0.003*(std::rand()%100);
+    float c = 0.003*(std::rand()%100);
   //  if (a%2 ==1) a = a*(-1);
    // b = b*(-1);
  //   c = c*(-1);
-particles[firstUnused].velVec = (glm::vec3(0,0,0));
-particles[firstUnused].duration = 3;
+particles[firstUnused].velVec = (glm::vec3(a,2*b,c));
+particles[firstUnused].duration = 5;
 particles[firstUnused].texture = texture;
 }

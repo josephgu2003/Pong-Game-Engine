@@ -43,7 +43,7 @@ vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir);
     {
 
    //     float distortion = sin(10*fragPos.x+30*time)+ 0.3*sin(20*fragPos.x+30*time+0.01);
-        float distortion = 0.3*sin(-60*time+10*sqrt(fragPos.x*fragPos.x+fragPos.z*fragPos.z));
+        float distortion = 0.1*sin(-90*time+10*sqrt(fragPos.x*fragPos.x+fragPos.z*fragPos.z));
         vec3 newNormal = vec3(Normals.x+distortion, Normals.y, Normals.z);
         vec3 norm = normalize(newNormal);
         vec3 fragColor = vec3(0.0);
@@ -51,12 +51,12 @@ vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir);
      //   vec3 dir = light.pos - fragPos;
         
       //  float lengthy = length(dir);
-
                 
         vec3 viewDir = vec3(viewPos-fragPos);
         
-        float fogFactor = exp(-pow(length(viewDir)*0.13,1.5));
+        float fogFactor = exp(-pow(length(viewDir)*0.03,2));
         
+        fogFactor *= (1+dot(viewDir, normalize(Normals)));
         fragColor += CalcDirLight(dirLight, norm, viewDir);
         
        // if (lengthy < 30) {
@@ -85,7 +85,9 @@ vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir);
         
         vec4 preFogColor = vec4(fragColor, 1.0);
         
-        FragColor = mix(vec4(0.6,0.6,0.6,1), preFogColor, fogFactor);
+        vec4 fogColor = 0.3 * texture(skyBox, normalize(-viewDir));
+        
+        FragColor = mix(fogColor, preFogColor, fogFactor);
     }
 
 vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {

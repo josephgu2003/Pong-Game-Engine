@@ -25,10 +25,6 @@ class World;
 class Ability;
 class Shader;
 
-struct Light {
-    bool exists;
-    float intensity;
-};
 
 enum State {
     STATE_NORMAL,

@@ -13,24 +13,26 @@ ParticleEffect::ParticleEffect() {
 }
 
 
-void ParticleEffect::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
+void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec_, float duration_) {
     size = size_;
     std::srand(314159);
     posVec = posVec_;
     force = glm::vec3(0,0,0);
-    x = x_;
-    y = y_;
-    z = z_;
+    x = dimensions.x;
+    y = dimensions.y;
+    z = dimensions.z;
     numParticles = numParticles_;
+    ptcPerSec = ptcPerSec_;
+    duration = duration_;
+    
     for (int i = 0; i < numParticles; i++)
         particles.push_back(Particle());
-    cycle = cyclecount_;
-    cyclecount = cyclecount_;
+    
     firstUnused = 0;
-    texture = loadTexture(TEX_PEACH); //***
+
     distribution = std::uniform_int_distribution<int>(1,1000);
-    textureTarget = GL_TEXTURE_2D;
-    shader.init("Shaders/ParticleVertexShader.vs", "Shaders/ParticleFragmentShader.fs");
+    
+
     
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
@@ -38,7 +40,6 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, float x_, float y_, fl
     glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 }
 
 void ParticleEffect::setActor(Actor* actor_) {
@@ -55,9 +56,6 @@ void ParticleEffect::tick() {
     }
     
     float dt = glfwGetTime();
-    
-    if (cycle == cyclecount) {
-    cycle = 0;
         
         for (int i = 0; i < 3; i++) {
         refreshParticle();
@@ -66,8 +64,7 @@ void ParticleEffect::tick() {
         }
         else if(particles[firstUnused+1].duration<=0) firstUnused++;
     }
-    }
-    cycle++;
+    
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
             particles[i].velVec += force;
@@ -79,6 +76,7 @@ void ParticleEffect::tick() {
             particles[i].duration -= dt;
         }
     }
+    duration -= dt;
 }
 
 int ParticleEffect::getNumParticles() {
@@ -100,12 +98,9 @@ void ParticleEffect::refreshParticle() {
     float n = y*k*0.01;
     float o = z*l*0.01;
     particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
-    float a = 0.01*(std::rand()%100);
-    float b = 0.01*(std::rand()%100);
-    float c = 0.01*(std::rand()%100);
-  //  if (a%2 ==1) a = a*(-1);
-   // b = b*(-1);
- //   c = c*(-1);
+    float a = 0.01*(distribution(generator)%100);
+    float b = 0.01*(distribution(generator)%100);
+    float c = 0.01*(distribution(generator)%100);
 particles[firstUnused].velVec = (glm::vec3(1*a-0.5,1*b-0.25,1*c-0.5));
 particles[firstUnused].duration = 1;
 particles[firstUnused].texture = texture;

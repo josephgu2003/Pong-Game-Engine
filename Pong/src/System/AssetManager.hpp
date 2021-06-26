@@ -42,8 +42,8 @@
 //loads textures and assets
 
 inline std::vector<Texture> loadedTextures;
-inline std::vector<Model*> loadedModels;
 inline std::vector<Shader> loadedShaders;
+
 
 struct Character {
     GLuint id;
@@ -107,12 +107,13 @@ static int loadGlyphs(const char* filePath, std::map<char, Character>& Character
 
 static void load3DTexture(const char* filePath, GLuint& id) {
     
-    stbi_set_flip_vertically_on_load(0);
+    stbi_set_flip_vertically_on_load(1);
  
     for (int j = 0; j < loadedTextures.size(); j++) {
         if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
             std::cout << loadedTextures[j].path.data() << "\n";
             id = loadedTextures[j].id;
+            return;
         }
     }
 
@@ -127,9 +128,9 @@ static void load3DTexture(const char* filePath, GLuint& id) {
     int imageHeight = 0;
     int channels = 0;
     
-    unsigned char* imageData;
-    
+ 
     while(true) {
+        unsigned char* imageData;
         std::string framePath("blah");
         if(counter > 0) {
             std::string number= std::to_string(counter);
@@ -150,7 +151,7 @@ static void load3DTexture(const char* filePath, GLuint& id) {
         }
     counter++;
         
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     imageData = stbi_load(framePath.c_str(), &imageWidth, &imageHeight, &channels, 0);
         
     if (imageData) {
@@ -160,9 +161,8 @@ static void load3DTexture(const char* filePath, GLuint& id) {
         stbi_image_free(imageData);
         break;
     }
-  //  stbi_image_free(imageData);
     }
-
+    
     GLenum format;
            if (channels == 1)
                format = GL_RED;
@@ -170,24 +170,21 @@ static void load3DTexture(const char* filePath, GLuint& id) {
                format = GL_RGB;
            else if (channels == 4)
                format = GL_RGBA;
-
-      
     
-   // glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, format, imageWidth, imageHeight, counter);
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, format, imageWidth, imageHeight, counter-1, 0, format, GL_UNSIGNED_BYTE, NULL);
-    // Upload pixel data.
-    // The first 0 refers to the mipmap level (level 0, since there's only 1)
-    // The following 2 zeroes refers to the x and y offsets in case you only want to specify a subrectangle.
-    // The final 0 refers to the layer index offset (we start from index 0 and have 2 levels).
-    // Altogether you can specify a 3D box subset of the overall texture, but only one mip level at a time.
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0,GL_RGBA8, imageWidth, imageHeight, counter-1, 0, format, GL_UNSIGNED_BYTE, NULL);
     
    for(int i = 0; i < imageDatas.size(); i++) {
         glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, imageWidth, imageHeight, 1, format, GL_UNSIGNED_BYTE, imageDatas.at(i));
     }
+   for(int i = 0; i < imageDatas.size(); i++) {
+       stbi_image_free(imageDatas.at(i));
+     }
+  //  imageDatas.clear();
+    // 460, 271.4, 233.4, 234
+    
     glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
-    // Always set reasonable texture parameters
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
     Texture newTex;
@@ -195,11 +192,11 @@ static void load3DTexture(const char* filePath, GLuint& id) {
     newTex.path = filePath;
     loadedTextures.push_back(newTex);
     stbi_set_flip_vertically_on_load(1);
- 
+    glBindTexture(GL_TEXTURE_2D_ARRAY,0);
 }
 
 static GLuint loadTexture(const char* filePath) {
-   for (int j = 0; j < loadedTextures.size(); j++) {
+ for (int j = 0; j < loadedTextures.size(); j++) {
        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
            std::cout << loadedTextures[j].path.data() << "\n";
            return loadedTextures[j].id;
@@ -223,11 +220,12 @@ static GLuint loadTexture(const char* filePath) {
                   format = GL_RGB;
               else if (channels == 4)
                   format = GL_RGBA;
-       glTexImage2D(GL_TEXTURE_2D, 0, format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
+       glTexImage2D(GL_TEXTURE_2D, 0,format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
        glGenerateMipmap(GL_TEXTURE_2D);
    } else {
        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
    }
+    
    stbi_image_free(imageData);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -243,11 +241,6 @@ static GLuint loadTexture(const char* filePath) {
 }
 
 static Model* loadModels(const char* filePath) {
-    for (int j = 0; j < loadedModels.size(); j++) {
-        if (std::strcmp(loadedModels[j]->getDirectory().data(), filePath) == 0) {
-            return loadedModels[j];
-        }
-    }
     Model* model = new Model(filePath);
    /** Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(filePath,  aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -260,10 +253,7 @@ static Model* loadModels(const char* filePath) {
     filePath_ = filePath_.substr(0, filePath_.find_last_of('/'));
     model->setDirectory(filePath_.c_str());
     model->setMeshes(processNode(scene->mRootNode, scene));**/
-    
-    Hitbox hitbox{MOD_JUGGERNAUT_HBOX};
-    model->setHitbox(hitbox);
-    loadedModels.push_back(model);
+
     return model;
 }
 

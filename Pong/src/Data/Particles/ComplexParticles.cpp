@@ -30,9 +30,9 @@ particles[firstUnused].duration = 5;
     particles[firstUnused].texture = texture;
 }
 
-void ComplexParticles::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
+void ComplexParticles::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, float ptcPerSec_, float duration_) {
     load3DTexture("Resources/Particles/Inky/GWtc0.png", texture);
-    ParticleEffect::init(size_, posVec_, x_, y_, z_, numParticles_,cyclecount_);
+    ParticleEffect::init(size_, posVec_, x_, y_, z_, numParticles_, ptcPerSec_);
     std::map<char,Character> glyphs;
     loadGlyphs("Resources/Glyphs/minecraft-enchantment.ttf", glyphs);
     textureTarget = GL_TEXTURE_2D_ARRAY;

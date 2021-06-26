@@ -20,7 +20,6 @@ vec3 dir;
 vec3 ambient;
 vec3 diffuse;
 vec3 specular;
-    
 };
 
 layout (std140) uniform Lights
@@ -41,7 +40,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 void main()
 {
     vec3 viewDir = vec3(viewPos-fragPos);
-    float fogFactor = exp(-pow(length(viewDir)*0.13,1.5));
+    float fogFactor = exp(-pow(length(viewDir)*0.03,2));
     vec3 norm = normalize(Normals);
     
     vec3 fragColor = vec3(0.0);

@@ -11,8 +11,6 @@
 #include "AssetManager.hpp"
 
 World::World() {
-
-
     float skyVerticesCopy[] = {
         -1.0f,  1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
@@ -64,7 +62,6 @@ World::World() {
     skyTextureFiles.push_back("Resources/Skybox/bottom.png");
     skyTextureFiles.push_back("Resources/Skybox/back.png");
     skyTextureFiles.push_back("Resources/Skybox/front.png");
-    setWeather(true, false, 0.6);
     globalTime = 0;
 }
 
@@ -155,15 +152,9 @@ void World::updateCleared(int i) {
     updates.textUpdate = false;
 }
 
-void World::setWeather(bool brightnessExists_,
-                bool particlesExists_,
-                float brightness_) {
-    weather = {
-        brightnessExists_,
-                        particlesExists_,
-                        brightness_
-    };
-}
+void World::setWeather(DirectionalLight dirLight_) {
+    weather.dirLight = dirLight_;
+    }
 
 Weather World::getWeather() {
     return weather;

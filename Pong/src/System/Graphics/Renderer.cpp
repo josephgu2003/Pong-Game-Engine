@@ -14,6 +14,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "DirectionalLight.hpp"
 
 GLuint uboViewProj;
 GLuint uboLights;
@@ -45,7 +46,7 @@ Renderer::Renderer() {
     funtex2 = loadTexture("Resources/Models/textures/lambert1_baseColor.png");
     noise = loadTexture("Resources/Utility/noise.png");
    // texture = loadTexture("Resources/snowy-mountain-terrain/textures/SM_DiffJPG.jpg");
-    texture2 = loadTexture("Resources/Map/mountains-free/source/ThickPlane_1-AO_u0_v0.jpg");
+  //  texture2 = loadTexture("Resources/Map/mountains-free/source/ThickPlane_1-AO_u0_v0.jpg");
     texture = loadTexture(TEX_EMPTY);
     
     glGenFramebuffers(1, &fbo);
@@ -117,11 +118,9 @@ void Renderer::setCamera(Camera *camera_) {
 }
 
 void Renderer::updateUniformBlocks() {
-
     updateViewProj();
     updateLights();
     updateCamPos();
-
 }
 
 void Renderer::updateViewProj() {
@@ -133,6 +132,8 @@ void Renderer::updateViewProj() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 void Renderer::updateLights() {
+    
+    DirectionalLight dl = world->getWeather().dirLight;
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
      
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 16, glm::value_ptr(glm::vec4(0.1,0.1,0.1,0)));
@@ -140,11 +141,17 @@ void Renderer::updateLights() {
      glBufferSubData(GL_UNIFORM_BUFFER,  2*16,16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
      glBufferSubData(GL_UNIFORM_BUFFER, 3*16, 16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
      
-     glBufferSubData(GL_UNIFORM_BUFFER, 4*16,16,glm::value_ptr(glm::vec4(0,-1,-1,0)));
-     glBufferSubData(GL_UNIFORM_BUFFER, 5*16, 16, glm::value_ptr(glm::vec4(0.1,0.1,0.1,0)));
-     glBufferSubData(GL_UNIFORM_BUFFER, 6*16,16, glm::value_ptr(glm::vec4(0.2,0.2,0.2,0)));
-     glBufferSubData(GL_UNIFORM_BUFFER, 7*16, 16, glm::value_ptr(glm::vec4(1.0,1.0,1.0,0)));
-     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camera->posVec,0)));
+    glm::vec4 shineDir = glm::vec4(dl.getShineDir(),0);
+    glm::vec4 ambient = glm::vec4(dl.getAmbient(),0);
+    glm::vec4 diffuse = glm::vec4(dl.getDiffuse(),0);
+    glm::vec4 specular = glm::vec4(dl.getSpecular(),0);
+    glm::vec4 camPos = glm::vec4(camera->posVec,0);
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 4*16,16,glm::value_ptr((shineDir)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 5*16, 16, glm::value_ptr((ambient)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 6*16,16, glm::value_ptr((diffuse)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 7*16, 16, glm::value_ptr((specular)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr((camPos)));
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
@@ -373,13 +380,8 @@ void Renderer::render() {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.6,0.6,0.6,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (world->getWeather().brightnessExists) {
-    lighting = world->getWeather().brightness;
-    } else {
-        lighting = 1.0f;
-    }
     updateCamPos();
-  //  renderSky();
+    renderSky();
     renderMap();
     renderActors();
     renderParticles();
@@ -436,10 +438,10 @@ void Renderer::renderSky() {
     glDisable(GL_BLEND);
     glDepthMask(GL_FALSE);
     skyShader->use();
-    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), lighting);
+    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 0.3);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
-    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(camViewMat));
+    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));
     glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
     glBindVertexArray(sVAO);
     glBindBuffer(GL_ARRAY_BUFFER, sVBO);

@@ -19,6 +19,7 @@
 #include "Model.hpp"
 #include "BehaviorComponent.hpp"
 #include "Map.hpp"
+#include "DirectionalLight.hpp"
 
 #define ACTOR_UPDATE 0
 #define PARTICLE_UPDATE 1
@@ -27,10 +28,7 @@
 //stores locations of everything
 
 struct Weather {
-    bool brightnessExists;
-    bool particlesExists;
-    float brightness;
-    ParticleEffect particleEffect;
+    DirectionalLight dirLight;
 };
 
 struct Quad {
@@ -59,7 +57,6 @@ class World {
     std::string activeText;
 
     std::vector<std::string> skyTextureFiles;
-    
     
     float skyVertices [108] = {0};
     
@@ -100,9 +97,7 @@ public:
     Updates checkforUpdates();
     void updateCleared(int i);
     
-    void setWeather(bool brightnessExists_,
-                    bool particlesExists_,
-                    float brightness_);
+    void setWeather(DirectionalLight dirLight);
     Weather getWeather();
     
     void tick();

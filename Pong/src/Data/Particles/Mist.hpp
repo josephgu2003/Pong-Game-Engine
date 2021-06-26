@@ -13,7 +13,7 @@
 
 class Mist : public ParticleEffect {
 public:
-    virtual void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) override;
+    virtual void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, float ptcPerSec_, float duration) override;
     virtual void tick() override;
     virtual void refreshParticle() override;
 };

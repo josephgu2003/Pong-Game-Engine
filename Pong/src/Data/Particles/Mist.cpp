@@ -8,7 +8,7 @@
 #include "Mist.hpp"
 #include "AssetManager.hpp"
 
-void Mist::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
+void Mist::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, float ptcPerSec_, float duration_) {
     size = size_;
     std::srand(314159);
     posVec = posVec_;
@@ -20,8 +20,6 @@ void Mist::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, in
     numParticles = numParticles_;
     for (int i = 0; i < numParticles; i++)
         particles.push_back(Particle());
-    cycle = cyclecount_;
-    cyclecount = cyclecount_;
     firstUnused = 0;
     distribution = std::uniform_int_distribution<int>(1,1000);
     
@@ -41,18 +39,16 @@ void Mist::tick() {
     }
     
     float dt = glfwGetTime();
-    if (cycle == cyclecount) {
-        cycle = 0;
+
             
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 20; i++) {
             refreshParticle();
             if(firstUnused == (particles.size()-1)) {
                 firstUnused = 0;
             }
             else if(particles[firstUnused+1].duration<=0) firstUnused++;
         }
-    }
-    cycle++;
+
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
           //  particles[i].velVec += force;
@@ -83,6 +79,6 @@ void Mist::refreshParticle() {
    // b = b*(-1);
  //   c = c*(-1);
 particles[firstUnused].velVec = (glm::vec3(0.1*a-0.05,0.2*b-0.1,0.1*c-0.05));
-particles[firstUnused].duration = 15;
+particles[firstUnused].duration = 30;
 particles[firstUnused].texture = texture;
 }

@@ -6,7 +6,7 @@
 //
 
 #include "Fish.hpp"
-
+#include "Game.hpp"
 
 Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
     quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
@@ -88,7 +88,7 @@ void Fish::tick() {
         }
         quad.pos = quad.vertices.at(0).Pos;
     }
-    duration += glfwGetTime();
+    duration -= glfwGetTime();
     if (duration > 0 && step == 0) {
         freeActor();
         step++;
@@ -97,6 +97,8 @@ void Fish::tick() {
 
 void Fish::freeActor() {
     actor->setState(STATE_NORMAL);
-    if (actor->affecting != NULL)
+    if (actor->affecting != NULL) {
     actor->affecting->dispel();
+        world->setActiveText("'I've made up my mind. I'm going.'");
+    }
 }

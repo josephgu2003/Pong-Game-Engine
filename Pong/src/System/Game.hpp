@@ -37,6 +37,8 @@ Camera camera;
 World world;
     World realWorld;
 Renderer* renderer;
+    Renderer* realRenderer;
+    Renderer* activeRenderer;
 InputHandler inputHandler;
     Audio audio;
     
@@ -58,8 +60,10 @@ InputHandler inputHandler;
     
     Ball ball;
     PlayerHero pHero;
+    PlayerHero rHero;
     InkGlyphs inkGlyphs;
     Map map;
+    Map realMap;
     Mist mist;
     
     std::vector<Ability*> abilities;

@@ -9,6 +9,7 @@
 #include "Game.hpp"
 #include "World.hpp"
 
+
 Dialogue::Dialogue(World* world_, Actor* actor_, float duration_) : Ability::Ability(world_, actor_, duration_) {
     std::vector<std::string> endLeftLines = {"'I know that to fly means to risk falling'", "'But I have to try, at the very least.'",
 "But you failed, and now you are vulnerable.", "I won't let you leave here again."};
@@ -46,6 +47,7 @@ Dialogue::Dialogue(World* world_, Actor* actor_, float duration_) : Ability::Abi
     
     dialogueTree = {firstLine, mainbody1, mainbody2};
     currentTree = &dialogueTree;
+    
 }
 
 void Dialogue::call(Game* game_) {

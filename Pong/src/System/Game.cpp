@@ -48,28 +48,37 @@ Game::Game() {
     //billow.posVec = glm::vec3(0,5,0);
     stbi_set_flip_vertically_on_load(1);
 
-  //  mist.init(3, glm::vec3(0,-0.5,0), 20, 0, 20, 400, 10);
-    inkGlyphs.init(3, glm::vec3(0,-0.5,0), 20, 2, 20, 400, 10);
-   // inkGlyphs.setActor(&ball);
+   mist.init(1, glm::vec3(0,0,0), 15, 0.3, 15, 1200, 9, 1000);
+    inkGlyphs.init(2.5, glm::vec3(0,-0.5,0), 1, 1, 1, 20, 9, 1000);
+    inkGlyphs.setActor(&ball);
+    realMap.init();
     map.init();
-    
     camera.setActor(&pHero);
     pHero.setWorld(&world);
     ball.setWorld(&world);
+    rHero.setWorld(&realWorld);
     world.insertCamera(&camera);
     world.insertActor(&pHero);
     world.insertActor(&ball);
   //  world.insertActor(&billow);
-  //  world.insertParticleEffect(&mist);
+    world.insertParticleEffect(&mist);
     world.insertParticleEffect(&inkGlyphs);
     world.setMap(map);
+    DirectionalLight dl(glm::vec3(0.1,0.1,0.1),glm::vec3(0.3,0.3,0.3),glm::vec3(0.5,0.5,0.5),glm::vec3(0,-1,-1));
+    world.setWeather(dl);
     
-    realWorld.insertActor(&pHero);
-    realWorld.setMap(map);
+    realWorld.insertActor(&rHero);
+    realWorld.setMap(realMap);
+    DirectionalLight dl2(glm::vec3(0.5,0.5,0.5),glm::vec3(0.5,0.5,0.5),glm::vec3(1.0,1.0,1.0),glm::vec3(0,-1,-1));
+    realWorld.setWeather(dl2);
     
     screen.print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
+    
+    realRenderer = new Renderer;
+    realRenderer->setWorld(&realWorld);
+    realRenderer->setCamera(&camera);
     
     renderer = new Renderer;
     renderer->setWorld(&world);
@@ -90,6 +99,7 @@ Game::Game() {
     pHero.posVec = glm::vec3(10,50,10);
     ball.posVec = glm::vec3(0,0.5,0);
    // billow.loadModel();
+    rHero.init();
 
     screen.print("Putting on a fresh canvas...");
     glfwPollEvents();
@@ -98,6 +108,11 @@ Game::Game() {
     renderer->loadActorData();
     renderer->loadMapData();
     renderer->loadSkyBoxData();
+    
+    realRenderer->loadActorData();
+    realRenderer->loadMapData();
+    realRenderer->loadSkyBoxData();
+    
     stbi_set_flip_vertically_on_load(1);
 
     printf("%s\n", glGetString(GL_VERSION));
@@ -114,7 +129,8 @@ Game::Game() {
      glBindTexture(GL_TEXTURE_2D, 0);
 
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
-    audio.playMusic();
+   // audio.playMusic();
+    activeRenderer = renderer;
 }
 
 Game::~Game() {
@@ -178,6 +194,7 @@ void Game::tick() {
     }
     }
     world.tick();
+    realWorld.tick();
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == false) {
@@ -186,14 +203,14 @@ void Game::tick() {
             }
     }
     }
+   // printf("%f\n", glfwGetTime());
     glfwSetTime(0);
     if(printing)
     {print();}
-    renderer->render();
+    activeRenderer->render();
     glfwPollEvents();
     glfwSwapBuffers(window);
 }
-
 
 void Game::moveMouse(double mouseX_, double mouseY_) {
     if (scheme != 2) {
@@ -278,6 +295,11 @@ int Game::processInput(int key, int action, int mods) {
             Fish* fish = new Fish(&world, &pHero, 6);
             abilities.push_back(fish);
             fish->call(this);
+        }
+        
+        if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+            activeRenderer = realRenderer;
+            camera.setActor(&rHero);
         }
         
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {

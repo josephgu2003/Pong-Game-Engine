@@ -7,7 +7,7 @@
 
 #include "InkGlyphs.hpp"
 
-void InkGlyphs::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_) {
+void InkGlyphs::init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, float ptcPerSec_, float duration) {
     size = size_;
     std::srand(314159);
     posVec = posVec_;
@@ -18,11 +18,11 @@ void InkGlyphs::init(float size_, glm::vec3 posVec_, float x_, float y_, float z
     numParticles = numParticles_;
     for (int i = 0; i < numParticles; i++)
         particles.push_back(Particle());
-    cycle = cyclecount_;
-    cyclecount = cyclecount_;
     firstUnused = 0;
     distribution = std::uniform_int_distribution<int>(1,1000);
-    load3DTexture("Resources/Particles/Smoke/Smoke/frame_000.jpg", texture);
+   load3DTexture("Resources/Particles/Smokes/smoke000.jpg", texture);
+   // texture = 0;
+  //load3DTexture("Resources/Particles/Ink/Ink/ink000.png", texture);
     textureTarget = GL_TEXTURE_2D_ARRAY;
     shader.init("Shaders/GlyphParticleVShader.vs", "Shaders/GlyphParticleFShader.fs");
     
@@ -39,19 +39,18 @@ void InkGlyphs::tick() {
     posVec = actor->getPos();
     }
     
-    float dt = glfwGetTime();
-    if (cycle == cyclecount) {
-        cycle = 0;
+    float dt = (float)glfwGetTime();
+
             
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
             refreshParticle();
             if(firstUnused == (particles.size()-1)) {
                 firstUnused = 0;
             }
             else if(particles[firstUnused+1].duration<=0) firstUnused++;
         }
-    }
-    cycle++;
+
+
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
           //  particles[i].velVec += force;
@@ -82,7 +81,7 @@ particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
   //  if (a%2 ==1) a = a*(-1);
    // b = b*(-1);
  //   c = c*(-1);
-particles[firstUnused].velVec = (glm::vec3(a,2*b,c));
-particles[firstUnused].duration = 5;
+particles[firstUnused].velVec = (glm::vec3(2*a,b-0.5,c));
+particles[firstUnused].duration = 3.0f;
 particles[firstUnused].texture = texture;
 }

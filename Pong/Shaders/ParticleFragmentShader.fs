@@ -12,6 +12,7 @@ uniform sampler2D texture1;
         vec3 colors = sampled.rgb;
        // sampled.w *= 5*log(duration);
         float intensity = texture(texture1, vec2((TexCoords.x-0.5)+0.5,(TexCoords.y-0.5)+0.5)).b;
-        sampled.a *= 3*intensity*intensity*intensity;
+        sampled.a *= 0.08*intensity*intensity;
+        sampled.a *= min(duration,1);
         FragColor = vec4(colors, sampled.a);
     }

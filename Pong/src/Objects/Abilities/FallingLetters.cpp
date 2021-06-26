@@ -18,11 +18,12 @@ FallingLetters::~FallingLetters() {
     letters->~ComplexParticles();
     if (target != NULL) {
         target->setState(STATE_NORMAL);
+        target->affecting = NULL;
     }
 }
 
 void FallingLetters::call(Game* game) {
-    letters->init(0.1, actor->getPos(), 3, 4, 3, 100, 2);
+    letters->init(0.1, actor->getPos(), 3, 4, 3, 100, 2, 1000);
    // flowers->init(0.028, actor->getPos(), 4, 3, 4, 350, 1);
   //  test->init(actor->getPos(), 3, 4, 3, 150, 2);
     world->insertParticleEffect(letters);

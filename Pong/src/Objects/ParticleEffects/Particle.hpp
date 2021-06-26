@@ -38,12 +38,14 @@ protected:
     
     Actor* actor = NULL;
     
-    int cyclecount;
+
     int numParticles;
     float x,y,z;
     
     int firstUnused;
-    int cycle;
+
+    float ptcPerSec;
+    float duration;
     
     glm::vec3 force = glm::vec3(0,0,0);
     
@@ -51,7 +53,9 @@ protected:
     std::uniform_int_distribution<int> distribution;
     virtual void refreshParticle();
 public:
-    virtual void init(float size_, glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
+    virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration);
+    
+    virtual void setGraphics() = 0;
     
     void setActor(Actor* actor);
     float getSize();
@@ -62,7 +66,6 @@ public:
     GLenum textureTarget;
     
     ParticleEffect();
-    ParticleEffect(glm::vec3 posVec_, float x_, float y_, float z_, int numParticles_, int cyclecount_);
     ~ParticleEffect();
     virtual void tick();
     

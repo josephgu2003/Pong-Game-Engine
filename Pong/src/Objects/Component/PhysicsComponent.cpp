@@ -17,35 +17,11 @@ PhysicsComponent::PhysicsComponent(bool gravityOn_) {
 
 void PhysicsComponent::tick(Actor& actor, World& world) {
     if (actor.getState() == STATE_NORMAL)
-    actor.posVec += actor.velVec;
+    actor.translatePos(actor.getVel());
     handleGravity(actor);
-    if (actor.velVec.x > 0) {
-        if (actor.velVec.x > glfwGetTime()) {
-            actor.velVec.x +=  -glfwGetTime();
-        } else {
-            actor.velVec.x = 0;
-        }
-    };
-    if (actor.velVec.z > 0)     {
-        if (actor.velVec.z > glfwGetTime()) {
-            actor.velVec.z +=  -glfwGetTime();
-        } else {
-            actor.velVec.z = 0;
-        }
-    }
-    if (actor.velVec.x < 0) {
-        if (actor.velVec.x <-glfwGetTime()) {
-            actor.velVec.x +=  glfwGetTime();
-        } else {
-            actor.velVec.x = 0;
-        }
-    }
-    if (actor.velVec.z < 0) {
-        if (actor.velVec.z <-glfwGetTime()) {
-            actor.velVec.z +=  glfwGetTime();
-        } else {
-            actor.velVec.z = 0;
-        }
+    actor.accelerate(-0.001f*actor.getVel());
+    if (glm::vec2(actor.getVel().x,actor.getVel().z).length() < 0.001) {
+        actor.setVel(glm::vec3(0,actor.getVel().y,0));
     }
 }
 
@@ -54,17 +30,18 @@ void PhysicsComponent::handleGravity(Actor& actor) {
         case STATE_PARALYZED:
             break;
         case STATE_NORMAL:
-            actor.velVec.y += -0.1f*glfwGetTime();
-            if (actor.posVec.y <= 0.0f) {
-                actor.velVec.y = 0;
-                actor.posVec.y = 0.0f;
+            actor.accelerate(glm::vec3(0,-0.1f*glfwGetTime(),0));
+            
+            if (actor.getPos().y <= 0.0f) {
+                actor.setVel(glm::vec3(actor.getVel().x,0,actor.getVel().z));
+                actor.setPosY(0.0f);
             }
             break;
         case STATE_FLYING:
-            actor.velVec.y += -0.01f*glfwGetTime();
-            if (actor.posVec.y <= 0.0f) {
-                actor.velVec.y = 0;
-                actor.posVec.y = 0.0f;
+            actor.accelerate(glm::vec3(0,-0.1f*glfwGetTime(),0));
+            if (actor.getPos().y <= 0.0f) {
+                actor.setVel(glm::vec3(actor.getVel().x,0,actor.getVel().z));
+                actor.setPosY(0.0f);
             }
             break;
     }

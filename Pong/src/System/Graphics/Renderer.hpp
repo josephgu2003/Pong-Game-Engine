@@ -19,6 +19,7 @@
 #include "Mesh.hpp"
 #include <string>
 #include "Batch.hpp"
+#include "AssetManager.hpp"
 
 // draws the world
 struct screentext {
@@ -32,7 +33,7 @@ class Renderer {
 private:
     screentext screenText = {0, ""};
     GLuint funtex1, funtex2;
-    GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, fbo, ftexture, rbo, fvbo, fvao, tVBO, tVAO, qVBO, qVAO, qEBO;
+    GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, tVBO, tVAO, qVBO, qVAO, qEBO;
     float screenquad[24] =
     {   -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
@@ -42,20 +43,17 @@ private:
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
+    Frame frame;
     GLuint texture = 0;
     GLuint texture2 = 0;
     GLuint skyTexture = 0;
     GLuint gradient = 0;
     GLuint noise = 0;
-    Shader* actorShader;
-    Shader* mapShader;
+
     Shader* skyShader;
-    Shader* particleShader;
-    Shader* glyphParticleShader;
     Shader* frameShader;
     Shader* textShader;
     Shader* sketchShader;
-    std::vector<Shader*> shaders;
     
     glm::mat4 modelMat;
     glm::mat4 viewMat;
@@ -78,8 +76,9 @@ private:
     void updateViewProj();
     void updateLights();
     void updateCamPos();
+    void updateUniformStopWatch();
+    float timeT;
 public:
-    float time;
     void renderSky();
     Renderer();
     ~Renderer();

@@ -20,7 +20,7 @@ Model::~Model() {
 
 void Model::loadModel(std::string filePath_) {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals );
+    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
     
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString();
@@ -30,12 +30,14 @@ void Model::loadModel(std::string filePath_) {
     directory = filePath_.substr(0, filePath_.find_last_of('/'));
     processNode(scene->mRootNode, scene);
 }
-void Model::setMeshTexture(int index, int type, std::vector<GLuint> newMaps) {
+void Model::setMeshTexture(int index, int type, std::vector<GLuint> newDiffMaps, std::vector<GLuint> newSpecMaps) {
 
         std::vector<Texture> newTextures;
-        for (int i = 0 ; i<newMaps.size();i++) {
-            Texture texture = {newMaps.at(i), "test","test"};
-            newTextures.push_back(texture);
+        for (int i = 0 ; i<newDiffMaps.size();i++) {
+            Texture diffTexture = {newDiffMaps.at(i), "test","test"};
+            newTextures.push_back(diffTexture);
+            Texture specTexture = {newSpecMaps.at(i), "test","test"};
+            newTextures.push_back(specTexture);
 
     meshes.at(index).textures = newTextures;
     }
@@ -55,12 +57,12 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-    std::vector<Vertex> vertices;
+    std::vector<TBNVertex> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
-        Vertex vertex;
+        TBNVertex vertex;
         
         glm::vec3 pos_;
         pos_.x = mesh->mVertices[i].x;
@@ -72,7 +74,19 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
         norm_.x = mesh->mNormals[i].x;
         norm_.y = mesh->mNormals[i].y;
         norm_.z = mesh->mNormals[i].z;
-        vertex.Normal = norm_;
+       vertex.Normal = norm_;
+        
+        glm::vec3 Tan_;
+        Tan_.x = mesh->mTangents[i].x;
+      Tan_.y = mesh->mTangents[i].y;
+       Tan_.z = mesh->mTangents[i].z;
+       vertex.Tan = Tan_;
+        
+        glm::vec3 BiTan_;
+       BiTan_.x = mesh->mBitangents[i].x;
+       BiTan_.y = mesh->mBitangents[i].y;
+       BiTan_.z = mesh->mBitangents[i].z;
+       vertex.BiTan = BiTan_;
         
         if (mesh->mTextureCoords[0]) {
             glm::vec2 texCoords_;

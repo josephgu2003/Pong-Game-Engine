@@ -43,7 +43,7 @@ public:
     Model(const char* filePath);
     ~Model();
     void setMeshes(std::vector<Mesh> meshes_);
-    void setMeshTexture(int index, int type, std::vector<GLuint> newMaps);
+    void setMeshTexture(int index, int type, std::vector<GLuint> newDiffMaps, std::vector<GLuint> newSpecMaps);
     void setDirectory(const char* directory_);
     std::string getDirectory();
     std::vector<Mesh>* getMeshes();

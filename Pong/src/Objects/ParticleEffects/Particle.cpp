@@ -13,9 +13,9 @@ ParticleEffect::ParticleEffect() {
 }
 
 
-void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec_, float duration_) {
+void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec_, float duration_, float friction_) {
+    friction = friction_;
     size = size_;
-    std::srand(314159);
     posVec = posVec_;
     force = glm::vec3(0,0,0);
     x = dimensions.x;
@@ -32,11 +32,15 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
 
     distribution = std::uniform_int_distribution<int>(1,1000);
     
-
+    setGraphics();
+    
+    if (drawTarget == GL_TRIANGLES)
+        verticesPerDraw = 6;
+    if (drawTarget == GL_POINTS)
+        verticesPerDraw = 1;
     
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    GLuint viewproj  = glGetUniformBlockIndex(shader.ID, "ViewProj");
     glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "ViewProj"), 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -56,19 +60,23 @@ void ParticleEffect::tick() {
     }
     
     float dt = glfwGetTime();
+    timer += dt;
         
-        for (int i = 0; i < 3; i++) {
+    if (timer > 0.2) {
+        timer = 0;
+        for (int i = 0; i < ptcPerSec/5; i++) {
         refreshParticle();
         if(firstUnused == (particles.size()-1)) {
             firstUnused = 0;
         }
         else if(particles[firstUnused+1].duration<=0) firstUnused++;
     }
+    }
     
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
             particles[i].velVec += force;
-            particles[i].velVec *= 0.995;
+            particles[i].velVec *= friction;
         if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
             particles[i].posVec.x += particles[i].velVec.x*dt;
             particles[i].posVec.y += particles[i].velVec.y*dt;
@@ -80,30 +88,15 @@ void ParticleEffect::tick() {
 }
 
 int ParticleEffect::getNumParticles() {
-    return numParticles;
+    return particles.size();
 }
 
 Particle& ParticleEffect::getNthParticle(int n) {
     return particles[n];
 }
 
-void ParticleEffect::refreshParticle() {
-    int j = (distribution(generator)%100);
-    int k = (distribution(generator)%100);
-    int l = (distribution(generator)%100);
-    if (j%2 ==1) j = j*(-1);
-    if (k%2 ==1) k = k*(-1);
-    if (l%2 ==1) l = l*(-1);
-    float m = x*j*0.01;
-    float n = y*k*0.01;
-    float o = z*l*0.01;
-    particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
-    float a = 0.01*(distribution(generator)%100);
-    float b = 0.01*(distribution(generator)%100);
-    float c = 0.01*(distribution(generator)%100);
-particles[firstUnused].velVec = (glm::vec3(1*a-0.5,1*b-0.25,1*c-0.5));
-particles[firstUnused].duration = 1;
-particles[firstUnused].texture = texture;
+Shader& ParticleEffect::getShader() {
+    return shader;
 }
 
 float ParticleEffect::getSize() {
@@ -113,3 +106,4 @@ float ParticleEffect::getSize() {
 void ParticleEffect::setForce(glm::vec3 force_) {
     force = force_;
 }
+

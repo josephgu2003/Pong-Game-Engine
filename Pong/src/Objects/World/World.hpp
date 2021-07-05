@@ -102,6 +102,8 @@ public:
     
     void tick();
     
-    void informProximityComponent(Actor& actor, BehaviorComponent& pc);
+    void informActorProximity(Actor& actor, float radius);
 };
+
+
 #endif /* World_hpp */

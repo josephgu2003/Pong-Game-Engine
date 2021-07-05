@@ -31,29 +31,31 @@ struct Character;
 
 class ParticleEffect {
 protected:
-    
+    float friction;
+    bool useTexture = true;
     float size;
     
     std::vector<Particle> particles;
     
     Actor* actor = NULL;
     
-
     int numParticles;
     float x,y,z;
     
     int firstUnused;
+    Shader shader;
 
     float ptcPerSec;
     float duration;
+    float timer = 0;
     
     glm::vec3 force = glm::vec3(0,0,0);
     
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
-    virtual void refreshParticle();
+    virtual void refreshParticle() = 0;
 public:
-    virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration);
+    virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
     
     virtual void setGraphics() = 0;
     
@@ -61,11 +63,15 @@ public:
     float getSize();
     
     glm::vec3 posVec;
-    Shader shader;
     GLuint texture;
     GLenum textureTarget;
+    GLenum drawTarget;
+    int verticesPerDraw;
+    
+    Shader& getShader();
     
     ParticleEffect();
+
     ~ParticleEffect();
     virtual void tick();
     

@@ -56,6 +56,12 @@ World::World() {
     };
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
     
+ /** skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");
+    skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");
+    skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");
+    skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");
+    skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");    skyTextureFiles.push_back("Resources/Skybox/Screen Shot 2021-06-30 at 3.45.04 PM.png");**/
+    
     skyTextureFiles.push_back("Resources/Skybox/right.png");
     skyTextureFiles.push_back("Resources/Skybox/left.png");
     skyTextureFiles.push_back("Resources/Skybox/top.png");
@@ -162,6 +168,7 @@ Weather World::getWeather() {
 
 void World::tick() {
     globalTime += glfwGetTime();
+    map->tick();
   //  weather.brightness = 0.5*(sin(globalTime)+1.3);
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
@@ -198,14 +205,13 @@ void World::tick() {
     }
 }
 
-void World::informProximityComponent(Actor& actor, BehaviorComponent& pc) {
+void World::informActorProximity(Actor& actor, float radius) {
     std::vector<Actor*> allOtherActors = allActorPtrs;
     allOtherActors.erase(std::remove(allOtherActors.begin(), allOtherActors.end(), &actor));
     for (int i = 0; i < allOtherActors.size(); i++) {
         float distance = glm::length(actor.getPos()-allOtherActors.at(i)->getPos());
-        if (distance <= 10) {
-            pc.somethingNear = true;
-            pc.biggestTarget = allOtherActors.at(i);
+        if (distance <= radius) {
+            actor.biggestTarget = allOtherActors.at(i);
         }
     }
 }

@@ -11,12 +11,18 @@
 #include <stdio.h>
 #include "Shader.hpp"
 #include "Mesh.hpp"
+#include "AssetManager.hpp"
+
 class Map {
     Mesh mesh;
     Shader shader;
+    GLuint array2D;
 public:
+    Frame frame;
     void init();
     Shader& getShader();
     Mesh& getMesh();
+    void beginAnimation();
+    void tick();
 };
 #endif /* Map_hpp */

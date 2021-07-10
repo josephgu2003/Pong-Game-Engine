@@ -25,9 +25,12 @@
 #include "Billow.hpp"
 #include "Mist.hpp"
 #include "LoadingScreen.hpp"
-#include "InkGlyphs.hpp"
+#include "InkEffect.hpp"
 #include "Audio.hpp"
 #include "Map.hpp"
+#include "Numberable.hpp"
+#include "Fireworks.hpp"
+#include "ScriptOne.hpp"
 
 class Dialogue;
 
@@ -61,12 +64,17 @@ InputHandler inputHandler;
     Ball ball;
     PlayerHero pHero;
     PlayerHero rHero;
-    InkGlyphs inkGlyphs;
+    InkEffect inkGlyphs;
+    Fireworks* fireworks;
     Map map;
     Map realMap;
     Mist mist;
     
+    ScriptOne* script;
+    
     std::vector<Ability*> abilities;
+    Numberable* numberables[100];
+    
     GLuint fbo, fvao, ftexture;
     unsigned char* paint;
     unsigned char* blank;
@@ -85,6 +93,8 @@ public:
     void print();
     void setActionScheme(int id);
     void newDialogue(Dialogue& dialogue_);
+    
+    Numberable* getNumberable(unsigned int ID_);
 };
 
 #endif /* Game_hpp */

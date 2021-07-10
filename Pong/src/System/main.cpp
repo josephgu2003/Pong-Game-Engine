@@ -18,6 +18,8 @@ int main() {
     
     Game game;
     
+
+    
     while(game.running)
 
     {

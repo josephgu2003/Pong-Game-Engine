@@ -20,6 +20,7 @@
 #include "BehaviorComponent.hpp"
 #include "Map.hpp"
 #include "DirectionalLight.hpp"
+#include "Numberable.hpp"
 
 #define ACTOR_UPDATE 0
 #define PARTICLE_UPDATE 1
@@ -47,7 +48,7 @@ struct Updates {
     bool quadUpdate;
     bool textUpdate;
 };
-class World {
+class World : public Numberable {
     Map* map;
     Updates updates = {false,false,false,false};
     std::vector <Actor*> allActorPtrs;

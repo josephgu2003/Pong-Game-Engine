@@ -7,14 +7,11 @@
 
 #include "CombatComponent.hpp"
 #include "Actor.hpp"
+#include "World.hpp"
+CombatComponent::CombatComponent() {
+    
+}
 
 void CombatComponent::tick(Actor& actor, World& world) {
-    switch (actor.getState()) {
-        case STATE_NORMAL:
-            // world->getfieldeffect->affect(actor)
-            break;
-        case STATE_PARALYZED:
-            
-            break;
-    }
+    world.informActorProximity(actor, 5);
 }

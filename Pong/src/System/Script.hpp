@@ -9,14 +9,16 @@
 #define Script_hpp
 
 #include <stdio.h>
+#include <vector>
+
+class Game;
 
 class Script {
 protected:
     int step;
 public:
     virtual void tick() = 0;
-    virtual void init() = 0;
-    virtual void inform() = 0;
+    virtual void init(Game* game) = 0;
 };
 
 #endif /* ScriptEvent_hpp */

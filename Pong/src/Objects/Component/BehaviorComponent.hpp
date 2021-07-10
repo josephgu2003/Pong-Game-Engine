@@ -21,6 +21,6 @@ protected:
     bool somethingNear = false;
 public:
     virtual void tick(Actor& actor, World& world);
-    virtual void trigger(Actor& actor, World& world) = 0;
+    virtual void trigger(Actor& actor, World& world);
 };
 #endif /* ProximityComponent_hpp */

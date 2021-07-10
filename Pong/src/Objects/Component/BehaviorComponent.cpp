@@ -9,10 +9,10 @@
 #include "World.hpp"
 
 void BehaviorComponent::tick(Actor& actor, World& world) {
-    world.informProximityComponent(actor, *this);
-    if (somethingNear) {
-        trigger(actor,world);
-        somethingNear= false;
-    }
+
+}
+
+void BehaviorComponent::trigger(Actor &actor, World &world) {
+    
 }
 

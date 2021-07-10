@@ -25,6 +25,14 @@ struct Vertex {
     glm::vec2 TexCoords;
 };
 
+struct TBNVertex {
+    glm::vec3 Pos;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+    glm::vec3 Tan;
+    glm::vec3 BiTan;
+};
+
 struct SimpleVertex {
     glm::vec3 Pos;
     glm::vec2 TexCoords;
@@ -39,17 +47,17 @@ struct Texture {
 class Mesh {
     friend class Billow;
 public:
-    std::vector<Vertex> vertices;
+    std::vector<TBNVertex> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     
     Mesh();
     
-    Mesh(std::vector<Vertex> vertices_,
+    Mesh(std::vector<TBNVertex> vertices_,
          std::vector<GLuint> indices_,
          std::vector<Texture> textures_);
     
-    void setVertexData(std::vector<Vertex> vertices_,
+    void setVertexData(std::vector<TBNVertex> vertices_,
                  std::vector<GLuint> indices_,
                  std::vector<Texture> textures_);
 };

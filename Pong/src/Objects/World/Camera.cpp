@@ -71,7 +71,7 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
     rightVec = glm::normalize(rightVec);
     upVec = glm::cross(dirVec,rightVec);
     upVec = glm::normalize(upVec);
-    posVec = actor->posVec-dirVec*3.5f+actor->camFocus;
+    posVec = actor->posVec-dirVec*3.0f+actor->camFocus;
     if (posVec.y < -0.11) {
         posVec.x += (-0.11f-posVec.y)*dirVec.x/dirVec.y;
         posVec.z += (-0.11f-posVec.y)*dirVec.z/dirVec.y;

@@ -5,7 +5,10 @@
     uniform sampler2D fbotexture;
     uniform sampler2D noise;
 uniform bool blur;
-uniform float time;
+layout(std140) uniform StopWatch
+{
+    float time;
+};
 uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
     void main()

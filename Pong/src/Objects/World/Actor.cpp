@@ -19,6 +19,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "ActorScript.hpp"
 
 #define JUMP_SPEED 0.05f
 
@@ -57,6 +58,7 @@ Actor::Actor() {
         };
     memcpy(indices, indicesCopy, sizeof(indicesCopy));**/
     eulerAngles = glm::vec3(0,-90,0);
+    distribution = std::uniform_int_distribution<int>(1,1000);
 }
 
 Actor::~Actor() {
@@ -93,7 +95,18 @@ void Actor::turnTowards(glm::vec3 newDir) {
     rightVec = glm::normalize(rightVec);
 }
 
+World& Actor::getWorld() {
+    return *world;
+}
+
+void Actor::setScript(ActorScript* script_) {
+    script = script_;
+    script->setActor(*this);
+}
+
 void Actor::tick() {
+    if (script != NULL)
+    script->tick();
     if (components.size() > 0) {
         for (int i = 0; i < components.size(); i++) {
             components.at(i)->tick(*this, *world);
@@ -111,7 +124,17 @@ glm::mat4 RotationMatrix = toMat4(MyQuaternion);
     shader->setMat4("modelMat", modelMat);
 }
 
+void Actor::setPos(glm::vec3 pos_) {
+    posVec = pos_;
+}
 
+void Actor::translatePos(glm::vec3 translate) {
+    posVec += translate;
+}
+
+void Actor::setPosY(float y_) {
+    posVec.y = y_;
+}
 void Actor::posDir(float speed) {
     if (state != STATE_PARALYZED) {
     posVec += speed * dirVec;
@@ -123,6 +146,19 @@ void Actor::posRight(float speed) {
     posVec += speed * rightVec;
     }
 }
+
+void Actor::randomPosAround(glm::vec3 pivot) {
+    int j = (distribution(generator)%360);
+}
+
+// Key by key, I used to sit here to tap out the image of a better world beyond these walls
+// I know our room was always small, but it was only because of the confinement that the music was able to focus into our very bones.
+// But yesterday I opened the windows and saw a bigger world right there. It's a snowy place, but also a beautiful place. And I saw us, under the soft sunset on that snowy plain.
+// I used to think this piano was a key. But is it really a key, or is it a prison?
+// I will count to 3. If you don't stop me, I will set fire to this piano and we will go.
+
+
+
 
 void Actor::jump() {
     if (state != STATE_PARALYZED) {
@@ -137,6 +173,18 @@ void Actor::velDir(float speed) {
     velVec += dirVec*speed;
 }
 
+glm::vec3 Actor::getVel() {
+    return velVec;
+}
+
+void Actor::setVel(glm::vec3 velVel_) {
+    velVec = velVel_;
+}
+
+void Actor::accelerate(glm::vec3 accel) {
+    velVec += accel;
+}
+
 float Actor::getYaw() {
     return eulerAngles.y;
 }
@@ -146,8 +194,13 @@ glm::vec3 Actor::getPos() {
 }
 
 void Actor::init() {
-    model = loadModels("Resources/Models/journey5.obj");
+    model = loadModels("Resources/Models/journey6.obj");
    // model = loadModels(MOD_JUGGERNAUT);
+    std::vector<GLuint> newMaps_ = {loadTexture("Resources/Models/textures/lambert1_baseColor.png")};
+    std::vector<GLuint> newMaps = {loadTexture("Resources/Models/tmpugfolmqr")};
+    for (int i = 0; i<model->getMeshes()->size(); i ++) {
+        model->setMeshTexture(i, DIFFUSE, newMaps_, newMaps);
+    }
     shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
     
     extern GLuint uboViewProj;

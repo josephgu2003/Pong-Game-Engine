@@ -7,18 +7,17 @@
 
 #include "Map.hpp"
 #include <vector>
-#include "AssetManager.hpp"
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 void Map::init() {
     shader.init("Shaders/MapVertexShader.vs", "Shaders/MapFragmentShader.fs");
-    Vertex a,b,c,d;
-    a = {glm::vec3(-100,0,-100),glm::vec3(0,1,0),glm::vec2(0,0)};
-    b = {glm::vec3(100,0,-100),glm::vec3(0,1,0),glm::vec2(1,0)};
-    c = {glm::vec3(100,0,100),glm::vec3(0,1,0),glm::vec2(1,1)};
-    d = {glm::vec3(-100,0,100),glm::vec3(0,1,0),glm::vec2(0,1)};
-    std::vector<Vertex> mapVertices = {a,b,c,d
+    TBNVertex a,b,c,d;
+    a = {glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0)};
+    b = {glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0)};
+    c = {glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0)};
+    d = {glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0)};
+    std::vector<TBNVertex> mapVertices = {a,b,c,d
     };
     
     std::vector<GLuint> mapIndices = {
@@ -26,9 +25,16 @@ void Map::init() {
         2, 3, 0
     };
     std::vector<Texture> mapTextures;
-    Texture texture = {loadTexture(TEX_EMPTY),"blah","blah"};
+    
+    GLuint id;
+    loadNullTexture(1600,1600,&id,GL_RGBA);
+   Texture texture = {id,"blah","blah"};
+    //Texture texture = {loadTexture(TEX_EMPTY),"blah","blah"};
     mapTextures.push_back(texture);
     mesh.setVertexData(mapVertices, mapIndices, mapTextures);
+    generateFramebuffer(&frame, &mesh.textures.at(0).id, 1600, 1600);
+    
+    load3DTexture(TEX_SMOKES, array2D);
     
     shader.use();
     glm::mat4 modelMat = glm::mat4(1.0f);
@@ -47,6 +53,14 @@ void Map::init() {
     glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    extern GLuint uboStopWatch;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
+    glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "StopWatch"), 2);
+    glUniformBlockBinding(frame.shader.ID, glGetUniformBlockIndex(frame.shader.ID, "StopWatch"), 2);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
+    
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 Shader& Map::getShader() {
@@ -55,4 +69,25 @@ Shader& Map::getShader() {
 
 Mesh& Map::getMesh() {
     return mesh;
+}
+
+void Map::beginAnimation() {
+}
+
+void Map::tick() {
+    glBindFramebuffer(GL_FRAMEBUFFER, frame.fbo);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0,0.0,0.0,0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBindVertexArray(frame.fvao);
+    
+    frame.shader.use();
+    
+    glActiveTexture(GL_TEXTURE0); // accomodate more trextures later
+    glUniform1i(glGetUniformLocation(frame.shader.ID, "fbotexture"), 0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, array2D);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

@@ -12,7 +12,7 @@ Mesh::Mesh() {
     
 }
 
-Mesh::Mesh(std::vector<Vertex> vertices_,
+Mesh::Mesh(std::vector<TBNVertex> vertices_,
      std::vector<GLuint> indices_,
            std::vector<Texture> textures_) {
     vertices = vertices_;
@@ -21,7 +21,7 @@ Mesh::Mesh(std::vector<Vertex> vertices_,
 }
 
 
-void Mesh::setVertexData(std::vector<Vertex> vertices_,
+void Mesh::setVertexData(std::vector<TBNVertex> vertices_,
              std::vector<GLuint> indices_,
              std::vector<Texture> textures_)  {
     vertices = vertices_;

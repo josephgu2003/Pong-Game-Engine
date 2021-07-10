@@ -14,7 +14,9 @@
 #define TEX_EMPTY "Resources/Particles/BLANK_ICON3.png"
 #define TEX_INKPAPER "Resources/Textures/inkpaper.jpg"
 #define TEX_MIST "Resources/Particles/imageedit_7_4243532340.png"
-
+#define TEX_FISH "Resources/Models/Flag/fish.png"
+#define TEX_SMOKES "Resources/Particles/Smokes/smoke000.jpg"
+#define TEX_DANCE "Resources/Textures/Dance/dance000.png"
 #define TEX_GRADIENT "Resources/Utility/radial.png"
 
 #define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
@@ -52,8 +54,35 @@ struct Character {
     GLuint advance; // advancing to next glph?
 };
 
+struct Frame {
+    GLuint fbo;
+    GLuint fvao;
+    GLuint fvbo;
+    GLuint frbo;
+    GLuint ftexture;
+    Shader shader;
+};
+
 static void loadShader() {
     
+}
+static void loadNullTexture(int x, int y, GLuint* texture, GLenum format) {
+    int imageWidth = 0;
+    int imageHeight = 0;
+    int channels = 0;
+    
+    glGenTextures(1, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
+    
+        glTexImage2D(GL_TEXTURE_2D, 0,format, x, y, 0, format, GL_UNSIGNED_BYTE, NULL);
+        glGenerateMipmap(GL_TEXTURE_2D);
+     
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters) {
@@ -185,8 +214,8 @@ static void load3DTexture(const char* filePath, GLuint& id) {
     glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
     Texture newTex;
     newTex.id = id;
     newTex.path = filePath;
@@ -198,7 +227,7 @@ static void load3DTexture(const char* filePath, GLuint& id) {
 static GLuint loadTexture(const char* filePath) {
  for (int j = 0; j < loadedTextures.size(); j++) {
        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-           std::cout << loadedTextures[j].path.data() << "\n";
+           std::cout << loadedTextures[j].path.data() << "already loaded" << "\n";
            return loadedTextures[j].id;
        }
    }
@@ -255,6 +284,98 @@ static Model* loadModels(const char* filePath) {
     model->setMeshes(processNode(scene->mRootNode, scene));**/
 
     return model;
+}
+
+static void generateFramebuffer(Frame* frame, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    glGenTextures(1, &frame->ftexture);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+    
+    frame->shader.init("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
+}
+
+static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    frame->ftexture = *ftexture_;
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *ftexture_, 0);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -0.10f,  0.10f,  0.0f, 1.0f,
+        -0.10f, -0.10f,  0.0f, 0.0f,
+         0.10f, -0.10f,  1.0f, 0.0f,
+
+        -0.10f,  0.10f,  0.0f, 1.0f,
+         0.10f, -0.10f,  1.0f, 0.0f,
+         0.10f,  0.10f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+    
+    frame->shader.init("Shaders/GIFFrameVShader.vs", "Shaders/GIFFrameFShader.fs");
 }
 
 /**static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene);

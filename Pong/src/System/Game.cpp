@@ -13,6 +13,7 @@
 #include "stb_image.h"
 #include "Dialogue.hpp"
 #include "Fish.hpp"
+#include "BallScriptOne.hpp"
 
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -31,6 +32,7 @@ Game::Game() {
     glfwMakeContextCurrent(window);
     
     glewExperimental = GL_TRUE;
+    
     glewInit();
     
     glEnable(GL_DEPTH_TEST); // enable depth-testing
@@ -40,16 +42,16 @@ Game::Game() {
     glfwSetTime(0);
     
     glfwSetWindowUserPointer(window, this);
-    
     LoadingScreen screen;
     
     inputHandler.setWindow(window);
     
     //billow.posVec = glm::vec3(0,5,0);
     stbi_set_flip_vertically_on_load(1);
-
-   mist.init(1, glm::vec3(0,0,0), 15, 0.3, 15, 1200, 9, 1000);
-    inkGlyphs.init(2.5, glm::vec3(0,-0.5,0), 1, 1, 1, 20, 9, 1000);
+   mist.init(1, glm::vec3(0,0,0), glm::vec3(15, 0.3, 15), 1400, 9, 1000, 0.995);
+  //  inkGlyphs.init(4, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 1, 9, 1000);
+    Fireworks* fireworks = new Fireworks(glm::vec4(0.1,0.3,0.9,1.0));
+    fireworks->init(0.20, glm::vec3(0,27,0), glm::vec3(0,0,0), 50, 20, 1000, 0.99);
     inkGlyphs.setActor(&ball);
     realMap.init();
     map.init();
@@ -57,28 +59,35 @@ Game::Game() {
     pHero.setWorld(&world);
     ball.setWorld(&world);
     rHero.setWorld(&realWorld);
+    
+    world.setID(0);
+    numberables[0] = &world;
+    
     world.insertCamera(&camera);
     world.insertActor(&pHero);
     world.insertActor(&ball);
-  //  world.insertActor(&billow);
+  //  world.insertActor(&billow)
     world.insertParticleEffect(&mist);
-    world.insertParticleEffect(&inkGlyphs);
+    world.insertParticleEffect(fireworks);
+   // world.insertParticleEffect(&inkGlyphs);
     world.setMap(map);
-    DirectionalLight dl(glm::vec3(0.1,0.1,0.1),glm::vec3(0.3,0.3,0.3),glm::vec3(0.5,0.5,0.5),glm::vec3(0,-1,-1));
-    world.setWeather(dl);
     
-    realWorld.insertActor(&rHero);
+    DirectionalLight dl(glm::vec3(0.1,0.1,0.1),glm::vec3(0.2,0.2,0.2),glm::vec3(1.0,1.0,1.0),glm::vec3(0,-1,-1));
+    world.setWeather(dl);
+
+   /** realWorld.insertActor(&rHero);
     realWorld.setMap(realMap);
     DirectionalLight dl2(glm::vec3(0.5,0.5,0.5),glm::vec3(0.5,0.5,0.5),glm::vec3(1.0,1.0,1.0),glm::vec3(0,-1,-1));
-    realWorld.setWeather(dl2);
+    realWorld.setWeather(dl2);**/
     
+
     screen.print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
-    realRenderer = new Renderer;
+  /**  realRenderer = new Renderer;
     realRenderer->setWorld(&realWorld);
-    realRenderer->setCamera(&camera);
+    realRenderer->setCamera(&camera);**/
     
     renderer = new Renderer;
     renderer->setWorld(&world);
@@ -90,14 +99,19 @@ Game::Game() {
     stbi_set_flip_vertically_on_load(0);
     
     ball.init();
+    ball.setID(1);
+    numberables[1] = &ball;
     
     screen.print("Flipping the pages...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
     pHero.init();
-    pHero.posVec = glm::vec3(10,50,10);
-    ball.posVec = glm::vec3(0,0.5,0);
+    pHero.setID(2);
+    numberables[2] = &pHero;
+    
+    pHero.setPos(glm::vec3(10,35,10));
+    ball.setPos(glm::vec3(0,0.5,0));
    // billow.loadModel();
     rHero.init();
 
@@ -109,13 +123,19 @@ Game::Game() {
     renderer->loadMapData();
     renderer->loadSkyBoxData();
     
-    realRenderer->loadActorData();
+ /**   realRenderer->loadActorData();
     realRenderer->loadMapData();
-    realRenderer->loadSkyBoxData();
+    realRenderer->loadSkyBoxData();**/
     
     stbi_set_flip_vertically_on_load(1);
 
     printf("%s\n", glGetString(GL_VERSION));
+
+    int i;
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &i);
+    printf("%i\n", i);
+    
+
     
     blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
      
@@ -129,13 +149,19 @@ Game::Game() {
      glBindTexture(GL_TEXTURE_2D, 0);
 
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
-   // audio.playMusic();
+  //  audio.playMusic();
     activeRenderer = renderer;
+    
+ //   BallScriptOne* bso = new BallScriptOne();
+  //  ball.setScript(bso);
+    script = new ScriptOne();
+    script->init(this);
 }
 
 Game::~Game() {
     
 }
+
 
 void Game::tick() {
     if (scheme == 0) {
@@ -193,8 +219,9 @@ void Game::tick() {
             }
     }
     }
+    script->tick();
     world.tick();
-    realWorld.tick();
+    
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == false) {
@@ -204,11 +231,13 @@ void Game::tick() {
     }
     }
    // printf("%f\n", glfwGetTime());
-    glfwSetTime(0);
     if(printing)
     {print();}
+    
     activeRenderer->render();
+    glfwSetTime(0);
     glfwPollEvents();
+    
     glfwSwapBuffers(window);
 }
 
@@ -298,8 +327,8 @@ int Game::processInput(int key, int action, int mods) {
         }
         
         if (key == GLFW_KEY_X && action == GLFW_PRESS) {
-            activeRenderer = realRenderer;
-            camera.setActor(&rHero);
+       //     activeRenderer = realRenderer;
+        //    camera.setActor(&rHero);
         }
         
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {
@@ -369,4 +398,8 @@ void Game::setActionScheme(int id) {
 
 void Game::newDialogue(Dialogue& dialogue_) {
     activeDialogue = &dialogue_;
+}
+
+Numberable* Game::getNumberable(unsigned int ID_) {
+    return numberables[ID_];
 }

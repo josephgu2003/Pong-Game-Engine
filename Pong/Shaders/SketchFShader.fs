@@ -39,12 +39,14 @@ layout (std140) uniform StopWatch
 
     uniform sampler2D texture0;
 
+uniform float alpha;
+
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
-    float alpha = texture(texture0, TexCoords).a;
-    if(alpha < 0.5)
+    float alpha_ = texture(texture0, TexCoords).a;
+    if(alpha_ < 0.5)
         discard;
     vec3 viewDir = vec3(viewPos-fragPos);
     float fogFactor = exp(-pow(length(viewDir)*0.03,2));
@@ -55,11 +57,11 @@ void main()
     fragColor += CalcDirLight(dirLight, norm, viewDir);
     
     //Yirou these next 3 lines can provide fish vfx, my version makes colors flash based on how much red they have, i couldn't figure out anything cooler yet
-  //  float howRed = fragColor.r;
-        //    fragColor += 0.3*sin(3.0*time)*vec3(howRed,howRed,howRed);
-  //  fragColor += sin(3.0*time+5.0*TexCoords.x)*vec3(0.1,0.1,0.1); waves of brightness up fish length
-    
-    FragColor = mix(vec4(0.6,0.6,0.6,1), vec4(fragColor,alpha), fogFactor);
+
+    fragColor *= 2.0;
+
+    FragColor = mix(vec4(0.6,0.6,0.6,1), vec4(fragColor,alpha_), fogFactor);
+    FragColor.a = alpha;
 }
 
 vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {

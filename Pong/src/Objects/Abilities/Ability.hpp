@@ -21,6 +21,7 @@ protected:
     Actor* target = NULL;
     float duration;
     Game* game;
+    int step;
 public:
     bool on;
     Ability();
@@ -30,6 +31,7 @@ public:
     virtual void call(Game* game) = 0;
     virtual void tick() = 0;
     virtual void dispel();
+    int getStep();
 };
 
 #endif /* Ability_hpp */

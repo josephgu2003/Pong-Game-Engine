@@ -11,6 +11,7 @@
 Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
     quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
     quad.texture = loadTexture(TEX_FISH);
+    quad.alpha = 0.0;
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
             Vertex vertex;
@@ -43,7 +44,7 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
     quad.size = 3;
     quad.rotations = glm::vec3(0,-90+actor->getYaw(),0);
     quad.force = glm::vec3(0,0,0);
-    duration = 18;
+    duration = duration_;
     on = true;
 }
 
@@ -59,26 +60,40 @@ void Fish::call(Game* game) {
 }
 
 void Fish::tick() {
+    if (step == 0) {
+        if (duration > 16.5) {
+            quad.alpha = (18.0-duration)/1.5;
+        }
+        else {
+            step++;
+            freeActor();
+        }
+    }
+    
+    if (step == 1) {
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
             if (i==0) {
-            //quad.vertices.at((50*i+j)).Pos.z = 0.3*sin(20*(float)i/49.0f-2*duration);
+                if (j ==0) {
                 glm::vec3 forwardDir = normalize(quad.vertices.at(50*(i)+j).Pos - quad.vertices.at(50*(i+1)+j).Pos);
+                
                 glm::mat4 transform = glm::mat4(1.0f);
+                
                 float k = (float)(sin(duration*3.0f)-sin(duration*3.0f+0.1f))/(1.0f+(sin(duration*3.0f)*sin(duration*3.0f+0.1f)));
-                     transform = glm::rotate(transform, glm::radians(100.0f*atan(k)+1.5f), glm::vec3(0,1,0));
+                
+                     transform = glm::rotate(transform, glm::radians(100.0f*atan(k)), glm::vec3(0,1,0));
+                
                 float l = (float)(sin(duration*30.0f)-sin(duration*30.0f+0.1f))/(1.0f+(sin(duration*30.0f)*sin(duration*30.0f+0.1f)));
-                     transform = glm::rotate(transform, glm::radians(0.8f*atan(k)+0.2f*atan(l)+0.3f), glm::vec3(0,1,0));
+                
+                     transform = glm::rotate(transform, glm::radians(0.8f*atan(k)+0.2f*atan(l)+2.0f), glm::vec3(0,1,0));
+        
                 forwardDir *= 0.016f;
                 forwardDir = glm::vec3(transform*glm::vec4(forwardDir,1));
         
-               // quad.vertices.at(50*(i)+j).Pos = glm::vec3( transform*glm::vec4(quad.vertices.at(50*(i)+j).Pos,1));
-                quad.vertices.at((50*i+j)).Pos += forwardDir;
-              //  quad.vertices.at((50*i+j)).Pos = glm::vec3(transform*glm::vec4(quad.vertices.at((50*i+j)).Pos,1));
-                
-               // glm::vec3 forwardDir = quad.vertices.at(50*(i)+j).Pos - quad.vertices.at(50*(i+1)+j).Pos;
-             //   quad.vertices.at((50*i+j)).Pos += 0.1f*forwardDir;
-           // quad.vertices.at((50*i+j)*5+2) += 0.3*sin(4*(float)j/49.0f-2*duration-1);
+                    for (int j2 = 0 ; j2 < 50; j2++) {
+                quad.vertices.at((50*i+j2)).Pos += forwardDir;
+                    }
+                }
             } else {
                 glm::vec3 lastVertex = quad.vertices.at(50*(i-1)+j).Pos;
                 
@@ -90,20 +105,15 @@ void Fish::tick() {
         }
         quad.pos = quad.vertices.at(0).Pos;
     }
-    duration -= glfwGetTime();
-    if (duration > 0 && step == 0) {
-        freeActor();
-        step++;
     }
     if (duration < 0) {
         on = false;
     }
+    duration -= (float)glfwGetTime();
 }
 
 void Fish::freeActor() {
-    actor->setState(STATE_NORMAL);
-    if (actor->affecting != NULL) {
+    if (actor->affecting.get() != NULL) {
     actor->affecting->dispel();
-        world->setActiveText("'I've made up my mind. I'm going.'");
     }
 }

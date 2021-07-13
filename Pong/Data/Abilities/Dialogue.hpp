@@ -29,13 +29,14 @@ private:
     DialogueTree dialogueTree;
     DialogueTree* currentTree;
     Renderer* renderer;
-    int counter = 0 ;
+    std::string activeText;
     float elapsetime = 0;
 public:
     Dialogue(World* world_, Actor* actor_, float duration_);
     virtual void call(Game* game);
     virtual void tick();
     void branch(int direction);
+    std::string getActiveText();
 };
 #endif /* Dialogue_hpp */
 

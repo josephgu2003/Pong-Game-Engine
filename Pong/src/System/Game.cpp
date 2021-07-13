@@ -13,7 +13,6 @@
 #include "stb_image.h"
 #include "Dialogue.hpp"
 #include "Fish.hpp"
-#include "BallScriptOne.hpp"
 
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -164,6 +163,8 @@ Game::~Game() {
 
 
 void Game::tick() {
+    glfwSetTime(glfwGetTime()-lastTime);
+    lastTime = glfwGetTime();
     if (scheme == 0) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         pHero.posDir(0.015);
@@ -212,20 +213,32 @@ void Game::tick() {
         }
         ball.abilityQ.clear();
     }
+    
+    if(pHero.abilityQ.size()>0) {
+        for(int i = 0; i < pHero.abilityQ.size(); i++) {
+            pHero.abilityQ.at(i)->call(this);
+            abilities.push_back(pHero.abilityQ.at(i));
+        }
+        pHero.abilityQ.clear();
+    }
+    
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == true) {
                 abilities.at(i)->tick();
             }
+            
     }
+        
     }
+    
     script->tick();
     world.tick();
     
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == false) {
-                delete abilities.at(i);
+                abilities.at(i).reset();
                 abilities.erase(abilities.begin()+i);
             }
     }
@@ -235,7 +248,7 @@ void Game::tick() {
     {print();}
     
     activeRenderer->render();
-    glfwSetTime(0);
+
     glfwPollEvents();
     
     glfwSwapBuffers(window);
@@ -309,19 +322,19 @@ int Game::processInput(int key, int action, int mods) {
         pHero.jump();
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        FallingLetters* letters = new FallingLetters(&world, &pHero, 6);
+        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&world, &pHero, 6);
         letters->call(this);
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
             std::vector<std::string> lines = { "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant"};
-            Speech* speech = new Speech(&world, &pHero, 6, lines);
+            std::shared_ptr<Ability> speech = std::make_shared<Speech>(&world, &pHero, 6.0, lines);
             abilities.push_back(speech);
             speech->call(this);
         }
         
         if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-            Fish* fish = new Fish(&world, &pHero, 6);
+            std::shared_ptr<Ability> fish = std::make_shared<Fish>(&world, &pHero, 18.0);
             abilities.push_back(fish);
             fish->call(this);
         }
@@ -334,9 +347,9 @@ int Game::processInput(int key, int action, int mods) {
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {
             int newScheme = (-1)*(scheme-2);
             setActionScheme(newScheme);
-            if (activeSketch == NULL) {
-            Sketch* sketch = new Sketch(&world, &pHero, 6, ftexture);
-            activeSketch = sketch;
+            if (activeSketch.get() == NULL) {
+            std::shared_ptr<Ability> sketch = std::make_shared<Sketch>(&world, &pHero, 6, ftexture);
+            activeSketch = static_pointer_cast<Sketch>(sketch);
             abilities.push_back(sketch);
             sketch->call(this);
             }
@@ -348,15 +361,14 @@ int Game::processInput(int key, int action, int mods) {
             glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2342, 1982, GL_RGB, GL_UNSIGNED_BYTE, blank);
          //   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGBA, GL_UNSIGNED_BYTE, blank);
             glBindTexture(GL_TEXTURE_2D, 0);
-            if (activeSketch != NULL) {
+            if (activeSketch.get() != NULL) {
             abilities.erase(std::remove(abilities.begin(), abilities.end(), activeSketch));
-            delete activeSketch;
-            activeSketch = NULL;
+            activeSketch.reset();
             }
         }
         
         if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-            if (activeSketch != NULL)
+            if (activeSketch.get() != NULL)
             activeSketch->call2();
         }
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {

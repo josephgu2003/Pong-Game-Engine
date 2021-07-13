@@ -19,7 +19,6 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "ActorScript.hpp"
 
 #define JUMP_SPEED 0.05f
 
@@ -31,32 +30,6 @@ Actor::Actor() {
         dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
         velVec = glm::vec3(0.0f, 0.0f, 0.0f);
         rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-     /**   float verticesCopy [] = {
-            -0.125f, -0.125f, -0.125f,
-            -0.125f, -0.125f, 0.125f,
-            0.125f, -0.125f, 0.125f,
-            0.125f, -0.125f, -0.125f,
-            -0.125f, 0.125f, -0.125f,
-            -0.125f, 0.125f, 0.125f,
-            0.125f, 0.125f, 0.125f,
-            0.125f, 0.125f, -0.125f
-        };
-        memcpy(vertices, verticesCopy, sizeof(verticesCopy));
-        GLuint indicesCopy [] = {
-            0, 1, 2,
-            2, 3, 0,
-            4, 5, 6,
-            6, 7, 4,
-            0, 1, 5,
-            5, 4, 0,
-            3, 2, 6,
-            6, 7, 3,
-            1, 2, 5,
-            5, 6, 2,
-            0, 3, 7,
-            7, 4, 0
-        };
-    memcpy(indices, indicesCopy, sizeof(indicesCopy));**/
     eulerAngles = glm::vec3(0,-90,0);
     distribution = std::uniform_int_distribution<int>(1,1000);
 }
@@ -99,14 +72,8 @@ World& Actor::getWorld() {
     return *world;
 }
 
-void Actor::setScript(ActorScript* script_) {
-    script = script_;
-    script->setActor(*this);
-}
 
 void Actor::tick() {
-    if (script != NULL)
-    script->tick();
     if (components.size() > 0) {
         for (int i = 0; i < components.size(); i++) {
             components.at(i)->tick(*this, *world);

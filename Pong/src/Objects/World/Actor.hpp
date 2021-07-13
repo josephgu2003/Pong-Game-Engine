@@ -20,6 +20,7 @@
 #include <algorithm>
 #include "Shader.hpp"
 #include "Numberable.hpp"
+#include <memory>
 //something that can move and has a model
 class ActorScript;
 class World;
@@ -49,10 +50,10 @@ protected:
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
 public:
-    Ability* currentAbility;
+    std::shared_ptr<Ability> currentAbility;
     Actor* biggestTarget;
-    std::vector<Ability*> abilityQ;
-    Ability* affecting = NULL;
+    std::vector<std::shared_ptr<Ability>> abilityQ;
+    std::shared_ptr<Ability> affecting;
     glm::vec3 dirVec;
     glm::vec3 eulerAngles;
     float height = 0.0f;

@@ -34,6 +34,10 @@ private:
     screentext screenText = {0, ""};
     GLuint funtex1, funtex2;
     GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, tVBO, tVAO, qVBO, qVAO, qEBO;
+    Batch<SimpleVertex> pointParticles;
+    Batch<SimpleVertex> quadParticles;
+    Batch<TBNVertex> models;
+    Batch
     float screenquad[24] =
     {   -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
@@ -78,6 +82,8 @@ private:
     void updateCamPos();
     void updateUniformStopWatch();
     float timeT;
+    
+    void updateParticleBatches();
 public:
     void renderSky();
     Renderer();

@@ -39,6 +39,8 @@ Renderer::Renderer() {
     
     generateFramebuffer(&frame, 2000, 1600);
 
+    pointParticles.init(50000, VERTEX_SIMPLEVERTEX);
+    quadParticles.init(50000, VERTEX_SIMPLEVERTEX);
 }
 
 
@@ -321,6 +323,11 @@ void Renderer::loadParticleData() {
     glBindVertexArray(0);
 }
 
+
+void Renderer::updateParticleBatches() {
+    
+}
+
 void Renderer::loadQuadData() {
     std::vector<Vertex> quadVertices;
     std::vector<GLuint> quadIndices;
@@ -449,6 +456,7 @@ void Renderer::renderSky() {
 }
 
 void Renderer::renderQuads() {
+    glEnable(GL_BLEND);
     if (world->getQuads()->size() > 0) {
         int indiceCount = 0;
         for (int i = 0; i < world->getQuads()->size(); i++) {
@@ -470,6 +478,7 @@ void Renderer::renderQuads() {
        // glUniform1f(glGetUniformLocation(sketchShader->ID, "z_offsets"), billowing[0]);
         glActiveTexture(GL_TEXTURE0);
         glUniform1i(glGetUniformLocation(sketchShader->ID, "texture0"), 0);
+            glUniform1f(glGetUniformLocation(sketchShader->ID, "alpha"), quad->alpha);
         glBindTexture(GL_TEXTURE_2D, world->getQuads()->at(0)->texture);
         glDrawElements(GL_TRIANGLES, quad->indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
             

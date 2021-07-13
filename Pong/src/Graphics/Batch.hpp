@@ -15,6 +15,7 @@
 #include <vector>
 #define VERTEX_VERTEX 0
 #define VERTEX_SIMPLEVERTEX 1
+#define VERTEX_TBNVERTEX 2
 
 template <typename T>
 class Batch {
@@ -25,7 +26,9 @@ class Batch {
     unsigned int byteStrideVertex, byteStrideIndex = 0;
     unsigned int vertexType;
 public:
+    Batch();
     Batch(unsigned int maxByteSize_, int vertexType_);
+    void init(unsigned int maxByteSize_, int vertexType_);
     void addVerticesIndices(const std::vector<T>& vertices, const std::vector<GLuint>& indices);
     void bindVAO();
     void unbindVAO();

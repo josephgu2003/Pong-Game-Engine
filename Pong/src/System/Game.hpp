@@ -58,7 +58,9 @@ InputHandler inputHandler;
     double yOffset;
     bool firstMouse = true;
     bool mouseMoved = false;
-    Sketch* activeSketch = NULL;
+    double lastTime = 0;
+    
+    std::shared_ptr<Sketch> activeSketch;
     Dialogue* activeDialogue = NULL;
     
     Ball ball;
@@ -72,7 +74,7 @@ InputHandler inputHandler;
     
     ScriptOne* script;
     
-    std::vector<Ability*> abilities;
+    std::vector<std::shared_ptr<Ability>> abilities;
     Numberable* numberables[100];
     
     GLuint fbo, fvao, ftexture;

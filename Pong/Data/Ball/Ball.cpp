@@ -9,7 +9,6 @@
 #include "AssetManager.hpp"
 #include "FallingLetters.hpp"
 #include "Speech.hpp"
-#include "BehaviorComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "CombatComponent.hpp"
 
@@ -53,8 +52,6 @@ void Ball::init() {
     for (int i = 0; i<model->getMeshes()->size(); i ++) {
         model->setMeshTexture(i, DIFFUSE, newMaps_, newMaps);
     }
-    BehaviorComponent* component = new BehaviorComponent();
-    components.push_back(component);
     CombatComponent* cc = new CombatComponent();
     components.push_back(cc);
 }

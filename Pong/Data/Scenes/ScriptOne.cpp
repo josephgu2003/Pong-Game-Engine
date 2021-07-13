@@ -21,40 +21,71 @@ void ScriptOne::tick() {
             
         case STATE_AGGRESSIVE:
             if (ball->biggestTarget != NULL) {
+          
+                if (ballDir == STATE_TRACK)
         ball->turnTowards(ball->biggestTarget->getPos()-ball->getPos());
+                if (ballDir == STATE_OPPOSITE)
+        ball->turnTowards(horizonDir);
                 
         if (step == 0) {
-            Dialogue* dialogue = new Dialogue(world, ball, 6);
-            ball->abilityQ.push_back(dialogue);
-            currentAbility = dialogue;
+            currentAbility = std::make_shared<Dialogue>(world, ball, 6.0);
+           ball->abilityQ.push_back(currentAbility);
             step++;
             return;
         }
                 
         if (step == 1) {
-            if (currentAbility->on == false) {
-                step++;
-                currentAbility = NULL;
-            FallingLetters* letters = new FallingLetters(world, ball, 5);
-            letters->setTarget(ball->biggestTarget);
-            ball->abilityQ.push_back(letters);
-            currentAbility = letters;
-            ball->biggestTarget->affecting = letters;
+            if (static_cast<Dialogue*>(currentAbility.get())->getActiveText() == "Figure: Look to the horizon.") {
+                ballDir = STATE_OPPOSITE;
+                horizonDir = ball->getPos()-ball->biggestTarget->getPos();
             }
+            if (currentAbility->on == false) {
+                ballDir = STATE_TRACK;
+                step++;
+                currentAbility.reset();
+            currentAbility = std::make_shared<FallingLetters>(world, ball, 10.0);
+            currentAbility->setTarget(ball->biggestTarget);
+            ball->abilityQ.push_back(currentAbility);
+                ball->biggestTarget->affecting = currentAbility;
+           }
             return;
         }
-                
-            if (step == 2) {
-                if (currentAbility->on == false) {
-                    step++;
-                    currentAbility = NULL;
-                    std::vector<std::string> strings = {"Then go"};
-                    Speech* speech = new Speech(world, (ball), 5,strings);
-                    ball->abilityQ.push_back(speech);
-                    currentAbility = speech;
+                if (step == 2) {
+                    timer += (float)glfwGetTime();
+                    if (timer > 1.0) {
+                        timer = 0;
+                        step++;
+                        currentAbility2.reset();
+                        std::vector<std::string> strings = {"'I've made up my mind. I'm going.'"};
+                        currentAbility2 = std::make_shared<Speech>(world, (pHero), 2.0,strings);
+                        pHero->abilityQ.push_back(currentAbility2);
+                    }
+                    return;
                 }
-                return;
-            }
+                
+                if (step == 3) {
+                    if (currentAbility2->on == false ) {
+                        step++;
+                        currentAbility2.reset();
+                        std::vector<std::string> strings = {"Figure: Oh? I'd like to see you try."};
+
+                        currentAbility2 = std::make_shared<Speech>(world, (ball), 2.0,strings);
+                        ball->abilityQ.push_back(currentAbility2);
+                    }
+                    return;
+                }
+    
+                if (step == 4) {
+                    if (currentAbility->on == false && currentAbility2->on == false ) {
+                        step++;
+                        currentAbility.reset();
+                        std::vector<std::string> strings = {"'If fish can fly, I can too.'", "'Into a brighter world.'"};
+                        
+                        currentAbility = std::make_shared<Speech>(world, (pHero), 3.0,strings);
+                        pHero->abilityQ.push_back(currentAbility);
+                    }
+                    return;
+                }
                 
             break;
 

@@ -17,7 +17,6 @@
 #include "Particle.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
-#include "BehaviorComponent.hpp"
 #include "Map.hpp"
 #include "DirectionalLight.hpp"
 #include "Numberable.hpp"
@@ -36,6 +35,7 @@ struct Quad {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
     float size;
+    float alpha;
     GLuint texture;
     glm::vec3 pos;
     glm::vec3 rotations; //pitch yaw roll

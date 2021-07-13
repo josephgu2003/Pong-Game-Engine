@@ -7,8 +7,9 @@
 
 #include "FallingLetters.hpp"
 #include "Particle.hpp"
+#include <memory>
 
-FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
+FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_)  {
     
 }
 
@@ -18,7 +19,6 @@ FallingLetters::~FallingLetters() {
  //   letters->~ComplexParticles();
     if (target != NULL) {
         target->setState(STATE_NORMAL);
-        target->affecting = NULL;
     }
 }
 
@@ -30,7 +30,6 @@ void FallingLetters::call(Game* game) {
     world->blur= true;
     if (target != NULL) {
     target->setState(STATE_PARALYZED);
-        target->affecting = this;
     }
   //  world->insertParticleEffect(flowers);
    // world->insertParticleEffect(test);

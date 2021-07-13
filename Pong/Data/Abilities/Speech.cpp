@@ -10,8 +10,9 @@
 
 
 Speech::Speech(World* world_, Actor* actor_, float duration_, std::vector<std::string> strings) : Ability(world_, actor_, duration_) {
-    counter = 0;
+    step = 0;
     elapsetime = 0;
+    duration = duration_;
     running = false;
     lines = strings;
 }
@@ -23,19 +24,21 @@ Speech::~Speech() {
 void Speech::call(Game* game) {
     running = true;
     on = true;
-    world->setActiveText(lines.at(counter));
-    counter++;
+    world->setActiveText(lines.at(step));
+    step++;
 }
 
 void Speech::tick() {
     elapsetime+=glfwGetTime();
-    if (counter == lines.size()) {
+    if (step > lines.size()) {
         running = false;
         on = false;
+        return;
     }
-    if (elapsetime > 4.3 && running) {
-        world->setActiveText(lines.at(counter));
-        counter++;
+    if (elapsetime > duration && running) {
+        if (step < lines.size())
+        world->setActiveText(lines.at(step));
+        step++;
         elapsetime = 0;
     }
 }

@@ -17,7 +17,6 @@ int main() {
     glfwInit();
     
     Game game;
-    
 
     
     while(game.running)

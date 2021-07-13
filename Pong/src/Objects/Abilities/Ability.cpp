@@ -15,6 +15,7 @@ Ability::Ability(World* world_, Actor* actor_, float duration_) {
     actor=actor_;
     duration = duration_;
     on = true;
+    step = 0;
 };
 
 Ability::~Ability() {
@@ -27,5 +28,9 @@ void Ability::setTarget(Actor* actor_) {
 
 void Ability::dispel() {
     on = false;
-    target->affecting = NULL;
+    (target->affecting).reset();
+}
+
+int Ability::getStep() {
+    return step;
 }

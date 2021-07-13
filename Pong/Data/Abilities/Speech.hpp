@@ -37,8 +37,8 @@ class Speech: public Ability{
     
  //   std::vector<std::string> lines = { "Oh, so you are approaching me?", "Joseph Gu - Lead Programmer", "Yirou Guo - Artistic Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Joseph's Dad - Programming and Math Consultant"};
     std::vector<std::string> lines;
-    int counter;
     float elapsetime;
+    float duration;
     bool running;
 public:
     Speech(World* world_, Actor* actor_, float duration_,std::vector<std::string> strings);

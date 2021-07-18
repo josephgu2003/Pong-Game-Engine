@@ -13,25 +13,54 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <vector>
-#define VERTEX_VERTEX 0
-#define VERTEX_SIMPLEVERTEX 1
-#define VERTEX_TBNVERTEX 2
+#include <map>
+#include "VertexData.hpp"
 
-template <typename T>
+struct VertexIndexByteStride {
+    unsigned int VertexByteStride;
+    unsigned int IndexByteStride;
+};
+
+struct InstanceBlockDescription {
+    GLuint bufferID;
+    unsigned int instanceByteStride;
+    unsigned int bytesToEnd;
+};
+
 class Batch {
-    unsigned int maxByteSize;
+    unsigned int maxVerticesSize, maxIndicesSize, maxInstancingByteSize;
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
-    unsigned int byteStrideVertex, byteStrideIndex = 0;
-    unsigned int vertexType;
+    std::vector<std::pair<VertexData*, VertexIndexByteStride>> locations;
+    std::vector<std::pair<VertexData*, InstanceBlockDescription>> instanceDataLocations;
+    std::vector<int> instanceLayout;
+    VertexType vertexType;
+    int floatsPerVertex;
+    GLenum drawTarget;
+    GLenum drawMode;
+    bool instancing;
+    int bytesPerInstance;
+    GLuint makeInstanceBuffer(VertexData* data_, int dataSize);
 public:
     Batch();
-    Batch(unsigned int maxByteSize_, int vertexType_);
-    void init(unsigned int maxByteSize_, int vertexType_);
-    void addVerticesIndices(const std::vector<T>& vertices, const std::vector<GLuint>& indices);
+    
+    Batch(unsigned int maxByteSize_, unsigned int maxIndicesSize_, VertexType vertexType_, GLenum drawTarget, GLenum drawMode);
+    void init(unsigned int maxByteSize_, unsigned int maxIndicesSize_, VertexType vertexType_, GLenum drawTarget, GLenum drawMode);
+    Batch(unsigned int maxVertexByteSize_, unsigned int maxIndicesSize_, std::vector<int> instanceLayout, VertexType vertexType_, GLenum drawTarget, GLenum drawMode);
+    void init(unsigned int maxVertexByteSize_, unsigned int maxIndicesSize_, std::vector<int> instanceLayout, VertexType vertexType_, GLenum drawTarget, GLenum drawMode);
+    
+    void updateVertexData(VertexData* data);
+    void deleteVertexData(VertexData* data);
+    void updateInstanceData(VertexData* data, std::vector<float>& data_);
+    void deleteInstanceData(VertexData* data, std::vector<float>& data_);
     void bindVAO();
     void unbindVAO();
+    
+    void bindInstanceBuffer(VertexData* data);
+    
+    std::vector<std::pair<VertexData*, VertexIndexByteStride>>& getVertexDataMap();
+    int getIndexByteStride(VertexData* data_);
 };
 
 #endif /* Batch_hpp */

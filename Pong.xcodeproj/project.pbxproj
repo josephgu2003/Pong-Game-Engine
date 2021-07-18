@@ -203,6 +203,12 @@
 		5DAC1805266993C40021DC31 /* InputHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DAC1803266993C40021DC31 /* InputHandler.cpp */; };
 		5DAC1808266994AE0021DC31 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DAC1806266994AE0021DC31 /* Game.cpp */; };
 		5DAC1810266A74470021DC31 /* noise.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC180F266A74470021DC31 /* noise.png */; };
+		5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */; };
+		5DCDDAC126A223870031FCC9 /* InstanceData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCDDABF26A223870031FCC9 /* InstanceData.cpp */; };
+		5DCDDACC26A3A3A50031FCC9 /* journey7.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */; };
+		5DCDDACD26A3A3A50031FCC9 /* journey7.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDACB26A3A3A50031FCC9 /* journey7.obj */; };
+		5DCDDAD426A491450031FCC9 /* BloomFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDAD226A491440031FCC9 /* BloomFShader.fs */; };
+		5DCDDAD526A491450031FCC9 /* BloomVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDAD326A491440031FCC9 /* BloomVShader.vs */; };
 		5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */; };
 		5DE467432688F8EC005CF9A5 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE466C22688ED93005CF9A5 /* libfreetype.6.dylib */; };
 		5DE467442688F8EC005CF9A5 /* libfreetype.6.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5DE466C22688ED93005CF9A5 /* libfreetype.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -499,6 +505,14 @@
 		5DAC1806266994AE0021DC31 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		5DAC1807266994AE0021DC31 /* Game.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Game.hpp; sourceTree = "<group>"; };
 		5DAC180F266A74470021DC31 /* noise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noise.png; sourceTree = "<group>"; };
+		5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexData.cpp; sourceTree = "<group>"; };
+		5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexData.hpp; sourceTree = "<group>"; };
+		5DCDDABF26A223870031FCC9 /* InstanceData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InstanceData.cpp; sourceTree = "<group>"; };
+		5DCDDAC026A223870031FCC9 /* InstanceData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InstanceData.hpp; sourceTree = "<group>"; };
+		5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = journey7.mtl; sourceTree = "<group>"; };
+		5DCDDACB26A3A3A50031FCC9 /* journey7.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = journey7.obj; sourceTree = "<group>"; };
+		5DCDDAD226A491440031FCC9 /* BloomFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BloomFShader.fs; sourceTree = "<group>"; };
+		5DCDDAD326A491440031FCC9 /* BloomVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BloomVShader.vs; sourceTree = "<group>"; };
 		5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsComponent.cpp; sourceTree = "<group>"; };
 		5DCEA18C26893D4E00A6F99F /* GraphicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GraphicsComponent.hpp; sourceTree = "<group>"; };
 		5DE466B62688EC8B005CF9A5 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../ponglib/libglfw.3.3.dylib; sourceTree = "<group>"; };
@@ -749,6 +763,8 @@
 				5D7F671A267187FF00B70DA7 /* tmp47wcx84s */,
 				5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */,
 				5D7F671B267187FF00B70DA7 /* tmph9sc7c89 */,
+				5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */,
+				5DCDDACB26A3A3A50031FCC9 /* journey7.obj */,
 				5D7F671C267187FF00B70DA7 /* tmpugfolmqr */,
 				5D391B85268F80000092623D /* journey6.mtl */,
 				5D7F671F2671880100B70DA7 /* tmp6rxwr4cq */,
@@ -819,18 +835,20 @@
 				5DA7E279267E6D33008845AA /* LoadScreenV.vs */,
 				5D391B7A268E13DA0092623D /* GIFFrameFShader.fs */,
 				5D25EC432691154C008BD594 /* ColorPartF.fs */,
+				5D25EC4726922AC8008BD594 /* ColorPartG.gs */,
 				5D25EC442691154C008BD594 /* ColorPartV.vs */,
 				5D98F65A2688059A0075552B /* MistFShader.fs */,
 				5D98F6592688059A0075552B /* MistVShader.vs */,
 				5D98F6552688053E0075552B /* SmokeFShader.fs */,
 				5D98F6562688053E0075552B /* SmokeVShader.vs */,
 				5DA7E27B267E6D33008845AA /* SkyFragmentShader.fs */,
+				5DCDDAD226A491440031FCC9 /* BloomFShader.fs */,
+				5DCDDAD326A491440031FCC9 /* BloomVShader.vs */,
 				5DA7E27C267E6D33008845AA /* TextFShader.fs */,
 				5DA7E27D267E6D33008845AA /* FBufferVShader.vs */,
 				5D391B76268E0EA50092623D /* GIFFrameVShader.vs */,
 				5DA7E27E267E6D33008845AA /* SkyVertexShader.vs */,
 				5DA7E28A267E6D33008845AA /* SketchVShader.vs */,
-				5D25EC4726922AC8008BD594 /* ColorPartG.gs */,
 				5DA7E286267E6D33008845AA /* SketchFShader.fs */,
 				5DA7E288267E6D33008845AA /* LoadScreenF.fs */,
 				5DA7E289267E6D33008845AA /* FBufferFShader.fs */,
@@ -1063,6 +1081,10 @@
 				5D33262226790444002F3D49 /* Component */,
 				5D479DC2264EE5A800067E35 /* Model.hpp */,
 				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
+				5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */,
+				5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */,
+				5DCDDABF26A223870031FCC9 /* InstanceData.cpp */,
+				5DCDDAC026A223870031FCC9 /* InstanceData.hpp */,
 				5D479DC1264EE5A800067E35 /* Model.cpp */,
 				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
 			);
@@ -1216,6 +1238,7 @@
 				5DA9831B2686A732008252BA /* smoke045.jpg in Resources */,
 				5DA983612686A732008252BA /* smoke011.jpg in Resources */,
 				5DA983372686A732008252BA /* smoke010.jpg in Resources */,
+				5DCDDAD526A491450031FCC9 /* BloomVShader.vs in Resources */,
 				5DA9831A2686A732008252BA /* smoke087.jpg in Resources */,
 				5D391B78268E0EA50092623D /* GIFFrameVShader.vs in Resources */,
 				5DA983492686A732008252BA /* smoke026.jpg in Resources */,
@@ -1231,6 +1254,7 @@
 				5DA9834B2686A732008252BA /* smoke017.jpg in Resources */,
 				5DA983682686A732008252BA /* smoke093.jpg in Resources */,
 				5DA7E291267E6D34008845AA /* TextVShader.vs in Resources */,
+				5DCDDACD26A3A3A50031FCC9 /* journey7.obj in Resources */,
 				5DA9836C2686A732008252BA /* smoke013.jpg in Resources */,
 				5D98F6582688053E0075552B /* SmokeVShader.vs in Resources */,
 				5DA983522686A732008252BA /* smoke012.jpg in Resources */,
@@ -1295,6 +1319,7 @@
 				5DA983202686A732008252BA /* smoke098.jpg in Resources */,
 				5DA9833B2686A732008252BA /* smoke046.jpg in Resources */,
 				5DA9835B2686A732008252BA /* smoke083.jpg in Resources */,
+				5DCDDACC26A3A3A50031FCC9 /* journey7.mtl in Resources */,
 				5D98FBF226762E470048829D /* water2.obj in Resources */,
 				5DA983832686A733008252BA /* smoke049.jpg in Resources */,
 				5D98FBF426762E470048829D /* ice.jpeg in Resources */,
@@ -1333,6 +1358,7 @@
 				5DA983352686A732008252BA /* smoke007.jpg in Resources */,
 				5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */,
 				5DA9835F2686A732008252BA /* smoke092.jpg in Resources */,
+				5DCDDAD426A491450031FCC9 /* BloomFShader.fs in Resources */,
 				5DA983572686A732008252BA /* smoke002.jpg in Resources */,
 				5DA983312686A732008252BA /* smoke028.jpg in Resources */,
 				5DAC1810266A74470021DC31 /* noise.png in Resources */,
@@ -1410,6 +1436,8 @@
 				5D670C9F2684D90C000E179C /* Sky.cpp in Sources */,
 				5DEE58232666A99F0080446C /* TicTacToe.cpp in Sources */,
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
+				5DCDDAC126A223870031FCC9 /* InstanceData.cpp in Sources */,
+				5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
 				5DEDAE592672B9990050F441 /* Audio.cpp in Sources */,
 				5DEDAE4E267266050050F441 /* Billow.cpp in Sources */,

@@ -92,7 +92,7 @@ public:
     std::vector<std::string>* getSkyTextureFiles();
     float* getSkyVertices();
     
-    std::vector<ParticleEffect*>* getParticleEffects();
+    std::vector<ParticleEffect*> getParticleEffects();
     std::vector<Quad*>* getQuads();
     
     Updates checkforUpdates();

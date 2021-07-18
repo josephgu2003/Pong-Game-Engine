@@ -8,7 +8,7 @@
 #include "LoadingScreen.hpp"
 
 LoadingScreen::LoadingScreen() {
-    frameShader = Shader("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
+    frameShader = Shader("Shaders/LoadScreenV.vs", "Shaders/LoadScreenF.fs");
     textShader = Shader("Shaders/TextVShader.vs", "Shaders/TextFShader.fs");
     
     glGenFramebuffers(1, &fbo);
@@ -99,7 +99,7 @@ void LoadingScreen::render() {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+     
     textShader.use();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -112,7 +112,7 @@ void LoadingScreen::render() {
     }
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     frameShader.use();
     glBindVertexArray(VAO);

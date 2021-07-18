@@ -15,50 +15,16 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-
+#include "VertexData.hpp"
 
 class Billow;
 
-struct Vertex {
-    glm::vec3 Pos;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-};
-
-struct TBNVertex {
-    glm::vec3 Pos;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-    glm::vec3 Tan;
-    glm::vec3 BiTan;
-};
-
-struct SimpleVertex {
-    glm::vec3 Pos;
-    glm::vec2 TexCoords;
-};
-
-struct Texture {
-    GLuint id;
-    std::string type;
-    std::string path;
-};
-
-class Mesh {
+class Mesh : public VertexData {
     friend class Billow;
 public:
-    std::vector<TBNVertex> vertices;
-    std::vector<GLuint> indices;
-    std::vector<Texture> textures;
-    
     Mesh();
-    
-    Mesh(std::vector<TBNVertex> vertices_,
-         std::vector<GLuint> indices_,
-         std::vector<Texture> textures_);
-    
-    void setVertexData(std::vector<TBNVertex> vertices_,
-                 std::vector<GLuint> indices_,
-                 std::vector<Texture> textures_);
+    Mesh(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
+         std::vector<GLuint>& indices_,
+               std::vector<Texture>& textures_, VertexType vertexType_);
 };
 #endif /* Mesh_hpp */

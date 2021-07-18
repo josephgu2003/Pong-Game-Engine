@@ -23,10 +23,11 @@ Renderer::Renderer() {
 
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
 
-    frameShader = new Shader("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
     textShader = new Shader("Shaders/TextVShader.vs", "Shaders/TextFShader.fs");
     sketchShader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
-    
+    blurShader = new Shader("Shaders/BloomVShader.vs","Shaders/BloomFShader.fs");
+    frameShader = new Shader("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
+
     modelMat = glm::mat4(1);
     viewMat = glm::mat4(1);
     projMat = glm::perspective(glm::radians(50.0f), 1000.0f/800.0f, 0.01f, 100.0f);
@@ -37,12 +38,15 @@ Renderer::Renderer() {
 
     texture = loadTexture(TEX_EMPTY);
     
-    generateFramebuffer(&frame, 2000, 1600);
+    generateFramebuffer2Color(&frame2C, 2000, 1600);
+    generateFramebuffer(&frame0, 2000, 1600);
+    generateFramebuffer(&frame1, 2000, 1600);
 
-    pointParticles.init(50000, VERTEX_SIMPLEVERTEX);
-    quadParticles.init(50000, VERTEX_SIMPLEVERTEX);
+    std::vector<int> vector {3,1};
+    pointParticles.init(300, 500000, vector, VERTEX_SIMPLEVERTEX, GL_POINTS, GL_DYNAMIC_DRAW);
+    std::vector<int> vector2 {1,16};
+    quadParticles.init(300, 500000, vector2, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
 }
-
 
 Renderer::~Renderer() {
     
@@ -81,8 +85,8 @@ void Renderer::setCamera(Camera *camera_) {
     glGenBuffers(1, &uboStopWatch);
     glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
     glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
-    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2);
-    glUniformBlockBinding(sketchShader->ID, glGetUniformBlockIndex(sketchShader->ID, "StopWatch"), 2);
+    glUniformBlockBinding(frame2C.shader.ID, glGetUniformBlockIndex(frame2C.shader.ID, "StopWatch"), 2);
+    glUniformBlockBinding(frame2C.shader.ID, glGetUniformBlockIndex(frame2C.shader.ID, "StopWatch"), 2);
     glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
     
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -153,13 +157,15 @@ void Renderer::loadActorData() {
     std::vector<GLuint> actorIndices;
     for (int i = 0; i<world->getActorsCount(); i++) { // iterate over actors
         std::vector<Mesh>* meshes = world->getNthActor(i)->model->getMeshes();
-
         for (int j = 0; j<meshes->size(); j++) { // iterate over meshes
             int marker = actorIndices.size();
-            actorVertices.insert(actorVertices.end(), meshes->at(j).vertices.begin(), meshes->at(j).vertices.end());
-            actorIndices.insert(actorIndices.end(), meshes->at(j).indices.begin(), meshes->at(j).indices.end());
+            std::vector<std::shared_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
+            for (int c = 0; c < vertices.size(); c++) {
+                actorVertices.push_back(*static_cast<TBNVertex*>(vertices.at(c).get()));
+            }
+            actorIndices.insert(actorIndices.end(), meshes->at(j).getIndices().begin(), meshes->at(j).getIndices().end());
             for (marker; marker != actorIndices.size(); marker++) {
-            actorIndices[marker] += actorVertices.size() - meshes->at(j).vertices.size();
+            actorIndices[marker] += actorVertices.size() - meshes->at(j).getVertices().size();
             }
         }
     }
@@ -195,6 +201,14 @@ void Renderer::loadActorData() {
 }
 
 void Renderer::loadMapData() {
+    std::vector<TBNVertex> mapVertices;
+    
+    Mesh mesh = world->getMap().getMesh();
+
+            std::vector<std::shared_ptr<AnyVertex>>& vertices = mesh.getVertices();
+            for (int c = 0; c < vertices.size(); c++) {
+                mapVertices.push_back(*static_cast<TBNVertex*>(vertices.at(c).get()));
+            }
 
     glGenVertexArrays(1, &mVAO);
       glBindVertexArray(mVAO);
@@ -202,11 +216,11 @@ void Renderer::loadMapData() {
       glGenBuffers(1, &mVBO);
       glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*world->getMap().getMesh().vertices.size(), &world->getMap().getMesh().vertices.at(0), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*world->getMap().getMesh().getVertices().size(), mapVertices.data(), GL_STATIC_DRAW);
       
       glGenBuffers(1, &mEBO);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  world->getMap().getMesh().indices.size() * sizeof(GLuint), &world->getMap().getMesh().indices.at(0), GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  world->getMap().getMesh().getIndices().size() * sizeof(GLuint), &world->getMap().getMesh().getIndices().at(0), GL_STATIC_DRAW);
       
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
       glEnableVertexAttribArray(0);
@@ -264,63 +278,88 @@ void Renderer::loadSkyBoxData() {
 }
 
 void Renderer::loadParticleData() {
-    std::vector<ParticleEffect*>* particleData = world->getParticleEffects();
-    std::vector<SimpleVertex>  particleVertices;
-    std::vector<GLuint> particleIndices;
-    std::vector<glm::vec3> particleInstances;
     
-    SimpleVertex v1;
-    SimpleVertex v2;
-    SimpleVertex v3;
-    SimpleVertex v4;
-    v1.Pos = glm::vec3(0,0,0);
-    v1.TexCoords = glm::vec2(0,0);
-    v2.Pos = glm::vec3(1,0,0);
-    v2.TexCoords = glm::vec2(1,0);
-    v3.Pos = glm::vec3(1,1,0);
-    v3.TexCoords = glm::vec2(1,1);
-    v4.Pos = glm::vec3(0,1,0);
-    v4.TexCoords = glm::vec2(0,1);
-    std::vector<SimpleVertex> newVertices = {
-        v1, v2, v3, v4
-    };
-    particleVertices.insert(particleVertices.end(), newVertices.begin(), newVertices.end());
-    for (int j = 0; j<particleData->size(); j++) {
-        if (particleData->at(j)->drawTarget == GL_TRIANGLES) {
-        for(int i = 0; i<particleData->at(j)->getNumParticles(); i++) {
-        std::vector<GLuint> newIndices = {
-            0, 1, 2,
-            2, 3, 0
-        };
-        particleIndices.insert(particleIndices.end(), newIndices.begin(), newIndices.end());
+    std::vector<ParticleEffect*> particleData = world->getParticleEffects();
+    std::vector<ParticleEffect*> deletedParticles = loadedParticles;
+    // subtract first or add first?
+    for (int i = 0; i < particleData.size(); i++) {
+        bool updateNeeded = true;
+        for (int j = 0; j < loadedParticles.size(); j++) {
+            if (particleData.at(i) == loadedParticles.at(j)) {
+                updateNeeded = false;
+                deletedParticles.erase(std::find(deletedParticles.begin(), deletedParticles.end(), particleData.at(i)));
+            }
         }
+        if (updateNeeded) {
+            loadedParticles.push_back(particleData.at(i));
+            if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
+                quadParticles.updateVertexData(particleData.at(i)->graphics.getVertexData());
+            }
+            if (particleData.at(i)->drawTarget == GL_POINTS) {
+                pointParticles.updateVertexData(particleData.at(i)->graphics.getVertexData());
+            }
         }
-        if (particleData->at(j)->drawTarget == GL_POINTS) {
-        for(int i = 0; i<particleData->at(j)->getNumParticles(); i++) {
-        std::vector<GLuint> newIndices = {
-            0
-        };
-        particleIndices.insert(particleIndices.end(), newIndices.begin(), newIndices.end());
+       if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
+            std::vector<float> instanceData;
+           int numParticles = particleData.at(i)->getNumParticles();
+           int vecLength = 17*numParticles;
+           instanceData.resize(vecLength);
+           int counter = 0;
+            for (int c = 0; c < particleData.at(i)->getNumParticles(); c++) {
+                instanceData[counter] = (particleData.at(i)->getNthParticle(c).duration);
+                counter++;
+                glm::vec3& pos = particleData.at(i)->getNthParticle(c).posVec;
+                glm::mat4 modelMatr = glm::mat4(1.0f);
+                modelMatr = glm::translate(modelMatr, pos);
+                modelMatr = glm::rotate(modelMatr, -glm::radians(-90+camera->getYaw()), glm::vec3(0,1,0));
+                modelMatr = glm::rotate(modelMatr, -glm::radians(camera->getPitch()), glm::vec3(1,0,0));
+                float* mat = glm::value_ptr(modelMatr[0]);
+                for (int l = 0; l < 16; l++) {
+                    instanceData[counter] = (mat[l]);
+                    counter++;
+                }
+            }
+            quadParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData);
         }
+        
+        if (particleData.at(i)->drawTarget == GL_POINTS) {
+            std::vector<float> instanceData;
+            int numParticles = particleData.at(i)->getNumParticles();
+            int vecLength = 4*numParticles;
+            instanceData.resize(vecLength);
+            int counter = 0;
+            for (int c = 0; c < particleData.at(i)->getNumParticles(); c++) {
+                glm::vec3& pos = particleData.at(i)->getNthParticle(c).posVec;
+                instanceData[counter] = pos.x;
+                counter++;
+                instanceData[counter] = pos.y;
+                counter++;
+                instanceData[counter] = pos.z;
+                counter++;
+                instanceData[counter] = (particleData.at(i)->getNthParticle(c).duration);
+                counter++;
+            }
+            pointParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData);
         }
     }
-    glGenVertexArrays(1, &pVAO);
-    glBindVertexArray(pVAO);
-    
-    glGenBuffers(1, &pVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, pVBO);
-    glBufferData(GL_ARRAY_BUFFER, particleVertices.size() * sizeof(SimpleVertex), particleVertices.data(), GL_STATIC_DRAW);
-    
-   glGenBuffers(1, &pEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, particleIndices.size() * sizeof(GLuint), particleIndices.data(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex), (void*)(sizeof(glm::vec3)));
-    glEnableVertexAttribArray(1);
-    
-    glBindVertexArray(0);
+    for (int i = 0; i < deletedParticles.size(); i++) {
+        std::vector<float> instanceData;
+        for (int c = 0; c < deletedParticles.at(i)->getNumParticles(); c++) {
+            glm::vec3& pos = deletedParticles.at(i)->getNthParticle(c).posVec;
+            instanceData.push_back(pos.x);
+            instanceData.push_back(pos.y);
+            instanceData.push_back(pos.z);
+            instanceData.push_back(deletedParticles.at(i)->getNthParticle(c).duration);
+        }
+        if (deletedParticles.at(i)->drawTarget == GL_TRIANGLES) {
+            quadParticles.deleteVertexData(deletedParticles.at(i)->graphics.getVertexData());
+            quadParticles.deleteInstanceData(deletedParticles.at(i)->graphics.getVertexData(), instanceData);
+        }
+        if (deletedParticles.at(i)->drawTarget == GL_POINTS) {
+            pointParticles.deleteVertexData(deletedParticles.at(i)->graphics.getVertexData());
+            pointParticles.deleteInstanceData(deletedParticles.at(i)->graphics.getVertexData(), instanceData);
+        }
+    }
 }
 
 
@@ -381,7 +420,9 @@ void Renderer::checkForUpdates() {
 
 void Renderer::render() {
     checkForUpdates();
-    glBindFramebuffer(GL_FRAMEBUFFER, frame.fbo);
+    loadParticleData();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo); //draw to 2C framebuffer
     glEnable(GL_DEPTH_TEST);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -397,23 +438,59 @@ void Renderer::render() {
     if (screenText.duration > 0) {
         renderText();
     }
-    
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    frameShader->use();
-    glBindVertexArray(frame.fvao);
+    
     glDisable(GL_DEPTH_TEST);
-    
-    glActiveTexture(GL_TEXTURE0); // accomodate more trextures later
-    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 0);
-    glBindTexture(GL_TEXTURE_2D, frame.ftexture);
-    
+    glBindVertexArray(frame2C.fvao);
+    bool horizontal = true;
+    bool first_iteration = true;
+    int amount = 10;
+    blurShader->use(); 
+    glActiveTexture(GL_TEXTURE0);
+    for (unsigned int i = 0; i < amount; i++)
+    {
+        if (horizontal) {
+        glBindFramebuffer(GL_FRAMEBUFFER, frame0.fbo);
+        }
+        else {
+            glBindFramebuffer(GL_FRAMEBUFFER, frame1.fbo);
+        }
+        blurShader->setBool("horizontal", horizontal);
+        if (first_iteration) {
+            glBindTexture(GL_TEXTURE_2D, frame2C.ftexture1);
+        }
+        else if (horizontal) {
+            glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
+        } 
+        else {
+            glBindTexture(GL_TEXTURE_2D, frame0.ftexture);
+        }
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+       horizontal = !horizontal;
+        if (first_iteration)
+            first_iteration = false;
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+     
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    frameShader->use();
     glActiveTexture(GL_TEXTURE1);
     glUniform1i(glGetUniformLocation(frameShader->ID, "noise"), 1);
     glBindTexture(GL_TEXTURE_2D, noise);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture1"), 0);
+    glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
+    
+    glActiveTexture(GL_TEXTURE2);
+    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 2);
+    glBindTexture(GL_TEXTURE_2D, frame2C.ftexture0);
+    
     glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);
+    frameShader->setFloat("exposure", 1.0);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+    
     timeT += (float)glfwGetTime();
     screenText.duration -= glfwGetTime();
 }
@@ -505,7 +582,7 @@ void Renderer::renderMap() {
     
     glActiveTexture(GL_TEXTURE2);
     glUniform1i(glGetUniformLocation(map.getShader().ID, "mapTexture"), 2);
-    glBindTexture(GL_TEXTURE_2D, map.getMesh().textures.at(0).id);
+    glBindTexture(GL_TEXTURE_2D, map.getMesh().getTextures().at(0).id);
     
     glActiveTexture(GL_TEXTURE1);
     glUniform1i(glGetUniformLocation(map.getShader().ID, "noise"), 1);
@@ -527,15 +604,15 @@ void Renderer::renderActors() {
         for (int j = 0; j < meshes->size(); j++) {
             
             GLuint id1;
-            if (meshes->at(j).textures.size() > 0) {
-                id1 = meshes->at(j).textures.at(0).id;
+            if (meshes->at(j).getTextures().size() > 0) {
+                id1 = meshes->at(j).getTextures().at(0).id;
             } else {
                // id1 = funtex2;
         
             }
             GLuint id2;
-            if (meshes->at(j).textures.size()>1) {
-                id2 = meshes->at(j).textures.at(1).id;
+            if (meshes->at(j).getTextures().size()>1) {
+                id2 = meshes->at(j).getTextures().at(1).id;
             } else {
                 id2 = texture;
             }
@@ -550,9 +627,9 @@ void Renderer::renderActors() {
             
             glActiveTexture(GL_TEXTURE0);
 
-            glDrawElements(GL_TRIANGLES, meshes->at(j).indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
+            glDrawElements(GL_TRIANGLES, meshes->at(j).getIndices().size(), GL_UNSIGNED_INT, (void*) indiceCount);
             
-            indiceCount += (meshes->at(j).indices.size())*sizeof(GLuint);
+            indiceCount += (meshes->at(j).getIndices().size())*sizeof(GLuint);
         
             glBindTexture(GL_TEXTURE_2D, 0);
             glActiveTexture(GL_TEXTURE1);
@@ -566,13 +643,25 @@ void Renderer::renderParticles() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
-    glBindVertexArray(pVAO);
-    int indiceCount = 0;
-    for (int i = 0; i < world->getParticleEffects()->size(); i++) {
-        ParticleEffect& effect = *world->getParticleEffects()->at(i);
-        Shader &shaderRef = effect.getShader();
-        shaderRef.use();
-        GLuint shader = shaderRef.ID;
+    for (int i = 0; i < world->getParticleEffects().size(); i++) {
+        ParticleEffect& effect = *world->getParticleEffects().at(i);
+        Batch* batch;
+        int elementsPerInstance;
+        if (effect.drawTarget == GL_TRIANGLES) {
+            batch = &quadParticles;
+            elementsPerInstance = 6;
+        }
+        if (effect.drawTarget == GL_POINTS) {
+            batch = &pointParticles;
+    
+            elementsPerInstance = 1;
+        }
+        batch->bindVAO();
+        batch->bindInstanceBuffer(effect.graphics.getVertexData());
+        Shader* shaderRef = effect.graphics.getShader();
+        shaderRef->use();
+        GLuint shader = shaderRef->ID;
+        
         glActiveTexture(GL_TEXTURE1);
         if (glGetUniformLocation(shader, "texture1") != -1) {
         glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
@@ -580,31 +669,11 @@ void Renderer::renderParticles() {
         }
         if (glGetUniformLocation(shader, "texture0") != -1) {
          glActiveTexture(GL_TEXTURE0);
-         glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
-        
-        for (int j = 0; j < effect.getNumParticles(); j++) {
-             if(effect.getNthParticle(j).duration > 0) {
-                 glBindTexture(effect.textureTarget, effect.getNthParticle(j).texture);
-                 
-                 modelMat = glm::mat4(1.0f);
-                 modelMat = glm::translate(modelMat, effect.getNthParticle(j).posVec);
-                 if (effect.drawTarget == GL_TRIANGLES) {
-                 modelMat = glm::rotate(modelMat, -glm::radians(-90+camera->getYaw()), glm::vec3(0,1,0));
-                 modelMat = glm::rotate(modelMat, -glm::radians(camera->getPitch()), glm::vec3(1,0,0));
-                 }
-                 
-                 glUniformMatrix4fv(glGetUniformLocation(shader, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-                 glUniform1f(glGetUniformLocation(shader, "duration"), effect.getNthParticle(j).duration);
-                 glUniform1f(glGetUniformLocation(shader, "size"), effect.getSize());
-                 glDrawElements(effect.drawTarget, effect.verticesPerDraw, GL_UNSIGNED_INT, (void*) indiceCount);
-                 
-                    indiceCount += effect.verticesPerDraw*sizeof(GLuint);
-                }
+            glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
+        glBindTexture(effect.textureTarget, effect.texture);
         }
+        glDrawElementsInstanced(effect.drawTarget, elementsPerInstance, GL_UNSIGNED_INT, (void*)(batch->getIndexByteStride(effect.graphics.getVertexData())), effect.getNumParticles());
         glBindTexture(effect.textureTarget, 0);
-        } else {
-            glActiveTexture(0);
-        }
        
     }
     glActiveTexture(0);

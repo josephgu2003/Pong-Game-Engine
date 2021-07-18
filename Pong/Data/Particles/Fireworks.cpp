@@ -12,11 +12,12 @@ Fireworks::Fireworks(glm::vec4 color_) {
     color = color_;
 }
 
-void Fireworks::setGraphics() {
+void Fireworks::setGraphics(Shader& shader) {
     force = glm::vec3(0.0,-0.02,0.0);
     firstUnusedTrail = numParticles;
-    int max = numParticles * 50;
-    for(int i = 0; i < max; i++) {
+    numberSparks = numParticles;
+    numParticles = numParticles * 50;
+    for(int i = numberSparks; i < numParticles; i++) {
         particles.push_back(Particle());
     }
     texture = loadTexture(TEX_GRADIENT);
@@ -25,6 +26,7 @@ void Fireworks::setGraphics() {
     shader.init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
     shader.use();
     shader.setVec4("color", color);
+    shader.setFloat("size", size);
 }
 
 void Fireworks::tick() {
@@ -37,9 +39,9 @@ void Fireworks::tick() {
     timer2 += dt;
     
     if (!exploded) {
-        for (int i = 0; i < numParticles; i++) {
+        for (int i = 0; i < numberSparks; i++) {
         refreshParticle();
-        if(firstUnused == (numParticles-1)) {
+        if(firstUnused == (numberSparks-1)) {
             firstUnused = 0;
         }
         else if(particles[firstUnused+1].duration<=0) firstUnused++;
@@ -50,7 +52,7 @@ void Fireworks::tick() {
         exploded = false;
         timer2 = 0;
     }
-    for (int i = 0; i < numParticles; i++) {
+    for (int i = 0; i < numberSparks; i++) {
         if (particles[i].duration > 0) {
             particles[i].velVec += force;
            particles[i].velVec *= friction;
@@ -62,7 +64,7 @@ void Fireworks::tick() {
                 
                 particles[firstUnusedTrail].texture = texture;
                 if(firstUnusedTrail == (particles.size()-1)) {
-                    firstUnusedTrail = numParticles;
+                    firstUnusedTrail = numberSparks;
                 }
                 else if(particles[firstUnusedTrail+1].duration<=0) firstUnusedTrail++;
             }
@@ -72,7 +74,7 @@ void Fireworks::tick() {
             particles[i].duration -= dt;
         }
     }
-    for (int i = numParticles; i < particles.size(); i++) {
+    for (int i = numberSparks; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
             particles[i].duration -= dt;
         }

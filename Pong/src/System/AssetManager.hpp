@@ -21,7 +21,7 @@
 
 #define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
-#define MOD_HOODY "Resources/Models/journey5.obj"
+#define MOD_HOODY "Resources/Models/journey7.obj"
 
 #define MOD_JUGGERNAUT_HBOX 0.5,-0.5,0.75,0.25,0.5,-0.5
 
@@ -60,6 +60,16 @@ struct Frame {
     GLuint fvbo;
     GLuint frbo;
     GLuint ftexture;
+    Shader shader;
+};
+
+struct DoubleFrame {
+    GLuint fbo;
+    GLuint fvao;
+    GLuint fvbo;
+    GLuint frbo;
+    GLuint ftexture0;
+    GLuint ftexture1;
     Shader shader;
 };
 
@@ -298,6 +308,67 @@ static void generateFramebuffer(Frame* frame, int x, int y) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+    
+    frame->shader.init("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
+}
+
+static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    glGenTextures(1, &frame->ftexture0);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture0, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glGenTextures(1, &frame->ftexture1);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, frame->ftexture1, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
     
    glGenRenderbuffers(1, &frame->frbo);
     glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);

@@ -136,8 +136,8 @@ float* World::getSkyVertices() {
     return &skyVertices[0];
 }
 
-std::vector<ParticleEffect*>* World::getParticleEffects() {
-    return &allParticleEffects;
+std::vector<ParticleEffect*> World::getParticleEffects() {
+    return allParticleEffects;
 }
 std::vector<Quad*>* World::getQuads() {
     return &allQuadPtrs;

@@ -39,7 +39,7 @@ void Model::setMeshTexture(int index, int type, std::vector<GLuint> newDiffMaps,
             Texture specTexture = {newSpecMaps.at(i), "test","test"};
             newTextures.push_back(specTexture);
 
-    meshes.at(index).textures = newTextures;
+            meshes.at(index).setTextures(newTextures);
     }
 }
 
@@ -57,46 +57,41 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-    std::vector<TBNVertex> vertices;
+    std::vector< std::shared_ptr<AnyVertex>> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
-        TBNVertex vertex;
         
         glm::vec3 pos_;
         pos_.x = mesh->mVertices[i].x;
         pos_.y = mesh->mVertices[i].y;
         pos_.z = mesh->mVertices[i].z;
-        vertex.Pos = pos_;
         
         glm::vec3 norm_;
         norm_.x = mesh->mNormals[i].x;
         norm_.y = mesh->mNormals[i].y;
         norm_.z = mesh->mNormals[i].z;
-       vertex.Normal = norm_;
         
         glm::vec3 Tan_;
         Tan_.x = mesh->mTangents[i].x;
       Tan_.y = mesh->mTangents[i].y;
        Tan_.z = mesh->mTangents[i].z;
-       vertex.Tan = Tan_;
         
         glm::vec3 BiTan_;
        BiTan_.x = mesh->mBitangents[i].x;
        BiTan_.y = mesh->mBitangents[i].y;
        BiTan_.z = mesh->mBitangents[i].z;
-       vertex.BiTan = BiTan_;
         
+        glm::vec2 texCoords_;
         if (mesh->mTextureCoords[0]) {
-            glm::vec2 texCoords_;
             texCoords_.x = mesh->mTextureCoords[0][i].x;
             texCoords_.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = texCoords_;
         } else {
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            texCoords_ = glm::vec2(0.0f, 0.0f);
         }
         
+        std::shared_ptr<TBNVertex> vertex = std::make_shared<TBNVertex>(pos_, norm_, texCoords_, Tan_, BiTan_);
         vertices.push_back(vertex);
     }
     
@@ -114,7 +109,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
         std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    Mesh returnedMesh(vertices, indices, textures);
+    Mesh returnedMesh(vertices, indices, textures, VERTEX_TBNVERTEX);
     return returnedMesh;
 }
 

@@ -74,6 +74,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     if(!success)
     {
         glGetProgramInfoLog(fShader, 512, NULL, errorLog);
+        std::string error(fragmentPath);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << errorLog << std::endl;
     }
     
@@ -126,7 +127,9 @@ void Shader::init(const char *vertexPath, const char *fragmentPath) {
     }
     catch(std::ifstream::failure e)
     {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        std::string error(vertexPath);
+            std::string error1(fragmentPath);
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << error<< error1 << std::endl;
     }
     //put into const char*
     const char* vShaderCode = vertexCode.c_str();

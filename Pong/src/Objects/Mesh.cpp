@@ -7,24 +7,16 @@
 
 #include "Mesh.hpp"
 
-
 Mesh::Mesh() {
     
 }
 
-Mesh::Mesh(std::vector<TBNVertex> vertices_,
-     std::vector<GLuint> indices_,
-           std::vector<Texture> textures_) {
+Mesh::Mesh(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
+     std::vector<GLuint>& indices_,
+           std::vector<Texture>& textures_, VertexType vertexType_) {
     vertices = vertices_;
     indices = indices_;
     textures = textures_;
+    vertexType = vertexType_;
 }
 
-
-void Mesh::setVertexData(std::vector<TBNVertex> vertices_,
-             std::vector<GLuint> indices_,
-             std::vector<Texture> textures_)  {
-    vertices = vertices_;
-    indices = indices_;
-    textures = textures_;
-}

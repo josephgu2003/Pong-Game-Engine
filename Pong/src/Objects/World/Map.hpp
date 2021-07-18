@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "Shader.hpp"
+#include "VertexData.hpp"
 #include "Mesh.hpp"
 #include "AssetManager.hpp"
 

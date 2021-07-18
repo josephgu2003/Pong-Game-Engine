@@ -47,11 +47,12 @@ Game::Game() {
     
     //billow.posVec = glm::vec3(0,5,0);
     stbi_set_flip_vertically_on_load(1);
-   mist.init(1, glm::vec3(0,0,0), glm::vec3(15, 0.3, 15), 1400, 9, 1000, 0.995);
+   mist.init(1.0, glm::vec3(0,0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.995);
   //  inkGlyphs.init(4, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 1, 9, 1000);
     Fireworks* fireworks = new Fireworks(glm::vec4(0.1,0.3,0.9,1.0));
-    fireworks->init(0.20, glm::vec3(0,27,0), glm::vec3(0,0,0), 50, 20, 1000, 0.99);
-    inkGlyphs.setActor(&ball);
+    fireworks->init(0.20, glm::vec3(0,27,0), glm::vec3(0,0,0), 500, 20, 1000, 0.99);
+
+    inkGlyphs.setActor(&ball); 
     realMap.init();
     map.init();
     camera.setActor(&pHero);
@@ -67,7 +68,8 @@ Game::Game() {
     world.insertActor(&ball);
   //  world.insertActor(&billow)
     world.insertParticleEffect(&mist);
-    world.insertParticleEffect(fireworks);
+  world.insertParticleEffect(fireworks);
+
    // world.insertParticleEffect(&inkGlyphs);
     world.setMap(map);
     
@@ -250,8 +252,7 @@ void Game::tick() {
     activeRenderer->render();
 
     glfwPollEvents();
-    
-    glfwSwapBuffers(window);
+        glfwSwapBuffers(window);
 }
 
 void Game::moveMouse(double mouseX_, double mouseY_) {

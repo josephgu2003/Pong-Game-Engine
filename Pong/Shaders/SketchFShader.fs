@@ -1,5 +1,6 @@
 #version 410 core
-    out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
     in vec2 TexCoords;
 in vec3 Normals;
 in vec3 fragPos;
@@ -56,12 +57,17 @@ void main()
     
     fragColor += CalcDirLight(dirLight, norm, viewDir);
     
+    fragColor *= 3.0;
+    
     //Yirou these next 3 lines can provide fish vfx, my version makes colors flash based on how much red they have, i couldn't figure out anything cooler yet
-
-    fragColor *= 2.0;
 
     FragColor = mix(vec4(0.6,0.6,0.6,1), vec4(fragColor,alpha_), fogFactor);
     FragColor.a = alpha;
+    float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+       if(brightness > 0.0)
+           BrightColor = vec4(FragColor.rgb, 1.0);
+       else
+          BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
 
 vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {

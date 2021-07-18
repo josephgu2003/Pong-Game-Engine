@@ -161,7 +161,7 @@ glm::vec3 Actor::getPos() {
 }
 
 void Actor::init() {
-    model = loadModels("Resources/Models/journey6.obj");
+    model = loadModels(MOD_HOODY);
    // model = loadModels(MOD_JUGGERNAUT);
     std::vector<GLuint> newMaps_ = {loadTexture("Resources/Models/textures/lambert1_baseColor.png")};
     std::vector<GLuint> newMaps = {loadTexture("Resources/Models/tmpugfolmqr")};

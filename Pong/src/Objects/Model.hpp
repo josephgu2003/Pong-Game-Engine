@@ -17,6 +17,7 @@
 #include "Mesh.hpp"
 #include <vector>
 #include <string>
+#include "VertexData.hpp"
 
 // is a model
 #define DIFFUSE 0
@@ -26,7 +27,7 @@ struct Hitbox {
     float maxX, minX, maxY, minY, maxZ, minZ;
 };
 
-class Model {
+class Model : public VertexData {
     friend class Billow;
 private:
     std::vector<Mesh> meshes;

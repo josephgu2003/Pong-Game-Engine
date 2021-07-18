@@ -3,8 +3,11 @@
     in vec2 TexCoords;
 
     uniform sampler2D fbotexture;
+
+uniform sampler2D fbotexture1;
     uniform sampler2D noise;
 uniform bool blur;
+uniform float exposure;
 layout(std140) uniform StopWatch
 {
     float time;
@@ -13,6 +16,7 @@ uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.0
 
     void main()
     {
+        vec3 sampled;
         if (blur) {
         vec2 tex_offset = 1.0 / textureSize(fbotexture, 0);
         
@@ -33,20 +37,24 @@ uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.0
             if (TexCoords.x < 0.45) distortion = 0;
             if (TexCoords.y < 0.2) distortion = 0;
       //  vec2 newCoords = vec2(TexCoords.x, TexCoords.y-distortion);
-        vec3 sampled =  texture(fbotexture, TexCoords).rgb * weight[0];
+        sampled =  texture(fbotexture, TexCoords).rgb * weight[0];
         
         for (int i = 1; i < 5; ++i) {
             sampled += 2.0*texture(fbotexture, TexCoords + vec2(0.0, tex_offset.y * i*30.0*distortion)).rgb * weight[i];
           //  sampled += texture(fbotexture, TexCoords - vec2(0.0, tex_offset.y * i*16.0*distortion)).rgb * weight[i];
         }
             sampled += distortion * vec3(0.1,0.1,0.1) / 100.0;
-        FragColor = vec4(sampled,1);
         } else {
-
-            FragColor = texture(fbotexture, TexCoords);
+            sampled = texture(fbotexture, TexCoords).rgb;
         }
         
-
+        float gamma = 2.2;
+        vec3 bloomColor = texture(fbotexture1, TexCoords).rgb;
+        sampled += bloomColor;
+      //  vec3 result = vec3(1.0) - exp(-sampled * exposure);
+        // also gamma correct while we're at it
+       // result = pow(result, vec3(1.0 / gamma));
+        FragColor = vec4(sampled, 1.0);
       /**  vec4 sampled = texture(fbotexture, TexCoords);
         for(int i = 1; i < 5; ++i)
         {

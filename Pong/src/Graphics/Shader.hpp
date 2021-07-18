@@ -38,8 +38,7 @@ public:
     void setVec3(const std::string &name, glm::vec3 vector) const;
     void setVec4(const std::string &name, glm::vec4 vector) const;
     void setMat4(const std::string &name, glm::mat4 matrix);
-    
-    void getRenderableData(Actor& actor);
+
 };
 
 #endif /* Shader_hpp */

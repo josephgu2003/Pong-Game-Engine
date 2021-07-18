@@ -1,10 +1,9 @@
 #version 410 core
     out vec4 FragColor;
     in vec2 TexCoords;
-
+in float duration;
     uniform sampler2D texture0;
 uniform sampler2D texture1;
-    uniform float duration;
 
     void main()
     {

@@ -21,6 +21,7 @@
 #include "Shader.hpp"
 #include "Numberable.hpp"
 #include <memory>
+#include "VertexData.hpp"
 //something that can move and has a model
 class ActorScript;
 class World;

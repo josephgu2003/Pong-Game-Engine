@@ -20,6 +20,7 @@
 #include <functional>
 #include "Actor.hpp"
 #include "Shader.hpp"
+#include "GraphicsComponent.hpp"
 
 struct Particle { // implies a set of vertices, don't store it or too much memory
     glm::vec3 posVec, velVec;
@@ -43,7 +44,6 @@ protected:
     float x,y,z;
     
     int firstUnused;
-    Shader shader;
 
     float ptcPerSec;
     float duration;
@@ -55,9 +55,10 @@ protected:
     std::uniform_int_distribution<int> distribution;
     virtual void refreshParticle() = 0;
 public:
+    GraphicsComponent graphics;
     virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
     
-    virtual void setGraphics() = 0;
+    virtual void setGraphics(Shader& shader) = 0;
     
     void setActor(Actor* actor);
     float getSize();
@@ -66,9 +67,7 @@ public:
     GLuint texture;
     GLenum textureTarget;
     GLenum drawTarget;
-    int verticesPerDraw;
     
-    Shader& getShader();
     
     ParticleEffect();
 

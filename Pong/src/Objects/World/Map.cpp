@@ -12,12 +12,11 @@
 
 void Map::init() {
     shader.init("Shaders/MapVertexShader.vs", "Shaders/MapFragmentShader.fs");
-    TBNVertex a,b,c,d;
-    a = {glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0)};
-    b = {glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0)};
-    c = {glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0)};
-    d = {glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0)};
-    std::vector<TBNVertex> mapVertices = {a,b,c,d
+    std::shared_ptr<TBNVertex> a = std::make_shared<TBNVertex>(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> b = std::make_shared<TBNVertex>(glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> c = std::make_shared<TBNVertex>(glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> d = std::make_shared<TBNVertex>(glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::vector<std::shared_ptr<AnyVertex>> mapVertices = {a,b,c,d
     };
     
     std::vector<GLuint> mapIndices = {
@@ -31,8 +30,8 @@ void Map::init() {
    Texture texture = {id,"blah","blah"};
     //Texture texture = {loadTexture(TEX_EMPTY),"blah","blah"};
     mapTextures.push_back(texture);
-    mesh.setVertexData(mapVertices, mapIndices, mapTextures);
-    generateFramebuffer(&frame, &mesh.textures.at(0).id, 1600, 1600);
+    mesh.setVertexData(mapVertices, mapIndices, mapTextures, VERTEX_TBNVERTEX);
+    generateFramebuffer(&frame, &mesh.getTextures().at(0).id, 1600, 1600);
     
     load3DTexture(TEX_SMOKES, array2D);
     

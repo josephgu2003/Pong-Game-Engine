@@ -9,7 +9,7 @@
 
 
 
-void InkEffect::setGraphics() {
+void InkEffect::setGraphics(Shader& shader) {
     load3DTexture("Resources/Particles/Smokes/smoke000.jpg", texture);
     drawTarget = GL_TRIANGLES;
      textureTarget = GL_TEXTURE_2D_ARRAY;

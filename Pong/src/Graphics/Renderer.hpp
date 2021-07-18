@@ -34,10 +34,12 @@ private:
     screentext screenText = {0, ""};
     GLuint funtex1, funtex2;
     GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, tVBO, tVAO, qVBO, qVAO, qEBO;
-    Batch<SimpleVertex> pointParticles;
-    Batch<SimpleVertex> quadParticles;
-    Batch<TBNVertex> models;
-    Batch
+    Batch pointParticles;
+    Batch quadParticles;
+    Batch models;
+    
+    std::vector <ParticleEffect*> loadedParticles;
+    
     float screenquad[24] =
     {   -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
@@ -47,7 +49,9 @@ private:
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
-    Frame frame;
+    DoubleFrame frame2C;
+    Frame frame0;
+    Frame frame1;
     GLuint texture = 0;
     GLuint texture2 = 0;
     GLuint skyTexture = 0;
@@ -55,9 +59,10 @@ private:
     GLuint noise = 0;
 
     Shader* skyShader;
-    Shader* frameShader;
     Shader* textShader;
     Shader* sketchShader;
+    Shader* blurShader;
+    Shader* frameShader;
     
     glm::mat4 modelMat;
     glm::mat4 viewMat;

@@ -31,19 +31,12 @@ int main() {
     
 }
 
-/**work on:
-// fix that bloody ability interface
- // ask dad about bool flags
- // destructor for ability
+/**
+ don't copy large amounts of data
+ use same vertices even when not instancing
  
  notes on performance:
  5/24: 7 % w/o, 8 % with particles of minecraft (200), no instancing
  6/3 : 18%, 713 mb 2000 particles
  6/12 :20%, 1.6 gb
  **/
-
-// design: game system (hold data of loaded models actors scene etc), graphics system (take the scene and draw it with all the right configurations), audio, assetmanager system, input system (i think this one should handle player actions instead of functions in playerhero class?)
-
-/**
- 
- */

@@ -14,7 +14,7 @@
 
 class InkEffect : public ParticleEffect {
 public:
-    virtual void setGraphics() override;
+    virtual void setGraphics(Shader& shader) override;
     virtual void refreshParticle() override;
 };
 

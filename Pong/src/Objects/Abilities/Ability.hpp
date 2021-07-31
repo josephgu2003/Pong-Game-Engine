@@ -9,18 +9,21 @@
 #define Ability_hpp
 
 #include <stdio.h>
-#include "World.hpp"
-#include "Actor.hpp"
+
 
 class Game;
 
+class World;
+
+class Actor;
+
 class Ability {
-protected:
-    World* world;
-    Actor* actor;
+protected: 
+    World* world = NULL;
+    Actor* actor = NULL;
     Actor* target = NULL;
     float duration;
-    Game* game;
+    Game* game = NULL;
     int step;
 public:
     bool on;

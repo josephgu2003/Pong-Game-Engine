@@ -14,49 +14,50 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "DirectionalLight.hpp"
+#include "AssetManager.hpp"
 
 GLuint uboViewProj;
-GLuint uboLights;
-GLuint uboStopWatch;
+ GLuint uboLights;
+ GLuint uboStopWatch;
 
 Renderer::Renderer() {
-
+    exposure = 0;
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
 
     textShader = new Shader("Shaders/TextVShader.vs", "Shaders/TextFShader.fs");
     sketchShader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
-    blurShader = new Shader("Shaders/BloomVShader.vs","Shaders/BloomFShader.fs");
+    blurShader = new Shader("Shaders/FBufferVShader.vs","Shaders/BloomFShader.fs");
     frameShader = new Shader("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
 
     modelMat = glm::mat4(1);
-    viewMat = glm::mat4(1);
-    projMat = glm::perspective(glm::radians(50.0f), 1000.0f/800.0f, 0.01f, 100.0f);
-    projMat2 = glm::perspective(glm::radians(50.0f), 1000.0f/800.0f, 0.01f, 100.0f);
+    viewMat = glm::mat4(1); 
+    projMat = glm::perspective(glm::radians(60.0f), 1000.0f/650.0f, 0.005f, 400.0f);
     timeT = 0;
-    gradient = loadTexture(TEX_GRADIENT);
-    noise = loadTexture("Resources/Utility/noise.png");
-
-    texture = loadTexture(TEX_EMPTY);
-    
-    generateFramebuffer2Color(&frame2C, 2000, 1600);
-    generateFramebuffer(&frame0, 2000, 1600);
-    generateFramebuffer(&frame1, 2000, 1600);
+    AssetManager::loadTexture(TEX_GRADIENT, &gradient, false);
+    AssetManager::loadTexture("Resources/Utility/noise.png", &noise, false);
+ 
+    AssetManager::loadTexture(TEX_EMPTY, &texture, false);
+     
+    generateFramebuffer2Color(&frame2C, 2000, 1300);
+    generateFramebuffer(&frame0, GL_RGBA16F, 1000 ,650);
+    generateFramebuffer(&frame1, GL_RGBA16F, 1000, 650);
 
     std::vector<int> vector {3,1};
-    pointParticles.init(300, 500000, vector, VERTEX_SIMPLEVERTEX, GL_POINTS, GL_DYNAMIC_DRAW);
+    pointParticles.init(300, 500000, vector,  VERTEX_SIMPLEVERTEX, GL_POINTS, GL_DYNAMIC_DRAW);
     std::vector<int> vector2 {1,16};
     quadParticles.init(300, 500000, vector2, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
 }
 
 Renderer::~Renderer() {
     
-}
+} 
 
 void Renderer::setWorld(World *world_) {
     world = world_;
 }
 
 void Renderer::setCamera(Camera *camera_) {
+    
     camera = camera_;
 
     glEnable(GL_POINT_SPRITE);
@@ -64,7 +65,7 @@ void Renderer::setCamera(Camera *camera_) {
     
     glGenBuffers(1, &uboViewProj);
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    glBufferData(GL_UNIFORM_BUFFER, 128, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
+    glBufferData(GL_UNIFORM_BUFFER, 64, NULL, GL_DYNAMIC_DRAW); // allocate 152 bytes of memory
     
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -85,8 +86,8 @@ void Renderer::setCamera(Camera *camera_) {
     glGenBuffers(1, &uboStopWatch);
     glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
     glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
-    glUniformBlockBinding(frame2C.shader.ID, glGetUniformBlockIndex(frame2C.shader.ID, "StopWatch"), 2);
-    glUniformBlockBinding(frame2C.shader.ID, glGetUniformBlockIndex(frame2C.shader.ID, "StopWatch"), 2);
+    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2);
+    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2);
     glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
     
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -95,6 +96,8 @@ void Renderer::setCamera(Camera *camera_) {
 }
 
 void Renderer::updateUniformBlocks() {
+//
+
     updateViewProj();
     updateLights();
     updateCamPos();
@@ -112,8 +115,9 @@ void Renderer::updateViewProj() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewMat));
-    glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(projMat));
+    glm::mat4 viewProj = projMat * viewMat;
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
+
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 void Renderer::updateLights() {
@@ -144,7 +148,8 @@ void Renderer::updateCamPos() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewMat));
+    glm::mat4 viewProj = projMat * viewMat;
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
@@ -177,7 +182,7 @@ void Renderer::loadActorData() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, actorVertices.size() * sizeof(TBNVertex), actorVertices.data(), GL_STATIC_DRAW);
-    
+     
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, actorIndices.size() * sizeof(GLuint), actorIndices.data(), GL_STATIC_DRAW);
@@ -197,17 +202,24 @@ void Renderer::loadActorData() {
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
     glEnableVertexAttribArray(4);
     
-    glBindVertexArray(0);
+    glBindVertexArray(0); 
 }
 
 void Renderer::loadMapData() {
     std::vector<TBNVertex> mapVertices;
     
-    Mesh mesh = world->getMap().getMesh();
+    GraphicsComponent& gc = world->getMap().getGraphics();
+    VertexData* mesh = gc.getVertexData();
 
-            std::vector<std::shared_ptr<AnyVertex>>& vertices = mesh.getVertices();
+            std::vector<std::shared_ptr<AnyVertex>>& vertices = mesh->getVertices();
+    
+    mapVertices.resize(vertices.size());
+    
+    int counter = 0;
+    
             for (int c = 0; c < vertices.size(); c++) {
-                mapVertices.push_back(*static_cast<TBNVertex*>(vertices.at(c).get()));
+                mapVertices[counter] = *static_cast<TBNVertex*>(vertices.at(c).get());
+                counter++;
             }
 
     glGenVertexArrays(1, &mVAO);
@@ -216,32 +228,40 @@ void Renderer::loadMapData() {
       glGenBuffers(1, &mVBO);
       glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*world->getMap().getMesh().getVertices().size(), mapVertices.data(), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*mesh->getVertices().size(), mapVertices.data(), GL_STATIC_DRAW);
       
       glGenBuffers(1, &mEBO);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  world->getMap().getMesh().getIndices().size() * sizeof(GLuint), &world->getMap().getMesh().getIndices().at(0), GL_STATIC_DRAW);
-      
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
-      glEnableVertexAttribArray(0);
-      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  sizeof(TBNVertex), (void*)(3*sizeof(float)));
-      glEnableVertexAttribArray(1);
-      glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,  sizeof(TBNVertex), (void*)(6*sizeof(float)));
-      glEnableVertexAttribArray(2);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh->getIndices().size() * sizeof(GLuint), &mesh->getIndices().at(0), GL_STATIC_DRAW);
+       
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(sizeof(glm::vec3)));
+    glEnableVertexAttribArray(1); 
+    
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)));
+    glEnableVertexAttribArray(2);
+    
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(3);
+    
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(4);
       
     glBindVertexArray(0);
 }
 
 void Renderer::loadSkyBoxData() {
     int imageWidth, imageHeight, channels;
-    unsigned char* imageData;
-    glGenTextures(1, &skyTexture);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture);
+    unsigned char* imageData = NULL;
+    glGenTextures(1, &skyTexture.id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture.id);
     std::vector<std::string>*skyFiles = world->getSkyTextureFiles();
     for (unsigned int i = 0; i < skyFiles->size(); i++) {
         imageData = stbi_load(skyFiles->at(i).c_str(), &imageWidth, &imageHeight, &channels, 0);
         if (imageData) {
-            GLenum format;
+            GLenum format = 4;
                    if (channels == 1)
                        format = GL_RED;
                    else if (channels == 3)
@@ -250,12 +270,13 @@ void Renderer::loadSkyBoxData() {
                        format = GL_RGBA;
             glTexImage2D(
                          GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                         0, format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData
+                         0, GL_SRGB, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData
                          );
         } else {
             std::cout << "Failed to load sky box data \n";
         }
     }
+
     
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -342,6 +363,7 @@ void Renderer::loadParticleData() {
             pointParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData);
         }
     }
+    
     for (int i = 0; i < deletedParticles.size(); i++) {
         std::vector<float> instanceData;
         for (int c = 0; c < deletedParticles.at(i)->getNumParticles(); c++) {
@@ -361,7 +383,6 @@ void Renderer::loadParticleData() {
         }
     }
 }
-
 
 void Renderer::updateParticleBatches() {
     
@@ -411,10 +432,14 @@ void Renderer::checkForUpdates() {
     if(updates.quadUpdate == true) {
         world->updateCleared(QUAD_UPDATE);
         loadQuadData();
-    }
+    } 
     if(updates.textUpdate == true) {
         world->updateCleared(TEXT_UPDATE);
         print(world->getActiveText());
+    }
+    if(updates.lightingUpdate == true) {
+        world->updateCleared(LIGHTING_UPDATE);
+        updateLights();
     }
 }
 
@@ -422,31 +447,34 @@ void Renderer::render() {
     checkForUpdates();
     loadParticleData();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     
     glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo); //draw to 2C framebuffer
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0,0,0,1);
+    glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     updateCamPos();
     updateUniformStopWatch();
-    renderSky();
-    renderMap();
+   renderSky();
     renderActors();
+    renderMap();
     renderParticles();
     renderQuads();
     renderUI();
-    
-    if (screenText.duration > 0) {
+    if (screenText.duration > 0.0f) {
         renderText();
+
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
     glDisable(GL_DEPTH_TEST);
     glBindVertexArray(frame2C.fvao);
     bool horizontal = true;
     bool first_iteration = true;
-    int amount = 10;
-    blurShader->use(); 
+    int amount = 6;
+    blurShader->use();  
     glActiveTexture(GL_TEXTURE0);
+    glViewport(0,0, 1000, 650);
+   // glBindFramebuffer(GL_FRAMEBUFFER, frame0.fbo);
     for (unsigned int i = 0; i < amount; i++)
     {
         if (horizontal) {
@@ -461,42 +489,84 @@ void Renderer::render() {
         }
         else if (horizontal) {
             glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
-        } 
+        }  
         else {
             glBindTexture(GL_TEXTURE_2D, frame0.ftexture);
         }
         glDrawArrays(GL_TRIANGLES, 0, 6);
-       horizontal = !horizontal;
+       horizontal = (!horizontal);
         if (first_iteration)
             first_iteration = false;
     }
-
+    
+    glViewport(0,0, 2000, 1300);
+             
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-     
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.0f,0.0f,0.0f,1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
     frameShader->use();
+    glBindVertexArray(frame2C.fvao);
+    glDisable(GL_DEPTH_TEST);
+    
     glActiveTexture(GL_TEXTURE1);
     glUniform1i(glGetUniformLocation(frameShader->ID, "noise"), 1);
-    glBindTexture(GL_TEXTURE_2D, noise);
-    
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture1"), 0);
-    glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
+    glBindTexture(GL_TEXTURE_2D, noise.id);
     
     glActiveTexture(GL_TEXTURE2);
-    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 2);
+    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture1"), 2);
+   glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
+     
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 0);
     glBindTexture(GL_TEXTURE_2D, frame2C.ftexture0);
-    
+      
     glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);
-    frameShader->setFloat("exposure", 1.0);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
     
+    glDrawArrays(GL_TRIANGLES, 0, 6); 
+     
     timeT += (float)glfwGetTime();
-    screenText.duration -= glfwGetTime();
+    screenText.duration -= (float)glfwGetTime();
 }
+
+/**void Renderer::render() {
+    glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     
+    textShader->use();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBindVertexArray(tVAO);
+    int verticeCount = 0;
+    for (int i = 0; i < screenText.text.size(); i++) {
+    glBindTexture(GL_TEXTURE_2D, screenText.Characters[screenText.text[i]].id);
+    glDrawArrays(GL_TRIANGLES, verticeCount, 6);
+    verticeCount += 6;
+    }
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    frameShader->use();
+    glBindVertexArray(frame2C.fvao);
+    glDisable(GL_DEPTH_TEST);
+    
+    glActiveTexture(GL_TEXTURE0); // accomodate more trextures later
+    glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 0);
+    glBindTexture(GL_TEXTURE_2D, frame2C.ftexture0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    screenText.duration -= glfwGetTime();
+}**/
 
 void Renderer::renderUI() {
     
+}
+
+
+void Renderer::incExposure(float delta) {
+    exposure += delta;
 }
 
 void Renderer::loadTextData() {
@@ -513,23 +583,24 @@ void Renderer::loadTextData() {
     glBindVertexArray(0);
 }
 
-
-
 void Renderer::renderSky() {
     //sky
     glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     glDepthMask(GL_FALSE);
     skyShader->use();
-    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 0.3);
+    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 2.5*world->getWeather().dirLight.getDiffuse().x);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
-    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));
-    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
+    camViewMat = projMat * camViewMat;
+    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewProjMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));
     glBindVertexArray(sVAO);
     glBindBuffer(GL_ARRAY_BUFFER, sVBO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glDepthMask(GL_TRUE);
     glEnable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
 }
 
 void Renderer::renderQuads() {
@@ -554,9 +625,9 @@ void Renderer::renderQuads() {
     glUniformMatrix4fv(glGetUniformLocation(sketchShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
        // glUniform1f(glGetUniformLocation(sketchShader->ID, "z_offsets"), billowing[0]);
         glActiveTexture(GL_TEXTURE0);
-        glUniform1i(glGetUniformLocation(sketchShader->ID, "texture0"), 0);
+        glUniform1i(glGetUniformLocation(sketchShader->ID, "diffuse"), 0);
             glUniform1f(glGetUniformLocation(sketchShader->ID, "alpha"), quad->alpha);
-        glBindTexture(GL_TEXTURE_2D, world->getQuads()->at(0)->texture);
+        glBindTexture(GL_TEXTURE_2D, world->getQuads()->at(i)->texture.id);
         glDrawElements(GL_TRIANGLES, quad->indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
             
             indiceCount += quad->indices.size()*sizeof(GLuint);
@@ -566,31 +637,54 @@ void Renderer::renderQuads() {
     glDepthMask(GL_TRUE);
 }
 
-
 void Renderer::renderMap() {
-    //map
-   // glActiveTexture(GL_TEXTURE0);
-   // glBindTexture(GL_TEXTURE_2D, texture);
-    Map& map = world->getMap();
-    map.getShader().use();
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    GraphicsComponent& gc = world->getMap().getGraphics();
+    Shader* shader = gc.getShader();
+    shader->use();
     
     glBindVertexArray(mVAO);
     
-    glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture.id);
     
+    TextureMaps& map = gc.getVertexData()->getTextures();
+    
+    if (map.diffuse.id != -1) {
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
+    glBindTexture(map.diffuse.textureTarget, map.diffuse.id);
+    }
+    
+    if (map.specular.id != -1) {
+  glActiveTexture(GL_TEXTURE1);
+    glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
+    glBindTexture(GL_TEXTURE_2D, map.specular.id);
+    }
+    
+    
+    if (map.normMap.id != -1) {
     glActiveTexture(GL_TEXTURE2);
-    glUniform1i(glGetUniformLocation(map.getShader().ID, "mapTexture"), 2);
-    glBindTexture(GL_TEXTURE_2D, map.getMesh().getTextures().at(0).id);
+      glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
+      glBindTexture(GL_TEXTURE_2D, map.normMap.id);
+    }
     
-    glActiveTexture(GL_TEXTURE1);
-    glUniform1i(glGetUniformLocation(map.getShader().ID, "noise"), 1);
-    glBindTexture(GL_TEXTURE_2D, noise);
+    if (map.voronoi.id != -1) {
+    glActiveTexture(GL_TEXTURE3);
+      glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
+      glBindTexture(GL_TEXTURE_2D, map.voronoi.id);
+    }
     
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    if (map.voronoi.id != -1) {
+    glActiveTexture(GL_TEXTURE4);
+      glUniform1i(glGetUniformLocation(shader->ID, "noise"), 4);
+      glBindTexture(GL_TEXTURE_2D, noise.id);
+    }
+    
+    
+    glDrawElements(GL_TRIANGLES, gc.getVertexData()->getIndices().size(), GL_UNSIGNED_INT, 0);
     
     glActiveTexture(GL_TEXTURE0);
+
 }
 
 void Renderer::renderActors() {
@@ -602,28 +696,25 @@ void Renderer::renderActors() {
         Shader* shader = world->getNthActor(i)->shader;
         shader->use();
         for (int j = 0; j < meshes->size(); j++) {
+            TextureMaps& map = meshes->at(j).getTextures();
             
-            GLuint id1;
-            if (meshes->at(j).getTextures().size() > 0) {
-                id1 = meshes->at(j).getTextures().at(0).id;
-            } else {
-               // id1 = funtex2;
-        
-            }
-            GLuint id2;
-            if (meshes->at(j).getTextures().size()>1) {
-                id2 = meshes->at(j).getTextures().at(1).id;
-            } else {
-                id2 = texture;
-            }
-            
+            if (map.diffuse.id != -1) {
             glActiveTexture(GL_TEXTURE0);
-            glUniform1i(glGetUniformLocation(shader->ID, "texture0"), 0);
-            glBindTexture(GL_TEXTURE_2D, id1);
+            glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
+            glBindTexture(GL_TEXTURE_2D, map.diffuse.id);
+            }
             
+            if (map.specular.id != -1) {
           glActiveTexture(GL_TEXTURE1);
-            glUniform1i(glGetUniformLocation(shader->ID, "texture1"), 1);
-            glBindTexture(GL_TEXTURE_2D, id2);
+            glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
+            glBindTexture(GL_TEXTURE_2D, map.specular.id);
+            }
+            
+            if (map.normMap.id != -1) {
+            glActiveTexture(GL_TEXTURE2);
+              glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
+              glBindTexture(GL_TEXTURE_2D, map.normMap.id);
+            }
             
             glActiveTexture(GL_TEXTURE0);
 
@@ -640,13 +731,13 @@ void Renderer::renderActors() {
 
 void Renderer::renderParticles() {
     //particles
-    glEnable(GL_BLEND);
+   glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glDepthMask(GL_FALSE);
+   glDepthMask(GL_FALSE);
     for (int i = 0; i < world->getParticleEffects().size(); i++) {
         ParticleEffect& effect = *world->getParticleEffects().at(i);
         Batch* batch;
-        int elementsPerInstance;
+        int elementsPerInstance = 3;
         if (effect.drawTarget == GL_TRIANGLES) {
             batch = &quadParticles;
             elementsPerInstance = 6;
@@ -663,31 +754,33 @@ void Renderer::renderParticles() {
         GLuint shader = shaderRef->ID;
         
         glActiveTexture(GL_TEXTURE1);
-        if (glGetUniformLocation(shader, "texture1") != -1) {
-        glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
-        glBindTexture(GL_TEXTURE_2D, gradient);
+        if (glGetUniformLocation(shader, "gradient") != -1) {
+        glUniform1i(glGetUniformLocation(shader, "gradient"), 1);
+        glBindTexture(GL_TEXTURE_2D, gradient.id);
         }
-        if (glGetUniformLocation(shader, "texture0") != -1) {
-         glActiveTexture(GL_TEXTURE0);
-            glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
-        glBindTexture(effect.textureTarget, effect.texture);
+        if (glGetUniformLocation(shader, "diffuse") != -1) {
+         glActiveTexture(GL_TEXTURE0); 
+            glUniform1i(glGetUniformLocation(shader, "diffuse"), 0);
+        glBindTexture(effect.textureTarget, effect.texture.id);
         }
         glDrawElementsInstanced(effect.drawTarget, elementsPerInstance, GL_UNSIGNED_INT, (void*)(batch->getIndexByteStride(effect.graphics.getVertexData())), effect.getNumParticles());
         glBindTexture(effect.textureTarget, 0);
-       
-    }
-    glActiveTexture(0);
+    } 
+    glBindVertexArray(0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::print(std::string string) {
-    screenText.duration = 3.7;
+
+    screenText.duration = 3.7; 
     screenText.text = string;
     if (screenText.Characters.size() == 0){
-    loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
+    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
     }
-    
+      
     screenText.textPosArray = {};
     std::string::const_iterator c;
     float x = -0.9;
@@ -701,7 +794,7 @@ void Renderer::print(std::string string) {
           float ypos = y - (ch.size.y - ch.bearing.y) * scale;
 
           float w = ch.size.x * scale;
-        
+         
           float h = ch.size.y * scale;
           
           // update VBO for each character
@@ -709,18 +802,19 @@ void Renderer::print(std::string string) {
                xpos,     ypos + h,   0.0f, 0.0f ,
               xpos,     ypos,       0.0f, 1.0f ,
                xpos + w, ypos,       1.0f, 1.0f ,
-               xpos,     ypos + h,   0.0f, 0.0f ,
+            xpos,     ypos + h,   0.0f, 0.0f ,
                xpos + w, ypos,       1.0f, 1.0f ,
                xpos + w, ypos + h,   1.0f, 0.0f
           };
           screenText.textPosArray.insert(screenText.textPosArray.end(), vertices.begin(), vertices.end());
           x += (ch.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
       }
-    loadTextData();
+    loadTextData(); 
 }
-
+ 
 void Renderer::renderText() {
     textShader->use();
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBindVertexArray(tVAO);
@@ -728,10 +822,11 @@ void Renderer::renderText() {
     for (int i = 0; i < screenText.text.size(); i++) {
     glBindTexture(GL_TEXTURE_2D, screenText.Characters[screenText.text[i]].id);
     glDrawArrays(GL_TRIANGLES, verticeCount, 6);
-    verticeCount += 6;
+        verticeCount += 6;
     }
-}
 
+}
+ 
 /** int imageWidth, imageHeight, channels;   OLD FLAT MAP
 
  unsigned char* imageData = stbi_load("Resources/Map/ice.jpeg", &imageWidth, &imageHeight, &channels, 0);
@@ -786,7 +881,7 @@ void Renderer::renderText() {
       glActiveTexture(GL_TEXTURE0);
       glUniform1i(glGetUniformLocation(actorShader->ID, "texture0"), 0);
       glBindTexture(GL_TEXTURE_2D, world->getParticleEffects()->at(i)->texture);
-  /**    for (int j = 0; j < world->getParticleEffects()->at(i)->getNumParticles(); j++) {
+  *    for (int j = 0; j < world->getParticleEffects()->at(i)->getNumParticles(); j++) {
           if(world->getParticleEffects()->at(i)->getNthParticle(j).duration > 0) {
               //
       glBindTexture(GL_TEXTURE_2D, world->getParticleEffects()->at(i)->getNthParticle(j).texture);

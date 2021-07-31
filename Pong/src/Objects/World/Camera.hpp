@@ -18,7 +18,7 @@ class Camera {
     glm::vec3 rightVec;
     float pitch, yaw, roll;
 protected:
-    Actor* actor;
+    Actor* actor = NULL;
 public:
     glm::vec3 dirVec;
     Camera();

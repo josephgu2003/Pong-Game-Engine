@@ -13,6 +13,7 @@
 
 PhysicsComponent::PhysicsComponent(bool gravityOn_) {
     gravityOn = gravityOn_;
+    type = PHYSICS;
 }
 
 void PhysicsComponent::tick(Actor& actor, World& world) {

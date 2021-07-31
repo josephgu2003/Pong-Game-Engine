@@ -20,28 +20,31 @@
 #include "InputHandler.hpp"
 #include <sstream>
 #include <vector>
-#include "Ability.hpp"
 #include "Sketch.hpp"
 #include "Billow.hpp"
 #include "Mist.hpp"
 #include "LoadingScreen.hpp"
 #include "InkEffect.hpp"
 #include "Audio.hpp"
-#include "Map.hpp"
+#include "MapObject.hpp"
 #include "Numberable.hpp"
 #include "Fireworks.hpp"
 #include "ScriptOne.hpp"
+#include <chrono>
 
 class Dialogue;
+
+class Ability;
 
 class Game {
 GLFWwindow* window; // Windowed
 Camera camera;
 World world;
     World realWorld;
-Renderer* renderer;
-    Renderer* realRenderer;
-    Renderer* activeRenderer;
+Renderer* renderer = NULL;
+    Renderer* realRenderer = NULL;
+    Renderer* activeRenderer = NULL;
+    LoadingScreen* screen;
 InputHandler inputHandler;
     Audio audio;
     
@@ -63,13 +66,14 @@ InputHandler inputHandler;
     std::shared_ptr<Sketch> activeSketch;
     Dialogue* activeDialogue = NULL;
     
-    Ball ball;
+    Actor ball;
     PlayerHero pHero;
     PlayerHero rHero;
     InkEffect inkGlyphs;
-    Fireworks* fireworks;
-    Map map;
-    Map realMap;
+    Fireworks fireworks;
+    MapObject map;
+    MapObject realMap;
+    Actor tree;
     Mist mist;
     
     ScriptOne* script;
@@ -78,12 +82,21 @@ InputHandler inputHandler;
     Numberable* numberables[100];
     
     GLuint fbo, fvao, ftexture;
-    unsigned char* paint;
-    unsigned char* blank;
+    unsigned char* paint = NULL;
+    unsigned char* blank = NULL;
     int imageWidth = 0;
     int imageHeight = 0;
     int channels = 0;
+
+    double fpsTimer;
+    int intervalTimer = 0;
+    bool firstTime = true;
+    std::chrono::time_point<std::chrono::high_resolution_clock> t0;
+    float draws;
     
+    void initWindow();
+    void initObjects();
+    void linkObjects();
 public:
     bool running = false;
     Game();

@@ -10,13 +10,13 @@
 LoadingScreen::LoadingScreen() {
     frameShader = Shader("Shaders/LoadScreenV.vs", "Shaders/LoadScreenF.fs");
     textShader = Shader("Shaders/TextVShader.vs", "Shaders/TextFShader.fs");
-    
+      
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2000, 1600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2000, 1300, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -60,7 +60,7 @@ void LoadingScreen::print(std::string string) {
     screenText.duration = 0.5;
     screenText.text = string;
     if (screenText.Characters.size() == 0){
-    loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
+    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
     }
     screenText.textPosArray = {};
     std::string::const_iterator c;

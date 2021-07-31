@@ -19,7 +19,10 @@
 #include "Mesh.hpp"
 #include <string>
 #include "Batch.hpp"
-#include "AssetManager.hpp"
+
+extern GLuint uboViewProj;
+extern GLuint uboLights; 
+extern GLuint uboStopWatch;
 
 // draws the world
 struct screentext {
@@ -30,15 +33,15 @@ struct screentext {
 };
 
 class Renderer {
-private:
-    screentext screenText = {0, ""};
+private: 
+    screentext screenText;
     GLuint funtex1, funtex2;
     GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, tVBO, tVAO, qVBO, qVAO, qEBO;
     Batch pointParticles;
     Batch quadParticles;
     Batch models;
     
-    std::vector <ParticleEffect*> loadedParticles;
+    std::vector<ParticleEffect*> loadedParticles;
     
     float screenquad[24] =
     {   -1.0f,  1.0f,  0.0f, 1.0f,
@@ -52,11 +55,11 @@ private:
     DoubleFrame frame2C;
     Frame frame0;
     Frame frame1;
-    GLuint texture = 0;
-    GLuint texture2 = 0;
-    GLuint skyTexture = 0;
-    GLuint gradient = 0;
-    GLuint noise = 0;
+    Texture texture ;
+    Texture texture2 ;
+    Texture skyTexture ;
+    Texture gradient ;
+    Texture noise ;
 
     Shader* skyShader;
     Shader* textShader;
@@ -67,14 +70,11 @@ private:
     glm::mat4 modelMat;
     glm::mat4 viewMat;
     glm::mat4 projMat;
-    glm::mat4 viewMat2;
-    glm::mat4 projMat2;
     
     Camera* camera;
     World* world;
     float lighting;
     
-
     void renderMap();
     void renderActors();
     void renderParticles();
@@ -83,13 +83,16 @@ private:
     
     void updateUniformBlocks();
     void updateViewProj();
-    void updateLights();
     void updateCamPos();
     void updateUniformStopWatch();
     float timeT;
+
     
     void updateParticleBatches();
 public:
+    float exposure;
+    void incExposure(float delta);
+    void updateLights();
     void renderSky();
     Renderer();
     ~Renderer();

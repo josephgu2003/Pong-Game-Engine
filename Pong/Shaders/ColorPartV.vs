@@ -14,17 +14,14 @@ out float duration;
 
     uniform float size;
 
-
 layout(std140) uniform ViewProj
 {
-    mat4 viewMat;
-
-    mat4 projMat;
+    mat4 viewProjMat;
 };
     
     void main()
     {
-        gl_Position =  projMat * viewMat * vec4(vec3(aPos+Displacement), 1.0);
+        gl_Position =  viewProjMat * vec4(vec3(aPos+Displacement), 1.0);
       //  vs_out.TextureCoords = TexCoords_;
         gl_PointSize = 1600.0*size / gl_Position.z;
         TexCoords = TexCoords_;

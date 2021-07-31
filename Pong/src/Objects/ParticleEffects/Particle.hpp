@@ -16,11 +16,11 @@
 #include <random>
 #include <algorithm>
 #include <map>
-#include "AssetManager.hpp"
 #include <functional>
 #include "Actor.hpp"
 #include "Shader.hpp"
 #include "GraphicsComponent.hpp"
+#include  "Force.hpp"
 
 struct Particle { // implies a set of vertices, don't store it or too much memory
     glm::vec3 posVec, velVec;
@@ -30,8 +30,12 @@ struct Particle { // implies a set of vertices, don't store it or too much memor
 
 struct Character;
 
+class World;
+
 class ParticleEffect {
 protected:
+
+
     float friction;
     bool useTexture = true;
     float size;
@@ -39,6 +43,7 @@ protected:
     std::vector<Particle> particles;
     
     Actor* actor = NULL;
+    World* world = NULL;
     
     int numParticles;
     float x,y,z;
@@ -59,12 +64,13 @@ public:
     virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
     
     virtual void setGraphics(Shader& shader) = 0;
-    
+    std::vector<Force*> forces;
     void setActor(Actor* actor);
+    void setWorld(World* world);
     float getSize();
     
     glm::vec3 posVec;
-    GLuint texture;
+    Texture texture;
     GLenum textureTarget;
     GLenum drawTarget;
     

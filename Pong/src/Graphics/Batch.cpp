@@ -91,6 +91,23 @@ void Batch::init(unsigned int maxVertexByteSize_, unsigned int maxIndicesSize_,s
     drawMode = drawMode_;
     instanceLayout = instanceLayout_;
     
+    for (int i = 0; i < instanceLayout.size(); i++) {
+        if (instanceLayout.at(i) > 4) { // if needs extra slots
+            
+            if ((instanceLayout.at(i) % 4) == 0) { // if it is right multiple
+                std::vector<int> newLayout;
+                for (int c = 0; c < instanceLayout.at(i) / 4; c++) {
+                    newLayout.push_back(4);
+                }
+                instanceLayout.insert(instanceLayout.begin()+i+1, newLayout.begin(), newLayout.end());
+                instanceLayout.erase(instanceLayout.begin()+i);
+            } else {
+                printf("Error: instanceLayout has non multiple of 4 > 4 \n");
+                return;
+            }
+        }
+    }
+    
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     
@@ -155,89 +172,46 @@ void Batch::init(unsigned int maxVertexByteSize_, unsigned int maxIndicesSize_,s
 
 GLuint Batch::makeInstanceBuffer(VertexData* data_, int dataSize_) {
     GLuint instanceVBO;
-    int byteCounter = 0;
-    glBindVertexArray(VAO);
+    bindVAO();
     glGenBuffers(1,  &instanceVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
     glBufferData(GL_ARRAY_BUFFER, dataSize_, nullptr, drawMode);
-    
+    configVAOAttribs();
+    unbindVAO();
+    return instanceVBO;
+}
+
+void Batch::configVAOAttribs() {
+    int byteCounter = 0;
     if(vertexType == 0) {
         for (int i = 0; i < instanceLayout.size(); i++) {
-            if (instanceLayout.at(i) > 4) { // if needs extra slots
-                
-                if ((instanceLayout.at(i) % 4) == 0) { // if it is right multiple
-                    std::vector<int> newLayout;
-                    for (int c = 0; c < instanceLayout.at(i) / 4; c++) {
-                        newLayout.push_back(4);
-                    }
-                    instanceLayout.insert(instanceLayout.begin()+i+1, newLayout.begin(), newLayout.end());
-                    instanceLayout.erase(instanceLayout.begin()+i);
-                } else {
-                    printf("Error: instanceLayout has non multiple of 4 > 4 \n");
-                    return -1;
-                }
-            }
             glVertexAttribPointer(i+3, instanceLayout.at(i), GL_FLOAT, GL_FALSE, bytesPerInstance, (void*)(byteCounter));
         glEnableVertexAttribArray(i+3);
         glVertexAttribDivisor(i+3, 1);
             byteCounter += instanceLayout.at(i)*sizeof(float);
-        }
-    
+        }    
     }
     
     if (vertexType == 1) {
         for (int i = 0; i < instanceLayout.size(); i++) {
-            if (instanceLayout.at(i) > 4) { // if needs extra slots
-                
-                if ((instanceLayout.at(i) % 4) == 0) { // if it is right multiple
-                    std::vector<int> newLayout;
-                    for (int c = 0; c < instanceLayout.at(i) / 4; c++) {
-                        newLayout.push_back(4);
-                    }
-                    instanceLayout.insert(instanceLayout.begin()+i+1, newLayout.begin(), newLayout.end());
-                    instanceLayout.erase(instanceLayout.begin()+i);
-                } else {
-                    printf("Error: instanceLayout has non multiple of 4 > 4 \n");
-                    return -1;
-                }
-            }
         }
         for (int i = 0; i < instanceLayout.size(); i++) {
             glVertexAttribPointer(i+2, instanceLayout.at(i), GL_FLOAT, GL_FALSE, bytesPerInstance, (void*)(byteCounter));
         glEnableVertexAttribArray(i+2);
         glVertexAttribDivisor(i+2, 1);
             byteCounter += instanceLayout.at(i)*sizeof(float);
-            int k = i +2;
-            k = k;
         }
         
     }
     
     if (vertexType == 2) {
         for (int i = 0; i < instanceLayout.size(); i++) {
-            if (instanceLayout.at(i) > 4) { // if needs extra slots
-                
-                if ((instanceLayout.at(i) % 4) == 0) { // if it is right multiple
-                    std::vector<int> newLayout;
-                    for (int c = 0; c < instanceLayout.at(i) / 4; c++) {
-                        newLayout.push_back(4);
-                    }
-                    instanceLayout.insert(instanceLayout.begin()+i+1, newLayout.begin(), newLayout.end());
-                    instanceLayout.erase(instanceLayout.begin()+i);
-                } else {
-                    printf("Error: instanceLayout has non multiple of 4 > 4 \n");
-                    return -1;
-                }
-            }
             glVertexAttribPointer(i+5, instanceLayout.at(i), GL_FLOAT, GL_FALSE, bytesPerInstance, (void*)(byteCounter));
         glEnableVertexAttribArray(i+5);
         glVertexAttribDivisor(i+5, 1);
             byteCounter += instanceLayout.at(i)*sizeof(float);
         }
     }
-    
-    glBindVertexArray(0);
-    return instanceVBO;
 }
 
 void Batch::updateVertexData(VertexData *data) {
@@ -249,7 +223,7 @@ void Batch::updateVertexData(VertexData *data) {
     bytePerVertex = floatsPerVertex*sizeof(float);
 
     
-    unsigned int vertexByteStride, indexByteStride;
+    unsigned int vertexByteStride, indexByteStride = 0;
     
     bool newData = true;
     for (int i = 0; i < locations.size(); i++) {
@@ -285,7 +259,7 @@ void Batch::updateVertexData(VertexData *data) {
     VertexIndexByteStride strides{vertexByteStride, indexByteStride};
         locations.push_back(std::pair<VertexData*, VertexIndexByteStride>(data, strides));
     }
-    glBindVertexArray(VAO);
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     std::vector<float> array;
@@ -297,14 +271,11 @@ void Batch::updateVertexData(VertexData *data) {
     }
     glBufferSubData(GL_ARRAY_BUFFER,    vertexByteStride,vDataSize, array.data());
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexByteStride,iDataSize, indices.data());
-    glBindVertexArray(0);
 }
 
 void Batch::deleteVertexData(VertexData* data) {
     int bytePerVertex;
-    int position;
+    int position = 0;
     //lol vertices are below
     std::vector<GLuint>& indices = data->getIndices();
     
@@ -332,8 +303,7 @@ void Batch::deleteVertexData(VertexData* data) {
     int vDataSize = bytePerVertex * data->getVertices().size();
     
     int iDataSize = sizeof(GLuint)*indices.size();
-    
-    glBindVertexArray(VAO);
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     glBufferSubData(GL_ARRAY_BUFFER,    vertexByteStride,vDataSize, NULL);
@@ -341,14 +311,13 @@ void Batch::deleteVertexData(VertexData* data) {
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexByteStride,iDataSize, NULL);
+     
 
-    //!!!
-    glBindVertexArray(0);
     locations.erase(locations.begin()+position);
 }
-
+      
 void Batch::updateInstanceData(VertexData* data, std::vector<float>& data_) {
-    unsigned int instanceByteStride;
+    unsigned int instanceByteStride = 0;
     
     bool newData = true;
     for (int i = 0; i < instanceDataLocations.size(); i++) {
@@ -356,7 +325,7 @@ void Batch::updateInstanceData(VertexData* data, std::vector<float>& data_) {
             instanceByteStride = instanceDataLocations.at(i).second.instanceByteStride;
             newData = false;
         }
-    }
+    }     
     if (newData) {
         if (instanceDataLocations.size()>0){
             instanceByteStride = (--instanceDataLocations.end())->second.instanceByteStride+(--instanceDataLocations.end())->second.bytesToEnd;
@@ -367,25 +336,24 @@ void Batch::updateInstanceData(VertexData* data, std::vector<float>& data_) {
     }
     
     unsigned int instanceDataSize = sizeof(float)*data_.size();
-
-
     
     if (newData) {
         GLuint id = makeInstanceBuffer(data, instanceDataSize);
     InstanceBlockDescription descript {id, instanceByteStride, instanceDataSize};
     instanceDataLocations.push_back(std::pair<VertexData*, InstanceBlockDescription>(data, descript));
     }
-
-    glBindVertexArray(VAO);
     
-    bindInstanceBuffer(data);
+    for (int i = 0; i < instanceDataLocations.size(); i++) {
+        if (data == instanceDataLocations.at(i).first) {
+            glBindBuffer(GL_ARRAY_BUFFER, instanceDataLocations.at(i).second.bufferID);
+        }
+    }
 
-    glBufferSubData(GL_ARRAY_BUFFER, instanceByteStride, instanceDataSize, data_.data());
-    
-    glBindVertexArray(0);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, instanceDataSize, data_.data());
+
 }
 void Batch::deleteInstanceData(VertexData* data, std::vector<float>& data_) {
-    int position;
+    int position = 0;
     unsigned int instanceByteStride = -1;
     
     
@@ -408,7 +376,7 @@ void Batch::deleteInstanceData(VertexData* data, std::vector<float>& data_) {
 
     glBufferSubData(GL_ARRAY_BUFFER, instanceByteStride, instanceDataSize, NULL);
     
-
+    
     glBindVertexArray(0);
     locations.erase(locations.begin()+position);
 }
@@ -443,6 +411,8 @@ void Batch::bindInstanceBuffer(VertexData* data) {
     for (int i = 0; i < instanceDataLocations.size(); i++) {
         if (data == instanceDataLocations.at(i).first) {
             glBindBuffer(GL_ARRAY_BUFFER, instanceDataLocations.at(i).second.bufferID);
+            configVAOAttribs();
+            return;
         }
     }
 }

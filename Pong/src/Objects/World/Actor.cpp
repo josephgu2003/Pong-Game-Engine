@@ -19,6 +19,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "CombatComponent.hpp"
 
 #define JUMP_SPEED 0.05f
 
@@ -45,11 +46,11 @@ void Actor::orient(float yaw_) {
     rightVec = rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
     dirVec = glm::normalize(dirVec);
     rightVec = glm::normalize(rightVec);
-}
+} 
 
 void Actor::turnTowards(glm::vec3 newDir) {
     newDir = glm::normalize(newDir);
-    float length = glm::length(newDir);
+    //float length = glm::length(newDir);
    // float dRoll = (180/3.14159)*acos(glm::dot(glm::vec3(dirVec.x,dirVec.y,0),glm::vec3(newDir.x,newDir.y,0)));
    // float dPitch =  (180.0f/3.14159)*acos(glm::dot(  glm::normalize(glm::vec3(0,newDir.y,newDir.z)),glm::normalize(glm::vec3(0,dirVec.y,dirVec.z))));
     
@@ -81,7 +82,6 @@ void Actor::tick() {
     }
     modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, posVec);
-    modelMat = glm::translate(modelMat, glm::vec3(0,-0.1,0));
     glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
     glm::quat MyQuaternion = glm::quat(rotations);
     
@@ -89,6 +89,9 @@ glm::mat4 RotationMatrix = toMat4(MyQuaternion);
     modelMat = modelMat * RotationMatrix;
     
     shader->setMat4("modelMat", modelMat);
+    
+    glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    shader->setMat3("transposeInverseModelMat", transposeInverse);
 }
 
 void Actor::setPos(glm::vec3 pos_) {
@@ -117,13 +120,6 @@ void Actor::posRight(float speed) {
 void Actor::randomPosAround(glm::vec3 pivot) {
     int j = (distribution(generator)%360);
 }
-
-// Key by key, I used to sit here to tap out the image of a better world beyond these walls
-// I know our room was always small, but it was only because of the confinement that the music was able to focus into our very bones.
-// But yesterday I opened the windows and saw a bigger world right there. It's a snowy place, but also a beautiful place. And I saw us, under the soft sunset on that snowy plain.
-// I used to think this piano was a key. But is it really a key, or is it a prison?
-// I will count to 3. If you don't stop me, I will set fire to this piano and we will go.
-
 
 
 
@@ -157,19 +153,23 @@ float Actor::getYaw() {
 }
 
 glm::vec3 Actor::getPos() {
-    return posVec;
+    return posVec; 
 }
 
-void Actor::init() {
+void Actor::init(int i ) {
+    if (i == 0) {
     model = loadModels(MOD_HOODY);
    // model = loadModels(MOD_JUGGERNAUT);
-    std::vector<GLuint> newMaps_ = {loadTexture("Resources/Models/textures/lambert1_baseColor.png")};
-    std::vector<GLuint> newMaps = {loadTexture("Resources/Models/tmpugfolmqr")};
+    TextureMaps map;
+    AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
+    AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
     for (int i = 0; i<model->getMeshes()->size(); i ++) {
-        model->setMeshTexture(i, DIFFUSE, newMaps_, newMaps);
+        model->setMeshTexture(i, map);
     }
     shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
-    
+    shader->use();
+    shader->setFloat("size", 0.005);
+    shader->setFloat("brightness", 3.0);
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
@@ -183,6 +183,43 @@ void Actor::init() {
     glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        CombatComponent* cc = new CombatComponent();
+        components.push_back(cc);
+        PhysicsComponent* pC = new PhysicsComponent(true);
+        components.push_back(pC);
+    }
+    if (i == 1) {
+        PhysicsComponent* pC = new PhysicsComponent(false);
+        components.push_back(pC);
+        state = STATE_FLYING;
+        model = loadModels(MOD_HOODY);
+      //  model = loadModels("Resources/Map/snow3.obj");
+        shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+        shader->use();
+        shader->setFloat("size", 0.005);
+        shader->setFloat("brightness", 1.0);
+        extern GLuint uboViewProj;
+        glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+        GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+        
+        extern GLuint uboLights;
+        glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+        GLuint lights  = glGetUniformBlockIndex(shader->ID, "Lights");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+     //   GLuint lights  = glGetUniformBlockIndex(shader.ID, "Lights");
+       // glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
+        TextureMaps map;
+        AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
+        AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
+        for (int i = 0; i<model->getMeshes()->size(); i ++) {
+            model->setMeshTexture(i, map);
+        }
+        CombatComponent* cc = new CombatComponent();
+        components.push_back(cc);
+    }
 }
 
 void Actor::setWorld(World* world_) {

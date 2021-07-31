@@ -33,7 +33,7 @@ VertexData::VertexData() {
 
 VertexData::VertexData(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
      std::vector<GLuint>& indices_,
-           std::vector<Texture>& textures_, VertexType vertexType_) {
+           TextureMaps& textures_, VertexType vertexType_) {
     vertices = vertices_;
     indices = indices_;
     textures = textures_;
@@ -42,7 +42,7 @@ VertexData::VertexData(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
 
 void VertexData::setVertexData(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
              std::vector<GLuint>& indices_,
-             std::vector<Texture>& textures_, VertexType vertexType_)  {
+             TextureMaps& textures_, VertexType vertexType_)  {
     vertices = vertices_;
     indices = indices_;
     textures = textures_;
@@ -67,10 +67,14 @@ void VertexData::setIndices(std::vector<GLuint>& indices_) {
     indices = indices_;
 }
 
-std::vector<Texture>& VertexData::getTextures() {
+TextureMaps& VertexData::getTextures() {
     return textures;
 }
 
-void VertexData::setTextures(std::vector<Texture>& textures_) {
+void VertexData::setTextures(TextureMaps& textures_) { 
     textures = textures_;
 }
+  
+ 
+  
+ 

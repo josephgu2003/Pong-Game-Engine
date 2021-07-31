@@ -38,7 +38,7 @@ layout (std140) uniform StopWatch
     float time;
 };
 
-    uniform sampler2D texture0;
+    uniform sampler2D diffuse;
 
 uniform float alpha;
 
@@ -46,7 +46,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
-    float alpha_ = texture(texture0, TexCoords).a;
+    float alpha_ = texture(diffuse, TexCoords).a;
     if(alpha_ < 0.5)
         discard;
     vec3 viewDir = vec3(viewPos-fragPos);
@@ -55,9 +55,9 @@ void main()
     
     vec3 fragColor = vec3(0.0);
     
-    fragColor += CalcDirLight(dirLight, norm, viewDir);
+    fragColor += vec3(texture(diffuse, TexCoords));
     
-    fragColor *= 3.0;
+    fragColor *= 2.0;
     
     //Yirou these next 3 lines can provide fish vfx, my version makes colors flash based on how much red they have, i couldn't figure out anything cooler yet
 
@@ -65,7 +65,7 @@ void main()
     FragColor.a = alpha;
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
        if(brightness > 0.0)
-           BrightColor = vec4(FragColor.rgb, 1.0);
+           BrightColor = vec4(FragColor.rgb, 1.0)*alpha;
        else
           BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
@@ -84,10 +84,10 @@ vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
         vec3 reflectDir = reflect(-dirlightDir, norm);
         spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     
-    vec3 ambient = dirLight.ambient*vec3(texture(texture0, TexCoords));
+    vec3 ambient = dirLight.ambient*vec3(texture(diffuse, TexCoords));
 
     
-    vec3 diffuse = dirLight.diffuse*diff*vec3(texture(texture0, TexCoords));
+    vec3 diffuse = dirLight.diffuse*diff*vec3(texture(diffuse, TexCoords));
     
   //  vec3 specular = dirLight.specular * spec * vec3(texture(texture0, TexCoords));
 

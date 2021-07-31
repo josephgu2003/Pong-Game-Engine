@@ -14,7 +14,7 @@ class Ball: public Actor {
 public:
     Ball();
     virtual void tick() override;
-    virtual void init() override;
+    virtual void init(int i) override;
 };
 
 #endif /* Ball_hpp */

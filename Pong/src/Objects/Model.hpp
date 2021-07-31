@@ -33,6 +33,7 @@ private:
     std::vector<Mesh> meshes;
     std::vector<Texture> loadedTextures;
     std::string directory;
+    std::string path;
     Hitbox hitbox;
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
@@ -44,9 +45,11 @@ public:
     Model(const char* filePath);
     ~Model();
     void setMeshes(std::vector<Mesh> meshes_);
-    void setMeshTexture(int index, int type, std::vector<GLuint> newDiffMaps, std::vector<GLuint> newSpecMaps);
+    void setMeshTexture(int index, TextureMaps& textures);
     void setDirectory(const char* directory_);
     std::string getDirectory();
+    void setFilepath(const char* path_);
+    std::string getFilepath();
     std::vector<Mesh>* getMeshes();
     void setHitbox(Hitbox hitbox_);
 };

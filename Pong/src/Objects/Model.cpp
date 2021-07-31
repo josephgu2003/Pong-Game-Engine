@@ -8,6 +8,7 @@
 #include "Model.hpp"
 #include "stb_image.h"
 #include <iostream>
+#include "AssetManager.hpp"
 
 Model::Model() {
 }
@@ -26,28 +27,18 @@ void Model::loadModel(std::string filePath_) {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString();
         return;
     }
-    
+    path = filePath_;
     directory = filePath_.substr(0, filePath_.find_last_of('/'));
     processNode(scene->mRootNode, scene);
 }
-void Model::setMeshTexture(int index, int type, std::vector<GLuint> newDiffMaps, std::vector<GLuint> newSpecMaps) {
-
-        std::vector<Texture> newTextures;
-        for (int i = 0 ; i<newDiffMaps.size();i++) {
-            Texture diffTexture = {newDiffMaps.at(i), "test","test"};
-            newTextures.push_back(diffTexture);
-            Texture specTexture = {newSpecMaps.at(i), "test","test"};
-            newTextures.push_back(specTexture);
-
-            meshes.at(index).setTextures(newTextures);
-    }
+void Model::setMeshTexture(int index, TextureMaps& textures) {
+            meshes.at(index).setTextures(textures);
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene) {
     //load each mesh from node
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::cout << meshes.size() << "\n";
         meshes.push_back(processMesh(mesh, scene));
     }
     for(unsigned int i = 0; i < node->mNumChildren; i++)
@@ -59,7 +50,7 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector< std::shared_ptr<AnyVertex>> vertices;
     std::vector<GLuint> indices;
-    std::vector<Texture> textures;
+    TextureMaps textures;
     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
         
@@ -105,10 +96,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+        if (diffuseMaps.size() != 0)
+        textures.diffuse = diffuseMaps.at(0); //???? lol who would have more than 1 texture
         std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
+        if (specularMaps.size() != 0)
+        textures.specular = specularMaps.at(0);
+    } 
     Mesh returnedMesh(vertices, indices, textures, VERTEX_TBNVERTEX);
     return returnedMesh;
 }
@@ -134,7 +127,9 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* material, aiTexture
         }
         if (!texIsRepeat) {
             Texture texture;
-            texture.id = getTextureFromFile(filePath);
+            bool srgb = false;
+            if (type_ == aiTextureType_DIFFUSE) srgb = true;
+            AssetManager::loadTexture(filePath.c_str(), &texture, srgb);
             texture.type = typeName;
             texture.path = filePath;
             textures.push_back(texture);
@@ -144,43 +139,8 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* material, aiTexture
     return textures;
 }
 
-GLuint Model::getTextureFromFile(std::string texturePath_) {
-    GLuint tex = 0;
-    int imageWidth = 0;
-    int imageHeight = 0;
-    int channels = 0;
-    unsigned char* imageData;
-    std::cout << texturePath_ << "\n";
-    const char* texturePath = texturePath_.c_str();
-    
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
-    
-    imageData = stbi_load(texturePath, &imageWidth, &imageHeight, &channels, 0);
-    if (imageData) {
-        GLenum format;
-               if (channels == 1)
-                   format = GL_RED;
-               else if (channels == 3)
-                   format = GL_RGB;
-               else if (channels == 4)
-                   format = GL_RGBA;
-        glTexImage2D(GL_TEXTURE_2D, 0, format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
-    }
-    stbi_image_free(imageData);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-   // glBindTexture(GL_TEXTURE_2D, 0);
-    return tex;
-}
+
+
 
 void Model::setMeshes(std::vector<Mesh> meshes_) {
     meshes = meshes_;
@@ -191,6 +151,14 @@ void Model::setDirectory(const char* directory_) {
 
 std::string Model::getDirectory() {
     return directory;
+}
+
+void Model::setFilepath(const char* path_) {
+    path = path_;
+}
+
+std::string Model::getFilepath() {
+    return path;
 }
 
 std::vector<Mesh>* Model::getMeshes() {

@@ -13,7 +13,7 @@
 #include <irrKlang.h>
 
 class Audio {
-    irrklang::ISoundEngine *SoundEngine;
+    irrklang::ISoundEngine *SoundEngine = NULL;
 public:
     Audio();
     void playMusic();

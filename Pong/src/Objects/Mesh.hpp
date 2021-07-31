@@ -25,6 +25,6 @@ public:
     Mesh();
     Mesh(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
          std::vector<GLuint>& indices_,
-               std::vector<Texture>& textures_, VertexType vertexType_);
+                TextureMaps& textures_, VertexType vertexType_);
 };
 #endif /* Mesh_hpp */

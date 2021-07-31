@@ -56,7 +56,7 @@ void Camera::incPitch(float inc) {
     }
 }
 void Camera::incYaw(float inc) {
-    yaw += inc;
+    yaw += inc; 
 }
 void Camera::incRoll(float inc) {
     roll += inc;
@@ -69,17 +69,17 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
     dirVec = glm::normalize(dirVec);
     rightVec = glm::cross(glm::vec3(0,1,0),dirVec);
     rightVec = glm::normalize(rightVec);
-    upVec = glm::cross(dirVec,rightVec);
+    upVec = glm::cross(dirVec,rightVec); 
     upVec = glm::normalize(upVec);
-    posVec = actor->posVec-dirVec*3.0f+actor->camFocus;
+    posVec = actor->posVec-dirVec*5.0f+actor->camFocus+glm::vec3(0.0,1.0,0);
     if (posVec.y < -0.11) {
         posVec.x += (-0.11f-posVec.y)*dirVec.x/dirVec.y;
         posVec.z += (-0.11f-posVec.y)*dirVec.z/dirVec.y;
-        posVec.y += (-0.11f-posVec.y);
+        posVec.y += (-0.11f-posVec.y);  
     }
 }
-
-void Camera::orientActor() {
+  
+void Camera::orientActor() { 
     actor->orient(yaw);
 }
 

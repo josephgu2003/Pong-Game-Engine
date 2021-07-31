@@ -12,7 +12,6 @@
 #include "PhysicsComponent.hpp"
 #include "CombatComponent.hpp"
 
-
 Ball::Ball() {
     std::cout << "oof2";
         posVec.x = 0.0f;
@@ -25,20 +24,20 @@ Ball::Ball() {
     components.push_back(pC);
     state = STATE_FLYING;
     distribution = std::uniform_int_distribution<int>(1,1000);
-
 }
 
-void Ball::init() {
+void Ball::init(int i) {
     model = loadModels("Resources/Models/journey5.obj");
-   // model = loadModels(MOD_JUGGERNAUT);
+  //  model = loadModels("Resources/Map/snow3.obj");
     shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
-    
+    shader->use();
+    shader->setFloat("size", 0.005);
+    shader->setFloat("brightness", 1.0);
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
     glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
-    
     
     extern GLuint uboLights;
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
@@ -47,10 +46,11 @@ void Ball::init() {
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
  //   GLuint lights  = glGetUniformBlockIndex(shader.ID, "Lights");
    // glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
-    std::vector<GLuint> newMaps_ = {loadTexture(TEX_INKPAPER)};
-    std::vector<GLuint> newMaps = {loadTexture("Resources/Models/tmpugfolmqr")};
+    TextureMaps map;
+    AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
+    AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
     for (int i = 0; i<model->getMeshes()->size(); i ++) {
-        model->setMeshTexture(i, DIFFUSE, newMaps_, newMaps);
+        model->setMeshTexture(i, map);
     }
     CombatComponent* cc = new CombatComponent();
     components.push_back(cc);

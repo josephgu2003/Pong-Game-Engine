@@ -17,18 +17,20 @@
 #include "Particle.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
-#include "Map.hpp"
+#include "MapObject.hpp"
 #include "DirectionalLight.hpp"
 #include "Numberable.hpp"
-
+#include "Force.hpp"
 #define ACTOR_UPDATE 0
 #define PARTICLE_UPDATE 1
 #define QUAD_UPDATE 2
 #define TEXT_UPDATE 3
+#define LIGHTING_UPDATE 3
 //stores locations of everything
 
 struct Weather {
     DirectionalLight dirLight;
+    int sky;
 };
 
 struct Quad {
@@ -36,7 +38,7 @@ struct Quad {
     std::vector<GLuint> indices;
     float size;
     float alpha;
-    GLuint texture;
+    Texture texture;
     glm::vec3 pos;
     glm::vec3 rotations; //pitch yaw roll
     glm::vec3 force;
@@ -47,14 +49,17 @@ struct Updates {
     bool particleUpdate;
     bool quadUpdate;
     bool textUpdate;
+    bool lightingUpdate;
 };
 class World : public Numberable {
-    Map* map;
-    Updates updates = {false,false,false,false};
+    MapObject* map = NULL;
+    Updates updates = {false,false,false,false, false};
     std::vector <Actor*> allActorPtrs;
     std::vector <ParticleEffect*> allParticleEffects;
+    std::vector <MapObject*> allMapObjPtrs;
     std::vector <Camera*> allCameraPtrs;
     std::vector <Quad*> allQuadPtrs;
+    std::vector <Force*> allForces;
     std::string activeText;
 
     std::vector<std::string> skyTextureFiles;
@@ -62,7 +67,7 @@ class World : public Numberable {
     float skyVertices [108] = {0};
     
     Weather weather;
-    
+     
     float globalTime;
     
 public:
@@ -70,7 +75,9 @@ public:
     World();
     ~World();
     
-    void setMap(Map& map);
+    void setMap(MapObject& map);
+    void insertMapObj(MapObject* map);
+    
     void insertCamera(Camera* camera);
     
     void insertActor(Actor* actor);
@@ -80,11 +87,14 @@ public:
     
     void insertQuad(Quad* quad);
     void deleteQuad(Quad* quad);
+    void insertForce(Force* force_);
+    void deleteForce(Force* force_);
     
     void setActiveText(const std::string& string);
     std::string getActiveText();
     
-    Map& getMap();
+    MapObject& getMap();
+    MapObject& getMapObjs();
     
     int getActorsCount();
     Actor* getNthActor(int n);
@@ -98,12 +108,13 @@ public:
     Updates checkforUpdates();
     void updateCleared(int i);
     
-    void setWeather(DirectionalLight dirLight);
+    void setWeather(DirectionalLight dirLight, int sky);
     Weather getWeather();
     
     void tick();
     
     void informActorProximity(Actor& actor, float radius);
+    bool informParticlesForce(ParticleEffect* effect);
 };
 
 

@@ -1,0 +1,48 @@
+
+[
+{
+    "DialogueID": 0,
+    "Dialogue" : [
+    {
+        "LineID": 0,
+        "Lines" : ["A lone figure in the distance. (Type A/B)"],
+        "LeftID" : 1,
+        "RightID" : 2
+    },
+    {
+        "LineID": 1,
+        "Lines" : ["'I see.'","...", "Figure: Come here.", "Figure: Look to the horizon. I know where you want to go.", "'I know you do. We are one.'",
+            "Figure: Like an albatross, which every year spreads its wings and flies North",
+            "Figure: But returns every winter without fail",
+            "Figure: Needing shelter from the winters of that land of snow.",
+            "Figure: Stay here in this world of black and white. Why leave? (Type A/B)"],
+        "LeftID" : 3,   
+        "RightID" : 4
+    },
+    { 
+        "LineID": 2,
+        "Lines" : ["'Oh?'","...", "Figure: Come here.", "Figure: Look to the horizon. I know where you want to go.", "'I know you do. We are one.'",
+            "Figure: Like an albatross, which every year spreads its wings and flies North",
+            "Figure: But returns every winter without fail",
+            "Figure: Needing shelter from the winters of that land of snow.",
+            "Figure: Stay here in this world of black and white. Why leave? (Type A/B)"],
+        "LeftID" : 3,
+        "RightID" : 4
+    },
+    { 
+        "LineID": 3,
+        "Lines" : ["'I know that to fly means to risk falling'", "'But I have to try, at the very least.'", "(Tension in the air)" , "(The figure seems ready to attack)" ,
+            "But you fell, and now you are vulnerable.", "'Vulnerable, but able to fly again.'", "It would be better to stay here."],
+        "LeftID" : -1,
+        "RightID" : -1
+    },
+    {
+        "LineID": 4,
+        "Lines" : ["'Some people want to see some new colors.'","'That's why I must go'", "(Tension in the air)" ,  "(The figure seems ready to attack)" ,  "Figure: Colors bring choices. Choices bring pain.", "'I am willing to face those choices'","Figure: It would be better to stay here."],
+        "LeftID" : -1,
+        "RightID" : -1
+    }
+    ]
+}
+]
+

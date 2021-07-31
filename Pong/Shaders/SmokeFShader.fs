@@ -5,9 +5,10 @@
 
     in vec2 TexCoords;
 
-    uniform sampler2DArray texture0;
-    uniform sampler2D texture1;
-    uniform float duration;
+    uniform sampler2DArray diffuse;
+    uniform sampler2D gradient;
+
+in float duration;
 
     void main()
     {
@@ -20,7 +21,7 @@
         duration1 *= float(36.0);
         int layer = 109;
         layer -= int(floor(duration1));
-        vec4 sampled = vec4(0.1,0.1,0.1,1.0-texture(texture0, vec3(TexCoords, layer)).r);
+        vec4 sampled = vec4(0.1,0.1,0.1,1.0-texture(diffuse, vec3(gl_PointCoord, layer)).r);
        // vec4 sampled = vec4(1,1,1,texture(texture0, realCoords).r);
     //    vec4 sampled = texture(texture0, realCoords);
       /**  for(int i = 1; i < 5; ++i)
@@ -29,8 +30,8 @@
         }**/
         
         float multiplier = duration-1.5;
-        float intensity = texture(texture1, vec2(TexCoords.x,TexCoords.y)).b;
+        float intensity = texture(gradient, gl_PointCoord).b;
         sampled.w *= intensity*intensity;
-        sampled.w *= min((2.0/multiplier/multiplier/multiplier/multiplier),1);
+        sampled.w *= min((5.0/multiplier/multiplier/multiplier/multiplier),1);
         FragColor = sampled;
     }

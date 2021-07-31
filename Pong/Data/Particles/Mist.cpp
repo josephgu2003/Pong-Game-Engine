@@ -9,9 +9,9 @@
 #include "AssetManager.hpp"
 
 void Mist::setGraphics(Shader& shader_) {
-    texture = loadTexture(TEX_MIST); //***
+    AssetManager::loadTexture(TEX_MIST, &texture, false); //***
     textureTarget = GL_TEXTURE_2D;
-    drawTarget = GL_TRIANGLES;
+    drawTarget = GL_POINTS;
     shader_.init("Shaders/MistVShader.vs", "Shaders/MistFShader.fs");
     shader_.use();
     shader_.setFloat("size", size);
@@ -33,6 +33,6 @@ void Mist::refreshParticle() {
     float c = 0.01*(std::rand()%100);
 particles[firstUnused].velVec = (glm::vec3(0.1*a-0.05,0.2*b-0.1,0.1*c-0.05));
 particles[firstUnused].duration = 30;
-particles[firstUnused].texture = texture;
+particles[firstUnused].texture = texture.id;
 }
 

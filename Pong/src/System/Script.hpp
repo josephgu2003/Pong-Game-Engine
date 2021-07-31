@@ -15,7 +15,7 @@ class Game;
 
 class Script {
 protected:
-    int step;
+    int step; 
 public:
     virtual void tick() = 0;
     virtual void init(Game* game) = 0;

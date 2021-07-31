@@ -20,9 +20,9 @@
 #include <memory>
 
 class ScriptOne : public Script {
-    PlayerHero* pHero;
-    World* world;
-    Ball* ball;
+    PlayerHero* pHero = NULL;
+    World* world = NULL;
+    Ball* ball = NULL;
     float timer = 0;
     
     enum State {

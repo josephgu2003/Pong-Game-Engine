@@ -13,27 +13,96 @@
 #include "stb_image.h"
 #include "Dialogue.hpp"
 #include "Fish.hpp"
-
+#include "Ability.hpp"
+#include <thread>
+#include "json.hpp"
+#include "AssetManager.hpp"
+ 
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
 extern void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_);
 
-Game::Game() {
-    running = true;
-    
+void Game::initWindow() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
-    window = glfwCreateWindow(1000, 800, "OpenGL", NULL, NULL);
+    window = glfwCreateWindow(1000, 650, "OpenGL", NULL, NULL);
     glfwMakeContextCurrent(window);
+}  
+  
+void Game::initObjects() {
+    
+    realRenderer = new Renderer;
+     renderer = new Renderer;
+    mist.init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
+     inkGlyphs.init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
+    inkGlyphs.setActor(&pHero);
+     fireworks.init(0.2, glm::vec3(0,27,0), glm::vec3(0,0,0), 300, 20, 1000, 0.995);
+    fireworks.setColor(glm::vec4(0.3,1.2,3.0,1.0));
+     realMap.init(glm::vec3(0,-1.0,0));
+     map.init(glm::vec3(0,-0.14,0));
+     ball.init(1);
+     ball.setID(1); 
+     numberables[1] = &ball;  
+    
+     pHero.init(0);
+     pHero.setID(2);
+     numberables[2] = &pHero; 
+        
+     pHero.setPos(glm::vec3(10,35,10));
+     ball.setPos(glm::vec3(0,0.5,0));
+    // billow.loadModel();
+     rHero.init(0); 
+    tree.init(0);
+    delete tree.model; 
+    tree.model = loadModels("Resources/Map/tree/source/tree1.fbx");
+    tree.shader->use();
+    tree.shader->setFloat("size", 0.005);
+   
+     world.setID(0);
+     numberables[0] = &world;
+}
+                   
+void Game::linkObjects() {      
+    renderer->setWorld(&world);
+    realRenderer->setWorld(&realWorld);
+                 
+    DirectionalLight  dl2(glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),glm::vec3(1.0,1.0,1.0),glm::vec3(-1,-1,0));
+    realWorld.setWeather(dl2, 0);  
+         
+    DirectionalLight   dl(glm::vec3(0.03,0.03,0.03),glm::vec3(0.08,0.08,0.08),glm::vec3(0.5,0.5,0.5),glm::vec3(-1,-1,0));
+    world.setWeather(dl, 0);
+
+    camera.setActor(&pHero); 
+    realRenderer->setCamera(&camera);  
+    renderer->setCamera(&camera);
+
+    world.insertCamera(&camera);
+    world.insertActor(&pHero);
+    world.insertActor(&ball);
+    realWorld.insertActor(&tree);
+    realWorld.insertActor(&rHero);
+       
+     world.insertParticleEffect(&fireworks);   
+     world.insertParticleEffect(&mist);
+
+       world.insertParticleEffect(&inkGlyphs);
+       world.setMap(map);
+       realWorld.setMap(realMap);
+}
+
+Game::Game() {
+    t0 = std::chrono::high_resolution_clock::now();
+    running = true;
+    
+    initWindow();
     
     glewExperimental = GL_TRUE;
-    
     glewInit();
-    
+     
     glEnable(GL_DEPTH_TEST); // enable depth-testing
     glDepthFunc(GL_LEQUAL);
     
@@ -41,82 +110,91 @@ Game::Game() {
     glfwSetTime(0);
     
     glfwSetWindowUserPointer(window, this);
-    LoadingScreen screen;
+    
+    screen = new LoadingScreen();
     
     inputHandler.setWindow(window);
     
     //billow.posVec = glm::vec3(0,5,0);
-    stbi_set_flip_vertically_on_load(1);
-   mist.init(1.0, glm::vec3(0,0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.995);
-  //  inkGlyphs.init(4, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 1, 9, 1000);
-    Fireworks* fireworks = new Fireworks(glm::vec4(0.1,0.3,0.9,1.0));
-    fireworks->init(0.20, glm::vec3(0,27,0), glm::vec3(0,0,0), 500, 20, 1000, 0.99);
-
-    inkGlyphs.setActor(&ball); 
-    realMap.init();
-    map.init();
-    camera.setActor(&pHero);
-    pHero.setWorld(&world);
-    ball.setWorld(&world);
-    rHero.setWorld(&realWorld);
-    
-    world.setID(0);
-    numberables[0] = &world;
-    
-    world.insertCamera(&camera);
-    world.insertActor(&pHero);
-    world.insertActor(&ball);
-  //  world.insertActor(&billow)
-    world.insertParticleEffect(&mist);
-  world.insertParticleEffect(fireworks);
-
-   // world.insertParticleEffect(&inkGlyphs);
-    world.setMap(map);
-    
-    DirectionalLight dl(glm::vec3(0.1,0.1,0.1),glm::vec3(0.2,0.2,0.2),glm::vec3(1.0,1.0,1.0),glm::vec3(0,-1,-1));
-    world.setWeather(dl);
-
-   /** realWorld.insertActor(&rHero);
-    realWorld.setMap(realMap);
-    DirectionalLight dl2(glm::vec3(0.5,0.5,0.5),glm::vec3(0.5,0.5,0.5),glm::vec3(1.0,1.0,1.0),glm::vec3(0,-1,-1));
-    realWorld.setWeather(dl2);**/
-    
-
-    screen.print("Preparing the brushes...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-    
-  /**  realRenderer = new Renderer;
-    realRenderer->setWorld(&realWorld);
-    realRenderer->setCamera(&camera);**/
-    
-    renderer = new Renderer;
-    renderer->setWorld(&world);
-    renderer->setCamera(&camera);
-    
-    screen.print("Opening the books...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
     stbi_set_flip_vertically_on_load(0);
     
-    ball.init();
-    ball.setID(1);
-    numberables[1] = &ball;
+    initObjects();
+  
+    linkObjects();
+
     
-    screen.print("Flipping the pages...");
+    VertexData* data = new VertexData;
+    std::shared_ptr<TBNVertex> a = std::make_shared<TBNVertex>(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> b = std::make_shared<TBNVertex>(glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> c = std::make_shared<TBNVertex>(glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::shared_ptr<TBNVertex> d = std::make_shared<TBNVertex>(glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::vector<std::shared_ptr<AnyVertex>> mapVertices = {a, b, c, d
+    };
+    
+    std::vector<GLuint> mapIndices = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    
+    TextureMaps mapTextures;
+    Texture t;
+    AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
+    mapTextures.diffuse = (t);
+    data->setVertexData(mapVertices, mapIndices, mapTextures, VERTEX_TBNVERTEX);
+    Shader* shader = new Shader("Shaders/WaterVertexShader.vs", "Shaders/WaterFragmentShader.fs");
+    glm::mat4 modelMat = glm::mat4(1.0);
+    modelMat = glm::translate(modelMat, glm::vec3(map.getPos()));
+    
+    shader->use();
+    shader->setMat4("modelMat", modelMat);
+    glm::mat3 mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    shader->setMat3("transposeInverseModelMat", mat);
+    GraphicsComponent* graphics = new GraphicsComponent(data, shader);
+    map.setGraphics(graphics);
+    
+    AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
+    AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
+    AssetManager::bindShaderUniblock(shader, AssetManager::StopWatch);
+ 
+    Model*  model = loadModels("Resources/Map/snow3.obj");
+    TextureMaps maps2;
+    
+    AssetManager::loadTexture(TEX_VORONOI, &maps2.voronoi, false);
+
+        model->setMeshTexture(0, maps2);      
+    VertexData* data2 = &model->getMeshes()->at(0);
+     Shader* shader2 = new Shader("Shaders/SnowVertexShader.vs", "Shaders/SnowFragmentShader.fs");
+    modelMat = glm::mat4(1.0);
+     modelMat = glm::translate(modelMat, glm::vec3(realMap.getPos()));
+     shader2->use();
+     shader2->setMat4("modelMat", modelMat);
+    shader2->setFloat("size", 15);  
+    mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+     shader2->setMat3("transposeInverseModelMat", mat);
+     GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
+     realMap.setGraphics(graphics2);
+
+    AssetManager::bindShaderUniblock(shader2, AssetManager::ViewProj);
+    AssetManager::bindShaderUniblock(shader2, AssetManager::Lights);
+    AssetManager::bindShaderUniblock(shader2, AssetManager::StopWatch);
+  //  world.insertActor(&billow)
+ 
+
+    screen->print("Preparing the brushes...");
+    glfwPollEvents(); 
+    glfwSwapBuffers(window);
+
+    
+    screen->print("Opening the books...");
     glfwPollEvents();
     glfwSwapBuffers(window);
-    
-    pHero.init();
-    pHero.setID(2);
-    numberables[2] = &pHero;
-    
-    pHero.setPos(glm::vec3(10,35,10));
-    ball.setPos(glm::vec3(0,0.5,0));
-   // billow.loadModel();
-    rHero.init();
 
-    screen.print("Putting on a fresh canvas...");
+    
+    screen->print("Flipping the pages...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+
+    screen->print("Putting on a fresh canvas...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
@@ -124,9 +202,9 @@ Game::Game() {
     renderer->loadMapData();
     renderer->loadSkyBoxData();
     
- /**   realRenderer->loadActorData();
+    realRenderer->loadActorData();
     realRenderer->loadMapData();
-    realRenderer->loadSkyBoxData();**/
+    realRenderer->loadSkyBoxData();
     
     stbi_set_flip_vertically_on_load(1);
 
@@ -136,9 +214,7 @@ Game::Game() {
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &i);
     printf("%i\n", i);
     
-
-    
-    blank = stbi_load("Resources/Particles/rosa.png", &imageWidth, &imageHeight, &channels, 0);
+    blank = stbi_load("Resources/Particles/BLANK_ICON3.png", &imageWidth, &imageHeight, &channels, 0);
      
     glGenTextures(1, &ftexture);
     glBindTexture(GL_TEXTURE_2D, ftexture);
@@ -152,38 +228,74 @@ Game::Game() {
     paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
   //  audio.playMusic();
     activeRenderer = renderer;
-    
- //   BallScriptOne* bso = new BallScriptOne();
-  //  ball.setScript(bso);
+
     script = new ScriptOne();
     script->init(this);
 }
 
 Game::~Game() {
+     
+}   
+
+void Game::tick() {    
+     
+    auto t1 = std::chrono::high_resolution_clock::now();
+ 
+        /* Getting number of milliseconds as an integer. */
+        auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t1-t0);
+
+    int t = ms_int.count();
+    float ratio = (float)t /30.0f; 
+    if (floor(ratio) == intervalTimer) {
+        intervalTimer = floor(ratio);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        return;
+    }
+    else {
+        intervalTimer = floor(ratio);
+        int k = 1;
+    }
     
-}
-
-
-void Game::tick() {
-    glfwSetTime(glfwGetTime()-lastTime);
+    glfwSetTime(glfwGetTime()-lastTime); 
     lastTime = glfwGetTime();
-    if (scheme == 0) {
+ //   printf("Delta t is %f\n", (float)lastTime );
+    fpsTimer += lastTime;
+    
+    draws = draws + 1.0;     
+    if (fpsTimer > 2.0) {
+        float fps = draws/2.0;
+        printf("Fps is %f\n", fps);
+        fpsTimer = 0.0;
+        draws = 0.0; 
+    }
+
+    if (scheme == 0) { 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        pHero.posDir(0.015);
+        pHero.posDir(0.03);
+        rHero.posDir(0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        pHero.posDir(-0.015);
+        pHero.posDir(-0.03);
+        rHero.posDir(-0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        pHero.posRight(0.015);
+        pHero.posRight(0.03);
+        rHero.posRight(0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        pHero.posRight(-0.015);
+        pHero.posRight(-0.12);
+        rHero.posRight(-0.03);
     }
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            activeRenderer->incExposure(0.01);
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            activeRenderer->incExposure(-0.01);
+        }
     }
-    
+     
     inputHandler.tick();
-    
+  
     double mx, my;
     
     if (scheme == 2)     {
@@ -197,8 +309,8 @@ void Game::tick() {
                     float ratio2 = 1.0f - ratio1;
                     glBindTexture(GL_TEXTURE_2D, ftexture);
                     //   glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-(ratio2*lastMX+ratio1*mx)/1000), 800*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 2342*(1-(ratio2*lastMX+ratio1*mx)/1000), 1982*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
-                }
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 800.0*(1.0-(ratio2*lastMX+ratio1*mx)/1000.0), 800.0*(1.0-((ratio2*lastMY+ratio1*my)/650.0)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
+                } 
             }
     lastMY = my;
     lastMX = mx;
@@ -224,6 +336,14 @@ void Game::tick() {
         pHero.abilityQ.clear();
     }
     
+    if(rHero.abilityQ.size()>0) {
+        for(int i = 0; i < rHero.abilityQ.size(); i++) {
+            rHero.abilityQ.at(i)->call(this);
+            abilities.push_back(rHero.abilityQ.at(i));
+        }
+        rHero.abilityQ.clear();
+    }
+    
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == true) {
@@ -231,12 +351,15 @@ void Game::tick() {
             }
             
     }
-        
+         
     }
-    
-    script->tick();
+
+  //  script->tick();
+
     world.tick();
-    
+
+    realWorld.tick();
+
     if (abilities.size() > 0) {
         for(int i = 0; i < abilities.size(); i++) {
             if(abilities.at(i)->on == false) {
@@ -271,7 +394,7 @@ void Game::moveMouse(double mouseX_, double mouseY_) {
     xOffset = 0;
     yOffset = 0;
     }
-}
+} 
 
 int Game::processInput(int key, int action, int mods) {
 //    unique_lock<mutex> lock()
@@ -298,15 +421,15 @@ int Game::processInput(int key, int action, int mods) {
     if (key_name != NULL)
        // input << (key_name);
         if (mods == GLFW_MOD_SHIFT){
-        char c = toupper(*key_name);
+        char c = toupper(*key_name); 
             if (key == GLFW_KEY_1) c = '!';
             if (key == GLFW_KEY_SLASH) c = '?';
             if (key == GLFW_KEY_APOSTROPHE) c = '\"';
         i.append(std::string(1, c));
-        } else {
-            i.append(key_name);
-        }
-    }
+         } else if (mods != GLFW_MOD_SHIFT) {
+            i.append(key_name);  
+         }
+    } 
         
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
             scheme = 0;
@@ -321,33 +444,47 @@ int Game::processInput(int key, int action, int mods) {
     if (scheme == 0) {
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
         pHero.jump();
+        rHero.jump();
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&world, &pHero, 6);
+
+        if (pHero.biggestTarget != NULL)
+            letters->setTarget(pHero.biggestTarget);
         letters->call(this);
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            std::vector<std::string> lines = { "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant"};
+            std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
             std::shared_ptr<Ability> speech = std::make_shared<Speech>(&world, &pHero, 6.0, lines);
             abilities.push_back(speech);
             speech->call(this);
-        }
+        }  
         
         if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
             std::shared_ptr<Ability> fish = std::make_shared<Fish>(&world, &pHero, 18.0);
             abilities.push_back(fish);
             fish->call(this);
         }
-        
+         
         if (key == GLFW_KEY_X && action == GLFW_PRESS) {
-       //     activeRenderer = realRenderer;
-        //    camera.setActor(&rHero);
+            if (activeRenderer == renderer) {
+            activeRenderer = realRenderer;
+                activeRenderer->updateLights();
+            camera.setActor(&rHero); 
+                return 0;
+            }
+            if (activeRenderer == realRenderer) {
+            activeRenderer = renderer;
+                activeRenderer->updateLights();
+            camera.setActor(&pHero);
+                return 0;
+            }
         }
         
         if (key == GLFW_KEY_E && action == GLFW_PRESS) {
             int newScheme = (-1)*(scheme-2);
-            setActionScheme(newScheme);
+            setActionScheme(newScheme); 
             if (activeSketch.get() == NULL) {
             std::shared_ptr<Ability> sketch = std::make_shared<Sketch>(&world, &pHero, 6, ftexture);
             activeSketch = static_pointer_cast<Sketch>(sketch);
@@ -359,7 +496,7 @@ int Game::processInput(int key, int action, int mods) {
         
         if (key == GLFW_KEY_R && action == GLFW_PRESS) {
             glBindTexture(GL_TEXTURE_2D, ftexture);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2342, 1982, GL_RGB, GL_UNSIGNED_BYTE, blank);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGB, GL_UNSIGNED_BYTE, blank);
          //   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGBA, GL_UNSIGNED_BYTE, blank);
             glBindTexture(GL_TEXTURE_2D, 0);
             if (activeSketch.get() != NULL) {
@@ -393,9 +530,10 @@ void Game::processInput2(int key, int action) {
 }
 
 void Game::print() {
-    renderer->print(i);
+    activeRenderer->print(i);
+    //printf("Exposure is %f \n", activeRenderer->exposure);
     printing = false;
-    i = "";
+    i = ""; 
 }
 
 void Game::setActionScheme(int id) {

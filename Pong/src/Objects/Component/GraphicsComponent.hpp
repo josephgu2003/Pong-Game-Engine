@@ -12,13 +12,18 @@
 #include "Shader.hpp"
 #include "VertexData.hpp"
 #include <memory>
+#include "AssetManager.hpp"
 
+struct FrameAndShader {
+    Frame* frame;
+    Shader* shader;
+};
 class GraphicsComponent : public Component {
 protected:
-    Shader* shader;
+    Shader* shader = NULL;
     std::unique_ptr<VertexData> vertexData;
+    std::map<Texture*, FrameAndShader> animatedTextures;
     int activeData = -1;
-    
 public:
     GraphicsComponent();
     
@@ -31,6 +36,8 @@ public:
     VertexData* getVertexData();
 
     Shader* getShader();
+    
+    void animateTexture(Texture* texture, Shader* shader);
 };
 
 

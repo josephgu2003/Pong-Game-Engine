@@ -6,11 +6,5 @@
 
     void main()
     {
-
-        
-
             FragColor = texture(fbotexture, TexCoords);
-
-        
-
     }

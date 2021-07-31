@@ -23,7 +23,7 @@
 #include <memory>
 #include "VertexData.hpp"
 //something that can move and has a model
-class ActorScript;
+
 class World;
 class Ability;
 class Shader;
@@ -35,15 +35,12 @@ enum State {
     STATE_FLYING
 };
 
-class Actor : public Numberable {
+class Actor : public Numberable, public Componentable {
     friend class Camera;
     friend class Renderer;
 protected:
-    World* world;
-    Model* model;
-    ActorScript* script;
-    std::vector<Component*> components;
-    Shader* shader;
+    World* world = NULL;
+
     glm::mat4 modelMat = glm::mat4(1.0f);
     State state;
     glm::vec3 posVec;
@@ -51,8 +48,10 @@ protected:
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
 public:
+    Shader* shader = NULL;
     std::shared_ptr<Ability> currentAbility;
-    Actor* biggestTarget;
+    Actor* biggestTarget = NULL;
+    Model* model = NULL;
     std::vector<std::shared_ptr<Ability>> abilityQ;
     std::shared_ptr<Ability> affecting;
     glm::vec3 dirVec;
@@ -66,13 +65,12 @@ public:
     ~Actor();
 
     virtual void tick();
-    virtual void init();
+    virtual void init(int i);
     void setWorld(World* world_);
     World& getWorld();
     
     float getYaw();
     
-    void setScript(ActorScript* script_);
     
     glm::vec3 getPos();
     void setPos(glm::vec3 pos_);

@@ -6,32 +6,57 @@
 //
 
 #include "InkEffect.hpp"
-
+#include "VertexData.hpp"
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 
 void InkEffect::setGraphics(Shader& shader) {
-    load3DTexture("Resources/Particles/Smokes/smoke000.jpg", texture);
-    drawTarget = GL_TRIANGLES;
+    /**load3DTexture("Resources/Particles/Smokes/smoke000.jpg", texture);
+    drawTarget = GL_POINTS;
      textureTarget = GL_TEXTURE_2D_ARRAY;
      shader.init("Shaders/SmokeVShader.vs", "Shaders/SmokeFShader.fs");
+    shader.use();
+    shader.setFloat("size", size);**/
+    AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
+    textureTarget = GL_TEXTURE_2D;
+    drawTarget = GL_POINTS;  
+    shader.init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
+    shader.use();
+    glm::vec4 color = glm::vec4(15.0,4.2,2.4,1.0);  
+    shader.setVec4("color", color);
+    shader.setFloat("size", size); 
 }
 
 void InkEffect::refreshParticle() {
-    int j = (distribution(generator)%100);
-    int k = (distribution(generator)%100);
-    int l = (distribution(generator)%100);
-    if (j%2 ==1) j = j*(-1);
-    if (k%2 ==1) k = k*(-1);
-    if (l%2 ==1) l = l*(-1);
-    float m = x*j*0.01;
-    float n = y*k*0.01;
-    float o = z*l*0.01;
-particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
-    float a = 0.003*(distribution(generator)%100);
-    float b = 0.003*(distribution(generator)%100);
-    float c = 0.003*(distribution(generator)%100);
+    glm::vec3 newPos = glm::vec3(0.0);
 
-particles[firstUnused].velVec = (glm::vec3(2*a,b-0.5,c));
-particles[firstUnused].duration = 3.0f;
-particles[firstUnused].texture = texture;
+    int count = 0;
+    for (int i = 0; i < actor->model->getMeshes()->size(); i++) {
+        count += actor->model->getMeshes()->at(i).getVertices().size();
+    }
+    int v = 0.01*count*(distribution(generator)%100);
+    int count2 = 0;
+    for (int i = 0; i < actor->model->getMeshes()->size(); i++) {
+        if (v >= actor->model->getMeshes()->at(i).getVertices().size()+count2) {
+            count2 += actor->model->getMeshes()->at(i).getVertices().size();
+        } else {
+            newPos =  static_cast<TBNVertex*>(actor->model-> getMeshes()->at(i).getVertices().at(v-count2).get())->Pos;
+            glm::mat3 modelMat = glm::mat3(1.0f);
+            modelMat = glm::rotate(modelMat, glm::radians(-90.0f+actor->getYaw()));
+            glm::vec3 vec = glm::vec3(newPos.x, newPos.z, 1.0); 
+            vec = modelMat * vec;
+            newPos.x = vec.x;
+            newPos.z = vec.y;
+        }
+    }
+    
+particles[firstUnused].posVec = 0.005f*newPos+actor->getPos(); 
+    float a = 0.0005*(distribution(generator)%100);
+    float b = 0.0005*(distribution(generator)%100);
+    float c = 0.0005*(distribution(generator)%100);
+
+particles[firstUnused].velVec = (glm::vec3(a-0.025,b-0.025,c-0.025));
+  
+particles[firstUnused].duration = 5.0f;
+particles[firstUnused].texture = texture.id;
 }

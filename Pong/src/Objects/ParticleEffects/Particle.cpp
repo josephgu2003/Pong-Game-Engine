@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <memory>
+#include "AssetManager.hpp"
+#include "World.hpp"
 
 ParticleEffect::ParticleEffect() {
 }
@@ -19,7 +21,7 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
     friction = friction_;
     size = size_;
     posVec = posVec_;
-    force = glm::vec3(0,0,0);
+    force = glm::vec3(0,0,0); 
     x = dimensions.x;
     y = dimensions.y;
     z = dimensions.z;
@@ -72,9 +74,9 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
         std::vector<std::shared_ptr<AnyVertex>> newVertices = {
             v1
         };
-        
+         
         data->setVertices(newVertices, VERTEX_SIMPLEVERTEX);
-        
+         
         for (int i = 0; i < numParticles; i++) {
             std::vector<GLuint> newIndices = {
                 0
@@ -83,9 +85,9 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
         }
         data->setIndices(particleIndices);
     }
-    
+     
     graphics.init(data, shader);
-    
+     
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
@@ -106,12 +108,16 @@ void ParticleEffect::tick() {
     posVec = actor->getPos();
     }
     
+    if (world != NULL) {
+          world->informParticlesForce(this);
+    }
+    
     float dt = glfwGetTime();
     timer += dt;
         
     if (timer > 0.2) {
         timer = 0;
-        for (int i = 0; i < ptcPerSec/5; i++) {
+        for (int i = 0; i < ptcPerSec/5.0; i++) {
         refreshParticle();
         if(firstUnused == (particles.size()-1)) {
             firstUnused = 0;
@@ -120,6 +126,7 @@ void ParticleEffect::tick() {
     }
     }
     
+    if (forces.size() == 0) {
     for (int i = 0; i < particles.size(); i++) {
         if (particles[i].duration > 0) {
             particles[i].velVec += force;
@@ -129,6 +136,26 @@ void ParticleEffect::tick() {
             particles[i].posVec.y += particles[i].velVec.y*dt;
             particles[i].posVec.z += particles[i].velVec.z*dt;
             particles[i].duration -= dt;
+        }
+    }
+    } 
+    else {
+        for (int i = 0; i < particles.size(); i++) { 
+            if (particles[i].duration > 0) {
+
+             
+                for (int j = 0; j < forces.size(); j++) { 
+                    forces.at(j)->affectVelAt(particles[i].posVec, particles[i].velVec);
+                }
+                particles[i].velVec *= (friction);
+              //  particles[i].velVec *= (friction-0.002*pow(glm::length(particles[i].velVec),2));
+            if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
+
+                particles[i].duration -= dt;
+                particles[i].posVec.x += particles[i].velVec.x*dt;
+                particles[i].posVec.y += particles[i].velVec.y*dt;
+                particles[i].posVec.z += particles[i].velVec.z*dt;
+            }
         }
     }
     duration -= dt;
@@ -150,3 +177,6 @@ void ParticleEffect::setForce(glm::vec3 force_) {
     force = force_;
 }
 
+void ParticleEffect::setWorld(World *world_) {
+    world  = world_;
+}

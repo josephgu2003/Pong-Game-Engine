@@ -8,19 +8,23 @@
 #include "Fireworks.hpp"
 
 
+Fireworks::Fireworks() {
+    
+}
 Fireworks::Fireworks(glm::vec4 color_) {
     color = color_;
 }
 
 void Fireworks::setGraphics(Shader& shader) {
-    force = glm::vec3(0.0,-0.02,0.0);
+    force = glm::vec3(0.0,-0.05,0.0);
     firstUnusedTrail = numParticles;
+    particleRefresh = 0.03;
     numberSparks = numParticles;
     numParticles = numParticles * 50;
     for(int i = numberSparks; i < numParticles; i++) {
         particles.push_back(Particle());
     }
-    texture = loadTexture(TEX_GRADIENT);
+    AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;
     shader.init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
@@ -29,6 +33,11 @@ void Fireworks::setGraphics(Shader& shader) {
     shader.setFloat("size", size);
 }
 
+void Fireworks::setColor(glm::vec4 color_) {
+    color = color_;
+    graphics.getShader()->use();
+    graphics.getShader()->setVec4("color", color);
+}
 void Fireworks::tick() {
     if (actor != NULL) {
     posVec = actor->getPos();
@@ -57,12 +66,13 @@ void Fireworks::tick() {
             particles[i].velVec += force;
            particles[i].velVec *= friction;
         if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
-            if (timer > 0.02) {
+            if (timer > particleRefresh) {
                 particles[firstUnusedTrail].posVec = particles[i].posVec;
                 particles[firstUnusedTrail].velVec = glm::vec3(0.0);
+   
                 particles[firstUnusedTrail].duration = 0.5;
-                
-                particles[firstUnusedTrail].texture = texture;
+                 
+                particles[firstUnusedTrail].texture = texture.id;
                 if(firstUnusedTrail == (particles.size()-1)) {
                     firstUnusedTrail = numberSparks;
                 }
@@ -80,7 +90,10 @@ void Fireworks::tick() {
         }
     }
     duration -= dt;
-    if (timer > 0.02) timer = 0;
+    if (timer > particleRefresh) {
+      //  particleRefresh = 0.02 + 0.0002*(distribution(generator)%100);
+        timer = 0;
+    }
 }
 
 void Fireworks::refreshParticle() {
@@ -102,5 +115,5 @@ particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
     c -= 0.15;
 particles[firstUnused].velVec = 4.0f*glm::normalize(glm::vec3(a,b,c));
 particles[firstUnused].duration = 2.0f;
-particles[firstUnused].texture = texture;
+particles[firstUnused].texture = texture.id;
 }

@@ -9,7 +9,7 @@
 #include "Actor.hpp"
 #include "World.hpp"
 CombatComponent::CombatComponent() {
-    
+    type = COMBAT;
 }
 
 void CombatComponent::tick(Actor& actor, World& world) {

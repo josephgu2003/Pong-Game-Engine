@@ -13,6 +13,6 @@ Component::Component() {
     
 }
 
-//Component::~Component() {
-    
-//}
+CompType Component::getType() {
+    return type;
+}

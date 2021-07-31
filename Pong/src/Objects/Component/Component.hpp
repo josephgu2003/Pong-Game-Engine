@@ -13,10 +13,18 @@
 class Actor;
 class World;
 
+enum CompType {
+    GRAPHICS,
+    COMBAT,
+    PHYSICS
+};
+
 class Component {
+private:
+    CompType type;
 public:
     Component();
-//    virtual ~Component();
+    CompType getType();
     virtual void tick(Actor& actor, World& world) = 0;
 };
 

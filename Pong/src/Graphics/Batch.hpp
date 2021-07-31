@@ -26,7 +26,7 @@ struct InstanceBlockDescription {
     unsigned int instanceByteStride;
     unsigned int bytesToEnd;
 };
-
+ 
 class Batch {
     unsigned int maxVerticesSize, maxIndicesSize, maxInstancingByteSize;
     GLuint VAO;
@@ -42,6 +42,7 @@ class Batch {
     bool instancing;
     int bytesPerInstance;
     GLuint makeInstanceBuffer(VertexData* data_, int dataSize);
+    void configVAOAttribs();
 public:
     Batch();
     

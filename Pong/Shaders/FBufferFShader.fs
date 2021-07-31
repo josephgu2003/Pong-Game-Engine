@@ -7,7 +7,7 @@
 uniform sampler2D fbotexture1;
     uniform sampler2D noise;
 uniform bool blur;
-uniform float exposure;
+
 layout(std140) uniform StopWatch
 {
     float time;
@@ -48,13 +48,29 @@ uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.0
             sampled = texture(fbotexture, TexCoords).rgb;
         }
         
-        float gamma = 2.2;
+    
         vec3 bloomColor = texture(fbotexture1, TexCoords).rgb;
         sampled += bloomColor;
-      //  vec3 result = vec3(1.0) - exp(-sampled * exposure);
-        // also gamma correct while we're at it
-       // result = pow(result, vec3(1.0 / gamma));
-        FragColor = vec4(sampled, 1.0);
+        
+          float gamma = 2.2;
+      //  vec3 result = vec3(1.0) - exp(-sampled * exposure); //camera
+        
+   //     vec3 result = sampled / (sampled + vec3(1.0)); //reinhard simple
+        
+
+       vec3 result = sampled;
+        result *= 0.6;
+        float a = 2.51;
+        float b = 0.03;
+        float c = 2.43;
+        float d = 0.59;
+        float e = 0.14;
+        result = (result*(a*result+b))/(result*(c*result+d)+e); //approx aces
+        
+    //    vec3 result = sampled;
+        
+        result = pow(result, vec3(1.0 / gamma));
+        FragColor = vec4(result, 1.0);
       /**  vec4 sampled = texture(fbotexture, TexCoords);
         for(int i = 1; i < 5; ++i)
         {

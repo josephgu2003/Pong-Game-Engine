@@ -6,6 +6,9 @@
 //
 
 #include "Ability.hpp"
+#include "Game.hpp"
+#include "World.hpp"
+#include "Actor.hpp"
 
 
 Ability::Ability(){}

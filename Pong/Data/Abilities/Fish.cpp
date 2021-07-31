@@ -10,7 +10,7 @@
 
 Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
     quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
-    quad.texture = loadTexture(TEX_FISH);
+    AssetManager::loadTexture(TEX_FISH, &quad.texture, true);
     quad.alpha = 0.0;
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
@@ -25,7 +25,7 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
             quad.vertices.push_back(vertex);
         }
     }
-    
+       
     std::vector<GLuint> indices;
     for (int i = 0; i < 49; i++) {
         for (int j = 0; j < 49; j++) {

@@ -3,18 +3,12 @@
     
     out vec3 TexVec;
 
-layout(std140) uniform ViewProj
-{
-    mat4 viewMat;
 
-    mat4 projMat;
-};
-
-uniform mat4 viewMat2;
+uniform mat4 viewProjMat2;
 
     void main()
     {
         TexVec = aPos;
-        vec4 pos = projMat * viewMat2 * vec4(aPos.x , aPos.y, aPos.z, 1.0);
+        vec4 pos = viewProjMat2 * vec4(aPos.x , aPos.y, aPos.z, 1.0);
         gl_Position = pos.xyww;
     }

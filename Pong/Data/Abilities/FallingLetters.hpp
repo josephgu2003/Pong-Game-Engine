@@ -15,6 +15,8 @@
 
 class FallingLetters: public Ability{
   //  ParticleEffect* flowers = new ParticleEffect;
+    Force* force;
+    Force* up;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
     ~FallingLetters();

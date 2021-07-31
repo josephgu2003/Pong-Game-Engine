@@ -18,6 +18,7 @@
 #define TEX_SMOKES "Resources/Particles/Smokes/smoke000.jpg"
 #define TEX_DANCE "Resources/Textures/Dance/dance000.png"
 #define TEX_GRADIENT "Resources/Utility/radial.png"
+#define TEX_VORONOI "Resources/Utility/voronoi.png"
 
 #define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
@@ -39,13 +40,16 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <map>
-#include "Shader.hpp"
+#include "Shader.hpp" 
+#include "json.hpp"
+#include <memory>
 
 //loads textures and assets
 
-inline std::vector<Texture> loadedTextures;
-inline std::vector<Shader> loadedShaders;
 
+inline std::vector<std::unique_ptr<Model>> loadedModels;
+inline std::vector<Shader> loadedShaders;
+inline nlohmann::json dialogues;
 
 struct Character {
     GLuint id;
@@ -60,7 +64,6 @@ struct Frame {
     GLuint fvbo;
     GLuint frbo;
     GLuint ftexture;
-    Shader shader;
 };
 
 struct DoubleFrame {
@@ -70,217 +73,47 @@ struct DoubleFrame {
     GLuint frbo;
     GLuint ftexture0;
     GLuint ftexture1;
-    Shader shader;
 };
 
-static void loadShader() {
-    
-}
-static void loadNullTexture(int x, int y, GLuint* texture, GLenum format) {
-    int imageWidth = 0;
-    int imageHeight = 0;
-    int channels = 0;
-    
-    glGenTextures(1, texture);
-    glBindTexture(GL_TEXTURE_2D, *texture);
-    
-        glTexImage2D(GL_TEXTURE_2D, 0,format, x, y, 0, format, GL_UNSIGNED_BYTE, NULL);
-        glGenerateMipmap(GL_TEXTURE_2D);
-     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+struct DialogueTree;
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
+class Dialogue;
 
-static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters) {
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft))
-    {
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-        return -1;
-    }
-    FT_Face face;
-    if (FT_New_Face(ft, filePath, 0, &face))
-    {
-        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-        return -1;
-    }
-    FT_Set_Pixel_Sizes(face, 0, 192);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
-    for (unsigned char c = 0; c < 126; c++) {
-        if(FT_Load_Char(face, (char)c, FT_LOAD_RENDER)) {
-            std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
-            continue;
-        }
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-                GL_TEXTURE_2D,
-                0,
-                GL_RED,
-                face->glyph->bitmap.width,
-                face->glyph->bitmap.rows,
-                0,
-                GL_RED,
-                GL_UNSIGNED_BYTE,
-                face->glyph->bitmap.buffer
-            );
-        std::cout << glGetError();
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        Character character = {
-            texture, glm::ivec2(face->glyph->bitmap.width,face->glyph->bitmap.rows),glm::ivec2(face->glyph->bitmap_left,face->glyph->bitmap_top), (GLuint)face->glyph->advance.x
-        };
-        Characters.insert(std::pair<char,Character>(c, character));
-    }
-         FT_Done_Face(face);
-         FT_Done_FreeType(ft);
-    return 0;
-}
+namespace AssetManager {
+inline std::vector<Texture> loadedTextures;
 
-static void load3DTexture(const char* filePath, GLuint& id) {
-    
-    stbi_set_flip_vertically_on_load(1);
- 
-    for (int j = 0; j < loadedTextures.size(); j++) {
-        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-            std::cout << loadedTextures[j].path.data() << "\n";
-            id = loadedTextures[j].id;
-            return;
-        }
-    }
+enum Uniblock {
+    ViewProj, Lights, StopWatch
+};
+void bindShaderUniblock(Shader* shader, Uniblock block);
+void buildTree(DialogueTree*& tree, int i, int branchID);
 
-    std::vector<unsigned char*> imageDatas;
-    
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, id);
-    
-    int counter = 0;
-    
-    int imageWidth = 0;
-    int imageHeight = 0;
-    int channels = 0;
-    
- 
-    while(true) {
-        unsigned char* imageData;
-        std::string framePath("blah");
-        if(counter > 0) {
-            std::string number= std::to_string(counter);
-            if (counter < 10) {
-                number = "";
-                number += "00";
-                number += std::to_string(counter);
-            } else if (counter < 100) {
-                number = "";
-                number += "0";
-                number += std::to_string(counter);
-            }
-            std::string filePath_ = std::string(filePath);
-            framePath = filePath_.replace(filePath_.begin()+filePath_.find('.')-3,filePath_.begin()+filePath_.find('.'),number);;
-           
-        } else {
-            framePath = std::string(filePath);
-        }
-    counter++;
-        
+void loadDialogue(Dialogue* dialogue, int id);
+void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
 
-    imageData = stbi_load(framePath.c_str(), &imageWidth, &imageHeight, &channels, 0);
-        
-    if (imageData) {
-        imageDatas.push_back(imageData);
-    } else {
-        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
-        stbi_image_free(imageData);
-        break;
-    }
-    }
-    
-    GLenum format;
-           if (channels == 1)
-               format = GL_RED;
-           else if (channels == 3)
-               format = GL_RGB;
-           else if (channels == 4)
-               format = GL_RGBA;
-    
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0,GL_RGBA8, imageWidth, imageHeight, counter-1, 0, format, GL_UNSIGNED_BYTE, NULL);
-    
-   for(int i = 0; i < imageDatas.size(); i++) {
-        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, imageWidth, imageHeight, 1, format, GL_UNSIGNED_BYTE, imageDatas.at(i));
-    }
-   for(int i = 0; i < imageDatas.size(); i++) {
-       stbi_image_free(imageDatas.at(i));
-     }
-  //  imageDatas.clear();
-    // 460, 271.4, 233.4, 234
-    
-    glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
-    Texture newTex;
-    newTex.id = id;
-    newTex.path = filePath;
-    loadedTextures.push_back(newTex);
-    stbi_set_flip_vertically_on_load(1);
-    glBindTexture(GL_TEXTURE_2D_ARRAY,0);
-}
+int loadGlyphs(const char* filePath, std::map<char, Character>& Characters);
 
-static GLuint loadTexture(const char* filePath) {
- for (int j = 0; j < loadedTextures.size(); j++) {
-       if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-           std::cout << loadedTextures[j].path.data() << "already loaded" << "\n";
-           return loadedTextures[j].id;
-       }
-   }
-   GLuint texture;
-   int imageWidth = 0;
-   int imageHeight = 0;
-   int channels = 0;
-   unsigned char* imageData;
-   
-   glGenTextures(1, &texture);
-   glBindTexture(GL_TEXTURE_2D, texture);
-   
-   imageData = stbi_load(filePath, &imageWidth, &imageHeight, &channels, 0);
-   if (imageData) {
-       GLenum format;
-              if (channels == 1)
-                  format = GL_RED;
-              else if (channels == 3)
-                  format = GL_RGB;
-              else if (channels == 4)
-                  format = GL_RGBA;
-       glTexImage2D(GL_TEXTURE_2D, 0,format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
-       glGenerateMipmap(GL_TEXTURE_2D);
-   } else {
-       std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
-   }
-    
-   stbi_image_free(imageData);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-   glBindTexture(GL_TEXTURE_2D, 0);
-   Texture newTex;
-   newTex.id = texture;
-   newTex.path = filePath;
-   loadedTextures.push_back(newTex);
-   return texture;
-}
+void load3DTexture(const char* filePath, Texture* texture);
+
+void loadTexture(const char* filePath, Texture* texture, bool srgb);
+
+};
+
 
 static Model* loadModels(const char* filePath) {
-    Model* model = new Model(filePath);
+    for (int i = 0; i < loadedModels.size(); i++) {
+        std::string s(filePath);
+        if (s == loadedModels.at(i)->getFilepath()) {
+            Model* model = new Model();
+            *model = *loadedModels.at(i).get();
+            return model;
+        }
+    }
+    
+    std::unique_ptr<Model> model = std::make_unique<Model>(filePath);
+    Model* model2 = new Model();
+    *model2 = *model.get();
+    loadedModels.push_back(std::move(model));
    /** Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(filePath,  aiProcess_Triangulate | aiProcess_FlipUVs);
     
@@ -293,16 +126,18 @@ static Model* loadModels(const char* filePath) {
     model->setDirectory(filePath_.c_str());
     model->setMeshes(processNode(scene->mRootNode, scene));**/
 
-    return model;
+    return model2;
 }
 
-static void generateFramebuffer(Frame* frame, int x, int y) {
+static void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
     glGenFramebuffers(1, &frame->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
     
     glGenTextures(1, &frame->ftexture);
     glBindTexture(GL_TEXTURE_2D, frame->ftexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -342,7 +177,6 @@ static void generateFramebuffer(Frame* frame, int x, int y) {
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
     
-    frame->shader.init("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
 }
 
 static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
@@ -351,7 +185,7 @@ static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     
     glGenTextures(1, &frame->ftexture0);
     glBindTexture(GL_TEXTURE_2D, frame->ftexture0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -360,7 +194,7 @@ static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     
     glGenTextures(1, &frame->ftexture1);
     glBindTexture(GL_TEXTURE_2D, frame->ftexture1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -403,7 +237,7 @@ static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
     
-    frame->shader.init("Shaders/FBufferVShader.vs", "Shaders/FBufferFShader.fs");
+
 }
 
 static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
@@ -446,7 +280,6 @@ static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
     
-    frame->shader.init("Shaders/GIFFrameVShader.vs", "Shaders/GIFFrameFShader.fs");
 }
 
 /**static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene);

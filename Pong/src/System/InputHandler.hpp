@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 class InputHandler{ //detects input, lets game know
-    GLFWwindow* window;
+    GLFWwindow* window = NULL;
 public:
     InputHandler();
     ~InputHandler();

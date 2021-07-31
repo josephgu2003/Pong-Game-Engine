@@ -13,15 +13,14 @@ out vec3 fragPos;
 
 layout(std140) uniform ViewProj
 {
-    mat4 viewMat;
+    mat4 viewProjMat;
 
-    mat4 projMat;
 };
     
     void main()
     {
        // gl_Position =  projMat * viewMat * modelMat*vec4(size*aPos, 1.0);
-        gl_Position =  projMat * viewMat * modelMat * vec4(aPos, 1.0);
+        gl_Position =  viewProjMat * modelMat * vec4(aPos, 1.0);
         fragPos = vec3(modelMat*vec4(aPos, 1.0));
         TexCoords = TexCoords_;
         Normals = mat3(transpose(inverse(modelMat))) * Normals_;

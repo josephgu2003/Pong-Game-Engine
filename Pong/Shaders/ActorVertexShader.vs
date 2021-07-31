@@ -8,9 +8,7 @@ layout (location = 4) in vec3 Bitangent;
 
 layout(std140) uniform ViewProj
 {
-    mat4 viewMat;
-
-    mat4 projMat;
+    mat4 viewProjMat;
 };
 
 struct Light {
@@ -24,8 +22,12 @@ vec3 specular;
 
 
 out vec3 Normals;
+
+uniform float size;
     
     uniform mat4 modelMat;
+
+uniform mat3 transposeInverseModelMat;
 
 out VS_OUT {
     vec3 fragPos;
@@ -54,14 +56,16 @@ layout (std140) uniform Lights
 
     void main()
     {
-        gl_Position =  projMat * viewMat * modelMat * vec4(0.005*aPos.x , 0.005*aPos.y , 0.005*aPos.z, 1.0);
-        Normals = mat3(transpose(inverse(modelMat))) * Normals_;
+        vec3 Pos = size*aPos;
+     //   Pos = vec3(size*Pos);
+        gl_Position =  viewProjMat * modelMat * vec4(Pos, 1.0);
+        Normals = transposeInverseModelMat * Normals_;
         
         vec3 T = normalize(vec3(modelMat * vec4(Tangent,   0.0)));
            vec3 B = normalize(vec3(modelMat * vec4(Bitangent, 0.0)));
            vec3 N = normalize(vec3(modelMat * vec4(Normals_,    0.0)));
 
-        vs_out.fragPos =  vec3(modelMat*vec4(0.005*aPos, 1.0));
+        vs_out.fragPos =  vec3(modelMat*vec4(Pos, 1.0));
         vs_out.TexCoords = TexCoords_;
         
         mat3 TBN = transpose(mat3(T, B, N));

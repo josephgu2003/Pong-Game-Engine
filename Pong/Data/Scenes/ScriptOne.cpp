@@ -14,26 +14,30 @@
 void ScriptOne::tick() {
     switch (state) {
         case STATE_PASSIVE: {
+
             if (ball->biggestTarget != NULL) {
                 state = STATE_AGGRESSIVE;
+
             }
+
         };
             
         case STATE_AGGRESSIVE:
-            if (ball->biggestTarget != NULL) {
-          
+
+            if (ball->biggestTarget != nullptr) {
+
                 if (ballDir == STATE_TRACK)
         ball->turnTowards(ball->biggestTarget->getPos()-ball->getPos());
                 if (ballDir == STATE_OPPOSITE)
         ball->turnTowards(horizonDir);
                 
         if (step == 0) {
-            currentAbility = std::make_shared<Dialogue>(world, ball, 6.0);
+            currentAbility = std::make_shared<Dialogue>(world, ball, 6.0, 0);
            ball->abilityQ.push_back(currentAbility);
             step++;
             return;
-        }
-                
+        }  
+                 
         if (step == 1) {
             if (static_cast<Dialogue*>(currentAbility.get())->getActiveText() == "Figure: Look to the horizon.") {
                 ballDir = STATE_OPPOSITE;
@@ -52,7 +56,7 @@ void ScriptOne::tick() {
         }
                 if (step == 2) {
                     timer += (float)glfwGetTime();
-                    if (timer > 1.0) {
+                    if (timer > 2.0) {
                         timer = 0;
                         step++;
                         currentAbility2.reset();

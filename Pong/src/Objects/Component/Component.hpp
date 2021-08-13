@@ -14,13 +14,15 @@ class Actor;
 class World;
 
 enum CompType {
-    GRAPHICS,
     COMBAT,
-    PHYSICS
+    ANIM,
+    PHYSICS,
+    GRAPHICS
 };
 
 class Component {
 private:
+protected:
     CompType type;
 public:
     Component();

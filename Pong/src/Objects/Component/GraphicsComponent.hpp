@@ -22,18 +22,23 @@ class GraphicsComponent : public Component {
 protected:
     Shader* shader = NULL;
     std::unique_ptr<VertexData> vertexData;
+    Model* model = NULL;
     std::map<Texture*, FrameAndShader> animatedTextures;
     int activeData = -1;
 public:
     GraphicsComponent();
     
     GraphicsComponent(VertexData* vertexData_, Shader* shader_);
+    
+    void setModel(Model* model);
 
     void init(VertexData* vertexData_, Shader* shader_);
     
     virtual void tick(Actor& actor, World& world) override;
     
     VertexData* getVertexData();
+    
+    Model* getModel();
 
     Shader* getShader();
     

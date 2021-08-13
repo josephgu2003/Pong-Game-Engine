@@ -20,8 +20,10 @@
 #include <algorithm>
 #include "Shader.hpp"
 #include "Numberable.hpp"
+#include "GraphicsComponent.hpp"
 #include <memory>
 #include "VertexData.hpp"
+#include "Componentable.hpp"
 //something that can move and has a model
 
 class World;
@@ -40,7 +42,7 @@ class Actor : public Numberable, public Componentable {
     friend class Renderer;
 protected:
     World* world = NULL;
-
+    std::shared_ptr<GraphicsComponent> graphics = NULL;
     glm::mat4 modelMat = glm::mat4(1.0f);
     State state;
     glm::vec3 posVec;
@@ -48,12 +50,8 @@ protected:
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
 public:
-    Shader* shader = NULL;
-    std::shared_ptr<Ability> currentAbility;
-    Actor* biggestTarget = NULL;
-    Model* model = NULL;
-    std::vector<std::shared_ptr<Ability>> abilityQ;
-    std::shared_ptr<Ability> affecting;
+
+    
     glm::vec3 dirVec;
     glm::vec3 eulerAngles;
     float height = 0.0f;
@@ -63,14 +61,15 @@ public:
     
     Actor();
     ~Actor();
-
+     
+    void addComp(const std::shared_ptr<Component>& comp) override;
+    
     virtual void tick();
     virtual void init(int i);
     void setWorld(World* world_);
     World& getWorld();
     
     float getYaw();
-    
     
     glm::vec3 getPos();
     void setPos(glm::vec3 pos_);

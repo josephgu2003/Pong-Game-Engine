@@ -9,13 +9,17 @@
 
 
 GraphicsComponent::GraphicsComponent() {
-    type = GRAPHICS;
+    Component::type = GRAPHICS;
 }
 
 GraphicsComponent::GraphicsComponent(VertexData* vertexData_, Shader* shader_) {
-    type = GRAPHICS;
+    Component::type = GRAPHICS; 
     vertexData.reset(vertexData_);
     shader = shader_;
+}
+
+void GraphicsComponent::setModel(Model* model_) {
+    model = model_;
 }
 
 void GraphicsComponent::init(VertexData* vertexData_, Shader* shader_) {
@@ -31,7 +35,6 @@ void GraphicsComponent::tick(Actor &actor, World &world) {
     
 }
 
-
 Shader* GraphicsComponent::getShader() {
     return shader;
 }
@@ -40,4 +43,8 @@ void GraphicsComponent::animateTexture(Texture* texture, Shader* shader_) {
     FrameAndShader fas = {nullptr, nullptr};
     fas.shader = shader_;
     generateFramebuffer(fas.frame, &texture->id, texture->dimensions.x, texture->dimensions.y);
+}
+
+Model* GraphicsComponent::getModel() {
+    return model;
 }

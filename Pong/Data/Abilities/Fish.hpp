@@ -15,11 +15,12 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include "World.hpp"
-
+#include "Force.hpp"
 class Game;
 
 class Fish: public Ability {
     Quad quad;
+    Force* force= NULL;
     bool mode2 = false;
     glm::vec3 dirFired;
     void freeActor();

@@ -9,7 +9,7 @@
 #include "AssetManager.hpp"
 
 void Billow::loadModel() {
-    model = loadModels("Resources/Models/Flag/flag.obj");
+//    model = loadModels("Resources/Models/Flag/flag.obj");
 
   //  model->meshes.at(0).textures.push_back(texture);
 }

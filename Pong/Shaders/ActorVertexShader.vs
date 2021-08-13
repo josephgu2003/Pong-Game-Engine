@@ -5,6 +5,8 @@ layout (location = 1) in vec3 Normals_;
 layout (location = 2) in vec2 TexCoords_;
 layout (location = 3) in vec3 Tangent;
 layout (location = 4) in vec3 Bitangent;
+layout (location = 5) in ivec4 boneIDs;
+layout (location = 6) in vec4 boneWeights;
 
 layout(std140) uniform ViewProj
 {
@@ -20,14 +22,18 @@ vec3 specular;
     
 };
 
+const int MAX_BONES = 100;
+const int MAX_BONE_WEIGHTS = 4;
 
-out vec3 Normals;
+out vec3 Normals; 
 
 uniform float size;
     
     uniform mat4 modelMat;
 
 uniform mat3 transposeInverseModelMat;
+
+uniform mat4 boneOffsetMatrices[100];
 
 out VS_OUT {
     vec3 fragPos;
@@ -54,18 +60,52 @@ layout (std140) uniform Lights
     vec3 viewPos;
 };
 
+
+
     void main()
     {
-        vec3 Pos = size*aPos;
-     //   Pos = vec3(size*Pos);
-        gl_Position =  viewProjMat * modelMat * vec4(Pos, 1.0);
-        Normals = transposeInverseModelMat * Normals_;
+      //  vec4 Pos = vec4(0.0,0.0,0.0,1.0);
+       // vec4 newNormals = vec4(0.0,1.0,0.0,0.0);
+        mat4 transform = mat4(0.0);
+        int z = 0;
+       for (int i = 0; i < MAX_BONE_WEIGHTS; i++) {
+           if (boneIDs[i] == -1) {
+               continue;
+           }
+           if (boneIDs[i] >= MAX_BONES) {
+           //    Pos = vec4(aPos, 1.0);
+               transform = mat4(1.0);
+               break;
+           }
+           int x = int(boneIDs[i]);
+            mat4 offset = boneOffsetMatrices[x];
+           float weight = boneWeights[i];
+           
+           transform += offset*weight;
+
+        //   vec4 localPos = offset * vec4(aPos, 0.0);
+       //   vec4 localNorm = offset * vec4(Normals_, 1.0);
+       //   Pos += vec4(localPos) * weight;
+       //    newNormals += localNorm * weight;
+           z =1;
+        }
+        if (z ==0 ) {
+       //     Pos = vec4(aPos, 1.0);
+            transform = mat4(1.0);
+        }
+    
+     //   Pos = vec4(size*Pos.xyz, 1.0);
+        vec4 Pos = transform * vec4(aPos.xyz,1.0);
+         
+        gl_Position =  viewProjMat * modelMat * vec4(size*Pos.xyz,1.0);
         
+      //  Normals = transposeInverseModelMat * Normals_.xyz; //sus normals
+        Normals = Normals_.xyz;
         vec3 T = normalize(vec3(modelMat * vec4(Tangent,   0.0)));
            vec3 B = normalize(vec3(modelMat * vec4(Bitangent, 0.0)));
            vec3 N = normalize(vec3(modelMat * vec4(Normals_,    0.0)));
 
-        vs_out.fragPos =  vec3(modelMat*vec4(Pos, 1.0));
+        vs_out.fragPos =  vec3(modelMat*vec4(aPos,1.0));
         vs_out.TexCoords = TexCoords_;
         
         mat3 TBN = transpose(mat3(T, B, N));

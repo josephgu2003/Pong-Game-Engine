@@ -18,8 +18,6 @@ class World;
 
 class PhysicsComponent : public Component {
     friend class World;
-private:
-    CompType type = PHYSICS;
 protected:
     bool gravityOn = true;
     virtual void handleGravity(Actor& actor);

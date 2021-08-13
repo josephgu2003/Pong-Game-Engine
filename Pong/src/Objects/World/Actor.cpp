@@ -20,6 +20,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "CombatComponent.hpp"
+#include "AnimComponent.hpp"
 
 #define JUMP_SPEED 0.05f
 
@@ -31,9 +32,9 @@ Actor::Actor() {
         dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
         velVec = glm::vec3(0.0f, 0.0f, 0.0f);
         rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    eulerAngles = glm::vec3(0,-90,0);
+    eulerAngles = glm::vec3(0,0,0);
     distribution = std::uniform_int_distribution<int>(1,1000);
-}
+} 
 
 Actor::~Actor() {
 
@@ -75,11 +76,7 @@ World& Actor::getWorld() {
 
 
 void Actor::tick() {
-    if (components.size() > 0) {
-        for (int i = 0; i < components.size(); i++) {
-            components.at(i)->tick(*this, *world);
-        }
-    }
+    Componentable::tick();
     modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, posVec);
     glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
@@ -88,10 +85,10 @@ void Actor::tick() {
 glm::mat4 RotationMatrix = toMat4(MyQuaternion);
     modelMat = modelMat * RotationMatrix;
     
-    shader->setMat4("modelMat", modelMat);
+    graphics->getShader()->setMat4("modelMat", modelMat);
     
     glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    shader->setMat3("transposeInverseModelMat", transposeInverse);
+    graphics->getShader()->setMat3("transposeInverseModelMat", transposeInverse);
 }
 
 void Actor::setPos(glm::vec3 pos_) {
@@ -158,7 +155,7 @@ glm::vec3 Actor::getPos() {
 
 void Actor::init(int i ) {
     if (i == 0) {
-    model = loadModels(MOD_HOODY);
+    Model* model = loadModels(MOD_HOODY); 
    // model = loadModels(MOD_JUGGERNAUT);
     TextureMaps map;
     AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
@@ -166,7 +163,7 @@ void Actor::init(int i ) {
     for (int i = 0; i<model->getMeshes()->size(); i ++) {
         model->setMeshTexture(i, map);
     }
-    shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
     shader->use();
     shader->setFloat("size", 0.005);
     shader->setFloat("brightness", 3.0);
@@ -183,20 +180,26 @@ void Actor::init(int i ) {
     glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        CombatComponent* cc = new CombatComponent();
-        components.push_back(cc);
-        PhysicsComponent* pC = new PhysicsComponent(true);
-        components.push_back(pC);
-    }
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(true);
+        addComp(pc);
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>();
+        addComp(cc);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        addComp(gc);
+
+
+
+
+
+    } 
     if (i == 1) {
-        PhysicsComponent* pC = new PhysicsComponent(false);
-        components.push_back(pC);
         state = STATE_FLYING;
-        model = loadModels(MOD_HOODY);
+        Model* model = loadModels(MOD_HOODY);
       //  model = loadModels("Resources/Map/snow3.obj");
-        shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+        Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
-        shader->setFloat("size", 0.005);
+        shader->setFloat("size", 0.005); 
         shader->setFloat("brightness", 1.0);
         extern GLuint uboViewProj;
         glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
@@ -217,18 +220,115 @@ void Actor::init(int i ) {
         for (int i = 0; i<model->getMeshes()->size(); i ++) {
             model->setMeshTexture(i, map);
         }
-        CombatComponent* cc = new CombatComponent();
-        components.push_back(cc);
+
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>();
+        addComp(cc);
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(false);
+        addComp(pc);
+
+
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        addComp(gc);
+
+    }
+    if (i == 2) {
+        state = STATE_FLYING;
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>();
+
+        Model* model = new Model(MOD_BIRD, static_cast<AnimComponent*>(ac.get()));
+        
+        addComp(ac);
+      //  model = loadModels("Resources/Map/snow3.obj");
+        Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+        shader->use();
+        shader->setFloat("size", 0.005);  
+        shader->setFloat("brightness", 1.0);
+        extern GLuint uboViewProj;
+        glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+        GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+        
+        extern GLuint uboLights;  
+        glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+        GLuint lights  = glGetUniformBlockIndex(shader->ID, "Lights");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+        TextureMaps map;
+        AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true); 
+        AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
+        for (int i = 0; i<model->getMeshes()->size(); i ++) {
+            model->setMeshTexture(i, map);
+        }
+
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>();
+        addComp(cc);
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(false);
+        addComp(pc);
+        
+
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        addComp(gc);
+
+    }
+    if (i == 3) {
+        state = STATE_FLYING;
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>();
+
+        Model* model = new Model(MOD_VAMP, static_cast<AnimComponent*>(ac.get()));
+        
+        addComp(ac); 
+      //  model = loadModels("Resources/Map/snow3.obj");
+        Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+        shader->use();
+        shader->setFloat("size", 0.005);
+        shader->setFloat("brightness", 1.0);
+        extern GLuint uboViewProj;
+        glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+        GLuint viewproj  = glGetUniformBlockIndex(shader->ID, "ViewProj");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+        
+        extern GLuint uboLights;
+        glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+        GLuint lights  = glGetUniformBlockIndex(shader->ID, "Lights");
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+        TextureMaps map;
+        AssetManager::loadTexture("Resources/Models/Vampire/Vampire_diffuse.png", &map.diffuse, true);
+        AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
+        for (int i = 0; i<model->getMeshes()->size(); i ++) {
+            model->setMeshTexture(i, map);
+        }
+
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>();
+        addComp(cc);
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(false);
+        addComp(pc);
+        
+
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        addComp(gc);
+
     }
 }
 
 void Actor::setWorld(World* world_) {
     world = world_;
+    Componentable::init(this, world);
 }
 
 void Actor::setState(State state_) {
     state = state_;
 }
 State Actor::getState() {
-    return state;
+    return state; 
+}
+
+void Actor::addComp(const std::shared_ptr<Component>& comp) {
+    Componentable::addComp(comp);
+    if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }

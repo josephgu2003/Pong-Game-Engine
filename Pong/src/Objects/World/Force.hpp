@@ -37,6 +37,7 @@ public:
     Force(glm::vec3 pos_, float magnitude);
     void init(glm::vec3 pos_, float magnitude);
     void tick();
+    void setPos(const glm::vec3& pos);
     glm::vec3 getPos();
     void setActor(Actor* actor);
     void configureStraightForce(glm::vec3 dir, float gradientK_, ForceGradient g);

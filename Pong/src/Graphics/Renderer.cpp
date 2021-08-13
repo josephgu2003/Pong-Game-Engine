@@ -158,16 +158,20 @@ void Renderer::updateCamPos() {
 }
 
 void Renderer::loadActorData() {
-    std::vector<TBNVertex> actorVertices;
+    std::vector<TBNBWVertex> actorVertices;
     std::vector<GLuint> actorIndices;
+    
     for (int i = 0; i<world->getActorsCount(); i++) { // iterate over actors
-        std::vector<Mesh>* meshes = world->getNthActor(i)->model->getMeshes();
+        std::vector<Mesh>* meshes = (static_cast<GraphicsComponent*>(world->getNthActor(i)->getComp(GRAPHICS).get()))->getModel()->getMeshes();
+        
         for (int j = 0; j<meshes->size(); j++) { // iterate over meshes
             int marker = actorIndices.size();
             std::vector<std::shared_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
+            
             for (int c = 0; c < vertices.size(); c++) {
-                actorVertices.push_back(*static_cast<TBNVertex*>(vertices.at(c).get()));
+                actorVertices.push_back(*static_cast<TBNBWVertex*>(vertices.at(c).get()));
             }
+            
             actorIndices.insert(actorIndices.end(), meshes->at(j).getIndices().begin(), meshes->at(j).getIndices().end());
             for (marker; marker != actorIndices.size(); marker++) {
             actorIndices[marker] += actorVertices.size() - meshes->at(j).getVertices().size();
@@ -181,26 +185,32 @@ void Renderer::loadActorData() {
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, actorVertices.size() * sizeof(TBNVertex), actorVertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, actorVertices.size() * sizeof(TBNBWVertex), actorVertices.data(), GL_STATIC_DRAW);
      
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, actorIndices.size() * sizeof(GLuint), actorIndices.data(), GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)0);
     glEnableVertexAttribArray(0);
     
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(sizeof(glm::vec3)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(sizeof(glm::vec3)));
     glEnableVertexAttribArray(1);
     
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)));
     glEnableVertexAttribArray(2);
     
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
     glEnableVertexAttribArray(3);
     
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
     glEnableVertexAttribArray(4);
+    
+    glVertexAttribIPointer(5, MAX_BONE_WEIGHTS, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(5);
+    
+    glVertexAttribPointer(6, MAX_BONE_WEIGHTS, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(MAX_BONE_WEIGHTS*sizeof(int)+4*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(6);
     
     glBindVertexArray(0); 
 }
@@ -692,8 +702,9 @@ void Renderer::renderActors() {
     glBindVertexArray(VAO);
     int indiceCount = 0;
     for (int i = 0; i<world->getActorsCount(); i++) {
-    std::vector<Mesh>* meshes = world->getNthActor(i)->model->getMeshes();
-        Shader* shader = world->getNthActor(i)->shader;
+        GraphicsComponent* comp = static_cast<GraphicsComponent*>(world->getNthActor(i)->getComp(GRAPHICS).get());
+    std::vector<Mesh>* meshes = comp->getModel()->getMeshes();
+        Shader* shader = comp->getShader();
         shader->use();
         for (int j = 0; j < meshes->size(); j++) {
             TextureMaps& map = meshes->at(j).getTextures();

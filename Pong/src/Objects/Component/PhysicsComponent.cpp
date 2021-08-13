@@ -13,8 +13,8 @@
 
 PhysicsComponent::PhysicsComponent(bool gravityOn_) {
     gravityOn = gravityOn_;
-    type = PHYSICS;
-}
+    Component::type = PHYSICS;
+} 
 
 void PhysicsComponent::tick(Actor& actor, World& world) {
     if (actor.getState() == STATE_NORMAL)

@@ -7,11 +7,15 @@
 
 #include "Fish.hpp"
 #include "Game.hpp"
+#include "CombatComponent.hpp"
 
 Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
+    force = new Force();
+    force->init(glm::vec3(0,0,0), -0.2);
+    force->configureSuctionForce(0.5, FORCE_LINEAR);
     quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
     AssetManager::loadTexture(TEX_FISH, &quad.texture, true);
-    quad.alpha = 0.0;
+    quad.alpha = 0.0; 
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
             Vertex vertex;
@@ -25,7 +29,7 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
             quad.vertices.push_back(vertex);
         }
     }
-       
+        
     std::vector<GLuint> indices;
     for (int i = 0; i < 49; i++) {
         for (int j = 0; j < 49; j++) {
@@ -50,16 +54,19 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
 
 Fish::~Fish() {
     world->deleteQuad(&quad);
+    world->deleteForce(force);
 }
 
 void Fish::call(Game* game) {
     world->insertQuad(&quad);
+    world->insertForce(force);
     dirFired = actor->dirVec;
     mode2 = true;
     quad.force = 0.1f*dirFired;
 }
-
+ 
 void Fish::tick() {
+    force->setPos(quad.pos);
     if (step == 0) {
         if (duration > 16.5) {
             quad.alpha = (18.0-duration)/1.5;
@@ -69,7 +76,7 @@ void Fish::tick() {
             freeActor();
         }
     }
-    
+     
     if (step == 1) {
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
@@ -113,7 +120,7 @@ void Fish::tick() {
 }
 
 void Fish::freeActor() {
-    if (actor->affecting.get() != NULL) {
-    actor->affecting->dispel();
+    if ((static_pointer_cast<CombatComponent>(actor->getComp(COMBAT)))->getAffecting().get() != NULL) {
+        (static_pointer_cast<CombatComponent>(actor->getComp(COMBAT)))->getAffecting()->dispel();
     }
 }

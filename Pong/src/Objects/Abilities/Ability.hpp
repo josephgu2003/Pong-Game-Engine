@@ -9,7 +9,7 @@
 #define Ability_hpp
 
 #include <stdio.h>
-
+#include <memory>
 
 class Game;
 
@@ -21,7 +21,7 @@ class Ability {
 protected: 
     World* world = NULL;
     Actor* actor = NULL;
-    Actor* target = NULL;
+    std::shared_ptr<Actor> target;
     float duration;
     Game* game = NULL;
     int step;
@@ -29,7 +29,7 @@ public:
     bool on;
     Ability();
     Ability(World* world_, Actor* actor_, float duration_);
-    virtual void setTarget(Actor* actor_);
+    virtual void setTarget(const std::shared_ptr<Actor>& actor_);
     virtual ~Ability();
     virtual void call(Game* game) = 0;
     virtual void tick() = 0;

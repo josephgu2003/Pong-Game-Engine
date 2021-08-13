@@ -11,8 +11,8 @@
 #include "PhysicsComponent.hpp"
 
 PlayerHero::PlayerHero() : Actor::Actor() {
-    PhysicsComponent* pC = new PhysicsComponent(true);
-    components.push_back(pC);
+  //  std::shared_ptr<Component> comp = std::make_shared<PhysicsComponent>(true);
+    //addComp(comp);
 }
 
 PlayerHero::~PlayerHero() {

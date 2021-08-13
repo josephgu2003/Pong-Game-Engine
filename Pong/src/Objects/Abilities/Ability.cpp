@@ -9,7 +9,7 @@
 #include "Game.hpp"
 #include "World.hpp"
 #include "Actor.hpp"
-
+#include "CombatComponent.hpp"
 
 Ability::Ability(){}
 
@@ -25,13 +25,13 @@ Ability::~Ability() {
     
 }
 
-void Ability::setTarget(Actor* actor_) {
+void Ability::setTarget(const std::shared_ptr<Actor>& actor_) {
     target = actor_;
 }
 
 void Ability::dispel() {
     on = false;
-    (target->affecting).reset();
+    static_pointer_cast<CombatComponent>(target->getComp(COMBAT))->clearAffecting();
 }
 
 int Ability::getStep() {

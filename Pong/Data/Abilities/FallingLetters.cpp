@@ -34,13 +34,13 @@ void FallingLetters::call(Game* game) {
     target->setState(STATE_PARALYZED);
         force = new Force();
         force->init(glm::vec3(0,0,0), 1.25f);
-        force->setActor(target);
+        force->setActor(target.get());
         force->configureVortexForce(0.96, -0.1f, FORCE_LINEAR);
         world->insertForce(force); 
-                
+                 
         up = new Force();
-        up->init(glm::vec3(0,0,0), 0.1f);
-        up->setActor(target);
+        up->init(glm::vec3(0,0,0), 0.5f);
+        up->setActor(target.get());
         up->configureStraightForce(glm::vec3(0,1,0), -0.1f, FORCE_QUADRATIC);
          world->insertForce(up);
     } 

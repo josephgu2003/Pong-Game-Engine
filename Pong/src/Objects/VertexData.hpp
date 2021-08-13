@@ -17,6 +17,8 @@
 #include <vector>
 #include <string>
 
+#define MAX_BONE_WEIGHTS 4
+
 struct AnyVertex {};
 
 enum VertexType {
@@ -41,6 +43,22 @@ struct TBNVertex : AnyVertex {
     glm::vec2 TexCoords;
     glm::vec3 Tan;
     glm::vec3 BiTan;
+};
+
+struct TBNBWVertex : AnyVertex {
+    TBNBWVertex();
+    TBNBWVertex(    glm::vec3 Pos,
+              glm::vec3 Normal,
+              glm::vec2 TexCoords,
+              glm::vec3 Tan,
+              glm::vec3 BiTan, int* boneIDs, float* boneWeights);
+    glm::vec3 Pos;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+    glm::vec3 Tan;
+    glm::vec3 BiTan;
+    int boneIDs[MAX_BONE_WEIGHTS];
+    float boneWeights[MAX_BONE_WEIGHTS];
 };
 
 struct SimpleVertex : AnyVertex {

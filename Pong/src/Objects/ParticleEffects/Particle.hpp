@@ -65,7 +65,7 @@ public:
     
     virtual void setGraphics(Shader& shader) = 0;
     std::vector<Force*> forces;
-    void setActor(Actor* actor);
+    virtual void setActor(Actor* actor);
     void setWorld(World* world);
     float getSize();
     

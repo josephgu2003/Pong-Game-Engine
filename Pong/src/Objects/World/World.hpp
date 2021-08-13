@@ -21,6 +21,7 @@
 #include "DirectionalLight.hpp"
 #include "Numberable.hpp"
 #include "Force.hpp"
+#include <memory>
 #define ACTOR_UPDATE 0
 #define PARTICLE_UPDATE 1
 #define QUAD_UPDATE 2
@@ -54,7 +55,7 @@ struct Updates {
 class World : public Numberable {
     MapObject* map = NULL;
     Updates updates = {false,false,false,false, false};
-    std::vector <Actor*> allActorPtrs;
+    std::vector <std::shared_ptr<Actor>> allActorPtrs;
     std::vector <ParticleEffect*> allParticleEffects;
     std::vector <MapObject*> allMapObjPtrs;
     std::vector <Camera*> allCameraPtrs;
@@ -80,7 +81,7 @@ public:
     
     void insertCamera(Camera* camera);
     
-    void insertActor(Actor* actor);
+    void insertActor(const std::shared_ptr<Actor>& actor);
     
     void insertParticleEffect(ParticleEffect* particleEffect);
     void deleteParticleEffect(ParticleEffect* particleEffect);
@@ -97,7 +98,7 @@ public:
     MapObject& getMapObjs();
     
     int getActorsCount();
-    Actor* getNthActor(int n);
+    std::shared_ptr<Actor> getNthActor(int n);
     
     std::vector<std::string>* getSkyTextureFiles();
     float* getSkyVertices();
@@ -110,7 +111,7 @@ public:
     
     void setWeather(DirectionalLight dirLight, int sky);
     Weather getWeather();
-    
+     
     void tick();
     
     void informActorProximity(Actor& actor, float radius);

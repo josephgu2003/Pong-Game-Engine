@@ -17,6 +17,8 @@
 #include <thread>
 #include "json.hpp"
 #include "AssetManager.hpp"
+#include "CombatComponent.hpp"
+#include "AnimComponent.hpp"
  
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -31,39 +33,40 @@ void Game::initWindow() {
     
     window = glfwCreateWindow(1000, 650, "OpenGL", NULL, NULL);
     glfwMakeContextCurrent(window);
-}  
+}
   
 void Game::initObjects() {
-    
-    realRenderer = new Renderer;
+    ball = std::make_shared<Actor>();
+    pHero = std::make_shared<Actor>(); 
+    rHero = std::make_shared<Actor>();
+    tree = std::make_shared<Actor>();
+    realRenderer = new Renderer; 
      renderer = new Renderer;
     mist.init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
      inkGlyphs.init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
-    inkGlyphs.setActor(&pHero);
+    
      fireworks.init(0.2, glm::vec3(0,27,0), glm::vec3(0,0,0), 300, 20, 1000, 0.995);
     fireworks.setColor(glm::vec4(0.3,1.2,3.0,1.0));
      realMap.init(glm::vec3(0,-1.0,0));
      map.init(glm::vec3(0,-0.14,0));
-     ball.init(1);
-     ball.setID(1); 
-     numberables[1] = &ball;  
+     ball->init(2);
+     ball->setID(1);  
+     numberables[1] = ball.get(); 
     
-     pHero.init(0);
-     pHero.setID(2);
-     numberables[2] = &pHero; 
+     pHero->init(0);
+     pHero->setID(2);
+     numberables[2] = pHero.get();
         
-     pHero.setPos(glm::vec3(10,35,10));
-     ball.setPos(glm::vec3(0,0.5,0));
+     pHero->setPos(glm::vec3(10,35,10)); 
+     ball->setPos(glm::vec3(0,1.7,0));
     // billow.loadModel();
-     rHero.init(0); 
-    tree.init(0);
-    delete tree.model; 
-    tree.model = loadModels("Resources/Map/tree/source/tree1.fbx");
-    tree.shader->use();
-    tree.shader->setFloat("size", 0.005);
-   
+     rHero->init(0);
+    tree->setPos(glm::vec3(0,0.7,0));  
+    tree->init(3);
+     
      world.setID(0);
      numberables[0] = &world;
+    
 }
                    
 void Game::linkObjects() {      
@@ -75,16 +78,16 @@ void Game::linkObjects() {
          
     DirectionalLight   dl(glm::vec3(0.03,0.03,0.03),glm::vec3(0.08,0.08,0.08),glm::vec3(0.5,0.5,0.5),glm::vec3(-1,-1,0));
     world.setWeather(dl, 0);
-
-    camera.setActor(&pHero); 
+    inkGlyphs.setActor(pHero.get());
+    camera.setActor(pHero.get());
     realRenderer->setCamera(&camera);  
     renderer->setCamera(&camera);
-
+ 
     world.insertCamera(&camera);
-    world.insertActor(&pHero);
-    world.insertActor(&ball);
-    realWorld.insertActor(&tree);
-    realWorld.insertActor(&rHero);
+    world.insertActor(pHero);
+    world.insertActor(ball);
+    realWorld.insertActor(tree);
+    realWorld.insertActor(rHero);
        
      world.insertParticleEffect(&fireworks);   
      world.insertParticleEffect(&mist);
@@ -231,6 +234,7 @@ Game::Game() {
 
     script = new ScriptOne();
     script->init(this);
+    static_cast<AnimComponent*>(tree->getComp(ANIM).get())->playAnim("");
 }
 
 Game::~Game() {
@@ -271,20 +275,20 @@ void Game::tick() {
 
     if (scheme == 0) { 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        pHero.posDir(0.03);
-        rHero.posDir(0.03);
+        pHero->posDir(0.03);
+        rHero->posDir(0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        pHero.posDir(-0.03);
-        rHero.posDir(-0.03);
+        pHero->posDir(-0.03);
+        rHero->posDir(-0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        pHero.posRight(0.03);
-        rHero.posRight(0.03);
+        pHero->posRight(0.03);
+        rHero->posRight(0.03);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        pHero.posRight(-0.12);
-        rHero.posRight(-0.03);
+        pHero->posRight(-0.12);
+        rHero->posRight(-0.03);
     }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             activeRenderer->incExposure(0.01);
@@ -320,28 +324,31 @@ void Game::tick() {
         running = false;
     }
     
-    if(ball.abilityQ.size()>0) {
-        for(int i = 0; i < ball.abilityQ.size(); i++) {
-            ball.abilityQ.at(i)->call(this);
-            abilities.push_back(ball.abilityQ.at(i));
+    if((static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->QHasAbilities())) {
+        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getAbilityQ();
+        for(int i = 0; i < q.size(); i++) {
+            q.at(i)->call(this);
+            abilities.push_back(q.at(i));
         }
-        ball.abilityQ.clear();
+        q.clear();
     }
     
-    if(pHero.abilityQ.size()>0) {
-        for(int i = 0; i < pHero.abilityQ.size(); i++) {
-            pHero.abilityQ.at(i)->call(this);
-            abilities.push_back(pHero.abilityQ.at(i));
+    if(static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->QHasAbilities()) {
+        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->getAbilityQ();
+        for(int i = 0; i < q.size(); i++) {
+            q.at(i)->call(this);
+            abilities.push_back(q.at(i));
         }
-        pHero.abilityQ.clear();
+        q.clear();
     }
     
-    if(rHero.abilityQ.size()>0) {
-        for(int i = 0; i < rHero.abilityQ.size(); i++) {
-            rHero.abilityQ.at(i)->call(this);
-            abilities.push_back(rHero.abilityQ.at(i));
+    if(static_pointer_cast<CombatComponent>(rHero->getComp(COMBAT))->QHasAbilities()) {
+        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(rHero->getComp(COMBAT))->getAbilityQ();
+        for(int i = 0; i < q.size(); i++) {
+          q.at(i)->call(this);
+            abilities.push_back(q.at(i));
         }
-        rHero.abilityQ.clear();
+        q.clear();
     }
     
     if (abilities.size() > 0) {
@@ -354,7 +361,7 @@ void Game::tick() {
          
     }
 
-  //  script->tick();
+  script->tick();
 
     world.tick();
 
@@ -443,26 +450,27 @@ int Game::processInput(int key, int action, int mods) {
     
     if (scheme == 0) {
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        pHero.jump();
-        rHero.jump();
+        pHero->jump();
+        rHero->jump();
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&world, &pHero, 6);
+        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&world, pHero.get(), 6);
 
-        if (pHero.biggestTarget != NULL)
-            letters->setTarget(pHero.biggestTarget);
+        if (static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->hasTarget()) {
+            letters->setTarget(static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->getBigTarget());
+        } 
         letters->call(this);
         abilities.push_back(letters);
     }
         if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
             std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
-            std::shared_ptr<Ability> speech = std::make_shared<Speech>(&world, &pHero, 6.0, lines);
+            std::shared_ptr<Ability> speech = std::make_shared<Speech>(&world, pHero.get(), 6.0, lines);
             abilities.push_back(speech);
             speech->call(this);
         }  
         
         if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-            std::shared_ptr<Ability> fish = std::make_shared<Fish>(&world, &pHero, 18.0);
+            std::shared_ptr<Ability> fish = std::make_shared<Fish>(&world, pHero.get(), 18.0);
             abilities.push_back(fish);
             fish->call(this);
         }
@@ -471,13 +479,13 @@ int Game::processInput(int key, int action, int mods) {
             if (activeRenderer == renderer) {
             activeRenderer = realRenderer;
                 activeRenderer->updateLights();
-            camera.setActor(&rHero); 
+            camera.setActor(rHero.get());
                 return 0;
             }
             if (activeRenderer == realRenderer) {
             activeRenderer = renderer;
                 activeRenderer->updateLights();
-            camera.setActor(&pHero);
+            camera.setActor(pHero.get());
                 return 0;
             }
         }
@@ -486,15 +494,15 @@ int Game::processInput(int key, int action, int mods) {
             int newScheme = (-1)*(scheme-2);
             setActionScheme(newScheme); 
             if (activeSketch.get() == NULL) {
-            std::shared_ptr<Ability> sketch = std::make_shared<Sketch>(&world, &pHero, 6, ftexture);
+            std::shared_ptr<Ability> sketch = std::make_shared<Sketch>(&world, pHero.get(), 6, ftexture);
             activeSketch = static_pointer_cast<Sketch>(sketch);
             abilities.push_back(sketch);
             sketch->call(this);
             }
-            return 0;
-        }
+            return 0; 
+        }    
         
-        if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+        if (key == GLFW_KEY_R && action == GLFW_PRESS) { 
             glBindTexture(GL_TEXTURE_2D, ftexture);
             glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGB, GL_UNSIGNED_BYTE, blank);
          //   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGBA, GL_UNSIGNED_BYTE, blank);
@@ -503,8 +511,8 @@ int Game::processInput(int key, int action, int mods) {
             abilities.erase(std::remove(abilities.begin(), abilities.end(), activeSketch));
             activeSketch.reset();
             }
-        }
-        
+        }  
+         
         if (key == GLFW_KEY_T && action == GLFW_PRESS) {
             if (activeSketch.get() != NULL)
             activeSketch->call2();

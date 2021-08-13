@@ -31,16 +31,16 @@ void InkEffect::refreshParticle() {
     glm::vec3 newPos = glm::vec3(0.0);
 
     int count = 0;
-    for (int i = 0; i < actor->model->getMeshes()->size(); i++) {
-        count += actor->model->getMeshes()->at(i).getVertices().size();
+    for (int i = 0; i < model->getMeshes()->size(); i++) {
+        count += model->getMeshes()->at(i).getVertices().size();
     }
     int v = 0.01*count*(distribution(generator)%100);
     int count2 = 0;
-    for (int i = 0; i < actor->model->getMeshes()->size(); i++) {
-        if (v >= actor->model->getMeshes()->at(i).getVertices().size()+count2) {
-            count2 += actor->model->getMeshes()->at(i).getVertices().size();
+    for (int i = 0; i < model->getMeshes()->size(); i++) {
+        if (v >= model->getMeshes()->at(i).getVertices().size()+count2) {
+            count2 += model->getMeshes()->at(i).getVertices().size();
         } else {
-            newPos =  static_cast<TBNVertex*>(actor->model-> getMeshes()->at(i).getVertices().at(v-count2).get())->Pos;
+            newPos =  static_cast<TBNVertex*>(model-> getMeshes()->at(i).getVertices().at(v-count2).get())->Pos;
             glm::mat3 modelMat = glm::mat3(1.0f);
             modelMat = glm::rotate(modelMat, glm::radians(-90.0f+actor->getYaw()));
             glm::vec3 vec = glm::vec3(newPos.x, newPos.z, 1.0); 
@@ -60,3 +60,9 @@ particles[firstUnused].velVec = (glm::vec3(a-0.025,b-0.025,c-0.025));
 particles[firstUnused].duration = 5.0f;
 particles[firstUnused].texture = texture.id;
 }
+
+void InkEffect::setActor(Actor *actor_) {
+    actor = actor_;
+    model = (static_cast<GraphicsComponent*>(actor->getComp(GRAPHICS).get())->getModel());
+}
+

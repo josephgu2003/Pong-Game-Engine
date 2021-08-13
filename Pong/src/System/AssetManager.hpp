@@ -8,7 +8,7 @@
 #ifndef AssetManager_hpp
 #define AssetManager_hpp
 
-#define TEX_ENERGY "Resources/Particles/aura.png"
+#define TEX_ENERGY "Resources/Particles/aura.png" 
 #define TEX_PEACH "Resources/Particles/rosa copy.png"
 #define TEX_FIERY "Resources/Particles/download.png"
 #define TEX_EMPTY "Resources/Particles/BLANK_ICON3.png"
@@ -22,11 +22,14 @@
 
 #define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
-#define MOD_HOODY "Resources/Models/journey7.obj"
+#define MOD_HOODY "Resources/Models/journey7.obj" 
+#define MOD_WOLF "Resources/Models/wolf/wolf.fbx" 
+#define MOD_BIRD "Resources/Models/bird/fly.fbx" 
+#define MOD_VAMP "Resources/Models/Vampire/dancing_vampire.dae"
 
 #define MOD_JUGGERNAUT_HBOX 0.5,-0.5,0.75,0.25,0.5,-0.5
 
-#include <GL/glew.h>
+#include <GL/glew.h> 
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>

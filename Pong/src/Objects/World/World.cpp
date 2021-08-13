@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "AssetManager.hpp"
+#include "CombatComponent.hpp"
 
 World::World() {
     float skyVerticesCopy[] = {
@@ -78,11 +79,12 @@ void World::insertCamera(Camera* camera) {
     allCameraPtrs.push_back(camera);
 }
 
-void World::insertActor(Actor* actor) {
-    allActorPtrs.push_back(actor);
+void World::insertActor(const std::shared_ptr<Actor>& actor) {
+    std::shared_ptr<Actor> p = actor;
+    allActorPtrs.push_back(std::move(p));
     actor -> setWorld(this);
 }
-
+ 
 void World::insertParticleEffect(ParticleEffect* particleEffect) {
     allParticleEffects.push_back(particleEffect);
     particleEffect->setWorld(this);
@@ -120,7 +122,7 @@ int World::getActorsCount() {
     return allActorPtrs.size();
 }
 
-Actor* World::getNthActor(int n) {
+std::shared_ptr<Actor> World::getNthActor(int n) {
     return allActorPtrs[n];
 }
 
@@ -155,7 +157,7 @@ void World::updateCleared(int i) {
     if (i == 4)
     updates.lightingUpdate = false;
 }
-
+ 
 void World::setWeather(DirectionalLight dirLight_, int sky_) {
     weather.dirLight = dirLight_;
     if (sky_ == 0) {
@@ -216,17 +218,18 @@ void World::tick() {
 }
 
 void World::informActorProximity(Actor& actor, float radius) {
-    
-    std::vector<Actor*> allOtherActors = allActorPtrs;
-    allOtherActors.erase(std::remove(allOtherActors.begin(), allOtherActors.end(), &actor));
-    for (int i = 0; i < allOtherActors.size(); i++) {
-        float distance = glm::length(actor.getPos()-allOtherActors.at(i)->getPos());
+
+
+    for (int i = 0; i < allActorPtrs.size(); i++) {
+        if (allActorPtrs.at(i).get() == &actor) continue;
+        float distance = glm::length(actor.getPos()-allActorPtrs.at(i)->getPos());
         if (distance <= radius) {
-            actor.biggestTarget = allOtherActors.at(i);
+            std::shared_ptr<Actor> t = (allActorPtrs.at(i));
+            static_pointer_cast<CombatComponent>(actor.getComp(COMBAT))->setBigTarget(t);
         }
     }
-}
-
+} 
+ 
 bool World::informParticlesForce(ParticleEffect* effect) {
     glm::vec3 uniformstraightforce = glm::vec3(0);
     bool b = false;

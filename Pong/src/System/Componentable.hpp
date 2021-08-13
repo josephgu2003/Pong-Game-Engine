@@ -15,10 +15,16 @@
 
 class Componentable {
 private:
+    Actor* actor= NULL;
+    World* world = NULL;
     std::vector<std::shared_ptr<Component>> components;
 public:
-    void addComp(std::shared_ptr<Component> comp);
-    void deleteComp(CompType type);
+    Componentable();
+    void init(Actor* actor, World* world);
+    void tick();
+    virtual void addComp(const std::shared_ptr<Component>& comp);
+    virtual void deleteComp(CompType type);
+    std::shared_ptr<Component> getComp(CompType type);
 };
 
 #endif /* Componentable_hpp */

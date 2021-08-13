@@ -37,7 +37,6 @@ void Force::affectVelAt(glm::vec3& point, glm::vec3& vel) {
             force = glm::normalize(pos - point);
             break;
         case FORCE_VORTEX:
- 
             force = (shear)*glm::normalize(pos - point)+(1.0f-shear)* glm::normalize(glm::cross(glm::vec3(0,1,0),glm::normalize(pos - point)));
             break; 
                  
@@ -89,6 +88,10 @@ void Force::tick() {
     if (actor.get() != NULL) {
         pos = actor->getPos();
     }
+}
+
+void Force::setPos(const glm::vec3& pos_) {
+    pos = pos_;
 }
 glm::vec3 Force::getPos() {
     return pos;

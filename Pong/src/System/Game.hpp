@@ -66,14 +66,14 @@ InputHandler inputHandler;
     std::shared_ptr<Sketch> activeSketch;
     Dialogue* activeDialogue = NULL;
     
-    Actor ball;
-    PlayerHero pHero;
-    PlayerHero rHero;
+    std::shared_ptr<Actor> ball;
+    std::shared_ptr<Actor> pHero;
+    std::shared_ptr<Actor> rHero;
     InkEffect inkGlyphs;
     Fireworks fireworks;
     MapObject map;
     MapObject realMap;
-    Actor tree;
+    std::shared_ptr<Actor> tree;
     Mist mist;
     
     ScriptOne* script;

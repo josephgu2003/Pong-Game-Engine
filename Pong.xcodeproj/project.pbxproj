@@ -43,6 +43,7 @@
 		5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4882651EEB8006EA749 /* ice.jpeg */; };
 		5D670C9C2684D903000E179C /* MapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9A2684D903000E179C /* MapObject.cpp */; };
 		5D670C9F2684D90C000E179C /* Sky.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9D2684D90C000E179C /* Sky.cpp */; };
+		5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D68FE6C26E8433600E572E5 /* JsonManager.cpp */; };
 		5D6D627326AC8B10004E43CB /* SaveFile.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D6D627226AC8B10004E43CB /* SaveFile.json */; };
 		5D6E82982698A0E3003A1059 /* ScriptOne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E82962698A0E3003A1059 /* ScriptOne.cpp */; };
 		5D6E829B2698A1CE003A1059 /* Numberable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E82992698A1CE003A1059 /* Numberable.cpp */; };
@@ -54,9 +55,18 @@
 		5D7F67272671880200B70DA7 /* tmp6rxwr4cq in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F671F2671880100B70DA7 /* tmp6rxwr4cq */; };
 		5D7F67282671880200B70DA7 /* tmpz0kzbith in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F67202671880200B70DA7 /* tmpz0kzbith */; };
 		5D7F672C26723A5200B70DA7 /* lambert1_baseColor.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */; };
+		5D8A7CF626EABBDF00BD8BDB /* NameComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */; };
+		5D8A7CF926EC212400BD8BDB /* LifeComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7CF726EC212400BD8BDB /* LifeComponent.cpp */; };
+		5D8A7CFC26ECEA1700BD8BDB /* AbilityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7CFA26ECEA1700BD8BDB /* AbilityManager.cpp */; };
+		5D8A7CFF26ECEB3E00BD8BDB /* Subject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7CFD26ECEB3E00BD8BDB /* Subject.cpp */; };
+		5D8A7D0226ECEB4B00BD8BDB /* Observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0026ECEB4B00BD8BDB /* Observer.cpp */; };
+		5D8A7D0826F032D700BD8BDB /* RunicLetters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0626F032D700BD8BDB /* RunicLetters.cpp */; };
+		5D8A7D0A26F0FAAA00BD8BDB /* 3DParticle.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0926F0FAAA00BD8BDB /* 3DParticle.vs */; };
+		5D8A7D0C26F0FCAF00BD8BDB /* GenericDiffuse.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0B26F0FCAF00BD8BDB /* GenericDiffuse.fs */; };
+		5D8A7D0E26F2853F00BD8BDB /* Simple2D.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0D26F2853E00BD8BDB /* Simple2D.vs */; };
+		5D8A7D1126F3E5C900BD8BDB /* HealthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */; };
 		5D9122C52638BCFA0045937F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C4155263794AD005F64D0 /* OpenGL.framework */; };
 		5D98F6572688053E0075552B /* SmokeFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F6552688053E0075552B /* SmokeFShader.fs */; };
-		5D98F6582688053E0075552B /* SmokeVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F6562688053E0075552B /* SmokeVShader.vs */; };
 		5D98F65B2688059A0075552B /* MistVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F6592688059A0075552B /* MistVShader.vs */; };
 		5D98F65C2688059A0075552B /* MistFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F65A2688059A0075552B /* MistFShader.fs */; };
 		5D98F6BC268890130075552B /* Untitled_Artwork.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F6BB268890130075552B /* Untitled_Artwork.jpeg */; };
@@ -84,7 +94,6 @@
 		5DA7E28D267E6D34008845AA /* ActorVertexShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E274267E6D33008845AA /* ActorVertexShader.vs */; };
 		5DA7E294267E6D34008845AA /* SkyFragmentShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E27B267E6D33008845AA /* SkyFragmentShader.fs */; };
 		5DA7E295267E6D34008845AA /* TextFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E27C267E6D33008845AA /* TextFShader.fs */; };
-		5DA7E296267E6D34008845AA /* FBufferVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E27D267E6D33008845AA /* FBufferVShader.vs */; };
 		5DA7E297267E6D34008845AA /* SkyVertexShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E27E267E6D33008845AA /* SkyVertexShader.vs */; };
 		5DA7E29E267E6D34008845AA /* SketchFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E286267E6D33008845AA /* SketchFShader.fs */; };
 		5DA7E29F267E6D34008845AA /* ActorFragmentShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DA7E287267E6D33008845AA /* ActorFragmentShader.fs */; };
@@ -245,7 +254,6 @@
 		5DAC32CE26B06B1000E54B4B /* snowtest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC32CC26B06B1000E54B4B /* snowtest.mtl */; };
 		5DAC32CF26B06B1000E54B4B /* snowtest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC32CD26B06B1000E54B4B /* snowtest.obj */; };
 		5DAC32D226B097D400E54B4B /* Force.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DAC32D026B097D400E54B4B /* Force.cpp */; };
-		5DAC32D426B0AC2B00E54B4B /* TextVShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC32D326B0AC2B00E54B4B /* TextVShader.vs */; };
 		5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */; };
 		5DCDDAC126A223870031FCC9 /* InstanceData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCDDABF26A223870031FCC9 /* InstanceData.cpp */; };
 		5DCDDACC26A3A3A50031FCC9 /* journey7.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */; };
@@ -362,6 +370,8 @@
 		5D670C9B2684D903000E179C /* MapObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MapObject.hpp; sourceTree = "<group>"; };
 		5D670C9D2684D90C000E179C /* Sky.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sky.cpp; sourceTree = "<group>"; };
 		5D670C9E2684D90C000E179C /* Sky.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sky.hpp; sourceTree = "<group>"; };
+		5D68FE6C26E8433600E572E5 /* JsonManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JsonManager.cpp; sourceTree = "<group>"; };
+		5D68FE6D26E8433700E572E5 /* JsonManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = JsonManager.hpp; sourceTree = "<group>"; };
 		5D6D627226AC8B10004E43CB /* SaveFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = SaveFile.json; path = Pong/Data/SaveFile.json; sourceTree = SOURCE_ROOT; };
 		5D6E82962698A0E3003A1059 /* ScriptOne.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptOne.cpp; sourceTree = "<group>"; };
 		5D6E82972698A0E3003A1059 /* ScriptOne.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptOne.hpp; sourceTree = "<group>"; };
@@ -378,9 +388,25 @@
 		5D7F672B26723A5200B70DA7 /* lambert1_baseColor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lambert1_baseColor.png; path = textures/lambert1_baseColor.png; sourceTree = "<group>"; };
 		5D84C740267D2E2D00604793 /* ikpMP3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = ikpMP3.dylib; path = ../../ponglib/ikpMP3.dylib; sourceTree = "<group>"; };
 		5D84C743267D2E3900604793 /* libirrklang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libirrklang.dylib; path = ../../ponglib/libirrklang.dylib; sourceTree = "<group>"; };
+		5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NameComponent.cpp; sourceTree = "<group>"; };
+		5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NameComponent.hpp; sourceTree = "<group>"; };
+		5D8A7CF726EC212400BD8BDB /* LifeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LifeComponent.cpp; sourceTree = "<group>"; };
+		5D8A7CF826EC212400BD8BDB /* LifeComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LifeComponent.hpp; sourceTree = "<group>"; };
+		5D8A7CFA26ECEA1700BD8BDB /* AbilityManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AbilityManager.cpp; sourceTree = "<group>"; };
+		5D8A7CFB26ECEA1700BD8BDB /* AbilityManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AbilityManager.hpp; sourceTree = "<group>"; };
+		5D8A7CFD26ECEB3E00BD8BDB /* Subject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Subject.cpp; sourceTree = "<group>"; };
+		5D8A7CFE26ECEB3E00BD8BDB /* Subject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Subject.hpp; sourceTree = "<group>"; };
+		5D8A7D0026ECEB4B00BD8BDB /* Observer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Observer.cpp; sourceTree = "<group>"; };
+		5D8A7D0126ECEB4B00BD8BDB /* Observer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Observer.hpp; sourceTree = "<group>"; };
+		5D8A7D0626F032D700BD8BDB /* RunicLetters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RunicLetters.cpp; sourceTree = "<group>"; };
+		5D8A7D0726F032D700BD8BDB /* RunicLetters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RunicLetters.hpp; sourceTree = "<group>"; };
+		5D8A7D0926F0FAAA00BD8BDB /* 3DParticle.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 3DParticle.vs; sourceTree = "<group>"; };
+		5D8A7D0B26F0FCAF00BD8BDB /* GenericDiffuse.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GenericDiffuse.fs; sourceTree = "<group>"; };
+		5D8A7D0D26F2853E00BD8BDB /* Simple2D.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Simple2D.vs; sourceTree = "<group>"; };
+		5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HealthMeter.cpp; sourceTree = "<group>"; };
+		5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HealthMeter.hpp; sourceTree = "<group>"; };
 		5D9122B22638BB9A0045937F /* Pong.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pong.entitlements; sourceTree = "<group>"; };
 		5D98F6552688053E0075552B /* SmokeFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SmokeFShader.fs; sourceTree = "<group>"; };
-		5D98F6562688053E0075552B /* SmokeVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SmokeVShader.vs; sourceTree = "<group>"; };
 		5D98F6592688059A0075552B /* MistVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MistVShader.vs; sourceTree = "<group>"; };
 		5D98F65A2688059A0075552B /* MistFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MistFShader.fs; sourceTree = "<group>"; };
 		5D98F6BB268890130075552B /* Untitled_Artwork.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Untitled_Artwork.jpeg; sourceTree = "<group>"; };
@@ -411,7 +437,6 @@
 		5DA7E274267E6D33008845AA /* ActorVertexShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ActorVertexShader.vs; sourceTree = "<group>"; };
 		5DA7E27B267E6D33008845AA /* SkyFragmentShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SkyFragmentShader.fs; sourceTree = "<group>"; };
 		5DA7E27C267E6D33008845AA /* TextFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextFShader.fs; sourceTree = "<group>"; };
-		5DA7E27D267E6D33008845AA /* FBufferVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FBufferVShader.vs; sourceTree = "<group>"; };
 		5DA7E27E267E6D33008845AA /* SkyVertexShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SkyVertexShader.vs; sourceTree = "<group>"; };
 		5DA7E286267E6D33008845AA /* SketchFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SketchFShader.fs; sourceTree = "<group>"; };
 		5DA7E287267E6D33008845AA /* ActorFragmentShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ActorFragmentShader.fs; sourceTree = "<group>"; };
@@ -587,7 +612,6 @@
 		5DAC32CD26B06B1000E54B4B /* snowtest.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = snowtest.obj; sourceTree = "<group>"; };
 		5DAC32D026B097D400E54B4B /* Force.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Force.cpp; sourceTree = "<group>"; };
 		5DAC32D126B097D400E54B4B /* Force.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Force.hpp; sourceTree = "<group>"; };
-		5DAC32D326B0AC2B00E54B4B /* TextVShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextVShader.vs; sourceTree = "<group>"; };
 		5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexData.cpp; sourceTree = "<group>"; };
 		5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexData.hpp; sourceTree = "<group>"; };
 		5DCDDABF26A223870031FCC9 /* InstanceData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InstanceData.cpp; sourceTree = "<group>"; };
@@ -790,6 +814,10 @@
 				5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */,
 				5DCEA18C26893D4E00A6F99F /* GraphicsComponent.hpp */,
 				5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */,
+				5D8A7CF726EC212400BD8BDB /* LifeComponent.cpp */,
+				5D8A7CF826EC212400BD8BDB /* LifeComponent.hpp */,
+				5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */,
+				5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */,
 				5D2E2D82267BB544007ADBF3 /* CombatComponent.hpp */,
 				5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */,
 				5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */,
@@ -810,8 +838,12 @@
 				5D670C9B2684D903000E179C /* MapObject.hpp */,
 				5DA67C292641A482005A7E74 /* Actor.hpp */,
 				5DA9759F268572F0008252BA /* DirectionalLight.cpp */,
+				5DA9BDE226B57DF100C1BAEC /* Componentable.hpp */,
 				5DAC32D026B097D400E54B4B /* Force.cpp */,
 				5DAC32D126B097D400E54B4B /* Force.hpp */,
+				5DA9BDE126B57DF100C1BAEC /* Componentable.cpp */,
+				5D6E82992698A1CE003A1059 /* Numberable.cpp */,
+				5D6E829A2698A1CE003A1059 /* Numberable.hpp */,
 				5DA975A0268572F0008252BA /* DirectionalLight.hpp */,
 				5DF7A2372640E0FD004F05E2 /* World.hpp */,
 				5D3E7088264308C10071115A /* Camera.hpp */,
@@ -893,6 +925,54 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		5D68FE6726E80E3D00E572E5 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				5D68FE6B26E8201300E572E5 /* RenderData */,
+				5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */,
+				5DF82DA72680D14800F4D177 /* uiPiece.hpp */,
+				5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */,
+				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
+				5DA7E2AC26801683008845AA /* Batch.hpp */,
+				5DEC19B7264B69B30001ABAE /* stb_image.h */,
+				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
+				5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */,
+				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
+				5DA7E2AB26801683008845AA /* Batch.cpp */,
+				5DF82DA32680CBA800F4D177 /* uiLayout.cpp */,
+				5D426581263C8E7B0026C24D /* Shader.hpp */,
+				5DEC19B9264B69E20001ABAE /* stb_image.c */,
+				5DF82DA42680CBA800F4D177 /* uiLayout.hpp */,
+				5DF82DA62680D14800F4D177 /* uiPiece.cpp */,
+				5D426580263C8E7B0026C24D /* Shader.cpp */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
+		5D68FE6826E80E8600E572E5 /* Combat */ = {
+			isa = PBXGroup;
+			children = (
+				5D391B8C268FDD1A0092623D /* Script.hpp */,
+				5D391B8E268FE01C0092623D /* Script.cpp */,
+				5DEE582D2667EE9B0080446C /* Abilities */,
+			);
+			path = Combat;
+			sourceTree = "<group>";
+		};
+		5D68FE6B26E8201300E572E5 /* RenderData */ = {
+			isa = PBXGroup;
+			children = (
+				5DCDDABF26A223870031FCC9 /* InstanceData.cpp */,
+				5DCDDAC026A223870031FCC9 /* InstanceData.hpp */,
+				5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */,
+				5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */,
+				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
+				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
+				5DA9BE6726C0413D00C1BAEC /* Models */,
+			);
+			path = RenderData;
+			sourceTree = "<group>";
+		};
 		5D84C746267D2EEB00604793 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -947,20 +1027,20 @@
 				5D391B7A268E13DA0092623D /* GIFFrameFShader.fs */,
 				5D25EC432691154C008BD594 /* ColorPartF.fs */,
 				5D25EC4726922AC8008BD594 /* ColorPartG.gs */,
+				5D8A7D0926F0FAAA00BD8BDB /* 3DParticle.vs */,
 				5D37512026A7624000BB8BC9 /* WaterFragmentShader.fs */,
 				5D37512126A7624000BB8BC9 /* WaterVertexShader.vs */,
+				5D8A7D0B26F0FCAF00BD8BDB /* GenericDiffuse.fs */,
 				5D25EC442691154C008BD594 /* ColorPartV.vs */,
 				5D98F65A2688059A0075552B /* MistFShader.fs */,
-				5DAC32D326B0AC2B00E54B4B /* TextVShader.vs */,
+				5D8A7D0D26F2853E00BD8BDB /* Simple2D.vs */,
 				5D98F6592688059A0075552B /* MistVShader.vs */,
 				5D98F6552688053E0075552B /* SmokeFShader.fs */,
 				5D37512526A7628200BB8BC9 /* SnowFragmentShader.fs */,
 				5D37512426A7628200BB8BC9 /* SnowVertexShader.vs */,
-				5D98F6562688053E0075552B /* SmokeVShader.vs */,
 				5DA7E27B267E6D33008845AA /* SkyFragmentShader.fs */,
 				5DCDDAD226A491440031FCC9 /* BloomFShader.fs */,
 				5DA7E27C267E6D33008845AA /* TextFShader.fs */,
-				5DA7E27D267E6D33008845AA /* FBufferVShader.vs */,
 				5DA7E27E267E6D33008845AA /* SkyVertexShader.vs */,
 				5DA7E28A267E6D33008845AA /* SketchVShader.vs */,
 				5DA7E286267E6D33008845AA /* SketchFShader.fs */,
@@ -1147,8 +1227,11 @@
 		5DEC19B6264B4BB10001ABAE /* src */ = {
 			isa = PBXGroup;
 			children = (
-				5DEE58262667E9390080446C /* Graphics */,
-				5DEE58282667E9AB0080446C /* Objects */,
+				5DEDAE5D2672BC960050F441 /* ParticleEffects */,
+				5D33262626791EB2002F3D49 /* World */,
+				5D68FE6826E80E8600E572E5 /* Combat */,
+				5D68FE6726E80E3D00E572E5 /* Rendering */,
+				5D33262226790444002F3D49 /* Component */,
 				5DEE58242667E8FC0080446C /* System */,
 			);
 			path = src;
@@ -1205,62 +1288,25 @@
 			isa = PBXGroup;
 			children = (
 				5D7706292654B082002A0BB0 /* AssetManager.hpp */,
+				5D7706282654B082002A0BB0 /* AssetManager.cpp */,
 				5DAC1803266993C40021DC31 /* InputHandler.cpp */,
 				5DAC1804266993C40021DC31 /* InputHandler.hpp */,
-				5D7706282654B082002A0BB0 /* AssetManager.cpp */,
 				5DEDAE572672B9990050F441 /* Audio.cpp */,
+				5D68FE6C26E8433600E572E5 /* JsonManager.cpp */,
+				5D68FE6D26E8433700E572E5 /* JsonManager.hpp */,
+				5D8A7CFD26ECEB3E00BD8BDB /* Subject.cpp */,
+				5D8A7CFE26ECEB3E00BD8BDB /* Subject.hpp */,
 				5DEDAE582672B9990050F441 /* Audio.hpp */,
+				5D8A7D0026ECEB4B00BD8BDB /* Observer.cpp */,
+				5D8A7D0126ECEB4B00BD8BDB /* Observer.hpp */,
+				5D8A7CFA26ECEA1700BD8BDB /* AbilityManager.cpp */,
+				5D8A7CFB26ECEA1700BD8BDB /* AbilityManager.hpp */,
 				5D391B87268FD4BF0092623D /* json.hpp */,
 				5DAC1806266994AE0021DC31 /* Game.cpp */,
-				5D391B8E268FE01C0092623D /* Script.cpp */,
-				5DA9BDE126B57DF100C1BAEC /* Componentable.cpp */,
-				5DA9BDE226B57DF100C1BAEC /* Componentable.hpp */,
 				5DAC1807266994AE0021DC31 /* Game.hpp */,
-				5D6E82992698A1CE003A1059 /* Numberable.cpp */,
-				5D6E829A2698A1CE003A1059 /* Numberable.hpp */,
 				5D0C414C2637948B005F64D0 /* main.cpp */,
-				5D391B8C268FDD1A0092623D /* Script.hpp */,
 			);
 			path = System;
-			sourceTree = "<group>";
-		};
-		5DEE58262667E9390080446C /* Graphics */ = {
-			isa = PBXGroup;
-			children = (
-				5D426580263C8E7B0026C24D /* Shader.cpp */,
-				5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */,
-				5DEC19B7264B69B30001ABAE /* stb_image.h */,
-				5DEC19B9264B69E20001ABAE /* stb_image.c */,
-				5DF82DA32680CBA800F4D177 /* uiLayout.cpp */,
-				5DF82DA42680CBA800F4D177 /* uiLayout.hpp */,
-				5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */,
-				5DF82DA62680D14800F4D177 /* uiPiece.cpp */,
-				5DF82DA72680D14800F4D177 /* uiPiece.hpp */,
-				5DA7E2AB26801683008845AA /* Batch.cpp */,
-				5DA7E2AC26801683008845AA /* Batch.hpp */,
-				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
-				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
-				5D426581263C8E7B0026C24D /* Shader.hpp */,
-			);
-			path = Graphics;
-			sourceTree = "<group>";
-		};
-		5DEE58282667E9AB0080446C /* Objects */ = {
-			isa = PBXGroup;
-			children = (
-				5DA9BE6726C0413D00C1BAEC /* Models */,
-				5DEE582D2667EE9B0080446C /* Abilities */,
-				5DEDAE5D2672BC960050F441 /* ParticleEffects */,
-				5D33262626791EB2002F3D49 /* World */,
-				5D33262226790444002F3D49 /* Component */,
-				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
-				5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */,
-				5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */,
-				5DCDDABF26A223870031FCC9 /* InstanceData.cpp */,
-				5DCDDAC026A223870031FCC9 /* InstanceData.hpp */,
-				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
-			);
-			path = Objects;
 			sourceTree = "<group>";
 		};
 		5DEE582D2667EE9B0080446C /* Abilities */ = {
@@ -1273,7 +1319,8 @@
 				5DEE582A2667EB990080446C /* Ability.cpp */,
 				5DEE582B2667EB990080446C /* Ability.hpp */,
 			);
-			path = Abilities;
+			name = Abilities;
+			path = "../New Group/Abilities";
 			sourceTree = "<group>";
 		};
 		5DF8BD752683A4D2006AAC64 /* Ball */ = {
@@ -1315,6 +1362,8 @@
 				5D3326182676CFDD002F3D49 /* InkEffect.cpp */,
 				5D25EC4026910C87008BD594 /* Fireworks.cpp */,
 				5D25EC4126910C87008BD594 /* Fireworks.hpp */,
+				5D8A7D0626F032D700BD8BDB /* RunicLetters.cpp */,
+				5D8A7D0726F032D700BD8BDB /* RunicLetters.hpp */,
 				5DEDAE5B2672BC920050F441 /* Mist.hpp */,
 				5D3326192676CFDD002F3D49 /* InkEffect.hpp */,
 			);
@@ -1441,7 +1490,7 @@
 				5DA983682686A732008252BA /* smoke093.jpg in Resources */,
 				5DCDDACD26A3A3A50031FCC9 /* journey7.obj in Resources */,
 				5DA9836C2686A732008252BA /* smoke013.jpg in Resources */,
-				5D98F6582688053E0075552B /* SmokeVShader.vs in Resources */,
+				5D8A7D0E26F2853F00BD8BDB /* Simple2D.vs in Resources */,
 				5DA983522686A732008252BA /* smoke012.jpg in Resources */,
 				5DA983482686A732008252BA /* smoke008.jpg in Resources */,
 				5DAC32C126AF42CD00E54B4B /* leafclustertranslu.png in Resources */,
@@ -1502,6 +1551,7 @@
 				5DA983672686A732008252BA /* smoke038.jpg in Resources */,
 				5DAC32CE26B06B1000E54B4B /* snowtest.mtl in Resources */,
 				5D25EC452691154C008BD594 /* ColorPartF.fs in Resources */,
+				5D8A7D0A26F0FAAA00BD8BDB /* 3DParticle.vs in Resources */,
 				5DA983592686A732008252BA /* smoke074.jpg in Resources */,
 				5DA9831F2686A732008252BA /* smoke056.jpg in Resources */,
 				5DA9BE7D26C2B47C00C1BAEC /* Vampire_specular.png in Resources */,
@@ -1522,8 +1572,8 @@
 				5D37512626A7628200BB8BC9 /* SnowVertexShader.vs in Resources */,
 				5DA9835C2686A732008252BA /* smoke020.jpg in Resources */,
 				5DA983622686A732008252BA /* smoke059.jpg in Resources */,
+				5D8A7D0C26F0FCAF00BD8BDB /* GenericDiffuse.fs in Resources */,
 				5D98F6572688053E0075552B /* SmokeFShader.fs in Resources */,
-				5DAC32D426B0AC2B00E54B4B /* TextVShader.vs in Resources */,
 				5DAC32C526AF42CE00E54B4B /* leafclustespecular.png in Resources */,
 				5DA983782686A733008252BA /* smoke035.jpg in Resources */,
 				5DEABA042659D2CF000C772F /* rosa.png in Resources */,
@@ -1542,7 +1592,6 @@
 				5DA9837F2686A733008252BA /* smoke105.jpg in Resources */,
 				5DA983532686A732008252BA /* smoke052.jpg in Resources */,
 				5DA983802686A733008252BA /* smoke089.jpg in Resources */,
-				5DA7E296267E6D34008845AA /* FBufferVShader.vs in Resources */,
 				5DA983242686A732008252BA /* smoke069.jpg in Resources */,
 				5DA7E29E267E6D34008845AA /* SketchFShader.fs in Resources */,
 				5DA983412686A732008252BA /* smoke054.jpg in Resources */,
@@ -1619,22 +1668,28 @@
 				5DAB0B4F266FF35900BC1C93 /* Sketch.cpp in Sources */,
 				5DF82DA52680CBA800F4D177 /* uiLayout.cpp in Sources */,
 				5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */,
+				5D8A7D0226ECEB4B00BD8BDB /* Observer.cpp in Sources */,
 				5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */,
 				5D6E82982698A0E3003A1059 /* ScriptOne.cpp in Sources */,
 				5D2F57C4263E3E92000AFA64 /* Ball.cpp in Sources */,
+				5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */,
 				5D391B8F268FE01C0092623D /* Script.cpp in Sources */,
 				5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */,
 				5D670C9C2684D903000E179C /* MapObject.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
 				5DAC1808266994AE0021DC31 /* Game.cpp in Sources */,
 				5DA7E2AD26801683008845AA /* Batch.cpp in Sources */,
+				5D8A7CF926EC212400BD8BDB /* LifeComponent.cpp in Sources */,
 				5D33261A2676CFDD002F3D49 /* InkEffect.cpp in Sources */,
 				5DAC1805266993C40021DC31 /* InputHandler.cpp in Sources */,
 				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
+				5D8A7D1126F3E5C900BD8BDB /* HealthMeter.cpp in Sources */,
 				5DEE581F2666A9290080446C /* GameGrid.cpp in Sources */,
 				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,
+				5D8A7CFC26ECEA1700BD8BDB /* AbilityManager.cpp in Sources */,
 				5DAC32D226B097D400E54B4B /* Force.cpp in Sources */,
+				5D8A7CFF26ECEB3E00BD8BDB /* Subject.cpp in Sources */,
 				5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */,
 				5D2E2D83267BB544007ADBF3 /* CombatComponent.cpp in Sources */,
 				5DA975A1268572F0008252BA /* DirectionalLight.cpp in Sources */,
@@ -1643,6 +1698,8 @@
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
 				5DCDDAC126A223870031FCC9 /* InstanceData.cpp in Sources */,
 				5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */,
+				5D8A7CF626EABBDF00BD8BDB /* NameComponent.cpp in Sources */,
+				5D8A7D0826F032D700BD8BDB /* RunicLetters.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
 				5DEDAE592672B9990050F441 /* Audio.cpp in Sources */,
 				5DEDAE4E267266050050F441 /* Billow.cpp in Sources */,

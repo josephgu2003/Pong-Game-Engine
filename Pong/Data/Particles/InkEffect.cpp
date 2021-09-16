@@ -63,6 +63,6 @@ particles[firstUnused].texture = texture.id;
 
 void InkEffect::setActor(Actor *actor_) {
     actor = actor_;
-    model = (static_cast<GraphicsComponent*>(actor->getComp(GRAPHICS).get())->getModel());
+    model = actor->getComponent<GraphicsComponent>()->getModel();
 }
 

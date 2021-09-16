@@ -9,7 +9,7 @@
 #include "Game.hpp"
 #include "Dialogue.hpp"
 #include "FallingLetters.hpp"
-#include "Speech.hpp"
+#include "Speech.hpp"  
 #include "CombatComponent.hpp"
 #include "AnimComponent.hpp"
 
@@ -17,7 +17,7 @@ void ScriptOne::tick() {
     switch (state) {
         case STATE_PASSIVE: {
 
-            if ((static_pointer_cast<CombatComponent>(ball->getComp(COMBAT)))->hasTarget()) {
+            if (ball->getComponent<CombatComponent>()->hasTarget()) {
                 state = STATE_AGGRESSIVE;
             }
 
@@ -25,7 +25,7 @@ void ScriptOne::tick() {
             
         case STATE_AGGRESSIVE:
 
-            if ((static_pointer_cast<CombatComponent>(ball->getComp(COMBAT)))->hasTarget()) {
+            if (ball->getComponent<CombatComponent>()->hasTarget()) {
                 ball->turnTowards(glm::cross(glm::vec3(0.0,1.0,0.0), ball->getPos()-pHero->getPos()));
                 ball->translatePos(0.04f*glm::normalize(glm::cross(glm::vec3(0.0,1.0,0.0),  ball->getPos()-pHero->getPos())));
     
@@ -35,28 +35,27 @@ void ScriptOne::tick() {
      //   ball->turnTowards(horizonDir); 
                   
         if (step == 0) {
-            currentAbility = std::make_shared<Dialogue>(world, ball, 6.0, 0);
-            (static_pointer_cast<CombatComponent>(ball->getComp(COMBAT)))->newAbility(currentAbility);
+            currentAbility = std::make_shared<Dialogue>(&ball->getWorld(), ball, 6.0, 0);
+            ball->getComponent<CombatComponent>()->newAbility(currentAbility);
             step++;
-            static_cast<AnimComponent*>(ball->getComp(ANIM).get())->playAnim("Take 001");
             return; 
         }  
-                 
+                  
         if (step == 1) {
      
             if (static_cast<Dialogue*>(currentAbility.get())->getActiveText() == "Figure: Look to the horizon.") { 
                 ballDir = STATE_OPPOSITE;  
-                horizonDir =  ball->getPos()-static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getBigTarget()->getPos();
+                horizonDir =  ball->getPos()-ball->getComponent<CombatComponent>()->getBigTarget()->getPos();
             }
             if (currentAbility->on == false) {
                 
                 ballDir = STATE_TRACK;
                 step++;
                 currentAbility.reset();
-            currentAbility = std::make_shared<FallingLetters>(world, ball, 10.0);
-            currentAbility->setTarget(static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getBigTarget());
-                static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->newAbility(currentAbility);
-                static_pointer_cast<CombatComponent>(static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getBigTarget()->getComp(COMBAT))->affect(currentAbility);
+            currentAbility = std::make_shared<FallingLetters>(&ball->getWorld(), ball, 10.0);
+            currentAbility->setTarget(ball->getComponent<CombatComponent>()->getBigTarget());
+           ball->getComponent<CombatComponent>()->newAbility(currentAbility);
+            ball->getComponent<CombatComponent>()->getBigTarget()->getComponent<CombatComponent>()->affect(currentAbility);
            }
             return;
         } 
@@ -67,10 +66,10 @@ void ScriptOne::tick() {
                         step++;
                         currentAbility2.reset();
                         std::vector<std::string> strings = {"'I've made up my mind. I'm going.'"};
-                        currentAbility2 = std::make_shared<Speech>(world, (pHero), 2.0,strings);
-                        static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->newAbility(currentAbility2);
+                        currentAbility2 = std::make_shared<Speech>(&pHero->getWorld(), (pHero), 2.0,strings);
+                       pHero->getComponent<CombatComponent>()->newAbility(currentAbility2);
                     }
-                    return;
+                    return; 
                 }
                 
                 if (step == 3) {
@@ -79,8 +78,8 @@ void ScriptOne::tick() {
                         currentAbility2.reset();
                         std::vector<std::string> strings = {"Figure: Oh? I'd like to see you try."};
 
-                        currentAbility2 = std::make_shared<Speech>(world, (ball), 2.0,strings);
-                        static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->newAbility(currentAbility2);
+                        currentAbility2 = std::make_shared<Speech>(&ball->getWorld(), (ball), 2.0,strings);
+                        ball->getComponent<CombatComponent>()->newAbility(currentAbility2);
                     }
                     return;
                 }
@@ -91,8 +90,8 @@ void ScriptOne::tick() {
                         currentAbility.reset();
                         std::vector<std::string> strings = {"'If fish can fly, I can too.'", "'Into a brighter world.'"};
                         
-                        currentAbility = std::make_shared<Speech>(world, (pHero), 3.0,strings);
-                        static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->newAbility(currentAbility);
+                        currentAbility = std::make_shared<Speech>(&pHero->getWorld(), (pHero), 3.0,strings);
+                        pHero->getComponent<CombatComponent>()->newAbility(currentAbility);
                     }
                     return;
                 }
@@ -104,7 +103,8 @@ void ScriptOne::tick() {
 }
 
 void ScriptOne::init(Game* game) {
-    pHero = static_cast<PlayerHero*>(game->getNumberable(2));
-    ball = static_cast<Ball*>(game->getNumberable(1));
-    world = static_cast<World*>(game->getNumberable(0));
+    //pHero = static_cast<PlayerHero*>(game->getNumberable(2));
+ //   ball = static_cast<Ball*>(game->getNumberable(1));
+    pHero = game->getWorld(0).getActorNamed("pHero0").get();
+    ball = game->getWorld(0).getActorNamed("LightChar").get();
 }

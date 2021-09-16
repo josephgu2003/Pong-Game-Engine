@@ -12,15 +12,18 @@
 #include "Ability.hpp"
 #include "World.hpp"
 #include "Actor.hpp"
+#include "RunicLetters.hpp"
+#include <memory>
 
 class FallingLetters: public Ability{
-  //  ParticleEffect* flowers = new ParticleEffect;
-    Force* force;
-    Force* up;
+private:
+    RunicLetters* letters = NULL;
+    Force* force = NULL;
+    Force* up = NULL;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
     ~FallingLetters();
-    virtual void call(Game* game);
+    virtual void call();
     virtual void tick();
 };
 #endif /* FallingLetters_hpp */

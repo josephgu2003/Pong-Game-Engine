@@ -425,3 +425,182 @@ GLuint getTextureFromFile(std::string texturePath_) {
     return tex;
 }
 **/
+
+void AssetManager::loadModel(const char* filePath, Model*& model) {
+    for (int i = 0; i < loadedModels.size(); i++) {
+        std::string s(filePath);
+        if (s == loadedModels.at(i)->getFilepath()) {
+     
+            *model = *(loadedModels.at(i).get());
+            return; 
+        } 
+    }
+    
+    std::unique_ptr<Model> archive = std::make_unique<Model>(filePath);
+
+    *model = *(archive.get());
+ 
+    loadedModels.push_back(std::move(archive));
+
+
+}
+
+void AssetManager::loadModel(const char* filePath, Model*& model, AnimComponent* anim) {
+// !!! separate model and animation loading maybe, this method makes repeated model loading
+    
+    std::unique_ptr<Model> archive = std::make_unique<Model>(filePath, anim);
+
+    *model = *(archive.get());
+
+    loadedModels.push_back(std::move(archive));
+}
+
+
+void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    glGenTextures(1, &frame->ftexture);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+    
+}
+
+
+
+void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    glGenTextures(1, &frame->ftexture0);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture0, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glGenTextures(1, &frame->ftexture1);
+    glBindTexture(GL_TEXTURE_2D, frame->ftexture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, frame->ftexture1, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+    
+
+}
+
+void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
+    glGenFramebuffers(1, &frame->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
+    
+    frame->ftexture = *ftexture_;
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *ftexture_, 0);
+    
+   glGenRenderbuffers(1, &frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, x, y);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    glGenVertexArrays(1, &frame->fvao);
+    glBindVertexArray(frame->fvao);
+    
+    glGenBuffers(1, &frame->fvbo);
+    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
+    float screenquad[24] =
+    {   -0.10f,  0.10f,  0.0f, 1.0f,
+        -0.10f, -0.10f,  0.0f, 0.0f,
+         0.10f, -0.10f,  1.0f, 0.0f,
+
+        -0.10f,  0.10f,  0.0f, 1.0f,
+         0.10f, -0.10f,  1.0f, 0.0f,
+         0.10f,  0.10f,  1.0f, 1.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+    
+}

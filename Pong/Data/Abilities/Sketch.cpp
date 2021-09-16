@@ -51,7 +51,7 @@ Sketch::~Sketch() {
     world->deleteQuad(&quad);
 }
 
-void Sketch::call(Game* game) {
+void Sketch::call() {
     world->insertQuad(&quad);
 }
 

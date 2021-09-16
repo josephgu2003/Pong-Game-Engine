@@ -100,190 +100,24 @@ void load3DTexture(const char* filePath, Texture* texture);
 
 void loadTexture(const char* filePath, Texture* texture, bool srgb);
 
+void loadModel(const char* filePath, Model*& model);
+
+
+void loadModel(const char* filePath, Model*& model, AnimComponent* anim);
+
+void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y);
+
+
+void generateFramebuffer2Color(DoubleFrame* frame, int x, int y);
+
+void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y);
+
 };
 
 
-static Model* loadModels(const char* filePath) {
-    for (int i = 0; i < loadedModels.size(); i++) {
-        std::string s(filePath);
-        if (s == loadedModels.at(i)->getFilepath()) {
-            Model* model = new Model();
-            *model = *loadedModels.at(i).get();
-            return model;
-        }
-    }
-    
-    std::unique_ptr<Model> model = std::make_unique<Model>(filePath);
-    Model* model2 = new Model();
-    *model2 = *model.get();
-    loadedModels.push_back(std::move(model));
-   /** Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filePath,  aiProcess_Triangulate | aiProcess_FlipUVs);
-    
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString();
-        return NULL;
-    }
-    std::string filePath_ = (std::string)(filePath);
-    filePath_ = filePath_.substr(0, filePath_.find_last_of('/'));
-    model->setDirectory(filePath_.c_str());
-    model->setMeshes(processNode(scene->mRootNode, scene));**/
 
-    return model2;
-}
 
-static void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
-    glGenFramebuffers(1, &frame->fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
-    
-    glGenTextures(1, &frame->ftexture);
-    glBindTexture(GL_TEXTURE_2D, frame->ftexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-   glGenRenderbuffers(1, &frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER,0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    glGenVertexArrays(1, &frame->fvao);
-    glBindVertexArray(frame->fvao);
-    
-    glGenBuffers(1, &frame->fvbo);
-    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
-
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);
-    
-}
-
-static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
-    glGenFramebuffers(1, &frame->fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
-    
-    glGenTextures(1, &frame->ftexture0);
-    glBindTexture(GL_TEXTURE_2D, frame->ftexture0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture0, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    glGenTextures(1, &frame->ftexture1);
-    glBindTexture(GL_TEXTURE_2D, frame->ftexture1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, frame->ftexture1, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-    glDrawBuffers(2, attachments);
-    
-   glGenRenderbuffers(1, &frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER,0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    glGenVertexArrays(1, &frame->fvao);
-    glBindVertexArray(frame->fvao);
-    
-    glGenBuffers(1, &frame->fvbo);
-    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
-
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);
-    
-
-}
-
-static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
-    glGenFramebuffers(1, &frame->fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
-    
-    frame->ftexture = *ftexture_;
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *ftexture_, 0);
-    
-   glGenRenderbuffers(1, &frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, x, y);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    glBindRenderbuffer(GL_RENDERBUFFER,0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    glGenVertexArrays(1, &frame->fvao);
-    glBindVertexArray(frame->fvao);
-    
-    glGenBuffers(1, &frame->fvbo);
-    glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -0.10f,  0.10f,  0.0f, 1.0f,
-        -0.10f, -0.10f,  0.0f, 0.0f,
-         0.10f, -0.10f,  1.0f, 0.0f,
-
-        -0.10f,  0.10f,  0.0f, 1.0f,
-         0.10f, -0.10f,  1.0f, 0.0f,
-         0.10f,  0.10f,  1.0f, 1.0f
-    };
-
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);
-    
-}
 
 /**static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene);
 

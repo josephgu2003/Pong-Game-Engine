@@ -57,7 +57,7 @@ Fish::~Fish() {
     world->deleteForce(force);
 }
 
-void Fish::call(Game* game) {
+void Fish::call() {
     world->insertQuad(&quad);
     world->insertForce(force);
     dirFired = actor->dirVec;
@@ -120,7 +120,7 @@ void Fish::tick() {
 }
 
 void Fish::freeActor() {
-    if ((static_pointer_cast<CombatComponent>(actor->getComp(COMBAT)))->getAffecting().get() != NULL) {
-        (static_pointer_cast<CombatComponent>(actor->getComp(COMBAT)))->getAffecting()->dispel();
+    if (actor->getComponent<CombatComponent>()->getAffecting().get() != NULL) {
+       actor->getComponent<CombatComponent>()->getAffecting()->dispel();
     }
 }

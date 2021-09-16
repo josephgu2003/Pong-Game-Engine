@@ -13,16 +13,15 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include "Script.hpp"
-#include "PlayerHero.hpp"
+
 #include "World.hpp"
-#include "Ball.hpp"
+#include "Actor.hpp"
 #include <glm/glm.hpp>
 #include <memory>
 
 class ScriptOne : public Script {
-    PlayerHero* pHero = NULL;
-    World* world = NULL;
-    Ball* ball = NULL;
+   Actor* pHero = NULL;
+    Actor* ball = NULL;
     float timer = 0;
     
     enum State {

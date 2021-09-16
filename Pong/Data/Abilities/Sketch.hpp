@@ -25,7 +25,7 @@ class Sketch: public Ability {
 public:
     Sketch(World* world_, Actor* actor_, float duration_, GLuint texture_);
     ~Sketch();
-    virtual void call(Game* game);
+    virtual void call();
     virtual void tick();
     void call2();
 };

@@ -12,6 +12,8 @@
 #include "TicTacToe.hpp"
 #include "Game.hpp"
 
+
+
 int main() {
     
     glfwInit();
@@ -25,6 +27,7 @@ int main() {
         game.tick();
     }
     
+    game.end();
     glfwTerminate();
     
     return 0;

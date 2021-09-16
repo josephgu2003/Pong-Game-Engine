@@ -32,62 +32,41 @@
 #include "ScriptOne.hpp"
 #include <chrono>
 
-class Dialogue;
-
-class Ability;
-
 class Game {
-GLFWwindow* window; // Windowed
-Camera camera;
-World world;
-    World realWorld;
-Renderer* renderer = NULL;
-    Renderer* realRenderer = NULL;
+    GLFWwindow* window; // Windowed
+    
+    std::shared_ptr<Camera> camera;
+    
+    World world0;
+    World world1;
+    
+    World* activeWorld = NULL;
+    
+    Renderer* renderer0 = NULL;
+    Renderer* renderer1 = NULL;
+    
     Renderer* activeRenderer = NULL;
+    
     LoadingScreen* screen;
-InputHandler inputHandler;
+    
+    InputHandler inputHandler;
+    
     Audio audio;
     
-    std::stringstream input;
-    std::string i;
-    int nextBranch;
-    bool printing = false;
-   // boost::mutex mutex;
     
-    int scheme = 0;
-    double lastMX = 500;
-    double lastMY = 400;
-    double xOffset;
-    double yOffset;
-    bool firstMouse = true;
-    bool mouseMoved = false;
-    double lastTime = 0;
+    std::shared_ptr<Actor> pHero0;
+    std::shared_ptr<Actor> pHero1;
     
-    std::shared_ptr<Sketch> activeSketch;
-    Dialogue* activeDialogue = NULL;
-    
-    std::shared_ptr<Actor> ball;
-    std::shared_ptr<Actor> pHero;
-    std::shared_ptr<Actor> rHero;
     InkEffect inkGlyphs;
     Fireworks fireworks;
     MapObject map;
     MapObject realMap;
-    std::shared_ptr<Actor> tree;
+
     Mist mist;
     
     ScriptOne* script;
     
-    std::vector<std::shared_ptr<Ability>> abilities;
-    Numberable* numberables[100];
-    
-    GLuint fbo, fvao, ftexture;
-    unsigned char* paint = NULL;
-    unsigned char* blank = NULL;
-    int imageWidth = 0;
-    int imageHeight = 0;
-    int channels = 0;
-
+    double lastTime = 0;
     double fpsTimer;
     int intervalTimer = 0;
     bool firstTime = true;
@@ -102,14 +81,14 @@ public:
     Game();
     ~Game();
     void tick();
-    void moveMouse(double mouseX_, double mouseY_);
-    int processInput(int key, int action, int mods);
-    void processInput2(int key, int action);
-    void print();
-    void setActionScheme(int id);
-    void newDialogue(Dialogue& dialogue_);
-    
-    Numberable* getNumberable(unsigned int ID_);
+
+   // void setNumberable(Numberable* numberable, int i);
+   // Numberable* getNumberable(unsigned int ID_);
+    World& getWorld(int i);
+    void setPlayerHero(const std::shared_ptr<Actor>& actor, int i);
+    void end();
+    InputHandler& getInputHandler();
+    void swapWorld();
 };
 
 #endif /* Game_hpp */

@@ -35,6 +35,8 @@ uniform mat3 transposeInverseModelMat;
 
 uniform mat4 boneOffsetMatrices[100];
 
+uniform bool animated;
+
 out VS_OUT {
     vec3 fragPos;
     vec2 TexCoords;
@@ -66,36 +68,42 @@ layout (std140) uniform Lights
     {
       //  vec4 Pos = vec4(0.0,0.0,0.0,1.0);
        // vec4 newNormals = vec4(0.0,1.0,0.0,0.0);
-        mat4 transform = mat4(0.0);
-        int z = 0;
-       for (int i = 0; i < MAX_BONE_WEIGHTS; i++) {
-           if (boneIDs[i] == -1) {
-               continue;
-           }
-           if (boneIDs[i] >= MAX_BONES) {
+        vec4 Pos = vec4(0.0,0.0,0.0,0.0);
+        if (animated == true) {
+            mat4 transform = mat4(0.0);
+            int z = 0;
+            for (int i = 0; i < MAX_BONE_WEIGHTS; i++) {
+                if (boneIDs[i] == -1) {
+                    continue;
+                }
+                if (boneIDs[i] >= MAX_BONES) {
            //    Pos = vec4(aPos, 1.0);
-               transform = mat4(1.0);
-               break;
-           }
-           int x = int(boneIDs[i]);
-            mat4 offset = boneOffsetMatrices[x];
-           float weight = boneWeights[i];
+                    transform = mat4(1.0);
+                    break;
+                }
+                int x = int(boneIDs[i]);
+                mat4 offset = boneOffsetMatrices[x];
+                float weight = boneWeights[i];
            
-           transform += offset*weight;
+                transform += offset*weight;
 
         //   vec4 localPos = offset * vec4(aPos, 0.0);
        //   vec4 localNorm = offset * vec4(Normals_, 1.0);
        //   Pos += vec4(localPos) * weight;
        //    newNormals += localNorm * weight;
-           z =1;
-        }
-        if (z ==0 ) {
+                z =1;
+            }
+            if (z ==0 ) {
        //     Pos = vec4(aPos, 1.0);
-            transform = mat4(1.0);
+                transform = mat4(1.0);
+            }
+            Pos = transform * vec4(aPos.xyz,1.0);
+        } else {
+            Pos = vec4(aPos.xyz, 1.0);
         }
-    
+ 
      //   Pos = vec4(size*Pos.xyz, 1.0);
-        vec4 Pos = transform * vec4(aPos.xyz,1.0);
+
          
         gl_Position =  viewProjMat * modelMat * vec4(size*Pos.xyz,1.0);
         

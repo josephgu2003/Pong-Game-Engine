@@ -20,7 +20,7 @@ Ball::Ball() {
         dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
         velVec = glm::vec3(0.0f, 0.0f, 0.0f);
         rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(false);
+    std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
     addComp(pc);
     state = STATE_FLYING;
     distribution = std::uniform_int_distribution<int>(1,1000);

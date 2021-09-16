@@ -4,21 +4,22 @@
 //
 //  Created by Joseph Gu on 6/3/21.
 //
+#define WINDOW_WIDTH 2000
+#define WINDOW_HEIGHT 1300
 
 #include "Game.hpp"
-#include "FallingLetters.hpp"
+
 #include <iostream>
 #include <cctype>
-#include "Speech.hpp"
+
 #include "stb_image.h"
-#include "Dialogue.hpp"
-#include "Fish.hpp"
-#include "Ability.hpp"
+
+
 #include <thread>
 #include "json.hpp"
+#include "JsonManager.hpp"
 #include "AssetManager.hpp"
-#include "CombatComponent.hpp"
-#include "AnimComponent.hpp"
+
  
 extern void char_callback(GLFWwindow* window, unsigned int key);
 extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -31,17 +32,15 @@ void Game::initWindow() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
-    window = glfwCreateWindow(1000, 650, "OpenGL", NULL, NULL);
+    window = glfwCreateWindow(0.5*WINDOW_WIDTH, 0.5*WINDOW_HEIGHT, "OpenGL", NULL, NULL);
     glfwMakeContextCurrent(window);
 }
   
 void Game::initObjects() {
-    ball = std::make_shared<Actor>();
-    pHero = std::make_shared<Actor>(); 
-    rHero = std::make_shared<Actor>();
-    tree = std::make_shared<Actor>();
-    realRenderer = new Renderer; 
-     renderer = new Renderer;
+    camera = std::make_shared<Camera>();
+    renderer1 = new Renderer; 
+     renderer0 = new Renderer;
+    
     mist.init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
      inkGlyphs.init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
     
@@ -49,52 +48,32 @@ void Game::initObjects() {
     fireworks.setColor(glm::vec4(0.3,1.2,3.0,1.0));
      realMap.init(glm::vec3(0,-1.0,0));
      map.init(glm::vec3(0,-0.14,0));
-     ball->init(2);
-     ball->setID(1);  
-     numberables[1] = ball.get(); 
-    
-     pHero->init(0);
-     pHero->setID(2);
-     numberables[2] = pHero.get();
-        
-     pHero->setPos(glm::vec3(10,35,10)); 
-     ball->setPos(glm::vec3(0,1.7,0));
-    // billow.loadModel();
-     rHero->init(0);
-    tree->setPos(glm::vec3(0,0.7,0));  
-    tree->init(3);
-     
-     world.setID(0);
-     numberables[0] = &world;
-    
+
 }
                    
 void Game::linkObjects() {      
-    renderer->setWorld(&world);
-    realRenderer->setWorld(&realWorld);
+    renderer0->setWorld(&world0);
+    renderer1->setWorld(&world1);
                  
     DirectionalLight  dl2(glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),glm::vec3(1.0,1.0,1.0),glm::vec3(-1,-1,0));
-    realWorld.setWeather(dl2, 0);  
+    world1.setWeather(dl2, 0);  
          
     DirectionalLight   dl(glm::vec3(0.03,0.03,0.03),glm::vec3(0.08,0.08,0.08),glm::vec3(0.5,0.5,0.5),glm::vec3(-1,-1,0));
-    world.setWeather(dl, 0);
-    inkGlyphs.setActor(pHero.get());
-    camera.setActor(pHero.get());
-    realRenderer->setCamera(&camera);  
-    renderer->setCamera(&camera);
- 
-    world.insertCamera(&camera);
-    world.insertActor(pHero);
-    world.insertActor(ball);
-    realWorld.insertActor(tree);
-    realWorld.insertActor(rHero);
-       
-     world.insertParticleEffect(&fireworks);   
-     world.insertParticleEffect(&mist);
+    world0.setWeather(dl, 0);
 
-       world.insertParticleEffect(&inkGlyphs);
-       world.setMap(map);
-       realWorld.setMap(realMap);
+    renderer1->setCamera(camera.get());
+    renderer0->setCamera(camera.get());
+ 
+    world0.insertCamera(camera.get());
+       
+     world0.insertParticleEffect(&fireworks);   
+     world0.insertParticleEffect(&mist);
+
+       world0.insertParticleEffect(&inkGlyphs);
+       world0.setMap(map);
+       world1.setMap(realMap);
+
+    inputHandler.setCamera(camera);
 }
 
 Game::Game() {
@@ -112,19 +91,27 @@ Game::Game() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetTime(0);
     
-    glfwSetWindowUserPointer(window, this);
+    glfwSetWindowUserPointer(window, &inputHandler);
     
     screen = new LoadingScreen();
     
     inputHandler.setWindow(window);
-    
+    inputHandler.setGame(this);
+
     //billow.posVec = glm::vec3(0,5,0);
     stbi_set_flip_vertically_on_load(0);
     
     initObjects();
   
     linkObjects();
-
+    
+    JsonManager::loadGame(this);
+    
+    inputHandler.setPlayerHero(pHero0, 0);
+    inputHandler.setPlayerHero(pHero1, 1);
+    
+    inkGlyphs.setActor(pHero0.get());
+    camera->setActor(pHero0.get());
     
     VertexData* data = new VertexData;
     std::shared_ptr<TBNVertex> a = std::make_shared<TBNVertex>(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
@@ -138,7 +125,7 @@ Game::Game() {
         0, 1, 2,
         2, 3, 0
     };
-    
+     
     TextureMaps mapTextures;
     Texture t;
     AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
@@ -154,17 +141,18 @@ Game::Game() {
     shader->setMat3("transposeInverseModelMat", mat);
     GraphicsComponent* graphics = new GraphicsComponent(data, shader);
     map.setGraphics(graphics);
-    
+     
     AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
     AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
     AssetManager::bindShaderUniblock(shader, AssetManager::StopWatch);
  
-    Model*  model = loadModels("Resources/Map/snow3.obj");
+    Model*  model = new Model();
+    AssetManager::loadModel("Resources/Map/snow3.obj", model);
     TextureMaps maps2;
     
     AssetManager::loadTexture(TEX_VORONOI, &maps2.voronoi, false);
 
-        model->setMeshTexture(0, maps2);      
+    model->setMeshTexture(0, maps2);      
     VertexData* data2 = &model->getMeshes()->at(0);
      Shader* shader2 = new Shader("Shaders/SnowVertexShader.vs", "Shaders/SnowFragmentShader.fs");
     modelMat = glm::mat4(1.0);
@@ -201,13 +189,13 @@ Game::Game() {
     glfwPollEvents();
     glfwSwapBuffers(window);
     
-    renderer->loadActorData();
-    renderer->loadMapData();
-    renderer->loadSkyBoxData();
+    renderer0->loadActorData();
+    renderer0->loadMapData();
+    renderer0->loadSkyBoxData();
     
-    realRenderer->loadActorData();
-    realRenderer->loadMapData();
-    realRenderer->loadSkyBoxData();
+    renderer1->loadActorData();
+    renderer1->loadMapData();
+    renderer1->loadSkyBoxData();
     
     stbi_set_flip_vertically_on_load(1);
 
@@ -216,25 +204,14 @@ Game::Game() {
     int i;
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &i);
     printf("%i\n", i);
-    
-    blank = stbi_load("Resources/Particles/BLANK_ICON3.png", &imageWidth, &imageHeight, &channels, 0);
-     
-    glGenTextures(1, &ftexture);
-    glBindTexture(GL_TEXTURE_2D, ftexture);
-     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,blank);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-     glBindTexture(GL_TEXTURE_2D, 0);
 
-    paint = stbi_load("Resources/Particles/pencil.jpg", &imageWidth, &imageHeight, &channels, 0);
-  //  audio.playMusic();
-    activeRenderer = renderer;
+    activeRenderer = renderer0;
+    activeWorld = &world0;
 
     script = new ScriptOne();
     script->init(this);
-    static_cast<AnimComponent*>(tree->getComp(ANIM).get())->playAnim("");
+  //  static_cast<AnimComponent*>(tree->getComp(ANIM).get())->playAnim("");
+ //   tree->getComponent<AnimComponent>()->playAnim("");
 }
 
 Game::~Game() {
@@ -242,7 +219,7 @@ Game::~Game() {
 }   
 
 void Game::tick() {    
-     
+
     auto t1 = std::chrono::high_resolution_clock::now();
  
         /* Getting number of milliseconds as an integer. */
@@ -257,75 +234,45 @@ void Game::tick() {
     }
     else {
         intervalTimer = floor(ratio);
-        int k = 1;
+
     }
     
-    glfwSetTime(glfwGetTime()-lastTime); 
+    glfwSetTime(glfwGetTime()-lastTime);
     lastTime = glfwGetTime();
  //   printf("Delta t is %f\n", (float)lastTime );
     fpsTimer += lastTime;
+    
+    
     
     draws = draws + 1.0;     
     if (fpsTimer > 2.0) {
         float fps = draws/2.0;
         printf("Fps is %f\n", fps);
         fpsTimer = 0.0;
-        draws = 0.0; 
+        draws = 0.0;  
     }
 
-    if (scheme == 0) { 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        pHero->posDir(0.03);
-        rHero->posDir(0.03);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        pHero->posDir(-0.03);
-        rHero->posDir(-0.03);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        pHero->posRight(0.03);
-        rHero->posRight(0.03);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        pHero->posRight(-0.12);
-        rHero->posRight(-0.03);
-    }
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            activeRenderer->incExposure(0.01);
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            activeRenderer->incExposure(-0.01);
-        }
-    }
-     
     inputHandler.tick();
   
-    double mx, my;
+
     
-    if (scheme == 2)     {
-        glfwGetCursorPos(window, &mx, &my);
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-                //quad and framebuffer
-                //write to framebuffer at that position
-                for (int j = 0; j < 50; j++) {
-           //  glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-trail.at(i).x/1000), 800*(1-trail.at(i).y/800),      imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, paint);
-                    float ratio1 = (float)(j/50.0f);
-                    float ratio2 = 1.0f - ratio1;
-                    glBindTexture(GL_TEXTURE_2D, ftexture);
-                    //   glTexSubImage2D(GL_TEXTURE_2D, 0, 800*(1-(ratio2*lastMX+ratio1*mx)/1000), 800*(1-((ratio2*lastMY+ratio1*my)/800)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 800.0*(1.0-(ratio2*lastMX+ratio1*mx)/1000.0), 800.0*(1.0-((ratio2*lastMY+ratio1*my)/650.0)), imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, paint);
-                } 
-            }
-    lastMY = my;
-    lastMX = mx;
-    }
+
 
     if(glfwWindowShouldClose(window)) {
         running = false;
     }
     
-    if((static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->QHasAbilities())) {
-        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getAbilityQ();
+  /**  if(ball->getComponent<CombatComponent>()->QHasAbilities()) {
+        std::vector<std::shared_ptr<Ability>>& q = ball->getComponent<CombatComponent>()->getAbilityQ();
+        for(int i = 0; i < q.size(); i++) {
+            q.at(i)->call(this);
+            abilities.push_back(q.at(i));
+        }
+        q.clear();
+    }**/
+    
+  /**  if(pHero0->getComponent<CombatComponent>()->QHasAbilities()) {
+        std::vector<std::shared_ptr<Ability>>& q = pHero0->getComponent<CombatComponent>()->getAbilityQ();
         for(int i = 0; i < q.size(); i++) {
             q.at(i)->call(this);
             abilities.push_back(q.at(i));
@@ -333,17 +280,8 @@ void Game::tick() {
         q.clear();
     }
     
-    if(static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->QHasAbilities()) {
-        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->getAbilityQ();
-        for(int i = 0; i < q.size(); i++) {
-            q.at(i)->call(this);
-            abilities.push_back(q.at(i));
-        }
-        q.clear();
-    }
-    
-    if(static_pointer_cast<CombatComponent>(rHero->getComp(COMBAT))->QHasAbilities()) {
-        std::vector<std::shared_ptr<Ability>>& q = static_pointer_cast<CombatComponent>(rHero->getComp(COMBAT))->getAbilityQ();
+    if(pHero1->getComponent<CombatComponent>()->QHasAbilities()) {
+        std::vector<std::shared_ptr<Ability>>& q = pHero1->getComponent<CombatComponent>()->getAbilityQ();
         for(int i = 0; i < q.size(); i++) {
           q.at(i)->call(this);
             abilities.push_back(q.at(i));
@@ -359,25 +297,16 @@ void Game::tick() {
             
     }
          
-    }
+    }**/
 
   script->tick();
 
-    world.tick();
+    world0.tick();
 
-    realWorld.tick();
+    world1.tick();
 
-    if (abilities.size() > 0) {
-        for(int i = 0; i < abilities.size(); i++) {
-            if(abilities.at(i)->on == false) {
-                abilities.at(i).reset();
-                abilities.erase(abilities.begin()+i);
-            }
-    }
-    }
-   // printf("%f\n", glfwGetTime());
-    if(printing)
-    {print();}
+  
+
     
     activeRenderer->render();
 
@@ -385,180 +314,55 @@ void Game::tick() {
         glfwSwapBuffers(window);
 }
 
-void Game::moveMouse(double mouseX_, double mouseY_) {
-    if (scheme != 2) {
-    if (firstMouse) {
-        lastMX = mouseX_;
-        lastMY = mouseY_;
-        firstMouse = false;
-    }
-    xOffset = mouseX_ - lastMX;
-    yOffset = lastMY - mouseY_;
-    lastMX = mouseX_;
-    lastMY = mouseY_;
-    camera.incYaw(xOffset*0.03);
-    camera.incPitch(yOffset*0.03);
-    xOffset = 0;
-    yOffset = 0;
-    }
+
+
+/**Numberable* Game::getNumberable(unsigned int ID_) {
+    return numberables[ID_];
+}**/
+ 
+World& Game::getWorld(int i) {
+    if (i == 0) return world0;
+    if (i == 1) return world1; 
+    return world0; 
+}
+
+void Game::setPlayerHero(const std::shared_ptr<Actor>& actor, int i) {
+    if (i == 0)
+        pHero0 = actor; 
+    
+    if (i == 1)
+        pHero1 = actor;
 } 
 
-int Game::processInput(int key, int action, int mods) {
-//    unique_lock<mutex> lock()
-    if (scheme == 3) {
-        if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-            nextBranch = 0;
-            if(activeDialogue != NULL) activeDialogue->branch(nextBranch);
-            setActionScheme(0);
-        }
-            if (key == GLFW_KEY_B && action == GLFW_PRESS) {
-                nextBranch = 1;
-                if(activeDialogue != NULL) activeDialogue->branch(nextBranch);
-                setActionScheme(0);
-            }
-    }
-    if (scheme == 1) {
-    if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_SPACE)
-        {
-          //  input.put(' ');
-            i.append(" ");
-        }
-    const char* key_name = glfwGetKeyName((key), 0);
-    if (key_name != NULL)
-       // input << (key_name);
-        if (mods == GLFW_MOD_SHIFT){
-        char c = toupper(*key_name); 
-            if (key == GLFW_KEY_1) c = '!';
-            if (key == GLFW_KEY_SLASH) c = '?';
-            if (key == GLFW_KEY_APOSTROPHE) c = '\"';
-        i.append(std::string(1, c));
-         } else if (mods != GLFW_MOD_SHIFT) {
-            i.append(key_name);  
-         }
-    } 
-        
-    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
-            scheme = 0;
-          //  std::string test;
-          //  input >> test;
-            std::cout << i;
-        printing = true;
-            return 1;
-        }
-    }
-    
-    if (scheme == 0) {
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        pHero->jump();
-        rHero->jump();
-    }
-    if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&world, pHero.get(), 6);
+void Game::end() {
+    JsonManager::saveGame(this);
+}
+/**void Game::setNumberable(Numberable* numberable, int i) {
+    numberables[i] = numberable;
+} 
+**/
 
-        if (static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->hasTarget()) {
-            letters->setTarget(static_pointer_cast<CombatComponent>(pHero->getComp(COMBAT))->getBigTarget());
-        } 
-        letters->call(this);
-        abilities.push_back(letters);
-    }
-        if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
-            std::shared_ptr<Ability> speech = std::make_shared<Speech>(&world, pHero.get(), 6.0, lines);
-            abilities.push_back(speech);
-            speech->call(this);
-        }  
-        
-        if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-            std::shared_ptr<Ability> fish = std::make_shared<Fish>(&world, pHero.get(), 18.0);
-            abilities.push_back(fish);
-            fish->call(this);
-        }
-         
-        if (key == GLFW_KEY_X && action == GLFW_PRESS) {
-            if (activeRenderer == renderer) {
-            activeRenderer = realRenderer;
-                activeRenderer->updateLights();
-            camera.setActor(rHero.get());
-                return 0;
-            }
-            if (activeRenderer == realRenderer) {
-            activeRenderer = renderer;
-                activeRenderer->updateLights();
-            camera.setActor(pHero.get());
-                return 0;
-            }
-        }
-        
-        if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-            int newScheme = (-1)*(scheme-2);
-            setActionScheme(newScheme); 
-            if (activeSketch.get() == NULL) {
-            std::shared_ptr<Ability> sketch = std::make_shared<Sketch>(&world, pHero.get(), 6, ftexture);
-            activeSketch = static_pointer_cast<Sketch>(sketch);
-            abilities.push_back(sketch);
-            sketch->call(this);
-            }
-            return 0; 
-        }    
-        
-        if (key == GLFW_KEY_R && action == GLFW_PRESS) { 
-            glBindTexture(GL_TEXTURE_2D, ftexture);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGB, GL_UNSIGNED_BYTE, blank);
-         //   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 800, 800, GL_RGBA, GL_UNSIGNED_BYTE, blank);
-            glBindTexture(GL_TEXTURE_2D, 0);
-            if (activeSketch.get() != NULL) {
-            abilities.erase(std::remove(abilities.begin(), abilities.end(), activeSketch));
-            activeSketch.reset();
-            }
-        }  
-         
-        if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-            if (activeSketch.get() != NULL)
-            activeSketch->call2();
-        }
-    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
-    //    inputHandler.setCharCallback(char_callback);
- //       inputHandler.setKeyCallback(onetap_callback0);
-        scheme = 1;
-    }
-    }
-    if (scheme == 2) {
-    if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        int newScheme = (-1)*(scheme-2);
-        setActionScheme(newScheme);
-        firstMouse = true;
-    }
-    }
-    return 0;
+InputHandler& Game::getInputHandler() {
+    return inputHandler;
 }
 
-void Game::processInput2(int key, int action) {
-
-}
-
-void Game::print() {
-    activeRenderer->print(i);
-    //printf("Exposure is %f \n", activeRenderer->exposure);
-    printing = false;
-    i = ""; 
-}
-
-void Game::setActionScheme(int id) {
-    if(id == 2) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        glfwSetCursorPosCallback(window, mouse_callback);
+void Game::swapWorld() {
+    if (activeWorld == &world0) {
+        inputHandler.setActiveHero(1);
+   
+        activeWorld = &world1;
+        activeRenderer = renderer1;
+        activeRenderer->updateLights();
+        camera->setActor(pHero1.get());
+        return;
     }
-    if(scheme == 2 && id !=2) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    if (activeWorld == &world1) {
+        inputHandler.setActiveHero(0);
+        activeWorld = &world0;
+        activeRenderer = renderer0;
+        activeRenderer->updateLights();
+        camera->setActor(pHero0.get());
+        return;
     }
-    scheme = id;
 }
-
-void Game::newDialogue(Dialogue& dialogue_) {
-    activeDialogue = &dialogue_;
-}
-
-Numberable* Game::getNumberable(unsigned int ID_) {
-    return numberables[ID_];
-}
+  

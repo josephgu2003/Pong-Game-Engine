@@ -29,7 +29,7 @@ class Fish: public Ability {
 public:
     Fish(World* world_, Actor* actor_, float duration_);
     ~Fish();
-    virtual void call(Game* game);
+    virtual void call();
     virtual void tick();
 };
 

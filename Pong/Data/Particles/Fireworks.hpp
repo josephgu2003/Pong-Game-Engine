@@ -16,7 +16,7 @@ class Fireworks : public ParticleEffect {
     glm::vec4 color;
     float numberSparks;
     float particleRefresh = 0; 
-    float timer2 = 0; 
+    Watch aWatch;
     int firstUnusedTrail;
 public:
     bool exploded = false;

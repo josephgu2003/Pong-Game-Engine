@@ -19,23 +19,21 @@ AnimComponent::AnimComponent(Actor& actor) : Component(actor) {
 }
 
 void AnimComponent::tick() {
-     
     if (activeAnim) {
-    timeInAnim += (float)activeAnim->getTicksPerSec()*glfwGetTime();
+        timeInAnim += (float)activeAnim->getTicksPerSec()*glfwGetTime();
         timeInAnim = (float)fmod((double)timeInAnim, (double)activeAnim->getDuration());
- 
         updateBoneMatrices(timeInAnim); 
- 
+   
         if (actor->getComponent<GraphicsComponent>()) {
             Shader* shader =  actor->getComponent<GraphicsComponent>()->getShader();
             shader->use();
-            shader->setBool("animated", true);
+            shader->setBool("animated", true );
             
             for (int i = 0; i < boneMatrices.size(); ++i) {
                         shader->setMat4("boneOffsetMatrices[" + std::to_string(i) + "]",
                                           boneMatrices[i]);
             }
-        }  
+        }
     }
     else {
                if (actor->getComponent<GraphicsComponent>()) {
@@ -72,7 +70,6 @@ void AnimComponent::updateBoneMatrices(float t) {
         {
             int index = BoneDataMap[boneName].id;
    
-
             boneMatrices[index] = localTransform;
 
         }

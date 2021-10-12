@@ -13,10 +13,10 @@
 
 Model::Model() {
 }
-Model::Model(const char* filePath_) {
+Model::Model(const char* filePath_) { 
     loadModel(filePath_);
 }
-
+ 
 Model::~Model() {
 }
 
@@ -41,19 +41,19 @@ void Model::loadModel(std::string filePath_, AnimComponent* anim_) {
     const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
      
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString();
-        return;      
-    }
+        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << "\n";
+        return;
+    }    
     path = filePath_;        
     directory = filePath_.substr(0, filePath_.find_last_of('/'));
     processNode(scene->mRootNode, scene);
     anim_->setBoneDataMap(BoneDataMap); 
-    for (int i = 0; i < scene->mNumAnimations; i ++) {
+    for (int i = 0; i < scene->mNumAnimations; i ++) { 
         anim_->addAnimation(scene->mAnimations[i], scene);
-    }
-
-}
-
+    } 
+ 
+}   
+  
 Model::Model(const char* filePath, AnimComponent* anim_) {
     loadModel(filePath, anim_);
 }
@@ -66,7 +66,7 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
     //load each mesh from node
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        processMesh(mesh, scene);
     }
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
@@ -74,8 +74,8 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-    std::vector< std::shared_ptr<TBNBWVertex>> vertices;
+void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+    std::vector<TBNBWVertex*> vertices;
     std::vector<GLuint> indices;
     TextureMaps textures;
     
@@ -117,7 +117,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
                boneWeights[i] = 0.25f;
            }
         
-        std::shared_ptr<TBNBWVertex> vertex = std::make_shared<TBNBWVertex>(pos_, norm_, texCoords_, Tan_, BiTan_, boneIDs, boneWeights);
+        TBNBWVertex* vertex = new TBNBWVertex(pos_, norm_, texCoords_, Tan_, BiTan_, boneIDs, boneWeights);
         vertices.push_back(vertex);
     }
     
@@ -137,14 +137,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
         if (specularMaps.size() != 0)
         textures.specular = specularMaps.at(0);
     }
+    
     BoneWeightVertices(vertices, mesh, scene);
-    std::vector<std::shared_ptr<AnyVertex>> newVertices;
+    std::vector<AnyVertex*> newVertices;
     newVertices.resize(vertices.size());
     for (int i = 0; i < vertices.size(); i++) {
-        newVertices[i] = vertices[i];
+        newVertices[i] = static_cast<AnyVertex*>(vertices.at(i));
     }
-    Mesh returnedMesh(newVertices, indices, textures, VERTEX_TBNVERTEX);
-    return returnedMesh;
+    meshes.emplace_back(newVertices, indices, textures, VERTEX_TBNVERTEX);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
@@ -206,15 +206,13 @@ std::vector<Mesh>* Model::getMeshes() {
     return &meshes;
 }
 
-void Model::setHitbox(Hitbox hitbox_) {
-    hitbox = hitbox_;
-}
 
-void Model::BoneWeightVertices(std::vector<std::shared_ptr<TBNBWVertex>>& vertices, aiMesh* mesh,
+
+void Model::BoneWeightVertices(std::vector<TBNBWVertex*>& vertices, aiMesh* mesh,
                                const aiScene* scene) { 
     printf("Here: %f \n", (float)mesh->mNumBones);
     int x = mesh->mNumBones;
-  //  if (x > 4) x = 4;
+
     for (int boneIndex = 0; boneIndex < x; ++boneIndex) {
         int id = -1;
         std::string boneName(mesh->mBones[boneIndex]->mName.C_Str());
@@ -226,9 +224,6 @@ void Model::BoneWeightVertices(std::vector<std::shared_ptr<TBNBWVertex>>& vertic
             data.id = boneCounter;
             data.offset =
                  ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
-            if (data.offset == glm::mat4(1.0f)) {
-
-            }
             BoneDataMap[boneName] = data;
             id = BoneDataMap.size()-1;
             boneCounter++;
@@ -248,7 +243,7 @@ void Model::BoneWeightVertices(std::vector<std::shared_ptr<TBNBWVertex>>& vertic
             int vertexId = weights[i].mVertexId;
                   float weight = weights[i].mWeight;
                   assert(vertexId <= vertices.size());
-                setVertexBoneData(*vertices[vertexId].get(), id, weight);
+                setVertexBoneData(*vertices[vertexId], id, weight);
         }
     }
     for (int i = 0; i < vertices.size(); i++) {
@@ -292,7 +287,8 @@ void Model::setVertexBoneData(TBNBWVertex& v, int id, float weight) {
             return;
         }
     }
-    printf("uh oh");
+    printf("UH OH \n");
 }
 
+ 
  

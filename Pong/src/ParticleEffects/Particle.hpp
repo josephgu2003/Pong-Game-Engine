@@ -20,7 +20,8 @@
 #include "Actor.hpp"
 #include "Shader.hpp"
 #include "GraphicsComponent.hpp"
-#include  "Force.hpp"
+#include "Force.hpp"
+#include "Watch.hpp"
 
 struct Particle { // implies a set of vertices, don't store it or too much memory
     glm::vec3 posVec, velVec, pyrAngles;
@@ -51,7 +52,7 @@ protected:
 
     float ptcPerSec;
     float duration;
-    float timer = 0;
+    Watch myWatch;
     
     glm::vec3 force = glm::vec3(0,0,0);
     

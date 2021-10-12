@@ -16,7 +16,7 @@
 class Componentable {
 private:
     Actor* actor= NULL;
-    World* world = NULL;
+    World* world = NULL; 
     std::vector<std::shared_ptr<Component>> components;
 public:
     Componentable();

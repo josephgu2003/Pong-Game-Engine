@@ -6,6 +6,7 @@
 //
 
 #include "Componentable.hpp"
+
 Componentable::Componentable() {
     
 } 

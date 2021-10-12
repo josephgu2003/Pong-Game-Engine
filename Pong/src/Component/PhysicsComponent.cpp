@@ -17,7 +17,7 @@ PhysicsComponent::PhysicsComponent(Actor& actor, bool gravityOn_) : Component(ac
 } 
 
 void PhysicsComponent::tick() {
-    if (actor->getState() == STATE_NORMAL)
+    if (actor->getState() == STATE_IDLE)
     actor->translatePos(actor->getVel());
     handleGravity(*actor);
     actor->accelerate(-0.001f*actor->getVel());
@@ -30,7 +30,7 @@ void PhysicsComponent::handleGravity(Actor& actor) {
     switch(actor.getState()) {
         case STATE_PARALYZED:
             break;
-        case STATE_NORMAL:
+        case STATE_IDLE:
             actor.accelerate(glm::vec3(0,-0.1f*glfwGetTime(),0));
             
             if (actor.getPos().y <= 0.0f) {

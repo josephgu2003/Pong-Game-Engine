@@ -9,8 +9,9 @@
 
 
 Fireworks::Fireworks() {
-    
+    aWatch.resetTime();
 }
+
 Fireworks::Fireworks(glm::vec4 color_) {
     color = color_;
 }
@@ -44,8 +45,6 @@ void Fireworks::tick() {
     }
     
     float dt = glfwGetTime();
-    timer += dt;
-    timer2 += dt;
     
     if (!exploded) {
         for (int i = 0; i < numberSparks; i++) {
@@ -57,16 +56,16 @@ void Fireworks::tick() {
     }
         exploded = true;
     }
-    if (timer2 > 5.0) {
+    if (aWatch.getTime() > 5.0) {
         exploded = false;
-        timer2 = 0;
+        aWatch.resetTime();
     }
     for (int i = 0; i < numberSparks; i++) {
         if (particles[i].duration > 0) {
             particles[i].velVec += force;
            particles[i].velVec *= friction;
         if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
-            if (timer > particleRefresh) {
+            if (myWatch.getTime() > particleRefresh) {
                 particles[firstUnusedTrail].posVec = particles[i].posVec;
                 particles[firstUnusedTrail].velVec = glm::vec3(0.0);
    
@@ -90,9 +89,9 @@ void Fireworks::tick() {
         }
     }
     duration -= dt;
-    if (timer > particleRefresh) {
+    if (myWatch.getTime() > particleRefresh) {
       //  particleRefresh = 0.02 + 0.0002*(distribution(generator)%100);
-        timer = 0;
+        myWatch.resetTime();
     }
 }
 

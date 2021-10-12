@@ -14,11 +14,13 @@
 #include "Actor.hpp"
 #include "Ability.hpp"
 
+//for abilities and fighting people, prob do some stuf with buffs, debuffs
+// lvl blah blah
+
 class CombatComponent : public Component {
 private:
     std::shared_ptr<Ability> currentAbility;
     std::shared_ptr<Actor> biggestTarget;
-
     std::vector<std::shared_ptr<Ability>> abilityQ;
     std::shared_ptr<Ability> affecting;
 public:

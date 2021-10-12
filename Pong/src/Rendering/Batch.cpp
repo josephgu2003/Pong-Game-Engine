@@ -170,7 +170,7 @@ void Batch::init(unsigned int maxVertexByteSize_, unsigned int maxIndicesSize_,s
     glBindVertexArray(0);
 }
 
-GLuint Batch::makeInstanceBuffer(VertexData* data_, int dataSize_) {
+GLuint Batch::makeInstanceBuffer(int dataSize_) {
     GLuint instanceVBO;
     bindVAO();
     glGenBuffers(1,  &instanceVBO);
@@ -279,7 +279,6 @@ void Batch::updateVertexData(VertexData *data) {
 
     int vDataSize = bytePerVertex * data->getVertices().size();
 
-
     if ((vDataSize + vertexByteStride) > maxVerticesSize) {
         printf("Batch vertices overloaded \n");
         return;
@@ -297,13 +296,13 @@ void Batch::updateVertexData(VertexData *data) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     std::vector<float> array;
-    for (int i = 0; i < data->getVertices().size(); i++) { 
-        float* vertex = (float*)(data->getVertices().at(i).get());
+   for (int i = 0; i < data->getVertices().size(); i++) {
+       float* vertex = (float*)(data->getVertices().at(i).get());
         for (int j = 0; j < floatsPerVertex; j++) {
             array.push_back(*(vertex+j));
         }
     }
-    glBufferSubData(GL_ARRAY_BUFFER,    vertexByteStride,vDataSize, array.data());
+    glBufferSubData(GL_ARRAY_BUFFER,  vertexByteStride,vDataSize, array.data());
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     
@@ -325,7 +324,7 @@ void Batch::deleteVertexData(VertexData* data) {
             vertexByteStride = locations.at(i).second.VertexByteStride;
             indexByteStride = locations.at(i).second.IndexByteStride;
             position = i;
-            break;
+            break; 
         }
     }
     if(vertexByteStride == -1) {
@@ -334,15 +333,15 @@ void Batch::deleteVertexData(VertexData* data) {
     }
     if(indexByteStride == -1) {
         printf("Oops tried to delete vertex data that wasn't there \n");
-        return;
+        return; 
     }
     
     
     int vDataSize =  floatsPerVertex * sizeof(float) * data->getVertices().size();
-    
+
     int iDataSize = sizeof(GLuint)*indices.size();
 
- /**   bindVAO();
+  /**bindVAO();
      
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     configVAOAttribs(VERTEXDATA_CONFIG);
@@ -351,8 +350,8 @@ void Batch::deleteVertexData(VertexData* data) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferSubData(GL_ARRAY_BUFFER, vertexByteStride,vDataSize, NULL);
 
-    unbindVAO();**/
-
+    unbindVAO();
+**/ 
     locations.erase(locations.begin()+position);
 }
       
@@ -378,7 +377,7 @@ void Batch::updateInstanceData(VertexData* data, std::vector<float>& data_) {
     unsigned int instanceDataSize = sizeof(float)*data_.size();
     
     if (newData) {
-        GLuint id = makeInstanceBuffer(data, instanceDataSize);
+        GLuint id = makeInstanceBuffer(instanceDataSize);
     InstanceBlockDescription descript {id, instanceByteStride, instanceDataSize};
     instanceDataLocations.push_back(std::pair<VertexData*, InstanceBlockDescription>(data, descript));
     }

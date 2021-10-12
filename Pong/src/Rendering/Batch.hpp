@@ -29,6 +29,8 @@ struct InstanceBlockDescription {
 
 enum AttribConfig {VERTEXDATA_CONFIG, INSTANCEDATA_CONFIG};
  
+// batches things, they don't even share a common shader, allows for deletion and updates of data though through maps, allows for a single vao and vbo so those don't switch, instance vbo switches
+
 class Batch {
     unsigned int maxVerticesSize, maxIndicesSize, maxInstancingByteSize;
     GLuint VAO;
@@ -43,7 +45,7 @@ class Batch {
     GLenum drawMode;
     bool instancing;
     int bytesPerInstance;
-    GLuint makeInstanceBuffer(VertexData* data_, int dataSize);
+    GLuint makeInstanceBuffer(int dataSize);
     void configVAOAttribs(AttribConfig ac);
 public:
     Batch();

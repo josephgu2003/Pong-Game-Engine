@@ -12,14 +12,11 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "Actor.hpp"
-#include "Ball.hpp"
-#include "PlayerHero.hpp"
 #include "Particle.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
 #include "MapObject.hpp"
 #include "DirectionalLight.hpp"
-#include "Numberable.hpp"
 #include "Force.hpp"
 #include "AbilityManager.hpp"
 #include <memory>
@@ -29,7 +26,6 @@
 #define QUAD_UPDATE 2
 #define TEXT_UPDATE 3
 #define LIGHTING_UPDATE 3
-//stores locations of everything
 
 struct Weather {
     DirectionalLight dirLight;

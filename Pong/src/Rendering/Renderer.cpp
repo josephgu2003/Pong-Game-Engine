@@ -22,6 +22,31 @@ GLuint uboViewProj;
  GLuint uboLights;
  GLuint uboStopWatch;
 
+void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
+    if (block == ViewProj) {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+ 
+    if (block == Lights) {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+    
+    if (block == StopWatch) {
+
+    glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
+    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "StopWatch"), 2);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+}
+
+
 Renderer::Renderer() { 
     exposure = 0;
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
@@ -165,16 +190,16 @@ void Renderer::loadActorData() {
     std::vector<GLuint> actorIndices;
     
     for (int i = 0; i<world->getActorsCount(); i++) { // iterate over actors
-        std::vector<Mesh>* meshes = world->getNthActor(i)->getComponent<GraphicsComponent>()->getModel()->getMeshes();
-        
+        std::vector<Mesh>* meshes = world->getNthActor(i)->getComponent<GraphicsComponent>()->getModel()->getMeshes(); 
+    
         for (int j = 0; j<meshes->size(); j++) { // iterate over meshes
             int marker = actorIndices.size();
-            std::vector<std::shared_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
-            
+           const std::vector<std::unique_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
+        
             for (int c = 0; c < vertices.size(); c++) {
-                actorVertices.push_back(*static_cast<TBNBWVertex*>(vertices.at(c).get()));
+                actorVertices.push_back((*static_cast<TBNBWVertex*>(vertices.at(c).get())));
             }
-             
+              
             actorIndices.insert(actorIndices.end(), meshes->at(j).getIndices().begin(), meshes->at(j).getIndices().end());
             for ( marker; marker != actorIndices.size(); marker++) {
             actorIndices[marker] += actorVertices.size() - meshes->at(j).getVertices().size();
@@ -224,27 +249,25 @@ void Renderer::loadMapData() {
     GraphicsComponent& gc = world->getMap().getGraphics();
     VertexData* mesh = gc.getVertexData();
 
-            std::vector<std::shared_ptr<AnyVertex>>& vertices = mesh->getVertices();
+    const std::vector<std::unique_ptr<AnyVertex>>& vertices = mesh->getVertices();
     
     mapVertices.resize(vertices.size());
-    
-    int counter = 0;
+     
     
             for (int c = 0; c < vertices.size(); c++) {
-                mapVertices[counter] = *static_cast<TBNVertex*>(vertices.at(c).get());
-                counter++;
+                mapVertices[c] = *static_cast<TBNVertex*>(vertices.at(c).get());
             }
-
+     
     glGenVertexArrays(1, &mVAO);
-      glBindVertexArray(mVAO);
+      glBindVertexArray(mVAO); 
       
       glGenBuffers(1, &mVBO);
       glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*mesh->getVertices().size(), mapVertices.data(), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*vertices.size(), mapVertices.data(), GL_STATIC_DRAW);
       
       glGenBuffers(1, &mEBO);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO); 
       glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh->getIndices().size() * sizeof(GLuint), &mesh->getIndices().at(0), GL_STATIC_DRAW);
        
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
@@ -324,7 +347,8 @@ void Renderer::loadParticleData() {
                 updateNeeded = false; // if match, no update needed
                 break;
             }
-        } 
+        }
+        
         if (updateNeeded) {
             loadedParticles.push_back(particleData.at(i));
             if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
@@ -391,7 +415,6 @@ void Renderer::loadParticleData() {
             quadParticles.deleteVertexData(deletedParticles.at(i)->graphics.getVertexData());
 
             loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
-            delete deletedParticles.at(i);
         }
         if (deletedParticles.at(i)->drawTarget == GL_POINTS) {
             pointParticles.deleteInstanceData(deletedParticles.at(i)->graphics.getVertexData(), bytes);
@@ -400,7 +423,6 @@ void Renderer::loadParticleData() {
            
 
             loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
-            delete deletedParticles.at(i);
         }
     } 
 }
@@ -477,10 +499,10 @@ void Renderer::render() {
     renderMap();
     renderParticles();
     renderQuads();
-    renderUI();
+    renderUI(); 
     if (screenText.duration > 0.0f) {
         renderText();
-
+ 
     }
     
     glDisable(GL_DEPTH_TEST);
@@ -548,8 +570,8 @@ void Renderer::render() {
 
 
 void Renderer::renderUI() {
-    uiStuff.bindVAO();
-    uiShader->use();
+  //  uiStuff.bindVAO();
+   // uiShader->use();
     
 }
 

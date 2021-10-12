@@ -15,14 +15,20 @@
 #include <vector>
 #include "Shader.hpp"
 #include "World.hpp"
-#include "Camera.hpp"
+#include "Camera.hpp" 
 #include "Mesh.hpp"
 #include <string>
+#include "uiLayout.hpp"
 #include "Batch.hpp"
 
 extern GLuint uboViewProj;
 extern GLuint uboLights; 
 extern GLuint uboStopWatch;
+
+
+enum Uniblock {
+    ViewProj, Lights, StopWatch
+};
 
 // draws the world
 struct screentext {
@@ -91,6 +97,7 @@ private:
     float timeT;
 
 public:
+    static void bindShaderUniblock(Shader* shader, Uniblock block);
     float exposure;
     void incExposure(float delta);
     void updateLights();

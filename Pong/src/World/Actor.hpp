@@ -19,7 +19,6 @@
 #include <random>
 #include <algorithm>
 #include "Shader.hpp"
-#include "Numberable.hpp"
 #include "GraphicsComponent.hpp"
 #include <memory>
 #include "VertexData.hpp"
@@ -30,11 +29,15 @@ class World;
 class Ability;
 class Shader;
 
-
 enum State {
-    STATE_NORMAL,
+    STATE_IDLE,
+    STATE_WALKING,
     STATE_PARALYZED,
     STATE_FLYING
+};
+
+enum ActorEvent {
+    
 };
 
 class Actor : public Componentable {
@@ -43,7 +46,7 @@ class Actor : public Componentable {
 protected:
     World* world = NULL;
     std::shared_ptr<GraphicsComponent> graphics = NULL;
-    glm::mat4 modelMat = glm::mat4(1.0f);
+    glm::mat4 modelMat = glm::mat4(1.0f);  
     State state;
     glm::vec3 posVec;
     glm::vec3 velVec;
@@ -73,10 +76,10 @@ public:
     
     glm::vec3 getPos();
     void setPos(glm::vec3 pos_);
-    void translatePos(glm::vec3 translate);
+    void translatePos(const glm::vec3& translate);
     void setPosY(float y_);
     void orient(float yaw);
-    void turnTowards(glm::vec3 newDir);
+    void turnTowards(const glm::vec3& newDir);
     void posDir(float speed);
     void posRight(float speed);
     void randomPosAround(glm::vec3 pivot);
@@ -90,6 +93,9 @@ public:
 
     void setState(State state);
     State getState();
+    
+    float getDistanceTo(Actor* b);
+
 };
 
 #endif /* Actor_hpp */

@@ -215,18 +215,14 @@ void World::tick() {
         }
     }
     abilityManager.tick();
-}
+} 
 
 void World::informActorProximity(Actor& actor, float radius) {
-
-
     for (int i = 0; i < allActorPtrs.size(); i++) {
         if (allActorPtrs.at(i).get() == &actor) continue;
-        float distance = glm::length(actor.getPos()-allActorPtrs.at(i)->getPos());
-        if (distance <= radius) {
+        if (actor.getDistanceTo(allActorPtrs.at(i).get()) <= radius) {
             std::shared_ptr<Actor> t = (allActorPtrs.at(i));
             actor.getComponent<CombatComponent>()->setBigTarget(t);
-         //   static_pointer_cast<CombatComponent>(actor.getComp(COMBAT))->setBigTarget(t);
         }
     }
 } 

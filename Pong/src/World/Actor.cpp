@@ -11,7 +11,6 @@
 #include <string>
 #include <iostream>
 #include "AssetManager.hpp"
-#include "Particle.hpp"
 #include "Ability.hpp"
 #include "PhysicsComponent.hpp"
 #include <glm/gtx/vector_angle.hpp>
@@ -21,13 +20,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "CombatComponent.hpp"
 #include "AnimComponent.hpp"
-#include "NameComponent.hpp"
+#include "NameComponent.hpp"  
 #include "LifeComponent.hpp"
-
+#include "CharacterComponent.hpp"
+#include "Renderer.hpp"
+#include "AIComponent.hpp"
+ 
 #define JUMP_SPEED 0.05f
 
 Actor::Actor() {
-    state = STATE_NORMAL;
+    state = STATE_IDLE;
         posVec.x = 0.0f;
         posVec.y = 0.0f;
         posVec.z = 0.0f;
@@ -51,22 +53,16 @@ void Actor::orient(float yaw_) {
     rightVec = glm::normalize(rightVec);
 } 
 
-void Actor::turnTowards(glm::vec3 newDir) {
-    newDir = glm::normalize(newDir);
-    //float length = glm::length(newDir);
-   // float dRoll = (180/3.14159)*acos(glm::dot(glm::vec3(dirVec.x,dirVec.y,0),glm::vec3(newDir.x,newDir.y,0)));
-   // float dPitch =  (180.0f/3.14159)*acos(glm::dot(  glm::normalize(glm::vec3(0,newDir.y,newDir.z)),glm::normalize(glm::vec3(0,dirVec.y,dirVec.z))));
-    
-  //  float dYaw =  (180.0f/3.14159)*acos(glm::dot(glm::normalize(glm::vec3(newDir.x,0,newDir.z)),glm::normalize(glm::vec3(dirVec.x,0,dirVec.z))));
+void Actor::turnTowards(const glm::vec3& newDir_) {
+    glm::vec3 newDir = glm::normalize(newDir_);
+
     float dYaw = (180.0f/3.14159)* glm::orientedAngle(glm::normalize(glm::vec2(newDir.x,newDir.z)), glm::normalize(glm::vec2(dirVec.x,dirVec.z)));
-  //  float dPitch = (180.0f/3.14159)* glm::orientedAngle(glm::normalize(glm::vec2(newDir.x,newDir.z)), glm::normalize(glm::vec2(dirVec.x,dirVec.z)));
+
     eulerAngles -= glm::vec3(0,dYaw,0);
     if (eulerAngles.x < -45.0f) {
         eulerAngles.x = -45.0f;
     }
- //   dirVec.x = std::cos(glm::radians(eulerAngles.y)) * std::cos(glm::radians(eulerAngles.x));
-   // dirVec.y = std::sin(glm::radians(eulerAngles.x));
-    //dirVec.z = std::sin(glm::radians(eulerAngles.y)) * std::cos(glm::radians(eulerAngles.x));
+
     dirVec = newDir;
     rightVec = rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
     rightVec = glm::normalize(rightVec);
@@ -101,7 +97,7 @@ void Actor::setPos(glm::vec3 pos_) {
     posVec = pos_;
 }
 
-void Actor::translatePos(glm::vec3 translate) {
+void Actor::translatePos(const glm::vec3& translate) {
     posVec += translate;
 }
 
@@ -162,57 +158,58 @@ glm::vec3 Actor::getPos() {
 void Actor::init(int i ) {
     dummy = false;
     if (i == 0) {
-        std::shared_ptr<Component> nc = std::make_shared<NameComponent>(*this);
+        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
+            
         std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
-        
-    Model* model = new Model();
-    AssetManager::loadModel(MOD_HOODY, model);
 
-    TextureMaps map;
-    AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
-    AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
-    for (int i = 0; i<model->getMeshes()->size(); i ++) {
-        model->setMeshTexture(i, map);
-    }
-    Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
-    shader->use();
-    shader->setFloat("size", 0.005);
-    shader->setFloat("brightness", 3.0);
-        
-    AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
+        Model* model = new Model();
+        AssetManager::loadModel(MOD_HOODY, model);
 
-        AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
-        
+        TextureMaps map;
+        AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
+        AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
+            
+        for (int i = 0; i<model->getMeshes()->size(); i ++) {
+            model->setMeshTexture(i, map);
+        }
+            
+        Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+        shader->use();
+        shader->setFloat("size", 0.005);
+        shader->setFloat("brightness", 3.0);
+            
+        Renderer::bindShaderUniblock(shader, ViewProj);
+        Renderer::bindShaderUniblock(shader, Lights);
+            
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
         addComp(pc);
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
-        addComp(cc);
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+            addComp(cc);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
         static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
-
-    }  
+        
+    }
     if (i == 1) {
-        std::shared_ptr<Component> nc = std::make_shared<NameComponent>(*this);
+        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
         std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
         
         state = STATE_FLYING;
         Model* model = new Model();
-        AssetManager::loadModel(MOD_HOODY, model);
-      //  model = loadModels("Resources/Map/snow3.obj");
+        AssetManager::loadModel(MOD_HOODY, model); 
+
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.005); 
         shader->setFloat("brightness", 1.0);
-        AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
+        
+        Renderer::bindShaderUniblock(shader, ViewProj);
+        Renderer::bindShaderUniblock(shader, Lights);
 
-            AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
-     //   GLuint lights  = glGetUniformBlockIndex(shader.ID, "Lights");
-       // glUniformBlockBinding(shader.ID, glGetUniformBlockIndex(shader.ID, "Lights"), 1);
         TextureMaps map;
         AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
@@ -225,8 +222,7 @@ void Actor::init(int i ) {
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
 
-
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
         static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
 
@@ -248,11 +244,11 @@ void Actor::init(int i ) {
 
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
-        shader->setFloat("size", 0.005);  
+        shader->setFloat("size", 0.005);
         shader->setFloat("brightness", 1.0);
-        AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
+        Renderer::bindShaderUniblock(shader, ViewProj);
 
-            AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
+        Renderer::bindShaderUniblock(shader, Lights);
         
         TextureMaps map;
         AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true); 
@@ -260,20 +256,19 @@ void Actor::init(int i ) {
         for (int i = 0; i<model->getMeshes()->size(); i ++) {
             model->setMeshTexture(i, map);
         }
-
+  
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
-        
 
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
         static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
 
     }
     if (i == 3) {
-        std::shared_ptr<Component> nc = std::make_shared<NameComponent>(*this);
+        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
         std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
@@ -289,9 +284,9 @@ void Actor::init(int i ) {
         shader->use();
         shader->setFloat("size", 0.005);
         shader->setFloat("brightness", 1.0);
-        AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
-
-            AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
+        
+        Renderer::bindShaderUniblock(shader, ViewProj);
+        Renderer::bindShaderUniblock(shader, Lights);
         
         TextureMaps map;
         AssetManager::loadTexture("Resources/Models/Vampire/Vampire_diffuse.png", &map.diffuse, true);
@@ -306,10 +301,54 @@ void Actor::init(int i ) {
         addComp(pc);
         
 
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(model, shader);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
         static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
 
+    }
+    if (i == 4) {
+        std::shared_ptr<Component> aic = std::make_shared<AIComponent>(*this);
+        addComp(aic);
+        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
+        addComp(nc);
+        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        addComp(lc);
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this);
+
+    Model* model = new Model();
+
+    AssetManager::loadModel("Resources/Models/Knight/knight.fbx", model,  static_cast<AnimComponent*>(ac.get()));
+         
+    static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("HollowKnight__Armature|Walk");
+    addComp(ac);  
+          
+    TextureMaps map;
+    AssetManager::loadTexture("/Users/josephgu/Downloads/hollow_knight_-_vr_chat_-_free_download/textures/Knight_baseColor.png", &map.diffuse, true);
+        
+    AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
+        
+    for (int i = 0; i<model->getMeshes()->size(); i ++) {
+        model->setMeshTexture(i, map);
+    }
+          
+    Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    shader->use();
+    shader->setFloat("size", 0.007);
+    shader->setFloat("brightness", 3.0);
+        
+        Renderer::bindShaderUniblock(shader,      ViewProj);
+
+        Renderer::bindShaderUniblock(shader,      Lights);
+        
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        addComp(pc);
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        addComp(cc);
+        
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
+        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        addComp(gc);
+        
     }
 }
 
@@ -328,4 +367,9 @@ State Actor::getState() {
 void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
     if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
+}
+  
+float Actor::getDistanceTo(Actor* b) {
+    float d = glm::length(posVec - b->getPos());
+    return d;
 }

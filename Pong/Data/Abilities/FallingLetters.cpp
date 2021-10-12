@@ -9,6 +9,7 @@
 #include "Particle.hpp"
 #include <memory>
 #include "Force.hpp"
+#include "LifeComponent.hpp"
 
 FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_)  {
     
@@ -18,7 +19,7 @@ FallingLetters::~FallingLetters() {
     world->blur = false;
     world->deleteParticleEffect(letters);
     if (target != NULL) {
-        target->setState(STATE_NORMAL);
+        target->setState(STATE_IDLE);
     }
     world->deleteForce(force);
     world->deleteForce(up);
@@ -32,8 +33,10 @@ void FallingLetters::call() {
  
     world->insertParticleEffect(letters); 
     world->blur= true;
-    if (target != NULL) {
-    target->setState(STATE_PARALYZED);
+    
+    if (target) {
+        target->setState(STATE_PARALYZED);
+        
         force = new Force();
         force->init(glm::vec3(0,0,0), 1.25f); 
         force->setActor(target); 
@@ -45,8 +48,7 @@ void FallingLetters::call() {
         up->setActor(target);
         up->configureStraightForce(glm::vec3(0,1,0), -0.1f, FORCE_QUADRATIC);
          world->insertForce(up);
-    } 
-
+    }
 }
 
 void FallingLetters::tick() { 
@@ -54,5 +56,9 @@ void FallingLetters::tick() {
     if (duration < 0) {
         on = false;
     }
+    if (target->getComponent<LifeComponent>()) {
+        target->getComponent<LifeComponent>()->incLife(-0.0005);
+    }
 }
 
+ 

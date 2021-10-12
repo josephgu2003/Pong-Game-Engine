@@ -86,31 +86,65 @@ struct TextureMaps {
     Texture voronoi;
 };
 
+enum VertexTemplate {
+    QUAD_SIMPLE
+};
+
 class VertexData {
 protected:
-    std::vector<std::shared_ptr<AnyVertex>> vertices;
-    std::vector<GLuint> indices;
+    std::vector<std::unique_ptr<AnyVertex>> vertices;
+    std::vector<GLuint> indices; 
     TextureMaps textures;
     VertexType vertexType;
 public:
     VertexData();
-
-    VertexData(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
+    
+    VertexData(const VertexData &vd) {
+        printf("VertexData copy constructor called \n");
+        indices = vd.indices;
+        textures = vd.textures;
+        vertexType = vd.vertexType;
+        vertices.resize(vd.vertices.size());
+        for (int i = 0; i < vd.vertices.size(); i++) {
+            std::unique_ptr<AnyVertex> vertex = std::make_unique<AnyVertex>();
+            *vertex.get() = *vd.vertices.at(i).get();
+            vertices[i] = std::move(vertex);
+        }
+    }
+         
+    void operator=(const VertexData& vd) {
+        printf("VertexData = overload called \n");
+        indices = vd.indices; 
+        textures = vd.textures;
+        vertexType = vd.vertexType;
+        vertices.resize(vd.vertices.size());
+        for (int i = 0; i < vd.vertices.size(); i++) {
+            std::unique_ptr<AnyVertex> vertex = std::make_unique<AnyVertex>();
+            *vertex.get() = *vd.vertices.at(i).get();
+            vertices[i] = std::move(vertex);
+        }
+    }
+    
+    // Joseph Gu, Northeastern University, 9/20/2021
+    
+    VertexData(std::vector<AnyVertex*>& vertices_,
          std::vector<GLuint>& indices_,
                TextureMaps& textures_, VertexType vertexType_);
-    void setVertexData(std::vector<std::shared_ptr<AnyVertex>>& vertices_,
+    
+    void setVertexData(std::vector<AnyVertex*>& vertices_,
                  std::vector<GLuint>& indices_,
                        TextureMaps& textures_, VertexType vertexType_);
-
-    std::vector<std::shared_ptr<AnyVertex>>& getVertices();
-
-    void setVertices(std::vector<std::shared_ptr<AnyVertex>>& vertices_, VertexType vertexType_);
+    void generateTemplate(VertexTemplate vt);
+    
+    const std::vector<std::unique_ptr<AnyVertex>>& getVertices();
+    void setVertices(std::vector<AnyVertex*>& vertices_, VertexType vertexType_);
     
     std::vector<GLuint>& getIndices();
     void setIndices(std::vector<GLuint>& indices_);
     
     TextureMaps& getTextures();
     void setTextures(TextureMaps& textures_);
+
 };
 
 #endif /* VertexData_hpp */

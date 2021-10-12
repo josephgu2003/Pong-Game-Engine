@@ -15,6 +15,8 @@ class Actor;
 class World;
 
 enum CompType {
+    AI,
+    CHAR,
     LIFE,
     NAME,
     COMBAT,

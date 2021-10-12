@@ -16,24 +16,26 @@
 #include <stdio.h>
 #include "Actor.hpp"
 #include "World.hpp"
-#include "PlayerHero.hpp"
 #include "InputHandler.hpp"
 #include <sstream>
 #include <vector>
 #include "Sketch.hpp"
-#include "Billow.hpp"
 #include "Mist.hpp"
 #include "LoadingScreen.hpp"
 #include "InkEffect.hpp"
 #include "Audio.hpp"
 #include "MapObject.hpp"
-#include "Numberable.hpp"
 #include "Fireworks.hpp"
 #include "ScriptOne.hpp"
-#include <chrono>
+#include "Watch.hpp"
 
 class Game {
+private:
+    Watch watch;
+    Watch timerForTick;
+    
     GLFWwindow* window; // Windowed
+    LoadingScreen* screen;
     
     std::shared_ptr<Camera> camera;
     
@@ -47,31 +49,25 @@ class Game {
     
     Renderer* activeRenderer = NULL;
     
-    LoadingScreen* screen;
-    
     InputHandler inputHandler;
     
     Audio audio;
     
-    
     std::shared_ptr<Actor> pHero0;
     std::shared_ptr<Actor> pHero1;
-    
-    InkEffect inkGlyphs;
-    Fireworks fireworks;
-    MapObject map;
-    MapObject realMap;
-
-    Mist mist;
-    
-    ScriptOne* script;
     
     double lastTime = 0;
     double fpsTimer;
     int intervalTimer = 0;
     bool firstTime = true;
-    std::chrono::time_point<std::chrono::high_resolution_clock> t0;
     float draws;
+    
+    InkEffect inkGlyphs;
+    Fireworks fireworks;
+    MapObject map;
+    MapObject realMap;
+    Mist mist;
+    ScriptOne* script;
     
     void initWindow();
     void initObjects();

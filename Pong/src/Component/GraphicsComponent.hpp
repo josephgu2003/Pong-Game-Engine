@@ -11,24 +11,30 @@
 #include "Component.hpp"
 #include "Shader.hpp"
 #include "VertexData.hpp"
-#include <memory>
+#include <memory> 
 #include "AssetManager.hpp"
 
 struct FrameAndShader {
     Frame* frame;
     Shader* shader;
 };
+
 class GraphicsComponent : public Component {
 protected:
     Shader* shader = NULL;
-    std::unique_ptr<VertexData> vertexData;
+    std::shared_ptr<VertexData> vertexData;
     Model* model = NULL;
     std::map<Texture*, FrameAndShader> animatedTextures;
     int activeData = -1;
-public:
-    GraphicsComponent();
+public:  
+    GraphicsComponent(); 
     
     GraphicsComponent(VertexData* vertexData_, Shader* shader_);
+    
+    GraphicsComponent(Shader* shader_) {
+        Component::type = GRAPHICS;
+        shader = shader_;
+    }
     
     void setModel(Model* model);
 

@@ -31,7 +31,7 @@ struct Hitbox {
     float maxX, minX, maxY, minY, maxZ, minZ;
 };
 
-class Model : public VertexData {
+class Model  {
     friend class Billow;
 private:
     std::map<std::string, BoneData> BoneDataMap;
@@ -42,13 +42,13 @@ private:
     std::vector<Texture> loadedTextures;
     std::string directory;
     std::string path;
-    Hitbox hitbox; 
+
     void processNode(aiNode* node, const aiScene* scene);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+    void processMesh(aiMesh* mesh, const aiScene* scene);
     std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
     GLuint getTextureFromFile(std::string path);
 
-    void BoneWeightVertices(std::vector<std::shared_ptr<TBNBWVertex>>& vertices, aiMesh* mesh,
+    void BoneWeightVertices(std::vector<TBNBWVertex*>& vertices, aiMesh* mesh,
                             const aiScene* scene);
     
     glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
@@ -59,6 +59,7 @@ public:
     Model();
     Model(const char* filePath);
     Model(const char* filePath, AnimComponent* anim);
+    
     
     ~Model();
     
@@ -72,6 +73,5 @@ public:
     void setFilepath(const char* path_);
     std::string getFilepath();
     std::vector<Mesh>* getMeshes();
-    void setHitbox(Hitbox hitbox_);
 };
 #endif /* Model_hpp */

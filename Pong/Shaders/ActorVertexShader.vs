@@ -66,8 +66,7 @@ layout (std140) uniform Lights
 
     void main()
     {
-      //  vec4 Pos = vec4(0.0,0.0,0.0,1.0);
-       // vec4 newNormals = vec4(0.0,1.0,0.0,0.0);
+
         vec4 Pos = vec4(0.0,0.0,0.0,0.0);
         if (animated == true) {
             mat4 transform = mat4(0.0);
@@ -77,7 +76,7 @@ layout (std140) uniform Lights
                     continue;
                 }
                 if (boneIDs[i] >= MAX_BONES) {
-           //    Pos = vec4(aPos, 1.0);
+
                     transform = mat4(1.0);
                     break;
                 }
@@ -87,27 +86,19 @@ layout (std140) uniform Lights
            
                 transform += offset*weight;
 
-        //   vec4 localPos = offset * vec4(aPos, 0.0);
-       //   vec4 localNorm = offset * vec4(Normals_, 1.0);
-       //   Pos += vec4(localPos) * weight;
-       //    newNormals += localNorm * weight;
                 z =1;
             }
             if (z ==0 ) {
-       //     Pos = vec4(aPos, 1.0);
+
                 transform = mat4(1.0);
             }
             Pos = transform * vec4(aPos.xyz,1.0);
         } else {
             Pos = vec4(aPos.xyz, 1.0);
         }
- 
-     //   Pos = vec4(size*Pos.xyz, 1.0);
-
          
         gl_Position =  viewProjMat * modelMat * vec4(size*Pos.xyz,1.0);
         
-      //  Normals = transposeInverseModelMat * Normals_.xyz; //sus normals
         Normals = Normals_.xyz;
         vec3 T = normalize(vec3(modelMat * vec4(Tangent,   0.0)));
            vec3 B = normalize(vec3(modelMat * vec4(Bitangent, 0.0)));

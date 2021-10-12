@@ -11,19 +11,144 @@
 
 #include <iostream>
 #include <cctype>
-
 #include "stb_image.h"
-
-
 #include <thread>
 #include "json.hpp"
 #include "JsonManager.hpp"
 #include "AssetManager.hpp"
 
- 
-extern void char_callback(GLFWwindow* window, unsigned int key);
-extern void onetap_callback0(GLFWwindow* window, int key, int scancode, int action, int mods);
-extern void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_);
+Game::Game() {
+    watch.resetTime();
+    timerForTick.resetTime();
+    running = true;
+    
+    initWindow();
+    
+    glewExperimental = GL_TRUE;
+    glewInit();
+     
+    glEnable(GL_DEPTH_TEST); // enable depth-testing
+    glDepthFunc(GL_LEQUAL);
+    
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetTime(0);
+    
+    glfwSetWindowUserPointer(window, &inputHandler);
+    
+    screen = new LoadingScreen();
+    
+    inputHandler.setWindow(window);
+    inputHandler.setGame(this);
+
+    stbi_set_flip_vertically_on_load(0);
+    
+    initObjects();
+  
+    linkObjects();
+    
+    JsonManager::loadGame(this);
+    
+    inputHandler.setPlayerHero(pHero0, 0);
+    inputHandler.setPlayerHero(pHero1, 1);
+    
+    inkGlyphs.setActor(pHero0.get());
+    camera->setActor(pHero0.get());
+    
+    VertexData* data = new VertexData;
+    AnyVertex* a = new TBNVertex(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    AnyVertex* b = new TBNVertex(glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    AnyVertex* c = new TBNVertex(glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    AnyVertex* d = new TBNVertex(glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
+    std::vector<AnyVertex*> mapVertices = {a, b, c, d
+    };
+    
+    std::vector<GLuint> mapIndices = {
+        0, 1, 2,
+        2, 3, 0
+    };
+     
+    TextureMaps mapTextures;
+    Texture t;
+    AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
+    mapTextures.diffuse = (t);
+    data->setVertexData(mapVertices, mapIndices, mapTextures, VERTEX_TBNVERTEX);
+    Shader* shader = new Shader("Shaders/WaterVertexShader.vs", "Shaders/WaterFragmentShader.fs");
+    glm::mat4 modelMat = glm::mat4(1.0);
+    modelMat = glm::translate(modelMat, glm::vec3(map.getPos()));
+    
+    shader->use();
+    shader->setMat4("modelMat", modelMat);
+    glm::mat3 mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    shader->setMat3("transposeInverseModelMat", mat);
+    GraphicsComponent* graphics = new GraphicsComponent(data, shader);
+    map.setGraphics(graphics);
+     
+    Renderer::bindShaderUniblock(shader, ViewProj);
+    Renderer::bindShaderUniblock(shader,   Lights);
+    Renderer::bindShaderUniblock(shader, StopWatch);
+ //memeleak
+    
+    Model*  model = new Model();
+    AssetManager::loadModel("Resources/Map/snow3.obj", model);
+    TextureMaps maps2;
+    
+    AssetManager::loadTexture(TEX_VORONOI, &maps2.voronoi, false);
+
+    model->setMeshTexture(0, maps2);
+    VertexData* data2 = &model->getMeshes()->at(0);
+    Shader* shader2 = new Shader("Shaders/SnowVertexShader.vs", "Shaders/SnowFragmentShader.fs");
+    modelMat = glm::mat4(1.0);
+    modelMat = glm::translate(modelMat, glm::vec3(realMap.getPos()));
+    shader2->use();
+    shader2->setMat4("modelMat", modelMat);
+    shader2->setFloat("size", 15);
+    mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    shader2->setMat3("transposeInverseModelMat", mat);
+    GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
+    realMap.setGraphics(graphics2);
+
+    Renderer::bindShaderUniblock(shader2,    ViewProj);
+    Renderer::bindShaderUniblock(shader2,    Lights);
+    Renderer::bindShaderUniblock(shader2,     StopWatch);
+
+    
+    screen->print("Preparing the brushes...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    renderer0->loadActorData();
+    
+    screen->print("Opening the books...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    renderer0->loadMapData();
+    renderer0->loadSkyBoxData();
+    
+    screen->print("Putting on a fresh canvas...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    renderer1->loadActorData();
+    renderer1->loadMapData();
+    
+    screen->print("Flipping the pages...");
+    glfwPollEvents();
+    glfwSwapBuffers(window);
+    
+    renderer1->loadSkyBoxData();
+    
+    stbi_set_flip_vertically_on_load(1);
+
+    printf("%s\n", glGetString(GL_VERSION));
+
+    activeRenderer = renderer0;
+    activeWorld = &world0;
+
+    script = new ScriptOne();
+    script->init(this);
+
+}
 
 void Game::initWindow() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -66,167 +191,23 @@ void Game::linkObjects() {
  
     world0.insertCamera(camera.get());
        
-     world0.insertParticleEffect(&fireworks);   
-     world0.insertParticleEffect(&mist);
+    world0.insertParticleEffect(&fireworks);
+    world0.insertParticleEffect(&mist);
 
-       world0.insertParticleEffect(&inkGlyphs);
-       world0.setMap(map);
-       world1.setMap(realMap);
-
+    world0.insertParticleEffect(&inkGlyphs);
+    world0.setMap(map);
+    world1.setMap(realMap);
+ 
     inputHandler.setCamera(camera);
 }
 
-Game::Game() {
-    t0 = std::chrono::high_resolution_clock::now();
-    running = true;
-    
-    initWindow();
-    
-    glewExperimental = GL_TRUE;
-    glewInit();
-     
-    glEnable(GL_DEPTH_TEST); // enable depth-testing
-    glDepthFunc(GL_LEQUAL);
-    
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetTime(0);
-    
-    glfwSetWindowUserPointer(window, &inputHandler);
-    
-    screen = new LoadingScreen();
-    
-    inputHandler.setWindow(window);
-    inputHandler.setGame(this);
-
-    //billow.posVec = glm::vec3(0,5,0);
-    stbi_set_flip_vertically_on_load(0);
-    
-    initObjects();
-  
-    linkObjects();
-    
-    JsonManager::loadGame(this);
-    
-    inputHandler.setPlayerHero(pHero0, 0);
-    inputHandler.setPlayerHero(pHero1, 1);
-    
-    inkGlyphs.setActor(pHero0.get());
-    camera->setActor(pHero0.get());
-    
-    VertexData* data = new VertexData;
-    std::shared_ptr<TBNVertex> a = std::make_shared<TBNVertex>(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    std::shared_ptr<TBNVertex> b = std::make_shared<TBNVertex>(glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    std::shared_ptr<TBNVertex> c = std::make_shared<TBNVertex>(glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    std::shared_ptr<TBNVertex> d = std::make_shared<TBNVertex>(glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    std::vector<std::shared_ptr<AnyVertex>> mapVertices = {a, b, c, d
-    };
-    
-    std::vector<GLuint> mapIndices = {
-        0, 1, 2,
-        2, 3, 0
-    };
-     
-    TextureMaps mapTextures;
-    Texture t;
-    AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
-    mapTextures.diffuse = (t);
-    data->setVertexData(mapVertices, mapIndices, mapTextures, VERTEX_TBNVERTEX);
-    Shader* shader = new Shader("Shaders/WaterVertexShader.vs", "Shaders/WaterFragmentShader.fs");
-    glm::mat4 modelMat = glm::mat4(1.0);
-    modelMat = glm::translate(modelMat, glm::vec3(map.getPos()));
-    
-    shader->use();
-    shader->setMat4("modelMat", modelMat);
-    glm::mat3 mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    shader->setMat3("transposeInverseModelMat", mat);
-    GraphicsComponent* graphics = new GraphicsComponent(data, shader);
-    map.setGraphics(graphics);
-     
-    AssetManager::bindShaderUniblock(shader, AssetManager::ViewProj);
-    AssetManager::bindShaderUniblock(shader, AssetManager::Lights);
-    AssetManager::bindShaderUniblock(shader, AssetManager::StopWatch);
- 
-    Model*  model = new Model();
-    AssetManager::loadModel("Resources/Map/snow3.obj", model);
-    TextureMaps maps2;
-    
-    AssetManager::loadTexture(TEX_VORONOI, &maps2.voronoi, false);
-
-    model->setMeshTexture(0, maps2);      
-    VertexData* data2 = &model->getMeshes()->at(0);
-     Shader* shader2 = new Shader("Shaders/SnowVertexShader.vs", "Shaders/SnowFragmentShader.fs");
-    modelMat = glm::mat4(1.0);
-     modelMat = glm::translate(modelMat, glm::vec3(realMap.getPos()));
-     shader2->use();
-     shader2->setMat4("modelMat", modelMat);
-    shader2->setFloat("size", 15);  
-    mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-     shader2->setMat3("transposeInverseModelMat", mat);
-     GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
-     realMap.setGraphics(graphics2);
-
-    AssetManager::bindShaderUniblock(shader2, AssetManager::ViewProj);
-    AssetManager::bindShaderUniblock(shader2, AssetManager::Lights);
-    AssetManager::bindShaderUniblock(shader2, AssetManager::StopWatch);
-  //  world.insertActor(&billow)
- 
-
-    screen->print("Preparing the brushes...");
-    glfwPollEvents(); 
-    glfwSwapBuffers(window);
-
-    
-    screen->print("Opening the books...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-
-    
-    screen->print("Flipping the pages...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-
-    screen->print("Putting on a fresh canvas...");
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-    
-    renderer0->loadActorData();
-    renderer0->loadMapData();
-    renderer0->loadSkyBoxData();
-    
-    renderer1->loadActorData();
-    renderer1->loadMapData();
-    renderer1->loadSkyBoxData();
-    
-    stbi_set_flip_vertically_on_load(1);
-
-    printf("%s\n", glGetString(GL_VERSION));
-
-    int i;
-    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &i);
-    printf("%i\n", i);
-
-    activeRenderer = renderer0;
-    activeWorld = &world0;
-
-    script = new ScriptOne();
-    script->init(this);
-  //  static_cast<AnimComponent*>(tree->getComp(ANIM).get())->playAnim("");
- //   tree->getComponent<AnimComponent>()->playAnim("");
-}
 
 Game::~Game() {
      
 }   
 
-void Game::tick() {    
-
-    auto t1 = std::chrono::high_resolution_clock::now();
- 
-        /* Getting number of milliseconds as an integer. */
-        auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t1-t0);
-
-    int t = ms_int.count();
-    float ratio = (float)t /30.0f; 
+void Game::tick() {
+    float ratio = (float) watch.getTime()/0.030f; 
     if (floor(ratio) == intervalTimer) {
         intervalTimer = floor(ratio);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -234,15 +215,12 @@ void Game::tick() {
     }
     else {
         intervalTimer = floor(ratio);
-
     }
     
-    glfwSetTime(glfwGetTime()-lastTime);
-    lastTime = glfwGetTime();
- //   printf("Delta t is %f\n", (float)lastTime );
-    fpsTimer += lastTime;
-    
-    
+    float elapsedT = timerForTick.getTime();
+    glfwSetTime(elapsedT);
+    timerForTick.resetTime();
+    fpsTimer += elapsedT;
     
     draws = draws + 1.0;     
     if (fpsTimer > 2.0) {
@@ -253,72 +231,24 @@ void Game::tick() {
     }
 
     inputHandler.tick();
-  
-
-    
-
 
     if(glfwWindowShouldClose(window)) {
         running = false;
     }
-    
-  /**  if(ball->getComponent<CombatComponent>()->QHasAbilities()) {
-        std::vector<std::shared_ptr<Ability>>& q = ball->getComponent<CombatComponent>()->getAbilityQ();
-        for(int i = 0; i < q.size(); i++) {
-            q.at(i)->call(this);
-            abilities.push_back(q.at(i));
-        }
-        q.clear();
-    }**/
-    
-  /**  if(pHero0->getComponent<CombatComponent>()->QHasAbilities()) {
-        std::vector<std::shared_ptr<Ability>>& q = pHero0->getComponent<CombatComponent>()->getAbilityQ();
-        for(int i = 0; i < q.size(); i++) {
-            q.at(i)->call(this);
-            abilities.push_back(q.at(i));
-        }
-        q.clear();
-    }
-    
-    if(pHero1->getComponent<CombatComponent>()->QHasAbilities()) {
-        std::vector<std::shared_ptr<Ability>>& q = pHero1->getComponent<CombatComponent>()->getAbilityQ();
-        for(int i = 0; i < q.size(); i++) {
-          q.at(i)->call(this);
-            abilities.push_back(q.at(i));
-        }
-        q.clear();
-    }
-    
-    if (abilities.size() > 0) {
-        for(int i = 0; i < abilities.size(); i++) {
-            if(abilities.at(i)->on == true) {
-                abilities.at(i)->tick();
-            }
-            
-    }
-         
-    }**/
 
-  script->tick();
+    script->tick();
 
     world0.tick();
 
     world1.tick();
-
-  
-
     
     activeRenderer->render();
 
     glfwPollEvents();
-        glfwSwapBuffers(window);
+    glfwSwapBuffers(window);
 }
 
 
-
-/**Numberable* Game::getNumberable(unsigned int ID_) {
-    return numberables[ID_];
-}**/
  
 World& Game::getWorld(int i) {
     if (i == 0) return world0;
@@ -337,10 +267,6 @@ void Game::setPlayerHero(const std::shared_ptr<Actor>& actor, int i) {
 void Game::end() {
     JsonManager::saveGame(this);
 }
-/**void Game::setNumberable(Numberable* numberable, int i) {
-    numberables[i] = numberable;
-} 
-**/
 
 InputHandler& Game::getInputHandler() {
     return inputHandler;
@@ -366,3 +292,4 @@ void Game::swapWorld() {
     }
 }
   
+ 

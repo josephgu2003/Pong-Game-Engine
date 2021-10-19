@@ -16,13 +16,13 @@
 #include "Model.hpp"
 #include <vector>
 #include "Component.hpp"
-#include <random>
 #include <algorithm>
-#include "Shader.hpp"
 #include "GraphicsComponent.hpp"
 #include <memory>
 #include "VertexData.hpp"
 #include "Componentable.hpp"
+#include "Positionable.hpp"
+
 //something that can move and has a model
 
 class World;
@@ -33,35 +33,26 @@ enum State {
     STATE_IDLE,
     STATE_WALKING,
     STATE_PARALYZED,
-    STATE_FLYING
+    STATE_FLYING,
+    STATE_JUMPING 
 };
 
 enum ActorEvent {
     
 };
 
-class Actor : public Componentable {
+class Actor : public Componentable, public Positionable {
     friend class Camera;
     friend class Renderer;
-protected:
+protected: 
     World* world = NULL;
     std::shared_ptr<GraphicsComponent> graphics = NULL;
     glm::mat4 modelMat = glm::mat4(1.0f);  
     State state;
-    glm::vec3 posVec;
     glm::vec3 velVec;
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution;
 public:
     bool dummy = true;
-    
-    glm::vec3 dirVec;
-    glm::vec3 eulerAngles;
-    float height = 0.0f;
-    glm::vec3 upVec;
-    glm::vec3 rightVec;
-    glm::vec3 camFocus = glm::vec3(0,0.5,0);
-     
+
     Actor();
     ~Actor();
      
@@ -71,18 +62,9 @@ public:
     virtual void init(int i);
     void setWorld(World* world_);
     World& getWorld();
-    
-    float getYaw();
-    
-    glm::vec3 getPos();
-    void setPos(glm::vec3 pos_);
-    void translatePos(const glm::vec3& translate);
-    void setPosY(float y_);
-    void orient(float yaw);
-    void turnTowards(const glm::vec3& newDir);
-    void posDir(float speed);
-    void posRight(float speed);
-    void randomPosAround(glm::vec3 pivot);
+
+    virtual void posDir(float speed) override;
+    virtual void posRight(float speed) override;
     
     void jump();
     void setVel(glm::vec3 velVel_);
@@ -93,8 +75,6 @@ public:
 
     void setState(State state);
     State getState();
-    
-    float getDistanceTo(Actor* b);
 
 };
 

@@ -39,7 +39,7 @@ enum PersonalityTrait { // trait and opposite trait next index
 
 class CharacterComponent : public NameComponent {
 private:
-    std::map<std::string, std::weak_ptr<Relationship>> relationships; // other character's name, relationship between
+    std::map<std::string, std::shared_ptr<Relationship>> relationships; // other character's name, relationship between
     PersonalityTrait traits[MAX_PTRAITS];
     int nextOpenTrait;
 public:
@@ -47,6 +47,8 @@ public:
     virtual void tick() override;
     void newRelationship(const std::shared_ptr<Relationship>& rs);
     void newTrait(PersonalityTrait pt);
+    bool hasTrait(PersonalityTrait pt);
+    bool hasRelationshipWith(Actor* actor, RelationShipType rst, float& intensity);
 };
 
 #endif /* CharacterComponent_hpp */

@@ -8,9 +8,6 @@
 #ifndef Particle_hpp
 #define Particle_hpp
 
-#include <GL/glew.h>
-#define GLFW_DLL
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <random>
@@ -19,10 +16,11 @@
 #include <functional>
 #include "Actor.hpp"
 #include "Shader.hpp"
-#include "GraphicsComponent.hpp"
+#include "GraphicsComponent.hpp" 
 #include "Force.hpp"
 #include "Watch.hpp"
-
+#include "Positionable.hpp"
+ 
 struct Particle { // implies a set of vertices, don't store it or too much memory
     glm::vec3 posVec, velVec, pyrAngles;
     GLuint texture;
@@ -33,9 +31,8 @@ struct Character;
 
 class World;
 
-class ParticleEffect {
+class ParticleEffect : public Positionable {
 protected:
-    
     float friction;
     bool useTexture = true;
     float size;
@@ -58,18 +55,20 @@ protected:
     
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
-    virtual void refreshParticle() = 0;
+    virtual void refreshParticle() {}
 public:
     GraphicsComponent graphics;
     virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
     
-    virtual void setGraphics(Shader& shader) = 0;
+    virtual void setGraphics(Shader& shader) {
+        
+    }
+    
     std::vector<Force*> forces;
     virtual void setActor(Actor* actor);
     void setWorld(World* world);
     float getSize();
     
-    glm::vec3 posVec;
     Texture texture;
     GLenum textureTarget;
     GLenum drawTarget;

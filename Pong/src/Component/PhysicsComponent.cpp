@@ -17,13 +17,13 @@ PhysicsComponent::PhysicsComponent(Actor& actor, bool gravityOn_) : Component(ac
 } 
 
 void PhysicsComponent::tick() {
-    if (actor->getState() == STATE_IDLE)
+    if (actor->getState() == STATE_IDLE || actor->getState() == STATE_JUMPING)
     actor->translatePos(actor->getVel());
     handleGravity(*actor);
     actor->accelerate(-0.001f*actor->getVel());
     if (glm::vec2(actor->getVel().x,actor->getVel().z).length() < 0.001) {
         actor->setVel(glm::vec3(0,actor->getVel().y,0));
-    }
+    } 
 }
 
 void PhysicsComponent::handleGravity(Actor& actor) {
@@ -43,6 +43,14 @@ void PhysicsComponent::handleGravity(Actor& actor) {
             if (actor.getPos().y <= 0.0f) {
                 actor.setVel(glm::vec3(actor.getVel().x,0,actor.getVel().z));
                 actor.setPosY(0.0f);
+            }
+            break;
+        case STATE_JUMPING:
+            actor.accelerate(glm::vec3(0,-0.1f*glfwGetTime(),0));
+            if (actor.getPos().y <= 0.0f) {
+                actor.setVel(glm::vec3(actor.getVel().x,0,actor.getVel().z));
+                actor.setPosY(0.0f);
+                actor.setState(STATE_IDLE);
             }
             break;
     }

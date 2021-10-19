@@ -7,6 +7,14 @@
 
 #include "AIAction.hpp"
 
-aiAction::aiAction() {
-    
+aiAction::aiAction(float interest_) {
+    interest = interest_;
+}
+
+
+bool aiAction::isDone() {
+    if (interest <= 0.0) {
+        return true;
+    }
+    return false;
 }

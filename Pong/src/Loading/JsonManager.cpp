@@ -7,12 +7,15 @@
 
 #include "JsonManager.hpp"
 #include "Game.hpp"
-#include "json.hpp"
 #include <fstream>
 #include "NameComponent.hpp"
 #include "CharacterComponent.hpp"
 #include "LifeComponent.hpp"
- 
+#include "Dialogue.hpp"
+
+
+nlohmann::json JsonManager::dialogues;
+
 void JsonManager::loadGame(Game* game) {
     nlohmann::json saveFile;
     std::ifstream i(SAVE_PATH);
@@ -32,26 +35,29 @@ void JsonManager::loadGame(Game* game) {
             pos.x =    (*i)["Position"][0];
             pos.y =   (*i)["Position"][1];
             pos.z =    (*i)["Position"][2];
-            
+             
             actor->init(actorEnum);
+            
+            NameComponent* nc = actor->getComponent<NameComponent>();
+            if (nc) {
+                std::string common = (*i)["CommonName"];
+                std::string id = (*i)["IDName"];
+                actor->getComponent<NameComponent>()->init(common, id);
+            }
+            
             CharacterComponent* charc = actor->getComponent<CharacterComponent>();
             if (charc) {
                 std::string id = (*i)["IDName"];
                 if(i->find("Relationships") != (*i).end()) {
                     auto field = (*i)["Relationships"];
                     for (int i = 0; i < field.size(); i++) {
-                        if (!checkRelationshipLoaded(field.at(i)["IDName1"], field.at(i)["IDName2"], field.at(i)["RelationshipType"], relationships)) {
-                            std::shared_ptr<Relationship> rs = std::make_shared<Relationship>(field.at(i)["IDName1"], field.at(i)["IDName2"]);
+                        auto entry = field.at(i);
+                        if (!checkRelationshipLoaded(entry["IDName1"], entry["IDName2"], entry["RelationshipType"], relationships)) {
+                            std::shared_ptr<Relationship> rs = std::make_shared<Relationship>(entry["IDName1"],entry["IDName2"], entry["RelationshipIntensity"],entry["RelationshipType"]);
                             charc->newRelationship(rs);
                         }
                     }
                 }
-            }
-            NameComponent* nc = actor->getComponent<NameComponent>();
-            if (nc) {
-                std::string common = (*i)["CommonName"];
-                std::string id = (*i)["IDName"];
-                actor->getComponent<NameComponent>()->init(common, id);
             }
             LifeComponent* lc = actor->getComponent<LifeComponent>();
             if (nc) {
@@ -130,7 +136,7 @@ void JsonManager::saveGame(Game* game) {
     o << std::setw(4) << saveFile << std::endl;
 }  
 
-bool JsonManager::checkRelationshipLoaded(std::string aname, std::string bname, std::string type,  const std::vector<std::shared_ptr<Relationship>>&  loaded) {
+bool JsonManager::checkRelationshipLoaded(std::string aname, std::string bname, RelationShipType type,  const std::vector<std::shared_ptr<Relationship>>&  loaded) {
     for (int i = 0; i < loaded.size(); i++) {
         if (loaded.at(i)->getName(RS_ONE) == aname) {
             if (loaded.at(i)->getName(RS_TWO) == bname) {
@@ -139,4 +145,38 @@ bool JsonManager::checkRelationshipLoaded(std::string aname, std::string bname, 
         }
     }
     return false;
+}
+
+
+void JsonManager::buildTree(DialogueTree*& tree, int i, int branchID) {
+    if (branchID == -1)  {
+        tree = nullptr;
+        return;
+    }
+    for (int j = 0; j < dialogues.at(i)["Dialogue"].size(); j++) {
+        if (dialogues.at(i)["Dialogue"].at(j)["LineID"] == branchID) { tree->lines.insert(tree->lines.end(),       dialogues.at(i)["Dialogue"].at(j)["Lines"].begin(), dialogues.at(i)["Dialogue"].at(j)["Lines"].end());
+        tree->left = new DialogueTree(); //interesting, these 2 lines are necessary or else original tree back in loadDialogue is different pointer than the tree in the first buildtree call
+        tree->right = new DialogueTree();
+        buildTree((tree->left), i, dialogues.at(i)["Dialogue"].at(j)["LeftID"]);
+        buildTree((tree->right), i, dialogues.at(i)["Dialogue"].at(j)["RightID"]);
+        return;
+        }
+    }
+}
+
+void JsonManager::loadDialogue(Dialogue* dialogue, int id) {
+    if (dialogues.size() == 0) { //check if loaded
+        std::ifstream i("Data/Scenes/File.json");
+        i >> dialogues;
+    }
+    
+    DialogueTree* tree = new DialogueTree();
+    
+    for (int i = 0; i < dialogues.size(); i++) {
+        if (dialogues.at(i)["DialogueID"] == i) { // find right dialogue
+            buildTree(tree, i, 0);
+        }
+    }
+    
+    dialogue->setDialogueTree(tree);
 }

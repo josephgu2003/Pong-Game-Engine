@@ -11,6 +11,9 @@
 #include "AssetManager.hpp"
 #include "CombatComponent.hpp"
 #include "NameComponent.hpp"
+#include "Actor.hpp"
+#include "Renderable.hpp"
+#include "Renderer.hpp"
 
 World::World() {
     float skyVerticesCopy[] = {
@@ -57,9 +60,6 @@ World::World() {
          1.0f, -1.0f,  1.0f
     };
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
-    
-    
-    
     globalTime = 0;
 }
 
@@ -76,6 +76,7 @@ void World::insertCamera(Camera* camera) {
 }
 
 void World::insertActor(const std::shared_ptr<Actor>& actor) {
+    activeText = new uiText(); // lmfao???
     std::shared_ptr<Actor> p = actor;
     allActorPtrs.push_back(std::move(p));
     actor -> setWorld(this);
@@ -91,7 +92,7 @@ void World::insertParticleEffect(ParticleEffect* particleEffect) {
 }
 
 void World::deleteParticleEffect(ParticleEffect *particleEffect) {
-    allParticleEffects.erase(std::find(allParticleEffects.begin(), allParticleEffects.end(), particleEffect), allParticleEffects.end());
+    allParticleEffects.erase(std::find(allParticleEffects.begin(), allParticleEffects.end(), particleEffect)); 
     updates.particleUpdate = true;
 }
 
@@ -105,13 +106,6 @@ void World::deleteQuad(Quad *quad) {
     updates.quadUpdate = true;
 }
 
-void World::setActiveText(const std::string& string) {
-    activeText = string;
-    updates.textUpdate = true;
-}
-std::string World::getActiveText() {
-    return activeText;
-}
 
 MapObject& World::getMap() {
     return *map;
@@ -179,6 +173,17 @@ void World::tick() {
     map->tick();
 
   //  weather.brightness = 0.5*(sin(globalTime)+1.3);
+    for(int i = 0; i < allSoundTexts.size(); i++) {
+        allSoundTexts.at(i)->duration -= (float) glfwGetTime();
+        if (allSoundTexts.at(i)->duration <= 0.0) {
+            allSoundTexts.erase(allSoundTexts.begin()+i);
+            i -= 1;
+            updates.textUpdate = true;
+        }
+    }
+    if (updates.textUpdate) {
+        updateActiveText();
+    }
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
     }
@@ -202,7 +207,7 @@ void World::tick() {
             for (int j = 0; j < allQuadPtrs.size(); j++) {
                 Quad& quad = *allQuadPtrs.at(j);
                 ParticleEffect& pEffect = *allParticleEffects.at(i);
-                glm::vec3 diff = quad.pos - pEffect.posVec;
+                glm::vec3 diff = quad.pos - pEffect.getPos();
                 if (glm::length(diff) < 2) {
                     newForce += quad.force;
                 }
@@ -215,6 +220,7 @@ void World::tick() {
         }
     }
     abilityManager.tick();
+    
 } 
 
 void World::informActorProximity(Actor& actor, float radius) {
@@ -232,7 +238,7 @@ bool World::informParticlesForce(ParticleEffect* effect) {
     bool b = false;
     effect->forces.clear();
     for (int i = 0; i < allForces.size(); i++) {
-        if (glm::length(effect->posVec-allForces.at(i)->getPos()) < 5) {
+        if (glm::length(effect->getPos()-allForces.at(i)->getPos()) < 5) {
             uniformstraightforce += allForces.at(i)->getUniStraightForce();
             b = true;
             effect->forces.push_back( allForces.at(i));
@@ -253,16 +259,39 @@ void World::deleteForce(Force* force_) {
     allForces.erase(std::find(allForces.begin(), allForces.end(), force_), allForces.end());
 }
 
-
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
     for (auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
         auto namec = i->get()->getComponent<NameComponent>();
         if (namec) {
             if (namec->getIdName() == name) {
                 return *i;
-            }
+            } 
         }
     }
     std::shared_ptr<Actor> dummy = std::make_shared<Actor>();
     return dummy;
 }
+
+void World::newSoundText(const std::string& text, const glm::vec3& pos, float duration) {
+    std::shared_ptr<SoundText> st = std::make_shared<SoundText>(text, pos, duration);
+    allSoundTexts.push_back(std::move(st));
+    updates.textUpdate = true;
+}
+  
+  
+void World::updateActiveText() {
+    std::string s;
+    for (int i = 0; i < allSoundTexts.size(); i++) {
+        s.append(allSoundTexts.at(i)->text + "\n");
+    }
+    activeText->setText(s);
+    updates.textUpdate = false;
+}
+ 
+
+void World::drawText(Renderer* r)
+{ //lmfao?
+   if (activeText)
+   r->renderText(activeText);
+}
+ 

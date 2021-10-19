@@ -6,23 +6,19 @@
 //
 
 #ifndef Map_hpp
-#define Map_hpp
+#define Map_hpp 
 
 #include <stdio.h>
-#include "Shader.hpp"
-#include "VertexData.hpp"
-#include "Mesh.hpp"
 #include <glm/glm.hpp>
-#include "GraphicsComponent.hpp"
+#include "Positionable.hpp"
+ 
+class GraphicsComponent;
 
-class MapObject {
+class MapObject : public Positionable {
     GraphicsComponent* graphics = NULL;
-    glm::vec3 pos;
 public:
     void init();
     void init(glm::vec3 pos_);
-    void setPos(glm::vec3 pos_);
-    glm::vec3 getPos();
     void setGraphics(GraphicsComponent* graphics);
     GraphicsComponent& getGraphics();
     void beginAnimation();

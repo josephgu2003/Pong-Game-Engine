@@ -10,30 +10,17 @@
 
 #include "Actor.hpp"
 #include <glm/glm.hpp>
+#include "Positionable.hpp"
 
-class Camera {
+class Camera : public Positionable{
     friend class Renderer;
-    glm::vec3 posVec;
-    glm::vec3 upVec;
-    glm::vec3 rightVec;
-    float pitch, yaw, roll;
 protected:
     Actor* actor = NULL;
 public:
-    glm::vec3 dirVec;
     Camera();
     Camera(Actor* actor);
     ~Camera();
     void setActor(Actor* actor_);
-    float getX();
-    float getY();
-    float getZ();
-    float getPitch();
-    float getYaw();
-    float getRoll();
-    void incPitch(float inc);
-    void incYaw(float inc);
-    void incRoll(float inc);
     void updateVecs();
     void orientActor();
     void tick();

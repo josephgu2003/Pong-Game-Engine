@@ -80,7 +80,6 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     TextureMaps textures;
     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
-        
         glm::vec3 pos_;
         pos_.x = mesh->mVertices[i].x;
         pos_.y = mesh->mVertices[i].y;
@@ -113,7 +112,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
         float boneWeights[MAX_BONE_WEIGHTS];
         for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
            {
-               boneIDs[i] = -1;
+               boneIDs[i] = -1; 
                boneWeights[i] = 0.25f;
            }
         
@@ -142,9 +141,9 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector<AnyVertex*> newVertices;
     newVertices.resize(vertices.size());
     for (int i = 0; i < vertices.size(); i++) {
-        newVertices[i] = static_cast<AnyVertex*>(vertices.at(i));
+        newVertices[i] = (vertices.at(i));
     }
-    meshes.emplace_back(newVertices, indices, textures, VERTEX_TBNVERTEX);
+    meshes.emplace_back(newVertices, indices, textures, VERTEX_TBNBWVERTEX);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
@@ -241,23 +240,23 @@ void Model::BoneWeightVertices(std::vector<TBNBWVertex*>& vertices, aiMesh* mesh
 
         for (int i = 0; i < numWeights; i++) {
             int vertexId = weights[i].mVertexId;
-                  float weight = weights[i].mWeight;
-                  assert(vertexId <= vertices.size());
-                setVertexBoneData(*vertices[vertexId], id, weight);
+            float weight = weights[i].mWeight;
+            assert(vertexId <= vertices.size()); 
+            setVertexBoneData(vertices[vertexId], id, weight);
         }
     }
-    for (int i = 0; i < vertices.size(); i++) {
+   /** for (int i = 0; i < vertices.size(); i++) {
         float sum = 0.0f;
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) {
             if (vertices.at(i)->boneIDs[j] != -1)
-            sum +=  vertices.at(i)->boneWeights[j];   
+            sum += vertices.at(i)->boneWeights[j];
         }
         float factor = 1.0f / sum;
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) { 
             if (vertices.at(i)->boneIDs[j] != -1)
             vertices.at(i)->boneWeights[j] *= factor;
         }
-     }
+     }**/
 }
  
 glm::mat4 Model::ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
@@ -279,11 +278,11 @@ glm::mat4 Model::ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
 }
 
 
-void Model::setVertexBoneData(TBNBWVertex& v, int id, float weight) {
+void Model::setVertexBoneData(TBNBWVertex* v, int id, float weight) {
     for (int i = 0; i< MAX_BONE_WEIGHTS; i++) {
-        if (v.boneIDs[i] == -1) {
-            v.boneIDs[i] = id;
-            v.boneWeights[i] = weight;
+        if (v->boneIDs[i] == -1) {
+            v->boneIDs[i] = id;
+            v->boneWeights[i] = weight;
             return;
         }
     }

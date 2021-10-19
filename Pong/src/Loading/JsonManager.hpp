@@ -14,15 +14,27 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include "json.hpp"
 #include "Relationship.hpp"
 
 class Game;
- 
-namespace JsonManager {
-    void loadGame(Game* game);
-    void saveGame(Game* game);
-    bool checkRelationshipLoaded(std::string aname, std::string bname, std::string type, const std::vector<std::shared_ptr<Relationship>>&  loaded);
-};
+
+struct DialogueTree;
+
+class Relationship;
+
+class Dialogue;
+
+class JsonManager {
+static nlohmann::json dialogues;
+    static void buildTree(DialogueTree*& tree, int i, int branchID);
+public:
+
+    static void loadDialogue(Dialogue* dialogue, int id);
+    static void loadGame(Game* game);
+    static void saveGame(Game* game);
+    static bool checkRelationshipLoaded(std::string aname, std::string bname, RelationShipType type, const std::vector<std::shared_ptr<Relationship>>&  loaded);
+}; 
 
 
 #endif /* JsonManager_hpp */

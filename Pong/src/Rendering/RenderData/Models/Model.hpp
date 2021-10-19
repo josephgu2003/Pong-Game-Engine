@@ -54,7 +54,7 @@ private:
     glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
     
     
-    void setVertexBoneData(TBNBWVertex& v, int id, float weight);
+    void setVertexBoneData(TBNBWVertex* v, int id, float weight);
 public:
     Model();
     Model(const char* filePath);

@@ -16,7 +16,7 @@ class aiDance : public aiAction {
 private:
     Watch myWatch; 
 public:
-    aiDance();
+    aiDance(float i);
     virtual void tick(Actor* actor) override;
 };
 #endif /* aiDance_hpp */

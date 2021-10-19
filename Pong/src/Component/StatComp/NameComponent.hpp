@@ -22,6 +22,7 @@ public:
     virtual void tick() override;
     const std::string& getCommonName();
     const std::string& getIdName();
+    void speak(const std::string& speech, float duration);
 };
 
 #endif /* NameComponent_hpp */

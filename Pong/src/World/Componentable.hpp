@@ -25,7 +25,6 @@ public:
     virtual void addComp(const std::shared_ptr<Component>& comp);
     virtual void deleteComp(CompType type);
 
-    
     template <typename T>
     T* getComponent()
     {
@@ -34,10 +33,11 @@ public:
                 return static_cast<T*>(components.at(i).get());
             }
         }
-
             return nullptr; // make a null component or something
 
     }
+    
+    bool hasComponent(CompType ct);
 };
 
 #endif /* Componentable_hpp */

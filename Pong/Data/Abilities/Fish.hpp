@@ -25,7 +25,7 @@ class Fish: public Ability {
     glm::vec3 dirFired;
     void freeActor();
     int step = 0;
-    Game* game = NULL;
+    Game* game = NULL; 
 public:
     Fish(World* world_, Actor* actor_, float duration_);
     ~Fish();

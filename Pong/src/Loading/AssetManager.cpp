@@ -6,9 +6,14 @@
 //
 
 #include <fstream>
-#include "Dialogue.hpp"
 #include "AssetManager.hpp"
-
+#include <iostream>
+#include "VertexLoader.hpp"
+ 
+std::vector<Texture> AssetManager::loadedTextures;
+ std::vector<std::pair<Texture, std::map<char, Character>>> AssetManager::loadedGlyphs;
+std::vector<std::unique_ptr<Model>>  AssetManager::loadedModels;
+ std::vector<Shader>  AssetManager::loadedShaders;
 
 void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb) {
  for (int j = 0; j < loadedTextures.size(); j++) {
@@ -21,7 +26,6 @@ void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb
            return;
        }
    }
-
    int imageWidth = 0;
    int imageHeight = 0;
    int channels = 0;
@@ -95,7 +99,6 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
     int imageHeight = 0;
     int channels = 0;
     
- 
     while(true) {
         unsigned char* imageData;
         std::string framePath("blah");
@@ -168,7 +171,15 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
   texture->dimensions = newTex.dimensions;
 }
 
-int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters) {
+int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, TextureMaps& map) {
+    for (int i = 0; i < loadedGlyphs.size(); i++) {
+        if (std::strcmp(loadedGlyphs.at(i).first.path.data(), filePath) == 0) {
+            printf("Font already loaded \n");
+            Characters = loadedGlyphs.at(i).second;
+            map.diffuse.id = loadedGlyphs.at(i).first.id;
+            return 0;
+        }
+    }
     FT_Library ft;
     if (FT_Init_FreeType(&ft))
     {
@@ -183,37 +194,66 @@ int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Ch
     }
     FT_Set_Pixel_Sizes(face, 0, 192);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+    
+    int maxX = 0;
+    int maxY = 0;
+    
     for (unsigned char c = 0; c < 126; c++) {
-        if(FT_Load_Char(face, (char)c, FT_LOAD_RENDER)) {
+        if(FT_Load_Char(face, (char)c, FT_LOAD_RENDER)) { //load a char
             std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
-            continue;
-        }
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-                GL_TEXTURE_2D,
-                0,
-                GL_RED,
-                face->glyph->bitmap.width,
-                face->glyph->bitmap.rows,
-                0,
-                GL_RED,
-                GL_UNSIGNED_BYTE,
-                face->glyph->bitmap.buffer
-            );
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            continue; 
+        }  
+        int width = face->glyph->bitmap.width;
+        int height = face->glyph->bitmap.rows;
+         
+        if (width > maxX) maxX = width;
+        if (height > maxY) maxY = height;
+        
         Character character = {
-            texture, glm::ivec2(face->glyph->bitmap.width,face->glyph->bitmap.rows),glm::ivec2(face->glyph->bitmap_left,face->glyph->bitmap_top), (GLuint)face->glyph->advance.x
+            0, glm::ivec2(width, face->glyph->bitmap.rows), glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top), (GLuint)face->glyph->advance.x, glm::vec2(0,0)
         };
         Characters.insert(std::pair<char,Character>(c, character));
     }
+    
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RED, maxX, maxY, 126, 0, GL_RED, GL_UNSIGNED_BYTE, NULL); // or 125
+ 
+    for (unsigned char c = 0; c < 126; c++) {
+        
+        if(FT_Load_Char(face, (char)c, FT_LOAD_RENDER)) { //load a char
+            std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
+            continue;
+        } 
+        
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, c, Characters[c].size.x, Characters[c].size.y, 1, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
+        
+        Characters[c].id = c;
+        float x,y;
+        x = (float )Characters[c].size.x / (float) maxX;
+        y = (float )Characters[c].size.y / (float) maxY;
+        Characters[c].texCoords = glm::vec2(x,y);
+    }
+       
+    glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+       
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_CUBIC_MIPMAP_NEAREST_IMG);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
          FT_Done_Face(face);
          FT_Done_FreeType(ft);
+     
+    std::pair<Texture, std::map<char, Character>> font;
+    Texture newTex;
+    newTex.id = texture;
+    newTex.path = filePath;
+    font.first = newTex;
+    font.second = Characters;
+    loadedGlyphs.push_back(font);
     return 0;
 }
 
@@ -236,38 +276,6 @@ void AssetManager::loadNullTexture(int x, int y, GLuint* texture, GLenum format)
 
 
 
-void AssetManager::buildTree(DialogueTree*& tree, int i, int branchID) {
-    if (branchID == -1)  {
-        tree = nullptr;
-        return;
-    }
-    for (int j = 0; j < dialogues.at(i)["Dialogue"].size(); j++) {
-        if (dialogues.at(i)["Dialogue"].at(j)["LineID"] == branchID) { tree->lines.insert(tree->lines.end(),       dialogues.at(i)["Dialogue"].at(j)["Lines"].begin(), dialogues.at(i)["Dialogue"].at(j)["Lines"].end());
-        tree->left = new DialogueTree(); //interesting, these 2 lines are necessary or else original tree back in loadDialogue is different pointer than the tree in the first buildtree call
-        tree->right = new DialogueTree();
-        buildTree((tree->left), i, dialogues.at(i)["Dialogue"].at(j)["LeftID"]);
-        buildTree((tree->right), i, dialogues.at(i)["Dialogue"].at(j)["RightID"]);
-        return;
-        } 
-    }
-}
-
-void AssetManager::loadDialogue(Dialogue* dialogue, int id) {
-    if (dialogues.size() == 0) { //check if loaded
-        std::ifstream i("Data/Scenes/File.json");
-        i >> dialogues;
-    }
-    
-    DialogueTree* tree = new DialogueTree();
-    
-    for (int i = 0; i < dialogues.size(); i++) {
-        if (dialogues.at(i)["DialogueID"] == i) { // find right dialogue
-            buildTree(tree, i, 0);
-        }
-    }
-    
-    dialogue->setDialogueTree(tree);
-}
 /**
 static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene) {
     //load each mesh from node
@@ -459,20 +467,19 @@ void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int 
     
     glGenBuffers(1, &frame->fvbo);
     glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
+    float screenquad[36] =
+    {   -1.0f,  1.0f, 0.0f,  0.0f, 1.0f, 0,
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0,
+         1.0f, -1.0f,0.0f,  1.0f, 0.0f, 0,
 
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
+        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0,
+         1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0,
+         1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 0
     };
 
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
     
 }
@@ -519,20 +526,19 @@ void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     
     glGenBuffers(1, &frame->fvbo);
     glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
+    float screenquad[36] =
+    {   -1.0f,  1.0f, 0.0f,  0.0f, 1.0f, 0,
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0,
+         1.0f, -1.0f,0.0f,  1.0f, 0.0f, 0,
 
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
+        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0,
+         1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0,
+         1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 0
     };
 
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
     
 
@@ -560,20 +566,19 @@ void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, i
     
     glGenBuffers(1, &frame->fvbo);
     glBindBuffer(GL_ARRAY_BUFFER, frame->fvbo);
-    float screenquad[24] =
-    {   -0.10f,  0.10f,  0.0f, 1.0f,
-        -0.10f, -0.10f,  0.0f, 0.0f,
-         0.10f, -0.10f,  1.0f, 0.0f,
+    float screenquad[36] =
+    {   -1.0f,  1.0f, 0.0f,  0.0f, 1.0f, 0,
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0,
+         1.0f, -1.0f,0.0f,  1.0f, 0.0f, 0,
 
-        -0.10f,  0.10f,  0.0f, 1.0f,
-         0.10f, -0.10f,  1.0f, 0.0f,
-         0.10f,  0.10f,  1.0f, 1.0f
+        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0,
+         1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0,
+         1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 0
     };
 
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
     
 }

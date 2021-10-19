@@ -43,7 +43,7 @@ void LifeComponent::init(float life_, float maxlife, float hunger_, float maxhun
     energy.max = maxenergy;
 }
 
-Stat LifeComponent::getStat(StatType type) {
+Stat LifeComponent::getStat(StatType type) const {
     switch (type) {
         case STAT_LIFE:
             return life;
@@ -62,12 +62,41 @@ Stat LifeComponent::getStat(StatType type) {
             break;
     }
 }
-
-void LifeComponent::incLife(float increment) {
-    float newLife = life.value + increment;
-    if (newLife < life.max) {
-        life.value = newLife;
-    } else if (newLife >= life.max) {
-        life.value = life.max;
+ 
+Stat& LifeComponent::getStatRef(StatType st) {
+    switch (st) {
+        case STAT_LIFE:
+            return life;
+            break;
+            
+        case STAT_HUNGER:
+            return hunger;
+            break;
+            
+        case STAT_STAMINA:
+            return stamina;
+            break;
+            
+        case STAT_ENERGY:
+            return energy;
+            break;
     }
 }
+
+void LifeComponent::incStatValue(float increment, StatType st) {
+    Stat& stat = getStatRef(st);
+    float newValue =  stat.value + increment;
+
+    if (newValue < stat.max && newValue > 0.0) {
+        stat.value = newValue;
+    } else if (newValue >= stat.max) {
+        stat.value = stat.max; 
+    } else if (newValue <= 0.0) {
+        stat.value = 0.0; 
+    }
+    if (st == STAT_LIFE) {
+        notifyAll(SUBJ_HP_CHANGED);
+    }
+} 
+
+ 

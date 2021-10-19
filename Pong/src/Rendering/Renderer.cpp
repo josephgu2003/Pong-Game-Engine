@@ -17,6 +17,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "DirectionalLight.hpp"
 #include "AssetManager.hpp"
+#include "Mesh.hpp"
+#include "Camera.hpp"
 
 GLuint uboViewProj;
  GLuint uboLights;
@@ -38,7 +40,6 @@ void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     }
     
     if (block == StopWatch) {
-
     glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
     glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "StopWatch"), 2);
     glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
@@ -46,9 +47,7 @@ void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     }
 }
 
-
-Renderer::Renderer() { 
-    exposure = 0;
+Renderer::Renderer() {
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
 
     textShader = new Shader("Shaders/Simple2D.vs", "Shaders/TextFShader.fs");
@@ -56,7 +55,6 @@ Renderer::Renderer() {
     blurShader = new Shader("Shaders/Simple2D.vs","Shaders/BloomFShader.fs");
     frameShader = new Shader("Shaders/Simple2D.vs", "Shaders/FBufferFShader.fs");
 
-    modelMat = glm::mat4(1);
     viewMat = glm::mat4(1);
     float ratio = (WINDOW_WIDTH)/(WINDOW_HEIGHT);
     projMat = glm::perspective(glm::radians(60.0f), ratio, 0.005f, 400.0f);
@@ -74,6 +72,7 @@ Renderer::Renderer() {
     pointParticles.init(1000, 500000, vector,  VERTEX_SIMPLEVERTEX, GL_POINTS, GL_DYNAMIC_DRAW);
     std::vector<int> vector2 {16,1};
     quadParticles.init(1000, 500000, vector2, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
+    soundTexts.init(10000, 10000, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
 }
 
 Renderer::~Renderer() { 
@@ -197,7 +196,7 @@ void Renderer::loadActorData() {
            const std::vector<std::unique_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
         
             for (int c = 0; c < vertices.size(); c++) {
-                actorVertices.push_back((*static_cast<TBNBWVertex*>(vertices.at(c).get())));
+                actorVertices.push_back((*static_cast<TBNBWVertex*>(vertices.at(c).get()))); // crash here bad access  
             }
               
             actorIndices.insert(actorIndices.end(), meshes->at(j).getIndices().begin(), meshes->at(j).getIndices().end());
@@ -219,26 +218,7 @@ void Renderer::loadActorData() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, actorIndices.size() * sizeof(GLuint), actorIndices.data(), GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(sizeof(glm::vec3)));
-    glEnableVertexAttribArray(1);
-    
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)));
-    glEnableVertexAttribArray(2);
-    
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(3);
-    
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(4);
-    
-    glVertexAttribIPointer(5, MAX_BONE_WEIGHTS, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(5);
-    
-    glVertexAttribPointer(6, MAX_BONE_WEIGHTS, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(MAX_BONE_WEIGHTS*sizeof(int)+4*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(6);
+    VertexLoader::setupVAOAttribs(VERTEX_TBNBWVERTEX);
     
     glBindVertexArray(0); 
 }
@@ -252,38 +232,24 @@ void Renderer::loadMapData() {
     const std::vector<std::unique_ptr<AnyVertex>>& vertices = mesh->getVertices();
     
     mapVertices.resize(vertices.size());
-     
     
-            for (int c = 0; c < vertices.size(); c++) {
+    for (int c = 0; c < vertices.size(); c++) {
                 mapVertices[c] = *static_cast<TBNVertex*>(vertices.at(c).get());
-            }
+    }
      
     glGenVertexArrays(1, &mVAO);
-      glBindVertexArray(mVAO); 
+    glBindVertexArray(mVAO);
       
-      glGenBuffers(1, &mVBO);
-      glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glGenBuffers(1, &mVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-      glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*vertices.size(), mapVertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*vertices.size(), mapVertices.data(), GL_STATIC_DRAW);
       
-      glGenBuffers(1, &mEBO);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO); 
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh->getIndices().size() * sizeof(GLuint), &mesh->getIndices().at(0), GL_STATIC_DRAW);
+    glGenBuffers(1, &mEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh->getIndices().size() * sizeof(GLuint), &mesh->getIndices().at(0), GL_STATIC_DRAW);
        
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(sizeof(glm::vec3)));
-    glEnableVertexAttribArray(1); 
-    
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)));
-    glEnableVertexAttribArray(2);
-    
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(3);
-    
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
-    glEnableVertexAttribArray(4);
+    VertexLoader::setupVAOAttribs(VERTEX_TBNVERTEX);
       
     glBindVertexArray(0);
 }
@@ -313,7 +279,6 @@ void Renderer::loadSkyBoxData() {
         }
     }
 
-    
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -352,10 +317,10 @@ void Renderer::loadParticleData() {
         if (updateNeeded) {
             loadedParticles.push_back(particleData.at(i));
             if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
-                quadParticles.updateVertexData(particleData.at(i)->graphics.getVertexData());
+                quadParticles.updateVertexData(particleData.at(i)->graphics.getVertexData(), particleData.at(i));
             }
             if (particleData.at(i)->drawTarget == GL_POINTS) {
-                pointParticles.updateVertexData(particleData.at(i)->graphics.getVertexData());
+                pointParticles.updateVertexData(particleData.at(i)->graphics.getVertexData(), particleData.at(i));
             }
         }
        if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
@@ -368,7 +333,6 @@ void Renderer::loadParticleData() {
                 glm::vec3& pos = particleData.at(i)->getNthParticle(c).posVec;
                 glm::mat4 modelMatr = glm::mat4(1.0f);
                  
-            
                 modelMatr = glm::translate(modelMatr, pos);
                 modelMatr = glm::rotate(modelMatr,    -glm::radians(particleData.at(i)->getNthParticle(c).pyrAngles.y), glm::vec3(0,1,0));
 
@@ -377,11 +341,10 @@ void Renderer::loadParticleData() {
                     instanceData[counter] = (mat[l]);
                     counter++;
                 }
-               // instanceData[counter] = (particleData.at(i)->getNthParticle(c).duration);
                 instanceData[counter] = 10.0;
                 counter++; 
             }
-            quadParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData);
+            quadParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData, particleData.at(i));
         }
         
         if (particleData.at(i)->drawTarget == GL_POINTS) {
@@ -401,27 +364,26 @@ void Renderer::loadParticleData() {
                 instanceData[counter] = (particleData.at(i)->getNthParticle(c).duration);
                 counter++;
             }
-            pointParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData);
+            pointParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData, particleData.at(i));
         }
     }
     
-    for (int i = 0; i < deletedParticles.size(); i++) {
+    for (int i = 0; i < deletedParticles.size(); i++) { // delete particles
         int bytes = 0;
         for (int c = 0; c < deletedParticles.at(i)->getNumParticles(); c++) {
             bytes += 4 * sizeof(float);
         }
         if (deletedParticles.at(i)->drawTarget == GL_TRIANGLES) {
-            quadParticles.deleteInstanceData(deletedParticles.at(i)->graphics.getVertexData(), bytes);
-            quadParticles.deleteVertexData(deletedParticles.at(i)->graphics.getVertexData());
+            quadParticles.deleteInstanceData(bytes, deletedParticles.at(i));
+            quadParticles.deleteVertexData(deletedParticles.at(i));
 
             loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
         }
         if (deletedParticles.at(i)->drawTarget == GL_POINTS) {
-            pointParticles.deleteInstanceData(deletedParticles.at(i)->graphics.getVertexData(), bytes);
+            pointParticles.deleteInstanceData(bytes, deletedParticles.at(i));
 
-            pointParticles.deleteVertexData(deletedParticles.at(i)->graphics.getVertexData());
+            pointParticles.deleteVertexData(deletedParticles.at(i));
            
-
             loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
         }
     } 
@@ -447,13 +409,7 @@ void Renderer::loadQuadData() {
     glGenBuffers(1, &qEBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, qEBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, quadIndices.size() * sizeof(GLuint), quadIndices.data(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2*sizeof(glm::vec3)));
-    glEnableVertexAttribArray(2);
+    VertexLoader::setupVAOAttribs(VERTEX_VERTEX);
     
     glBindVertexArray(0);
 }
@@ -473,12 +429,14 @@ void Renderer::checkForUpdates() {
         loadQuadData();
     } 
     if(updates.textUpdate == true) {
-        world->updateCleared(TEXT_UPDATE);
-        print(world->getActiveText());
+      //  world->updateCleared(TEXT_UPDATE);
+     //   print(world->getActiveText());
+        //wishlist: function to get renderer all the relevant soundtext objects
+      //  world->fillBatchTextData(&soundTexts, glm::vec3(camera->getPos()));
     }
     if(updates.lightingUpdate == true) {
         world->updateCleared(LIGHTING_UPDATE);
-        updateLights();
+        updateLights(); 
     }
 }
 
@@ -499,12 +457,10 @@ void Renderer::render() {
     renderMap();
     renderParticles();
     renderQuads();
-    renderUI(); 
-    if (screenText.duration > 0.0f) {
-        renderText();
- 
-    }
-    
+    world->drawText(this);
+}
+void Renderer::render2() {
+     
     glDisable(GL_DEPTH_TEST);
     glBindVertexArray(frame2C.fvao);
     bool horizontal = true;
@@ -564,35 +520,21 @@ void Renderer::render() {
     glDrawArrays(GL_TRIANGLES, 0, 6); 
      
     timeT += (float)glfwGetTime();
-    screenText.duration -= (float)glfwGetTime();
 }
 
 
 
-void Renderer::renderUI() {
-  //  uiStuff.bindVAO();
-   // uiShader->use();
-    
+void Renderer::renderUI(uiPiece* uip) {
+    if (!ui.lock()) return;
+    Shader* s = uip->getShader();
+    s->use();
+    uip->bind();
+    bindTextures(s, uip->getTextureMap());
+    glDrawElements(GL_TRIANGLES, uip->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    uip->unbind();
 }
 
 
-void Renderer::incExposure(float delta) {
-    exposure += delta;
-}
-
-void Renderer::loadTextData() {
-    glGenVertexArrays(1, &tVAO);
-    glBindVertexArray(tVAO);
-    
-    glGenBuffers(1, &tVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, tVBO);
-    glBufferData(GL_ARRAY_BUFFER, screenText.textPosArray.size()*sizeof(float), screenText.textPosArray.data(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindVertexArray(0);
-}
 
 void Renderer::renderSky() {
     //sky
@@ -609,6 +551,7 @@ void Renderer::renderSky() {
     glBindVertexArray(sVAO);
     glBindBuffer(GL_ARRAY_BUFFER, sVBO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    
     glDepthMask(GL_TRUE);
     glEnable(GL_BLEND);
     glDisable(GL_CULL_FACE);
@@ -624,11 +567,9 @@ void Renderer::renderQuads() {
     glBindVertexArray(qVAO);
     glBindBuffer(GL_ARRAY_BUFFER, qVBO);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(Vertex)*quad->vertices.size(),quad->vertices.data());
-    modelMat = glm::mat4(1.0f);
+    glm::mat4 modelMat = glm::mat4(1.0f);
 
         glm::vec3 rotations = glm::vec3(glm::radians(quad->rotations.x),glm::radians(quad->rotations.y),glm::radians(quad->rotations.z));
-
-
 
     glUniformMatrix4fv(glGetUniformLocation(sketchShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
         glActiveTexture(GL_TEXTURE0);
@@ -640,12 +581,10 @@ void Renderer::renderQuads() {
             indiceCount += quad->indices.size()*sizeof(GLuint);
     }
     }
-    modelMat = glm::mat4(1);
     glDepthMask(GL_TRUE);
 }
 
 void Renderer::renderMap() {
-    
     GraphicsComponent& gc = world->getMap().getGraphics();
     Shader* shader = gc.getShader();
     shader->use();
@@ -656,37 +595,7 @@ void Renderer::renderMap() {
     
     TextureMaps& map = gc.getVertexData()->getTextures();
     
-    if (map.diffuse.id != -1) {
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
-    glBindTexture(map.diffuse.textureTarget, map.diffuse.id);
-    }
-    
-    if (map.specular.id != -1) {
-  glActiveTexture(GL_TEXTURE1);
-    glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
-    glBindTexture(GL_TEXTURE_2D, map.specular.id);
-    }
-    
-    
-    if (map.normMap.id != -1) {
-    glActiveTexture(GL_TEXTURE2);
-      glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
-      glBindTexture(GL_TEXTURE_2D, map.normMap.id);
-    }
-    
-    if (map.voronoi.id != -1) {
-    glActiveTexture(GL_TEXTURE3);
-      glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
-      glBindTexture(GL_TEXTURE_2D, map.voronoi.id);
-    }
-    
-    if (map.voronoi.id != -1) {
-    glActiveTexture(GL_TEXTURE4);
-      glUniform1i(glGetUniformLocation(shader->ID, "noise"), 4);
-      glBindTexture(GL_TEXTURE_2D, noise.id);
-    }
-    
+    bindTextures(shader, map);
     
     glDrawElements(GL_TRIANGLES, gc.getVertexData()->getIndices().size(), GL_UNSIGNED_INT, 0);
     
@@ -705,26 +614,8 @@ void Renderer::renderActors() {
         shader->use();
         for (int j = 0; j < meshes->size(); j++) {
             TextureMaps& map = meshes->at(j).getTextures();
-            
-            if (map.diffuse.id != -1) {
-            glActiveTexture(GL_TEXTURE0);
-            glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
-            glBindTexture(GL_TEXTURE_2D, map.diffuse.id);
-            }
-            
-            if (map.specular.id != -1) {
-          glActiveTexture(GL_TEXTURE1);
-            glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
-            glBindTexture(GL_TEXTURE_2D, map.specular.id);
-            }
-            
-            if (map.normMap.id != -1) {
-            glActiveTexture(GL_TEXTURE2);
-              glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
-              glBindTexture(GL_TEXTURE_2D, map.normMap.id);
-            }
-            
-            glActiveTexture(GL_TEXTURE0);
+  
+            bindTextures(shader, map);
 
             glDrawElements(GL_TRIANGLES, meshes->at(j).getIndices().size(), GL_UNSIGNED_INT, (void*) indiceCount);
             
@@ -744,7 +635,7 @@ void Renderer::renderParticles() {
    glDepthMask(GL_FALSE);
     for (int i = 0; i < world->getParticleEffects().size(); i++) {
         ParticleEffect& effect = *world->getParticleEffects().at(i);
-        Batch* batch;
+        Batch<ParticleEffect>* batch;
         int elementsPerInstance = 3;
         if (effect.drawTarget == GL_TRIANGLES) {
             batch = &quadParticles;
@@ -756,7 +647,7 @@ void Renderer::renderParticles() {
             elementsPerInstance = 1;
         }
         batch->bindVAO();
-        batch->bindInstanceBuffer(effect.graphics.getVertexData());
+        batch->bindInstanceBuffer(&effect);
         Shader* shaderRef = effect.graphics.getShader();
         shaderRef->use();
         GLuint shader = shaderRef->ID;
@@ -770,140 +661,77 @@ void Renderer::renderParticles() {
          glActiveTexture(GL_TEXTURE0); 
             glUniform1i(glGetUniformLocation(shader, "diffuse"), 0);
         glBindTexture(effect.textureTarget, effect.texture.id);
-        } 
-        glDrawElementsInstanced(effect.drawTarget, elementsPerInstance, GL_UNSIGNED_INT, (void*)(batch->getIndexByteStride(effect.graphics.getVertexData())), effect.getNumParticles());
+        }
+        
+        glDrawElementsInstanced(effect.drawTarget, elementsPerInstance, GL_UNSIGNED_INT, (void*)(batch->getIndexByteStride(&effect)), effect.getNumParticles());
         glBindTexture(effect.textureTarget, 0);
     } 
-    glBindVertexArray(0);
+    glBindVertexArray(0); 
     glActiveTexture(GL_TEXTURE0);
+    
     glBindTexture(GL_TEXTURE_2D, 0);
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Renderer::print(std::string string) {
-
-    screenText.duration = 3.7; 
-    screenText.text = string;
-    if (screenText.Characters.size() == 0){
-    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
-    }
-      
-    screenText.textPosArray = {};
-    std::string::const_iterator c;
-    float x = -0.9;
-    float y = -0.8;
-    float scale = 0.0004;
-      for (c = screenText.text.begin(); c != screenText.text.end(); c++)
-      {
-          Character ch = screenText.Characters[*c];
-
-          float xpos = x + ch.bearing.x * scale;
-          float ypos = y - (ch.size.y - ch.bearing.y) * scale;
-
-          float w = ch.size.x * scale;
-         
-          float h = ch.size.y * scale;
-          
-          // update VBO for each character
-          std::vector<float> vertices = {
-               xpos,     ypos + h,   0.0f, 0.0f ,
-              xpos,     ypos,       0.0f, 1.0f ,
-               xpos + w, ypos,       1.0f, 1.0f ,
-            xpos,     ypos + h,   0.0f, 0.0f ,
-               xpos + w, ypos,       1.0f, 1.0f ,
-               xpos + w, ypos + h,   1.0f, 0.0f
-          };
-          screenText.textPosArray.insert(screenText.textPosArray.end(), vertices.begin(), vertices.end());
-          x += (ch.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
-      }
-    loadTextData(); 
-}
- 
-void Renderer::renderText() {
-    textShader->use();
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
+  
+void Renderer::renderText(uiText* text) {
+   /** textShader->use();
+    glEnable(GL_DEPTH_TEST); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBindVertexArray(tVAO);
-    int verticeCount = 0;
-    for (int i = 0; i < screenText.text.size(); i++) {
-    glBindTexture(GL_TEXTURE_2D, screenText.Characters[screenText.text[i]].id);
-    glDrawArrays(GL_TRIANGLES, verticeCount, 6);
-        verticeCount += 6;
+  //  glBindVertexArray(tVAO);
+    soundTexts.bindVAO();   
+    int verticeCount = 0;   
+    for (int i = 0; i < soundTexts.getNumDrawables(); i++) { // wtf bro u really texture swapping per character??
+        glBindTexture(GL_TEXTURE_2D_ARRAY,   soundTexts.getVertexDataMap().at(i).first->data.getTextures().diffuse.id); //hahahaha
+        glDrawElements(GL_TRIANGLES, soundTexts.getVertexDataMap().at(i).first->data.getIndices().size(), GL_UNSIGNED_INT, (void*) verticeCount);
+        verticeCount += soundTexts.getVertexDataMap().at(i).first->data.getIndices().size();
     }
-
+    soundTexts.unbindVAO(); **/
+    text->getShader()->use(); 
+  //  glBindVertexArray(tVAO);
+    text->bind();
+    glBindTexture(GL_TEXTURE_2D_ARRAY, text->getTextureMap().diffuse.id); //hahahaha
+    glDrawElements(GL_TRIANGLES, text->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    text->unbind(); 
+} 
+   
+ 
+void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
+    if (map.diffuse.id != -1) {
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
+    glBindTexture(map.diffuse.textureTarget, map.diffuse.id);
+    }
+    
+    if (map.specular.id != -1) {
+  glActiveTexture(GL_TEXTURE1);
+    glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
+    glBindTexture(GL_TEXTURE_2D, map.specular.id);
+    }
+    
+    
+    if (map.normMap.id != -1) {
+    glActiveTexture(GL_TEXTURE2);
+      glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
+      glBindTexture(GL_TEXTURE_2D, map.normMap.id);
+    }
+    
+    if (map.voronoi.id != -1) { 
+    glActiveTexture(GL_TEXTURE3);
+      glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
+      glBindTexture(GL_TEXTURE_2D, map.voronoi.id);
+    }
+    
+    if (map.voronoi.id != -1) {
+    glActiveTexture(GL_TEXTURE4);
+      glUniform1i(glGetUniformLocation(shader->ID, "noise"), 4);
+      glBindTexture(GL_TEXTURE_2D, noise.id);
+    }
+    
+    glActiveTexture(GL_TEXTURE0);
 }
- 
-/** int imageWidth, imageHeight, channels;   OLD FLAT MAP
 
- unsigned char* imageData = stbi_load("Resources/Map/ice.jpeg", &imageWidth, &imageHeight, &channels, 0);
- 
- 
- glGenTextures(1, &texture);
- glBindTexture(GL_TEXTURE_2D, texture);
- 
- glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_viewMat_LINEAR);
- glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
- 
- glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
- glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
- 
- if (imageData) {
-     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-     glGenerateMipmap(GL_TEXTURE_2D);
- } else {
-     std::cout << "Failed to load image data \n";
- }
- stbi_image_free(imageData);
- 
- mapMesh* mesh = world->getMapMesh();
- 
- glGenVertexArrays(1, &mVAO);
- glBindVertexArray(mVAO);
- 
- glGenBuffers(1, &mVBO);
- glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-
- glBufferData(GL_ARRAY_BUFFER, mesh->mapVertexCount * sizeof(float), mesh->mapFirstVertex, GL_STATIC_DRAW);
- glGenBuffers(1, &mEBO);
- glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
- glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->mapIndexCount *sizeof(GLuint), mesh->mapFirstIndex, GL_STATIC_DRAW);
- 
- glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)0);
- glEnableVertexAttribArray(0);
- glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(3*sizeof(float)));
- glEnableVertexAttribArray(1);
- glBindVertexArray(0);**/
-
-/**  for (int i = 0; i < world->getParticleEffects()->size(); i++) { PARTICLE INSTANCING
- 
-      for (int j = 0; j < world->getParticleEffects()->at(i)->getNumParticles(); j++) {
-          pPositions[j]=(world->getParticleEffects()->at(i)->getNthParticle(j).posVec);
-      }
-      shaders.at(world->getParticleEffects()->at(i)->shader)->use();
-      GLuint shader = shaders.at(world->getParticleEffects()->at(i)->shader)->ID;
-      glUniformMatrix4fv(glGetUniformLocation(shader, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-      glUniformMatrix4fv(glGetUniformLocation(shader, "projMat"), 1, GL_FALSE,
-                  glm::value_ptr(projMat));
-      glActiveTexture(GL_TEXTURE0);
-      glUniform1i(glGetUniformLocation(actorShader->ID, "texture0"), 0);
-      glBindTexture(GL_TEXTURE_2D, world->getParticleEffects()->at(i)->texture);
-  *    for (int j = 0; j < world->getParticleEffects()->at(i)->getNumParticles(); j++) {
-          if(world->getParticleEffects()->at(i)->getNthParticle(j).duration > 0) {
-              //
-      glBindTexture(GL_TEXTURE_2D, world->getParticleEffects()->at(i)->getNthParticle(j).texture);
-              // world->getParticleEffects()->at(i).getNthParticle(j).texture
-      modelMat = glm::mat4(1.0f);
-      modelMat = glm::translate(modelMat, world->getParticleEffects()->at(i)->getNthParticle(j).posVec);
-      modelMat = glm::rotate(modelMat, -glm::radians(-90+camera->getYaw()), glm::vec3(0,1,0));
-      glUniformMatrix4fv(glGetUniformLocation(shader, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-      glUniform1f(glGetUniformLocation(shader, "duration"), world->getParticleEffects()->at(i)->getNthParticle(j).duration);
-      glUniform1f(glGetUniformLocation(shader, "size"), world->getParticleEffects()->at(i)->getSize());
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*) indiceCount);
-              indiceCount += 6*sizeof(GLuint);
-      }*
-      glUniform1f(glGetUniformLocation(shader, "size"), world->getParticleEffects()->at(i)->getSize());
-      glUniform3fv(glGetUniformLocation(shader, "positions"), 1000, glm::value_ptr(pPositions[0]));
-      glDrawArraysInstanced(GL_TRIANGLES, 0,6, world->getParticleEffects()->at(i)->getNumParticles());
-      glActiveTexture(0);**/
+void Renderer::setUI(const std::shared_ptr<uiLayout>& ui_) {
+    ui = ui_;
+}

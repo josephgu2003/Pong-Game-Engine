@@ -39,6 +39,10 @@
 		5D46CDCB265D6DC700096EC7 /* radial.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D46CDCA265D6DC700096EC7 /* radial.png */; };
 		5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D479DBE264EDC2200067E35 /* Mesh.cpp */; };
 		5D479DC3264EE5A800067E35 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D479DC1264EE5A800067E35 /* Model.cpp */; };
+		5D4BD7BD271B068D00A89C8B /* aiPonder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BD7BB271B068C00A89C8B /* aiPonder.cpp */; };
+		5D4BD7C0271B13D900A89C8B /* Positionable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BD7BE271B13D900A89C8B /* Positionable.cpp */; };
+		5D4BD7C5271B6A9900A89C8B /* Renderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BD7C3271B6A9900A89C8B /* Renderable.cpp */; };
+		5D4BD7C8271BA16800A89C8B /* uiText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BD7C6271BA16800A89C8B /* uiText.cpp */; };
 		5D66B4892651EEB8006EA749 /* ice.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5D66B4882651EEB8006EA749 /* ice.jpeg */; };
 		5D670C9C2684D903000E179C /* MapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9A2684D903000E179C /* MapObject.cpp */; };
 		5D670C9F2684D90C000E179C /* Sky.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9D2684D90C000E179C /* Sky.cpp */; };
@@ -252,6 +256,11 @@
 		5DAC32CE26B06B1000E54B4B /* snowtest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC32CC26B06B1000E54B4B /* snowtest.mtl */; };
 		5DAC32CF26B06B1000E54B4B /* snowtest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC32CD26B06B1000E54B4B /* snowtest.obj */; };
 		5DAC32D226B097D400E54B4B /* Force.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DAC32D026B097D400E54B4B /* Force.cpp */; };
+		5DB91EA1271BA8B0003AAAA7 /* VertexLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DB91E9F271BA8B0003AAAA7 /* VertexLoader.cpp */; };
+		5DB91EA4271CB0EA003AAAA7 /* aiSingFriend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DB91EA2271CB0E9003AAAA7 /* aiSingFriend.cpp */; };
+		5DB91EA7271D0554003AAAA7 /* Subject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DB91EA5271D0554003AAAA7 /* Subject.cpp */; };
+		5DB91EAA271D056E003AAAA7 /* Observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DB91EA8271D056E003AAAA7 /* Observer.cpp */; };
+		5DB91EAE271DD7AA003AAAA7 /* HealthMeter.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DB91EAD271DD7AA003AAAA7 /* HealthMeter.fs */; };
 		5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */; };
 		5DCDDACC26A3A3A50031FCC9 /* journey7.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */; };
 		5DCDDACD26A3A3A50031FCC9 /* journey7.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDACB26A3A3A50031FCC9 /* journey7.obj */; };
@@ -264,7 +273,6 @@
 		5DE85CD92708E79A000D948D /* AIAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CD72708E79A000D948D /* AIAction.cpp */; };
 		5DE85CE1270FB639000D948D /* Watch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CDF270FB639000D948D /* Watch.cpp */; };
 		5DE85CE627126C2B000D948D /* aiDance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CE427126C2B000D948D /* aiDance.cpp */; };
-		5DE85CE927134172000D948D /* VertexCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CE727134172000D948D /* VertexCollection.cpp */; };
 		5DE85CEC271354FC000D948D /* Dice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CEA271354FC000D948D /* Dice.cpp */; };
 		5DEABA042659D2CF000C772F /* rosa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEABA032659D2CF000C772F /* rosa.png */; };
 		5DEABA062659FC4E000C772F /* rosa copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEABA052659FC4E000C772F /* rosa copy.png */; };
@@ -363,6 +371,14 @@
 		5D479DBF264EDC2200067E35 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
 		5D479DC1264EE5A800067E35 /* Model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		5D479DC2264EE5A800067E35 /* Model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
+		5D4BD7BB271B068C00A89C8B /* aiPonder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = aiPonder.cpp; sourceTree = "<group>"; };
+		5D4BD7BC271B068D00A89C8B /* aiPonder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = aiPonder.hpp; sourceTree = "<group>"; };
+		5D4BD7BE271B13D900A89C8B /* Positionable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Positionable.cpp; sourceTree = "<group>"; };
+		5D4BD7BF271B13D900A89C8B /* Positionable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Positionable.hpp; sourceTree = "<group>"; };
+		5D4BD7C3271B6A9900A89C8B /* Renderable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderable.cpp; sourceTree = "<group>"; };
+		5D4BD7C4271B6A9900A89C8B /* Renderable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Renderable.hpp; sourceTree = "<group>"; };
+		5D4BD7C6271BA16800A89C8B /* uiText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiText.cpp; sourceTree = "<group>"; };
+		5D4BD7C7271BA16800A89C8B /* uiText.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = uiText.hpp; sourceTree = "<group>"; };
 		5D65F5C82638EDBB00A839D3 /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		5D66B4882651EEB8006EA749 /* ice.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpeg; sourceTree = "<group>"; };
 		5D670C9A2684D903000E179C /* MapObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MapObject.cpp; sourceTree = "<group>"; };
@@ -607,6 +623,15 @@
 		5DAC32CD26B06B1000E54B4B /* snowtest.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = snowtest.obj; sourceTree = "<group>"; };
 		5DAC32D026B097D400E54B4B /* Force.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Force.cpp; sourceTree = "<group>"; };
 		5DAC32D126B097D400E54B4B /* Force.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Force.hpp; sourceTree = "<group>"; };
+		5DB91E9F271BA8B0003AAAA7 /* VertexLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexLoader.cpp; sourceTree = "<group>"; };
+		5DB91EA0271BA8B0003AAAA7 /* VertexLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexLoader.hpp; sourceTree = "<group>"; };
+		5DB91EA2271CB0E9003AAAA7 /* aiSingFriend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = aiSingFriend.cpp; sourceTree = "<group>"; };
+		5DB91EA3271CB0E9003AAAA7 /* aiSingFriend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = aiSingFriend.hpp; sourceTree = "<group>"; };
+		5DB91EA5271D0554003AAAA7 /* Subject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Subject.cpp; sourceTree = "<group>"; };
+		5DB91EA6271D0554003AAAA7 /* Subject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Subject.hpp; sourceTree = "<group>"; };
+		5DB91EA8271D056E003AAAA7 /* Observer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Observer.cpp; sourceTree = "<group>"; };
+		5DB91EA9271D056E003AAAA7 /* Observer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Observer.hpp; sourceTree = "<group>"; };
+		5DB91EAD271DD7AA003AAAA7 /* HealthMeter.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HealthMeter.fs; sourceTree = "<group>"; };
 		5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexData.cpp; sourceTree = "<group>"; };
 		5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexData.hpp; sourceTree = "<group>"; };
 		5DCDDACA26A3A3A50031FCC9 /* journey7.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = journey7.mtl; sourceTree = "<group>"; };
@@ -636,8 +661,6 @@
 		5DE85CE0270FB639000D948D /* Watch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Watch.hpp; sourceTree = "<group>"; };
 		5DE85CE427126C2B000D948D /* aiDance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = aiDance.cpp; sourceTree = "<group>"; };
 		5DE85CE527126C2B000D948D /* aiDance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = aiDance.hpp; sourceTree = "<group>"; };
-		5DE85CE727134172000D948D /* VertexCollection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexCollection.cpp; sourceTree = "<group>"; };
-		5DE85CE827134172000D948D /* VertexCollection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexCollection.hpp; sourceTree = "<group>"; };
 		5DE85CEA271354FC000D948D /* Dice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dice.cpp; sourceTree = "<group>"; };
 		5DE85CEB271354FC000D948D /* Dice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Dice.hpp; sourceTree = "<group>"; };
 		5DEABA032659D2CF000C772F /* rosa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosa.png; sourceTree = "<group>"; };
@@ -833,24 +856,14 @@
 		5D33262626791EB2002F3D49 /* World */ = {
 			isa = PBXGroup;
 			children = (
-				5D3E7087264308C10071115A /* Camera.cpp */,
-				5DA67C282641A482005A7E74 /* Actor.cpp */,
 				5D670C9D2684D90C000E179C /* Sky.cpp */,
 				5D670C9E2684D90C000E179C /* Sky.hpp */,
+				5DA9BDE226B57DF100C1BAEC /* Componentable.hpp */,
 				5D670C9A2684D903000E179C /* MapObject.cpp */,
 				5D670C9B2684D903000E179C /* MapObject.hpp */,
-				5DA67C292641A482005A7E74 /* Actor.hpp */,
-				5DA9759F268572F0008252BA /* DirectionalLight.cpp */,
-				5DA9BDE226B57DF100C1BAEC /* Componentable.hpp */,
-				5DAC32D026B097D400E54B4B /* Force.cpp */,
-				5DAC32D126B097D400E54B4B /* Force.hpp */,
 				5DA9BDE126B57DF100C1BAEC /* Componentable.cpp */,
-				5DA975A0268572F0008252BA /* DirectionalLight.hpp */,
 				5DF7A2372640E0FD004F05E2 /* World.hpp */,
-				5D3E7088264308C10071115A /* Camera.hpp */,
 				5DF7A2362640E0FD004F05E2 /* World.cpp */,
-				5DA9759C26857135008252BA /* Light.cpp */,
-				5DA9759D26857135008252BA /* Light.hpp */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -930,9 +943,6 @@
 			children = (
 				5D68FE6B26E8201300E572E5 /* RenderData */,
 				5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */,
-				5DF82DA72680D14800F4D177 /* uiPiece.hpp */,
-				5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */,
-				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
 				5DA7E2AC26801683008845AA /* Batch.hpp */,
 				5DEC19B7264B69B30001ABAE /* stb_image.h */,
 				5DE8573A2640E3210062DFC2 /* Renderer.cpp */,
@@ -942,8 +952,6 @@
 				5DF82DA32680CBA800F4D177 /* uiLayout.cpp */,
 				5D426581263C8E7B0026C24D /* Shader.hpp */,
 				5DEC19B9264B69E20001ABAE /* stb_image.c */,
-				5DF82DA42680CBA800F4D177 /* uiLayout.hpp */,
-				5DF82DA62680D14800F4D177 /* uiPiece.cpp */,
 				5D426580263C8E7B0026C24D /* Shader.cpp */,
 			);
 			path = Rendering;
@@ -963,12 +971,14 @@
 			isa = PBXGroup;
 			children = (
 				5DCDDAB8269F73BD0031FCC9 /* VertexData.cpp */,
-				5DE85CE727134172000D948D /* VertexCollection.cpp */,
-				5DE85CE827134172000D948D /* VertexCollection.hpp */,
+				5D4BD7C3271B6A9900A89C8B /* Renderable.cpp */,
+				5D4BD7C4271B6A9900A89C8B /* Renderable.hpp */,
 				5DCDDAB9269F73BD0031FCC9 /* VertexData.hpp */,
 				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
 				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
 				5DA9BE6726C0413D00C1BAEC /* Models */,
+				5DB91E9F271BA8B0003AAAA7 /* VertexLoader.cpp */,
+				5DB91EA0271BA8B0003AAAA7 /* VertexLoader.hpp */,
 			);
 			path = RenderData;
 			sourceTree = "<group>";
@@ -1044,6 +1054,7 @@
 				5D8A7D0B26F0FCAF00BD8BDB /* GenericDiffuse.fs */,
 				5D25EC442691154C008BD594 /* ColorPartV.vs */,
 				5D98F65A2688059A0075552B /* MistFShader.fs */,
+				5DB91EAD271DD7AA003AAAA7 /* HealthMeter.fs */,
 				5D8A7D0D26F2853E00BD8BDB /* Simple2D.vs */,
 				5D98F6592688059A0075552B /* MistVShader.vs */,
 				5D98F6552688053E0075552B /* SmokeFShader.fs */,
@@ -1235,6 +1246,39 @@
 			path = source;
 			sourceTree = "<group>";
 		};
+		5DB91EAF271EF5B9003AAAA7 /* WorldObjects */ = {
+			isa = PBXGroup;
+			children = (
+				5DF82DA42680CBA800F4D177 /* uiLayout.hpp */,
+				5D4BD7BE271B13D900A89C8B /* Positionable.cpp */,
+				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5D4BD7BF271B13D900A89C8B /* Positionable.hpp */,
+				5D3E7087264308C10071115A /* Camera.cpp */,
+				5DAC32D026B097D400E54B4B /* Force.cpp */,
+				5DAC32D126B097D400E54B4B /* Force.hpp */,
+				5DA9759D26857135008252BA /* Light.hpp */,
+				5DA9759F268572F0008252BA /* DirectionalLight.cpp */,
+				5D3E7088264308C10071115A /* Camera.hpp */,
+				5DA9759C26857135008252BA /* Light.cpp */,
+				5DA67C292641A482005A7E74 /* Actor.hpp */,
+				5DA975A0268572F0008252BA /* DirectionalLight.hpp */,
+			);
+			path = WorldObjects;
+			sourceTree = "<group>";
+		};
+		5DB91EB0271EF602003AAAA7 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				5D4BD7C7271BA16800A89C8B /* uiText.hpp */,
+				5DF82DA72680D14800F4D177 /* uiPiece.hpp */,
+				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
+				5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */,
+				5D4BD7C6271BA16800A89C8B /* uiText.cpp */,
+				5DF82DA62680D14800F4D177 /* uiPiece.cpp */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		5DE85CD1270527A1000D948D /* AIComp */ = {
 			isa = PBXGroup;
 			children = (
@@ -1242,6 +1286,10 @@
 				5DE85CD72708E79A000D948D /* AIAction.cpp */,
 				5DE85CD82708E79A000D948D /* AIAction.hpp */,
 				5DE85CE427126C2B000D948D /* aiDance.cpp */,
+				5D4BD7BB271B068C00A89C8B /* aiPonder.cpp */,
+				5DB91EA2271CB0E9003AAAA7 /* aiSingFriend.cpp */,
+				5DB91EA3271CB0E9003AAAA7 /* aiSingFriend.hpp */,
+				5D4BD7BC271B068D00A89C8B /* aiPonder.hpp */,
 				5DE85CE527126C2B000D948D /* aiDance.hpp */,
 				5DE85CCE2705278E000D948D /* AIComponent.cpp */,
 				5DE85CD327052BFE000D948D /* FriendAI.cpp */,
@@ -1254,11 +1302,11 @@
 			isa = PBXGroup;
 			children = (
 				5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */,
+				5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */,
+				5D10D5FF26FBBB7700281E6B /* CharacterComponent.cpp */,
 				5D10D60026FBBB7800281E6B /* CharacterComponent.hpp */,
 				5D8A7CF726EC212400BD8BDB /* LifeComponent.cpp */,
 				5D8A7CF826EC212400BD8BDB /* LifeComponent.hpp */,
-				5D10D5FF26FBBB7700281E6B /* CharacterComponent.cpp */,
-				5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */,
 			);
 			path = StatComp;
 			sourceTree = "<group>";
@@ -1307,6 +1355,8 @@
 		5DEC19B6264B4BB10001ABAE /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5DB91EB0271EF602003AAAA7 /* UI */,
+				5DB91EAF271EF5B9003AAAA7 /* WorldObjects */,
 				5DE85CF02714869C000D948D /* Input */,
 				5DE85CEF27148696000D948D /* Audio */,
 				5DE85CEE27148657000D948D /* Util */,
@@ -1362,6 +1412,10 @@
 				5DAC1806266994AE0021DC31 /* Game.cpp */,
 				5DAC1807266994AE0021DC31 /* Game.hpp */,
 				5D0C414C2637948B005F64D0 /* main.cpp */,
+				5DB91EA5271D0554003AAAA7 /* Subject.cpp */,
+				5DB91EA6271D0554003AAAA7 /* Subject.hpp */,
+				5DB91EA8271D056E003AAAA7 /* Observer.cpp */,
+				5DB91EA9271D056E003AAAA7 /* Observer.hpp */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -1546,6 +1600,7 @@
 				5DA9834A2686A732008252BA /* smoke030.jpg in Resources */,
 				5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */,
 				5DA983442686A732008252BA /* smoke081.jpg in Resources */,
+				5DB91EAE271DD7AA003AAAA7 /* HealthMeter.fs in Resources */,
 				5DA9759B26854B60008252BA /* imageedit_7_4243532340.png in Resources */,
 				5D25EC462691154C008BD594 /* ColorPartV.vs in Resources */,
 				5DA983562686A732008252BA /* smoke029.jpg in Resources */,
@@ -1693,15 +1748,20 @@
 				5DE85CD02705278E000D948D /* AIComponent.cpp in Sources */,
 				5DA9BE7326C1882B00C1BAEC /* AnimComponent.cpp in Sources */,
 				5DEE582C2667EB990080446C /* Ability.cpp in Sources */,
+				5D4BD7C5271B6A9900A89C8B /* Renderable.cpp in Sources */,
 				5DAB0B4F266FF35900BC1C93 /* Sketch.cpp in Sources */,
 				5DF82DA52680CBA800F4D177 /* uiLayout.cpp in Sources */,
 				5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */,
+				5DB91EA7271D0554003AAAA7 /* Subject.cpp in Sources */,
 				5DE85CE1270FB639000D948D /* Watch.cpp in Sources */,
 				5DE85CEC271354FC000D948D /* Dice.cpp in Sources */,
 				5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */,
+				5D4BD7C0271B13D900A89C8B /* Positionable.cpp in Sources */,
 				5D6E82982698A0E3003A1059 /* ScriptOne.cpp in Sources */,
 				5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */,
+				5DB91EA1271BA8B0003AAAA7 /* VertexLoader.cpp in Sources */,
 				5D391B8F268FE01C0092623D /* Script.cpp in Sources */,
+				5DB91EA4271CB0EA003AAAA7 /* aiSingFriend.cpp in Sources */,
 				5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */,
 				5D670C9C2684D903000E179C /* MapObject.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
@@ -1712,8 +1772,8 @@
 				5D8A7CF926EC212400BD8BDB /* LifeComponent.cpp in Sources */,
 				5D33261A2676CFDD002F3D49 /* InkEffect.cpp in Sources */,
 				5DAC1805266993C40021DC31 /* InputHandler.cpp in Sources */,
+				5DB91EAA271D056E003AAAA7 /* Observer.cpp in Sources */,
 				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
-				5DE85CE927134172000D948D /* VertexCollection.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
 				5D8A7D1126F3E5C900BD8BDB /* HealthMeter.cpp in Sources */,
 				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,
@@ -1727,9 +1787,11 @@
 				5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */,
 				5D8A7CF626EABBDF00BD8BDB /* NameComponent.cpp in Sources */,
 				5D8A7D0826F032D700BD8BDB /* RunicLetters.cpp in Sources */,
+				5D4BD7C8271BA16800A89C8B /* uiText.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
 				5DEDAE592672B9990050F441 /* Audio.cpp in Sources */,
 				5D25EC4226910C87008BD594 /* Fireworks.cpp in Sources */,
+				5D4BD7BD271B068D00A89C8B /* aiPonder.cpp in Sources */,
 				5DEDAE5C2672BC920050F441 /* Mist.cpp in Sources */,
 				5DA9BE6A26C0417500C1BAEC /* Bone.cpp in Sources */,
 				5DE85CD92708E79A000D948D /* AIAction.cpp in Sources */,

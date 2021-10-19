@@ -13,11 +13,12 @@
 #include "Speech.hpp"
 #include "FallingLetters.hpp"
 #include "Fish.hpp"
+#include "NameComponent.hpp"
 #include "CombatComponent.hpp"
 
 void onetap_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
-    handler->processInput(key, action, mods);
+    handler->addKeyEventToQ(key, action, mods);
 }
 
 void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
@@ -25,12 +26,76 @@ void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
     handler->moveMouse(mouseX_, mouseY_);
 }
 
+void InputHandler::dumpTextToPlayer() {
+    setReadTextMode(false);
+    game->getActivePlayerHero()->getComponent<NameComponent>()->speak(readText, 3.0);
+    setCallbackforKey(GLFW_KEY_ENTER,  [](Game* game){
+        game->getInputHandler().setReadTextMode(true);
+        game->getInputHandler().setCallbackforKey(GLFW_KEY_ENTER, [](Game* game){
+            game->getInputHandler().dumpTextToPlayer();
+        });
+    });
+    readText = ""; 
+}
+
 InputHandler::InputHandler() {
+    readText = "";
+    
+    setCallbackforKey(GLFW_KEY_ENTER,  [](Game* game){
+        game->getInputHandler().setReadTextMode(true);
+        game->getInputHandler().setCallbackforKey(GLFW_KEY_ENTER, [](Game* game){
+            game->getInputHandler().dumpTextToPlayer();
+        });
+    });
+    
+    setCallbackforKey(GLFW_KEY_X, [](Game* game){
+        game->swapWorld();
+    });
+    
+    setCallbackforKey(GLFW_KEY_SPACE, [](Game* game){
+        game->getActivePlayerHero()->jump();
+    });
+
+    setCallbackforKey(GLFW_KEY_Z, [](Game* game){
+        Actor* ph = game->getActivePlayerHero();
+        std::shared_ptr<Ability> fish = std::make_shared<Fish>(&ph->getWorld(), ph, 18.0);
+        ph->getComponent<CombatComponent>()->newAbility(fish);
+    });
+    
+    setCallbackforKey(GLFW_KEY_G, [](Game* game){
+        Actor* ph = game->getActivePlayerHero();
+        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&ph->getWorld(), ph, 6.0);
+        auto comb = ph->getComponent<CombatComponent>();
+        if (comb->hasTarget()) {
+            letters->setTarget(comb->getBigTarget());
+        }
+        comb->newAbility(letters);
+    });
+    
+    setCallbackforKey(GLFW_KEY_Q, [](Game* game){
+        Actor* ph = game->getActivePlayerHero();
+        std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
+        std::shared_ptr<Ability> speech = std::make_shared<Speech>(&ph->getWorld(), ph, 6.0, lines);
+        ph->getComponent<CombatComponent>()->newAbility(speech);
+    });
+    
 
 }
 
 InputHandler::~InputHandler() {
     
+}
+
+void InputHandler::setCallbackforKey(int i, keyCallback kc) {
+    if (keyCallbacks.find(i) == keyCallbacks.end()) {
+        keyCallbacks.insert(std::pair<int, keyCallback>(i, kc));
+    } else {
+        keyCallbacks.find(i)->second = kc; 
+    }
+}
+
+void InputHandler::addKeyEventToQ(int key, int action, int mods) {
+    keyEventQ.push(KeyEvent(key, action, mods)); 
 }
 
 void InputHandler::setWindow(GLFWwindow *window_) {
@@ -39,55 +104,54 @@ void InputHandler::setWindow(GLFWwindow *window_) {
     glfwSetKeyCallback(window, onetap_callback);
 }
 
+// input handler read mode turned on
+// read, until enter is hit again
+// text dumped to actor speech?
+
+// something calls read mode, and accepts the string?, including inputhanlder itself
+
+// turnOnReadMode(string ref?); observer pattern can't use?
+
 void InputHandler::tick() {
-    
-
-    if (scheme == 0) {
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        activeHero->posDir(0.03);
-
+    if (readKeysToTextMode) { // read text isntead of controls
+        while (!keyEventQ.empty()) {
+            KeyEvent& ke = keyEventQ.front();
+            if (ke.key == GLFW_KEY_ENTER) {
+                processInput(ke);
+            }
+            const char* key_name = glfwGetKeyName(ke.key, 0);
+            keyEventQ.pop();
+            if (!key_name) continue;
+            readText.append(key_name);
+        }
+        return;
     }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        activeHero->posDir(-0.03);
+    while (!keyEventQ.empty()) {
+        KeyEvent& ke = keyEventQ.front();
+        processInput(ke);
+        keyEventQ.pop();
     }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        activeHero->posRight(0.03);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        activeHero->posRight(-0.03);
-    }
-
-    }
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            activeHero->posDir(0.03);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            activeHero->posDir(-0.03);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            activeHero->posRight(0.03);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            activeHero->posRight(-0.03);
+        }
      
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
-    
-    double mx, my;
-    
-    if (scheme == 2)     {
-        glfwGetCursorPos(window, &mx, &my);
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-
-            }
-    lastMY = my;
-    lastMX = mx;
-    }
 }
 
-void InputHandler::setActionScheme(int id) {
-    if(id == 2) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        glfwSetCursorPosCallback(window, mouse_callback);
-    }
-    if(scheme == 2 && id !=2) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
-    scheme = id;
-}
+
 
 void InputHandler::moveMouse(double mouseX_, double mouseY_) {
-    if (scheme != 2) {
     if (firstMouse) {
         lastMX = mouseX_;
         lastMY = mouseY_;
@@ -97,16 +161,28 @@ void InputHandler::moveMouse(double mouseX_, double mouseY_) {
     yOffset = lastMY - mouseY_;
     lastMX = mouseX_;
     lastMY = mouseY_;
-    activeCamera->incYaw(xOffset*0.03);
-    activeCamera->incPitch(yOffset*0.03);
+    activeCamera->rotate(glm::vec3(yOffset*0.03, xOffset*0.03, 0));
     xOffset = 0;
     yOffset = 0;
-    }
+    
 }
 
-int InputHandler::processInput(int key, int action, int mods) {
-//    unique_lock<mutex> lock()
-    if (scheme == 3) {
+void InputHandler::setReadTextMode(bool b) {
+    readKeysToTextMode = b;
+}
+
+int InputHandler::processInput(const KeyEvent& ke) {
+    auto call = keyCallbacks.find(ke.key);
+    if (ke.action == GLFW_PRESS && call != keyCallbacks.end()) {
+        (*(call->second))(game); 
+        return 0;
+    }
+    
+    int key = ke.key;
+    int action = ke.action;
+    int mod = ke.mod; 
+//    unique_lock<mutex> lock() 
+ /**   if (scheme == 3) {
         int nextBranch;
         if (key == GLFW_KEY_A && action == GLFW_PRESS) {
             nextBranch = 0;
@@ -129,54 +205,29 @@ int InputHandler::processInput(int key, int action, int mods) {
     const char* key_name = glfwGetKeyName((key), 0);
     if (key_name != NULL)
        // input << (key_name);
-        if (mods == GLFW_MOD_SHIFT){
+        if (mod == GLFW_MOD_SHIFT){
         char c = toupper(*key_name);
             if (key == GLFW_KEY_1) c = '!';
             if (key == GLFW_KEY_SLASH) c = '?';
             if (key == GLFW_KEY_APOSTROPHE) c = '\"';
         i.append(std::string(1, c));
-         } else if (mods != GLFW_MOD_SHIFT) {
+         } else if (mod != GLFW_MOD_SHIFT) {
             i.append(key_name);
-         }
+         } 
     }
         
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
             scheme = 0;
           //  std::string test;
           //  input >> test;
-            std::cout << i;
         printing = true;
             return 1;
         }
     }
     
-    if (scheme == 0) {
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        activeHero->jump();
-    }
-    if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&activeHero->getWorld(), activeHero.get(), 6);
 
-        if (activeHero->getComponent<CombatComponent>()->hasTarget()) {
-            letters->setTarget(activeHero->getComponent<CombatComponent>()->getBigTarget());
-        }
-        activeHero->getComponent<CombatComponent>()->newAbility(letters);
-    }
-        if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-            std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
-            std::shared_ptr<Ability> speech = std::make_shared<Speech>(&activeHero->getWorld(), activeHero.get(), 6.0, lines);
-            activeHero->getComponent<CombatComponent>()->newAbility(speech);
-        }
-        
-        if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-            std::shared_ptr<Ability> fish = std::make_shared<Fish>(&activeHero->getWorld(), activeHero.get(), 18.0);
-            activeHero->getComponent<CombatComponent>()->newAbility(fish);
-        }
+
          
-        if (key == GLFW_KEY_X && action == GLFW_PRESS) {
-            game->swapWorld();
-        } 
-        
      /**   if (key == GLFW_KEY_E && action == GLFW_PRESS) {
             int newScheme = (-1)*(scheme-2);
             setActionScheme(newScheme);
@@ -199,7 +250,7 @@ int InputHandler::processInput(int key, int action, int mods) {
             activeSketch.reset();
             }
         }
-         **/
+         
         if (key == GLFW_KEY_T && action == GLFW_PRESS) {
             if (activeSketch.get() != NULL)
             activeSketch->call2();
@@ -216,29 +267,17 @@ int InputHandler::processInput(int key, int action, int mods) {
         setActionScheme(newScheme);
         firstMouse = true;
     }
-    }
+    }**/
     return 0;
 }
 
-void InputHandler::setPlayerHero(const std::shared_ptr<Actor>& actor, int i) {
-    if (i == 0)
-        pHero0 = actor;
-    
-    if (i == 1)
-        pHero1 = actor;
-    
-    if (activeHero.get() == NULL) {
-        activeHero = pHero0;
-    }
-}
 
 void InputHandler::setCamera(const std::shared_ptr<Camera>& cam) {
     activeCamera = cam;
 }
 
-void InputHandler::setActiveHero(int i) {
-    if (i == 0) activeHero = pHero0;
-    if (i == 1) activeHero = pHero1;
+void InputHandler::setActiveHero(const std::shared_ptr<Actor>& actor) {
+    activeHero = actor;
 }
 
 void InputHandler::setGame(Game* game_) {

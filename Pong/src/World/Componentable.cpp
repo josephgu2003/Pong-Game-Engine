@@ -60,3 +60,11 @@ void Componentable::deleteComp(CompType type) {
     }
 }
 
+bool Componentable::hasComponent(CompType ct) {
+    for (int i = 0; i < components.size(); i++) {
+        if (components.at(i)->getType() == ct) {
+            return true;
+        }
+    }
+    return false;
+} 

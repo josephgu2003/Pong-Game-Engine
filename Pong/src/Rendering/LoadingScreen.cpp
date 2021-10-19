@@ -24,9 +24,9 @@ LoadingScreen::LoadingScreen() {
     glBindTexture(GL_TEXTURE_2D, 0);
     
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+      printf( "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n" );
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
+     
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     
@@ -58,7 +58,7 @@ void LoadingScreen::print(std::string string) {
     screenText.duration = 0.5;
     screenText.text = string;
     if (screenText.Characters.size() == 0){
-    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters);
+  //  AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters, );
     }
     screenText.textPosArray = {};
     std::string::const_iterator c;

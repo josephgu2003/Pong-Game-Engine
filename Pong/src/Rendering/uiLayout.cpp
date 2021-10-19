@@ -6,17 +6,17 @@
 //
 
 #include "uiLayout.hpp"
+#include "Renderer.hpp"
 
 uiLayout::uiLayout() {
 }
-   
- 
 
+void uiLayout::insertNode(const std::shared_ptr<uiPiece>& piece) {
+    uiPieces.push_back(piece); //?
+}
 
-void uiLayout::insertNode(uiPiece* piece, float x, float y) {
-    uiNode node;
-    node.piece = piece;
-    node.x = x;
-    node.y = y;
-    uiPieces.push_back(node);
+void uiLayout::renderAll(Renderer *renderer) {
+    for (auto i : uiPieces) {
+        renderer->renderUI(i.get());
+    }
 }

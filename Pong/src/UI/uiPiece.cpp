@@ -7,10 +7,6 @@
 
 #include "uiPiece.hpp"
 
-uiPiece::uiPiece() {
+uiPiece::uiPiece() : Renderable::Renderable() {
 
-}
-
-void uiPiece::tick() {
-    
-}
+} 

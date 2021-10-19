@@ -10,11 +10,13 @@
 
 #include <stdio.h>
 #include <random>
+#include <chrono>
 
-class Dice {
+class Dice { 
 private:
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
+    static unsigned int seedValue;
 public:
     Dice();
     Dice(int inclusiveLow, int inclusiveHigh);

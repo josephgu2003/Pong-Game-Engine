@@ -8,11 +8,11 @@
 #include "Dialogue.hpp"
 #include "Game.hpp"
 #include "World.hpp"
-#include "AssetManager.hpp"
 #include "Renderer.hpp"
+#include "JsonManager.hpp"
 
 Dialogue::Dialogue(World* world_, Actor* actor_, float duration_, int id) : Ability::Ability(world_, actor_, duration_) {
-    AssetManager::loadDialogue(this, id);
+    JsonManager::loadDialogue(this, id);
     currentTree = dialogueTree;
 }
 
@@ -20,12 +20,12 @@ void Dialogue::call() {
     on = true;
     paused = false;
    // world->setActiveText(getCurrentLines().at(counter));
-    world->setActiveText(currentTree->lines.at(step));
+world->newSoundText(currentTree->lines.at(step), actor->getPos(), 5.0f);
     activeText = currentTree->lines.at(step);
-    step++;
+    step++; 
 }
-
-void Dialogue::tick() {
+  
+void Dialogue::tick() { 
     elapsetime+=glfwGetTime();
 
     if (step == currentTree->lines.size()) {
@@ -40,7 +40,7 @@ void Dialogue::tick() {
     }
     if (elapsetime > 3.0 && !paused) {
      //   world->setActiveText(getCurrentLines().at(counter));
-        world->setActiveText(currentTree->lines.at(step));
+        world->newSoundText(currentTree->lines.at(step), actor->getPos(), 5.0f);
         activeText = currentTree->lines.at(step);
         step++;
         elapsetime = 0;

@@ -27,38 +27,27 @@
 #define MOD_BIRD "Resources/Models/bird/fly.fbx" 
 #define MOD_VAMP "Resources/Models/Vampire/dancing_vampire.dae"
 
-#define MOD_JUGGERNAUT_HBOX 0.5,-0.5,0.75,0.25,0.5,-0.5
-
-#include <GL/glew.h> 
-#define GLFW_DLL
-#include <GLFW/glfw3.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
-#include "Mesh.hpp"
 #include <vector>
 #include "Model.hpp"
 #include "stb_image.h"
 #include <stdio.h>
-#include <iostream>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <map>
-#include "Shader.hpp" 
-#include "json.hpp"
+#include "Shader.hpp"
 #include <memory>
 
 //loads textures and assets
-
-
-inline std::vector<std::unique_ptr<Model>> loadedModels;
-inline std::vector<Shader> loadedShaders;
-inline nlohmann::json dialogues;
 
 struct Character {
     GLuint id;
     glm::ivec2   size;       // Size of glyph
     glm::ivec2   bearing;    // Offset from baseline to left/top of glyph
     GLuint advance; // advancing to next glph?
+    glm::vec2 texCoords;
 };
 
 struct Frame {
@@ -78,51 +67,36 @@ struct DoubleFrame {
     GLuint ftexture1;
 };
 
-struct DialogueTree;
 
-class Dialogue;
+class AssetManager {
+private:
+    static std::vector<Texture> loadedTextures;
+    static std::vector<std::pair<Texture, std::map<char, Character>>> loadedGlyphs;
+    static std::vector<std::unique_ptr<Model>> loadedModels;
+    static std::vector<Shader> loadedShaders;
+public:
+    static void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
 
-namespace AssetManager {
-inline std::vector<Texture> loadedTextures;
+    static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters, TextureMaps& map);
 
-enum Uniblock {
-    ViewProj, Lights, StopWatch
-};
+    static void load3DTexture(const char* filePath, Texture* texture);
 
-void buildTree(DialogueTree*& tree, int i, int branchID);
+    static void loadTexture(const char* filePath, Texture* texture, bool srgb);
 
-void loadDialogue(Dialogue* dialogue, int id);
-void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
+    static void loadModel(const char* filePath, Model*& model);
 
-int loadGlyphs(const char* filePath, std::map<char, Character>& Characters);
+    static void loadModel(const char* filePath, Model*& model, AnimComponent* anim);
 
-void load3DTexture(const char* filePath, Texture* texture);
+    static void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y);
 
-void loadTexture(const char* filePath, Texture* texture, bool srgb);
+    static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y);
 
-void loadModel(const char* filePath, Model*& model);
-
-
-void loadModel(const char* filePath, Model*& model, AnimComponent* anim);
-
-void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y);
-
-
-void generateFramebuffer2Color(DoubleFrame* frame, int x, int y);
-
-void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y);
+    static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y);
 
 };
 
 
 
-
-
-
-/**static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene);
-
-Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-
-std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName);**/
-#endif /* AssetManager_hpp */
-
+  
+#endif /* AssetManager_hpp */ 
+ 

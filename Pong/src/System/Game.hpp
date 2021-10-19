@@ -17,17 +17,18 @@
 #include "Actor.hpp"
 #include "World.hpp"
 #include "InputHandler.hpp"
-#include <sstream>
 #include <vector>
 #include "Sketch.hpp"
 #include "Mist.hpp"
 #include "LoadingScreen.hpp"
 #include "InkEffect.hpp"
-#include "Audio.hpp"
 #include "MapObject.hpp"
 #include "Fireworks.hpp"
 #include "ScriptOne.hpp"
 #include "Watch.hpp"
+#include "uiLayout.hpp"
+#include "Audio.hpp"
+
 
 class Game {
 private:
@@ -38,6 +39,7 @@ private:
     LoadingScreen* screen;
     
     std::shared_ptr<Camera> camera;
+    std::shared_ptr<uiLayout> ui;
     
     World world0;
     World world1;
@@ -55,6 +57,7 @@ private:
     
     std::shared_ptr<Actor> pHero0;
     std::shared_ptr<Actor> pHero1;
+    std::shared_ptr<Actor> activeHero;
     
     double lastTime = 0;
     double fpsTimer;
@@ -82,6 +85,7 @@ public:
    // Numberable* getNumberable(unsigned int ID_);
     World& getWorld(int i);
     void setPlayerHero(const std::shared_ptr<Actor>& actor, int i);
+    Actor* getActivePlayerHero();
     void end();
     InputHandler& getInputHandler();
     void swapWorld();

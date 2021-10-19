@@ -16,8 +16,12 @@
 #include "json.hpp"
 #include "JsonManager.hpp"
 #include "AssetManager.hpp"
-
+#include "HealthMeter.hpp"
+#include "LifeComponent.hpp"
+#include "Subject.hpp"
+ 
 Game::Game() {
+    ui = std::make_shared<uiLayout>();
     watch.resetTime();
     timerForTick.resetTime();
     running = true;
@@ -48,8 +52,6 @@ Game::Game() {
     
     JsonManager::loadGame(this);
     
-    inputHandler.setPlayerHero(pHero0, 0);
-    inputHandler.setPlayerHero(pHero1, 1);
     
     inkGlyphs.setActor(pHero0.get());
     camera->setActor(pHero0.get());
@@ -101,15 +103,15 @@ Game::Game() {
     modelMat = glm::translate(modelMat, glm::vec3(realMap.getPos()));
     shader2->use();
     shader2->setMat4("modelMat", modelMat);
-    shader2->setFloat("size", 15);
+    shader2->setFloat("size", 15); 
     mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
     shader2->setMat3("transposeInverseModelMat", mat);
     GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
     realMap.setGraphics(graphics2);
-
+  
     Renderer::bindShaderUniblock(shader2,    ViewProj);
-    Renderer::bindShaderUniblock(shader2,    Lights);
-    Renderer::bindShaderUniblock(shader2,     StopWatch);
+    Renderer::bindShaderUniblock(shader2,    Lights); 
+    Renderer::bindShaderUniblock(shader2,     StopWatch); 
 
     
     screen->print("Preparing the brushes...");
@@ -131,19 +133,27 @@ Game::Game() {
     
     renderer1->loadActorData();
     renderer1->loadMapData();
+    renderer1->loadSkyBoxData();
     
     screen->print("Flipping the pages...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
-    renderer1->loadSkyBoxData();
-    
     stbi_set_flip_vertically_on_load(1);
 
     printf("%s\n", glGetString(GL_VERSION));
+    
+    renderer0->setUI(ui);
+    renderer1->setUI(ui);
+    
+    std::shared_ptr<HealthMeter> hm =  std::make_shared<HealthMeter>();
+    pHero0->getComponent<LifeComponent>()->addObserver(hm);
+    ui->insertNode(hm);
 
     activeRenderer = renderer0;
-    activeWorld = &world0;
+    activeWorld = &world0; 
+    inputHandler.setActiveHero(pHero0);
+    activeHero = pHero0;
 
     script = new ScriptOne();
     script->init(this);
@@ -190,7 +200,7 @@ void Game::linkObjects() {
     renderer0->setCamera(camera.get());
  
     world0.insertCamera(camera.get());
-       
+        
     world0.insertParticleEffect(&fireworks);
     world0.insertParticleEffect(&mist);
 
@@ -243,6 +253,8 @@ void Game::tick() {
     world1.tick();
     
     activeRenderer->render();
+    ui->renderAll(activeRenderer);
+    activeRenderer->render2(); 
 
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -274,8 +286,8 @@ InputHandler& Game::getInputHandler() {
 
 void Game::swapWorld() {
     if (activeWorld == &world0) {
-        inputHandler.setActiveHero(1);
-   
+        inputHandler.setActiveHero(pHero1);
+        activeHero = pHero1;
         activeWorld = &world1;
         activeRenderer = renderer1;
         activeRenderer->updateLights();
@@ -283,7 +295,8 @@ void Game::swapWorld() {
         return;
     }
     if (activeWorld == &world1) {
-        inputHandler.setActiveHero(0);
+        inputHandler.setActiveHero(pHero0);
+        activeHero = pHero0;
         activeWorld = &world0;
         activeRenderer = renderer0;
         activeRenderer->updateLights();
@@ -293,3 +306,6 @@ void Game::swapWorld() {
 }
   
  
+Actor* Game::getActivePlayerHero() {
+    return activeHero.get();
+}

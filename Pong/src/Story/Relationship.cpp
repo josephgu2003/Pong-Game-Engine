@@ -7,9 +7,11 @@
 
 #include "Relationship.hpp"
 
-Relationship::Relationship(std::string name1_, std::string name2_) {
+Relationship::Relationship(std::string name1_, std::string name2_, float intensity, RelationShipType rst_) {
     name1 = name1_;
     name2 = name2_;
+    rsIntensity = intensity;
+    rst = rst_;
 }
 
 std::string Relationship::getName(RelationshipSide rs) {
@@ -20,4 +22,12 @@ std::string Relationship::getName(RelationshipSide rs) {
         case RS_TWO:
             return name2;
     }
+}
+
+RelationShipType Relationship::getType() {
+    return rst;
+}
+
+float Relationship::getIntensity() {
+    return rsIntensity;
 }

@@ -57,8 +57,9 @@ void FallingLetters::tick() {
         on = false;
     }
     if (target->getComponent<LifeComponent>()) {
-        target->getComponent<LifeComponent>()->incLife(-0.0005);
+        target->getComponent<LifeComponent>()->incStatValue(-0.0005, STAT_LIFE);
     }
 }
 
+ 
  

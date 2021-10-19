@@ -7,10 +7,14 @@
 
 #include "CharacterComponent.hpp"
 #include <iostream>
+#include "Actor.hpp"
 
 CharacterComponent::CharacterComponent(Actor& actor) : NameComponent(actor) {
     Component::type = CHAR;
     nextOpenTrait = 0;
+    for (int i = 0; i < MAX_PTRAITS; i++) {
+        traits[i] = PT_EMPTY;
+    }
 }
 
 void CharacterComponent::tick() { 
@@ -38,4 +42,22 @@ void CharacterComponent::newTrait(PersonalityTrait pt) {
     if (nextOpenTrait < MAX_PTRAITS-1) {
         nextOpenTrait++;
     }
+}
+
+bool CharacterComponent::hasTrait(PersonalityTrait pt) {
+    for (int i = 0; i < MAX_PTRAITS; i++) {
+        if (traits[i] == pt) return true;
+    }
+    return false;
+}
+
+bool CharacterComponent::hasRelationshipWith(Actor* actor, RelationShipType rst, float& intensity) {
+    for (int i = 0; i < relationships.size(); i++) {
+        auto it = relationships.find(actor->getComponent<CharacterComponent>()->getIdName());
+        if (it != relationships.end()) {
+            intensity = it->second->getIntensity();
+            return true;
+        }
+    }
+    return false;
 }

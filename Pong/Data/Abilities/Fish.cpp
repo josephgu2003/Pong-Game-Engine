@@ -8,6 +8,7 @@
 #include "Fish.hpp"
 #include "Game.hpp"
 #include "CombatComponent.hpp"
+#include "LifeComponent.hpp"
 
 Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_) {
     force = new Force();
@@ -66,9 +67,10 @@ void Fish::call() {
 }
  
 void Fish::tick() {
+    actor->getComponent<LifeComponent>()->incStatValue(-0.3, STAT_LIFE);
     force->setPos(quad.pos);
     if (step == 0) {
-        if (duration > 16.5) {
+        if (duration > 16.5) { 
             quad.alpha = (18.0-duration)/1.5;
         }
         else {

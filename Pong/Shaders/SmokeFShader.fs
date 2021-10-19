@@ -9,7 +9,7 @@
     uniform sampler2D gradient;
 
 in float duration;
-
+ 
     void main()
     {
 

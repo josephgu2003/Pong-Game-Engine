@@ -74,7 +74,7 @@ void AnimComponent::updateBoneMatrices(float t) {
 
         }
         else {
-            std::cout << "ERROR: AnimComponent's transform node not found in final bone matrices" << "\n";
+            printf("ERROR: AnimComponent's transform node not found in final bone matrices \n");
         }
     } 
     for (int i = 0; i < nodeData->size() ; i++) {

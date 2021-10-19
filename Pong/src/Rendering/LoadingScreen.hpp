@@ -31,7 +31,13 @@
 #include "Camera.hpp"
 #include "Mesh.hpp"
 #include <string>
-#include "Renderer.hpp"
+
+struct screentext {
+    float duration;
+    std::string text;
+    std::map<char, Character> Characters;
+    std::vector<float> textPosArray;
+};
 
 
 class LoadingScreen {

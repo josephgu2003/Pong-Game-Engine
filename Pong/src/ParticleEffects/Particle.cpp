@@ -48,7 +48,7 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
 
         std::vector<GLuint> particleIndices;
         
-        AnyVertex* v1 = new SimpleVertex(glm::vec3(0,0,0), glm::vec2(0,0));
+        AnyVertex* v1 = new SimpleVertex(glm::vec3(0,0,0), glm::vec2(0,0), 0);
 
         std::vector<AnyVertex*> newVertices;
         newVertices.push_back(v1);

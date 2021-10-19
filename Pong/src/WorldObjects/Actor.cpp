@@ -9,12 +9,10 @@
 #include "World.hpp"
 #include <stdio.h>
 #include <string>
-#include <iostream>
 #include "AssetManager.hpp"
-#include "Ability.hpp"
 #include "PhysicsComponent.hpp"
 #include <glm/gtx/vector_angle.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp> 
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -22,9 +20,9 @@
 #include "AnimComponent.hpp"
 #include "NameComponent.hpp"  
 #include "LifeComponent.hpp"
-#include "CharacterComponent.hpp"
 #include "Renderer.hpp"
 #include "AIComponent.hpp"
+#include "Shader.hpp"
  
 #define JUMP_SPEED 0.05f
 
@@ -37,36 +35,13 @@ Actor::Actor() {
         velVec = glm::vec3(0.0f, 0.0f, 0.0f);
         rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
     eulerAngles = glm::vec3(0,0,0);
-    distribution = std::uniform_int_distribution<int>(1,1000);
 } 
 
 Actor::~Actor() {
  
 } 
 
-void Actor::orient(float yaw_) {
-    eulerAngles.y = yaw_;
-    dirVec.x = std::cos(glm::radians(eulerAngles.y));
-    dirVec.z = std::sin(glm::radians(eulerAngles.y));
-    rightVec = rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    dirVec = glm::normalize(dirVec);
-    rightVec = glm::normalize(rightVec);
-} 
 
-void Actor::turnTowards(const glm::vec3& newDir_) {
-    glm::vec3 newDir = glm::normalize(newDir_);
-
-    float dYaw = (180.0f/3.14159)* glm::orientedAngle(glm::normalize(glm::vec2(newDir.x,newDir.z)), glm::normalize(glm::vec2(dirVec.x,dirVec.z)));
-
-    eulerAngles -= glm::vec3(0,dYaw,0);
-    if (eulerAngles.x < -45.0f) {
-        eulerAngles.x = -45.0f;
-    }
-
-    dirVec = newDir;
-    rightVec = rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    rightVec = glm::normalize(rightVec);
-}
 
 World& Actor::getWorld() {
     return *world;
@@ -74,10 +49,7 @@ World& Actor::getWorld() {
 
 
 void Actor::tick() {
-    
     Componentable::tick();
-    
-    
     
     modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, posVec);
@@ -93,17 +65,6 @@ void Actor::tick() {
     graphics->getShader()->setMat3("transposeInverseModelMat", transposeInverse);
 }
 
-void Actor::setPos(glm::vec3 pos_) {
-    posVec = pos_;
-}
-
-void Actor::translatePos(const glm::vec3& translate) {
-    posVec += translate;
-}
-
-void Actor::setPosY(float y_) {
-    posVec.y = y_;
-}
 void Actor::posDir(float speed) {
     if (state != STATE_PARALYZED) {
     posVec += speed * dirVec;
@@ -116,15 +77,11 @@ void Actor::posRight(float speed) {
     }
 }
 
-void Actor::randomPosAround(glm::vec3 pivot) {
-
-}
-
-
 
 void Actor::jump() {
-    if (state != STATE_PARALYZED) {
+    if (state != STATE_PARALYZED && state!= STATE_JUMPING) {
     velVec.y = JUMP_SPEED;
+    state = STATE_JUMPING;
     }
 }
 
@@ -147,13 +104,7 @@ void Actor::accelerate(glm::vec3 accel) {
     velVec += accel;
 }
 
-float Actor::getYaw() {
-    return eulerAngles.y;
-}
 
-glm::vec3 Actor::getPos() {
-    return posVec;  
-}
 
 void Actor::init(int i ) {
     dummy = false;
@@ -237,14 +188,14 @@ void Actor::init(int i ) {
         std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this);
 
 
-        Model* model = new Model;
+        Model* model = new Model; 
         AssetManager::loadModel(MOD_BIRD, model,static_cast<AnimComponent*>(ac.get()));
         static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Take 001");
         addComp(ac);
 
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
-        shader->setFloat("size", 0.005);
+        shader->setFloat("size", 0.002); 
         shader->setFloat("brightness", 1.0);
         Renderer::bindShaderUniblock(shader, ViewProj);
 
@@ -368,8 +319,4 @@ void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
     if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }
-  
-float Actor::getDistanceTo(Actor* b) {
-    float d = glm::length(posVec - b->getPos());
-    return d;
-}
+ 

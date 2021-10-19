@@ -6,6 +6,8 @@
 //
 
 #include "NameComponent.hpp"
+#include "Actor.hpp"
+#include "World.hpp"
 
 NameComponent::NameComponent(Actor& actor) : Component(actor) {
     Component::type = NAME;
@@ -27,4 +29,9 @@ const std::string& NameComponent::getIdName() {
 void NameComponent::tick() {
     
 }
- 
+
+void NameComponent::speak(const std::string& speech, float duration) {
+    std::string s = std::string(commonName + ": " + speech);
+    actor->getWorld().newSoundText(s, actor->getPos(), duration); 
+} 
+  

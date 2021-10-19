@@ -10,10 +10,11 @@
 
 #include <stdio.h>
 #include <glm/glm.hpp>
-#include "Actor.hpp"
 #include <memory>
+#include "Positionable.hpp"
+
 enum ForceGradient {
-    FORCE_UNIFORM,
+    FORCE_UNIFORM, 
     FORCE_LINEAR,
     FORCE_QUADRATIC
 };
@@ -22,9 +23,11 @@ enum ForceType {
     FORCE_SUCTION,
     FORCE_VORTEX
 };
-class Force {
+
+class Actor;
+
+class Force : public Positionable {
 protected:
-    glm::vec3 pos;
     glm::vec3 dir;
     float magnitude;
     float gradientK;
@@ -37,8 +40,6 @@ public:
     Force(glm::vec3 pos_, float magnitude);
     void init(glm::vec3 pos_, float magnitude);
     void tick();
-    void setPos(const glm::vec3& pos);
-    glm::vec3 getPos();
     void setActor(const std::shared_ptr<Actor>& actor);
     void configureStraightForce(glm::vec3 dir, float gradientK_, ForceGradient g);
     void configureVortexForce(float shear, float gradientK_, ForceGradient g);

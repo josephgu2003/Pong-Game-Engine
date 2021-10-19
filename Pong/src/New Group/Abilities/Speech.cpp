@@ -24,7 +24,7 @@ Speech::~Speech() {
 void Speech::call() {
     running = true;
     on = true;
-    world->setActiveText(lines.at(step));
+    world->newSoundText(lines.at(step), actor->getPos(), 3.0);
     step++;
 }
   
@@ -32,12 +32,12 @@ void Speech::tick() {
     elapsetime+=glfwGetTime();
     if (step > lines.size()) {
         running = false;
-        on = false;
+        on = false; 
         return;
     }
     if (elapsetime > duration && running) {
         if (step < lines.size())
-        world->setActiveText(lines.at(step));
+        world->newSoundText(lines.at(step), actor->getPos(), 3.0);
         step++;
         elapsetime = 0;
     }

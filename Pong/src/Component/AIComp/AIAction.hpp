@@ -11,14 +11,14 @@
 #include <stdio.h>
 #include "Actor.hpp"
 
-// an action, encapsulate a function as a class
-
 class aiAction {
 protected:
-    bool complete; // may be switched on when 
+    float interest;
 public:
-    aiAction();
+    aiAction(float interest_);
     virtual void tick(Actor* actor) = 0;
+    bool isDone();
 };
+
 
 #endif /* AIAction_hpp */

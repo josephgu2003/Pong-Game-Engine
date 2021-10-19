@@ -9,10 +9,11 @@
 #include <vector>
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include "AssetManager.hpp"
+#include "Shader.hpp"
+#include "GraphicsComponent.hpp"
 
 void MapObject::init() {
-    pos = glm::vec3(0,0,0);
+    posVec = glm::vec3(0,0,0);
 
   /**  glm::mat4 modelMat = glm::mat4(1.0f);
    // modelMat = glm::rotate(modelMat, glm::radians(90.0f), glm::vec3(1,0,0));
@@ -40,17 +41,11 @@ void MapObject::init() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);**/
 }
 void MapObject::init(glm::vec3 pos_) {
-    pos = pos_;
+    posVec = pos_;
 
 }
-void MapObject::setPos(glm::vec3 pos_) {
-    pos = pos_;
-}
-glm::vec3 MapObject::getPos() {
-    return pos;
-}
 
-
+ 
 void MapObject::beginAnimation() {
 }
 

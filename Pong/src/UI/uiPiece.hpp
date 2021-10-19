@@ -12,12 +12,12 @@
 #include "Mesh.hpp"
 #include <vector>
 #include <glm/glm.hpp>
+#include "Renderable.hpp"
 
-class uiPiece {
+class uiPiece : public Renderable {
 private:
 public:
     uiPiece();
-    void tick();
 };
 
 #endif /* uiPiece_hpp */

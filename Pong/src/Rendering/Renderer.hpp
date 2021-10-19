@@ -15,11 +15,10 @@
 #include <vector>
 #include "Shader.hpp"
 #include "World.hpp"
-#include "Camera.hpp" 
-#include "Mesh.hpp"
 #include <string>
 #include "uiLayout.hpp"
 #include "Batch.hpp"
+#include <memory>
 
 extern GLuint uboViewProj;
 extern GLuint uboLights; 
@@ -30,44 +29,38 @@ enum Uniblock {
     ViewProj, Lights, StopWatch
 };
 
+class Camera;
 // draws the world
-struct screentext {
-    float duration;
-    std::string text;
-    std::map<char, Character> Characters;
-    std::vector<float> textPosArray;
+const static float screenquad[24] =
+{   -1.0f,  1.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f,  0.0f, 0.0f,
+     1.0f, -1.0f,  1.0f, 0.0f,
+
+    -1.0f,  1.0f,  0.0f, 1.0f,
+     1.0f, -1.0f,  1.0f, 0.0f,
+     1.0f,  1.0f,  1.0f, 1.0f
 };
 
 class Renderer {
 private:
-    uiLayout uilayout;
+    std::weak_ptr<uiLayout> ui;
     
-    screentext screenText;
-    GLuint funtex1, funtex2;
-    GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, pVAO, pVBO, pEBO, tVBO, tVAO, qVBO, qVAO, qEBO;
-    Batch pointParticles;
-    Batch quadParticles;
-
-    Batch uiStuff;
+    GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, tVBO, tVAO, qVBO, qVAO, qEBO;
+    Batch<ParticleEffect> pointParticles;
+    Batch<ParticleEffect> quadParticles;
+    Batch<uiLayout> uiStuff;
+    Batch<SoundText> soundTexts;
+    
     std::vector<ParticleEffect*> loadedParticles;
     
-    float screenquad[24] =
-    {   -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
     DoubleFrame frame2C;
     Frame frame0;
     Frame frame1;
-    Texture texture ;
-    Texture texture2 ;
-    Texture skyTexture ;
-    Texture gradient ;
-    Texture noise ;
+    
+    Texture texture;
+    Texture skyTexture;
+    Texture gradient;
+    Texture noise;
 
     Shader* skyShader;
     Shader* textShader;
@@ -76,30 +69,27 @@ private:
     Shader* frameShader;
     Shader* uiShader;
     
-    glm::mat4 modelMat;
     glm::mat4 viewMat;
     glm::mat4 projMat;
     
-    Camera* camera;
-    World* world;
+    Camera* camera = NULL;
+    World* world = NULL;
     float lighting;
     
     void renderMap();
     void renderActors();
     void renderParticles();
     void renderQuads();
-    void renderUI();
     
     void updateUniformBlocks();
     void updateViewProj();
     void updateCamPos();
     void updateUniformStopWatch();
     float timeT;
-
+    void bindTextures(Shader* shader, TextureMaps& map);
 public:
     static void bindShaderUniblock(Shader* shader, Uniblock block);
-    float exposure;
-    void incExposure(float delta);
+    void renderUI(uiPiece* uip);
     void updateLights();
     void renderSky();
     Renderer();
@@ -111,11 +101,26 @@ public:
     void loadSkyBoxData();
     void loadParticleData();
     void loadQuadData();
-    void loadTextData();
     void render();
-    void print(std::string string);
-    void renderText();
+    void render2();
+    void renderText(uiText* text);
     void checkForUpdates();
+    void setUI(const std::shared_ptr<uiLayout>& ui);
 };
 #endif /* Renderer_hpp */
+ 
+// renderable interface
+// - Shader
+// - VAO
+// - VBO (vertex data)
+// - EBO (indices)
+// - instancing data?
+// - If batch with others: share shader, share vao and vbo, vao and vbo become
+// same as others, draw call becomes function pointer?
 
+// batches for furniture and static basic objects and ui and text
+
+// no vertexdata, keep some semblance of vertex data for dynamic draws
+// fish -> option 1 : buffersubdata full vertices
+// fish -> option 2 : make pos part of vertices in contiguous vbo memory
+// option 3 :  instance draw - square is vertex set, instance data is position and texture

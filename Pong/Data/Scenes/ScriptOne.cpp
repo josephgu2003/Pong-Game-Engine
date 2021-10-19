@@ -16,11 +16,10 @@
 void ScriptOne::tick() {
     switch (state) {
         case STATE_PASSIVE: {
-
+ 
             if (ball->getComponent<CombatComponent>()->hasTarget()) {
                 state = STATE_AGGRESSIVE;
             }
-
         }; 
             
         case STATE_AGGRESSIVE:
@@ -28,11 +27,6 @@ void ScriptOne::tick() {
             if (ball->getComponent<CombatComponent>()->hasTarget()) {
                 ball->turnTowards(glm::cross(glm::vec3(0.0,1.0,0.0), ball->getPos()-pHero->getPos()));
                 ball->translatePos(0.04f*glm::normalize(glm::cross(glm::vec3(0.0,1.0,0.0),  ball->getPos()-pHero->getPos())));
-    
-              //  if (ballDir == STATE_TRACK)
-     //   ball->turnTowards(static_pointer_cast<CombatComponent>(ball->getComp(COMBAT))->getBigTarget()->getPos()-ball->getPos());
-           //     if (ballDir == STATE_OPPOSITE)
-     //   ball->turnTowards(horizonDir); 
                   
         if (step == 0) {
             currentAbility = std::make_shared<Dialogue>(&ball->getWorld(), ball, 6.0, 0);
@@ -103,8 +97,6 @@ void ScriptOne::tick() {
 }
 
 void ScriptOne::init(Game* game) {
-    //pHero = static_cast<PlayerHero*>(game->getNumberable(2));
- //   ball = static_cast<Ball*>(game->getNumberable(1));
     pHero = game->getWorld(0).getActorNamed("pHero0").get();
     ball = game->getWorld(0).getActorNamed("LightChar").get();
 }

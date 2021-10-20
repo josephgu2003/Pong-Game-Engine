@@ -6,35 +6,22 @@
 //
 
 #include "GraphicsComponent.hpp"
-GraphicsComponent::GraphicsComponent() {
+#include "Renderer.hpp"
+
+GraphicsComponent::GraphicsComponent() : Renderable::Renderable() {
     Component::type = GRAPHICS;
 }
-
-GraphicsComponent::GraphicsComponent(VertexData* vertexData_, Shader* shader_) {
-    Component::type = GRAPHICS; 
-    vertexData.reset(vertexData_);
-    shader = shader_;
-}
-
-void GraphicsComponent::setModel(Model* model_) {
-    model = model_;
-}
-
-void GraphicsComponent::init( VertexData* vertexData_, Shader* shader_) {
-    vertexData.reset(vertexData_);
-    shader = shader_;
-}
-
-VertexData* GraphicsComponent::getVertexData() {
-    return vertexData.get();
-}
-
+ 
 void GraphicsComponent::tick() {
     
 }
 
-Shader* GraphicsComponent::getShader() {
-    return shader;
+void GraphicsComponent::init(Shader* shader_, const std::string& model, const TextureMaps& map_) {
+    shader = shader_;
+    shader->use();
+    // need to load model data to vao vbo,
+    VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices); 
+    map = map_;
 }
 
 void GraphicsComponent::animateTexture(Texture* texture, Shader* shader_) {
@@ -43,6 +30,8 @@ void GraphicsComponent::animateTexture(Texture* texture, Shader* shader_) {
     AssetManager::generateFramebuffer(fas.frame, &texture->id, texture->dimensions.x, texture->dimensions.y);
 }
 
-Model* GraphicsComponent::getModel() {
-    return model;
-}
+void GraphicsComponent::draw(Renderer* r) {
+    r->renderElements(this);
+} 
+  
+  

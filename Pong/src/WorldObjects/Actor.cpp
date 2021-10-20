@@ -114,18 +114,13 @@ void Actor::init(int i ) {
             
         std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
-
-        Model* model = new Model();
-        AssetManager::loadModel(MOD_HOODY, model);
-
-        TextureMaps map;
-        AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
-        AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
             
-        for (int i = 0; i<model->getMeshes()->size(); i ++) {
-            model->setMeshTexture(i, map);
-        }
-            
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        addComp(pc);
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+            addComp(cc);
+        
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.005);
@@ -133,13 +128,10 @@ void Actor::init(int i ) {
             
         Renderer::bindShaderUniblock(shader, ViewProj);
         Renderer::bindShaderUniblock(shader, Lights);
-            
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
-        addComp(pc);
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
-            addComp(cc);
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
-        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        TextureMaps map;
+        AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
+        AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
+        static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_HOODY, map);
         addComp(gc);
         
     }
@@ -150,8 +142,6 @@ void Actor::init(int i ) {
         addComp(lc);
         
         state = STATE_FLYING;
-        Model* model = new Model();
-        AssetManager::loadModel(MOD_HOODY, model); 
 
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
@@ -164,18 +154,15 @@ void Actor::init(int i ) {
         TextureMaps map;
         AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
-        for (int i = 0; i<model->getMeshes()->size(); i ++) {
-            model->setMeshTexture(i, map);
-        }
+        
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_HOODY, map);
+        addComp(gc);
 
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
-
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
-        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
-        addComp(gc);
 
     }
     if (i == 2) {
@@ -185,13 +172,7 @@ void Actor::init(int i ) {
         addComp(lc);
         
         state = STATE_FLYING;
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this);
-
-
-        Model* model = new Model; 
-        AssetManager::loadModel(MOD_BIRD, model,static_cast<AnimComponent*>(ac.get()));
-        static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Take 001");
-        addComp(ac);
+ 
 
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
@@ -204,18 +185,21 @@ void Actor::init(int i ) {
         TextureMaps map;
         AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true); 
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
-        for (int i = 0; i<model->getMeshes()->size(); i ++) {
-            model->setMeshTexture(i, map);
-        }
   
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_BIRD, map);
+        addComp(gc);
+        
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
-        addComp(pc);
+        addComp(pc); 
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, MOD_BIRD);
+       // Model* model = new Model; 
+       // AssetManager::loadModel(MOD_BIRD, model,   static_pointer_cast<AnimComponent>(ac).get());
+        static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Take 001");
+        addComp(ac);
 
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
-        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
-        addComp(gc);
 
     }
     if (i == 3) {
@@ -225,9 +209,9 @@ void Actor::init(int i ) {
         addComp(lc);
         
         state = STATE_FLYING;
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this);
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, MOD_VAMP);
 
-        Model* model = new Model(MOD_VAMP, static_cast<AnimComponent*>(ac.get()));
+
         static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("");
         addComp(ac); 
       //  model = loadModels("Resources/Map/snow3.obj");
@@ -242,18 +226,15 @@ void Actor::init(int i ) {
         TextureMaps map;
         AssetManager::loadTexture("Resources/Models/Vampire/Vampire_diffuse.png", &map.diffuse, true);
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
-        for (int i = 0; i<model->getMeshes()->size(); i ++) {
-            model->setMeshTexture(i, map);
-        }
-
+  
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
         
 
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
-        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_VAMP, map);
         addComp(gc);
 
     }
@@ -264,23 +245,42 @@ void Actor::init(int i ) {
         addComp(nc);
         std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this);
 
-    Model* model = new Model();
-
-    AssetManager::loadModel("Resources/Models/Knight/knight.fbx", model,  static_cast<AnimComponent*>(ac.get()));
-         
-    static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("HollowKnight__Armature|Walk");
-    addComp(ac);  
           
     TextureMaps map;
     AssetManager::loadTexture("/Users/josephgu/Downloads/hollow_knight_-_vr_chat_-_free_download/textures/Knight_baseColor.png", &map.diffuse, true);
         
     AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
+
+    Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+    shader->use();
+    shader->setFloat("size", 0.007);
+    shader->setFloat("brightness", 3.0);
         
-    for (int i = 0; i<model->getMeshes()->size(); i ++) {
-        model->setMeshTexture(i, map);
+        Renderer::bindShaderUniblock(shader,      ViewProj);
+
+        Renderer::bindShaderUniblock(shader,      Lights);
+        
+        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        addComp(pc);
+        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        addComp(cc);
+        
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        static_pointer_cast<GraphicsComponent>(gc)->init(shader, "Resources/Models/Knight/knight.fbx", map);
+        addComp(gc);
+        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, "Resources/Models/Knight/knight.fbx");
+
+    static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("HollowKnight__Armature|Walk");
+    addComp(ac);
+        
     }
+    if (i == 5) {
+         
+          
+    TextureMaps map;
+    AssetManager::loadTexture("/Users/josephgu/Downloads/hollow_knight_-_vr_chat_-_free_download/textures/Knight_baseColor.png", &map.diffuse, true);
+        
           
     Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
     shader->use();
@@ -296,8 +296,8 @@ void Actor::init(int i ) {
         std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>(shader);
-        static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
+        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+    //   static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
         
     }

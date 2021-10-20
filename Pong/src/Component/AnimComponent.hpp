@@ -16,6 +16,8 @@
 #include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
 
+typedef std::map<std::string, BoneData> BoneInfoMap;
+
 class AnimComponent : public Component {
 protected:
     glm::mat4 globalInverse;
@@ -23,11 +25,11 @@ protected:
     Animation* activeAnim = NULL;
     Animation* defaultAnim = NULL;
     std::vector<Animation> animations;
-    std::map<std::string, BoneData> BoneDataMap;
+    BoneInfoMap BoneDataMap;
     std::vector<glm::mat4>  boneMatrices; 
     void updateBoneMatrices(float t);
 public:
-    AnimComponent(Actor& actor);
+    AnimComponent(Actor& actor, const std::string& filePath);
     virtual void tick() override;
     void setDefaultAnim(const std::string& name);
     void playAnim(const std::string& name);

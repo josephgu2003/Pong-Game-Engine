@@ -65,11 +65,11 @@ private:
     bool firstTime = true;
     float draws;
     
-    InkEffect inkGlyphs;
-    Fireworks fireworks;
-    MapObject map;
-    MapObject realMap;
-    Mist mist;
+    InkEffect* inkGlyphs = nullptr;
+    Fireworks* fireworks = nullptr;
+   // MapObject map;
+   // MapObject realMap;
+    Mist* mist = nullptr;
     ScriptOne* script;
     
     void initWindow();

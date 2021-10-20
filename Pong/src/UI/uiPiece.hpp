@@ -18,6 +18,7 @@ class uiPiece : public Renderable {
 private:
 public:
     uiPiece();
+    virtual void draw(Renderer* r) override;
 };
 
 #endif /* uiPiece_hpp */

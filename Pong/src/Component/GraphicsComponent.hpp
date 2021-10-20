@@ -13,41 +13,23 @@
 #include "VertexData.hpp"
 #include <memory> 
 #include "AssetManager.hpp"
+#include "Renderable.hpp"
 
 struct FrameAndShader {
-    Frame* frame;
-    Shader* shader;
+    Frame* frame = NULL;
+    Shader* shader = NULL;
 };
 
-class GraphicsComponent : public Component {
+class GraphicsComponent : public Component, public Renderable { // for actors
 protected:
-    Shader* shader = NULL;
-    std::shared_ptr<VertexData> vertexData;
-    Model* model = NULL;
     std::map<Texture*, FrameAndShader> animatedTextures;
-    int activeData = -1;
 public:  
-    GraphicsComponent(); 
+    GraphicsComponent();
     
-    GraphicsComponent(VertexData* vertexData_, Shader* shader_);
-    
-    GraphicsComponent(Shader* shader_) {
-        Component::type = GRAPHICS;
-        shader = shader_;
-    }
-    
-    void setModel(Model* model);
-
-    void init(VertexData* vertexData_, Shader* shader_);
-    
+    void init(Shader* shader, const std::string& model, const TextureMaps& map);
     virtual void tick() override;
-    
-    VertexData* getVertexData();
-    
-    Model* getModel();
+    virtual void draw(Renderer* r) override;
 
-    Shader* getShader();
-    
     void animateTexture(Texture* texture, Shader* shader);
 };
 

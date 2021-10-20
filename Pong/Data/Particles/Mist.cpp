@@ -8,13 +8,13 @@
 #include "Mist.hpp"
 #include "AssetManager.hpp"
 
-void Mist::setGraphics(Shader& shader_) {
+void Mist::setGraphics(Shader* shader_) {
     AssetManager::loadTexture(TEX_MIST, &texture, false); //***
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;
-    shader_.init("Shaders/MistVShader.vs", "Shaders/MistFShader.fs");
-    shader_.use();
-    shader_.setFloat("size", size);
+    shader_->init("Shaders/MistVShader.vs", "Shaders/MistFShader.fs");
+    shader_->use();
+    shader_->setFloat("size", size);
 }
 
 void Mist::refreshParticle() {

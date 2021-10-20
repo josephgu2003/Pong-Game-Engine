@@ -19,7 +19,7 @@
 class Game;
 
 class Fish: public Ability {
-    Quad quad;
+//    Quad quad;
     Force* force= NULL;
     bool mode2 = false;
     glm::vec3 dirFired;

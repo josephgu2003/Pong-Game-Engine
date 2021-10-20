@@ -13,9 +13,8 @@
 #include "Particle.hpp"
 
 class InkEffect : public ParticleEffect {
-    Model* model = NULL;
 public:
-    virtual void setGraphics(Shader& shader) override;
+    virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;
     virtual void setActor(Actor* actor) override;
 };

@@ -24,7 +24,7 @@ public:
     Fireworks(glm::vec4 color);
     void setColor(glm::vec4 color);
     virtual void tick() override;
-    virtual void setGraphics(Shader& shader) override;
+    virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;
 };
 

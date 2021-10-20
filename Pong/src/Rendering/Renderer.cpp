@@ -17,8 +17,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "DirectionalLight.hpp"
 #include "AssetManager.hpp"
-#include "Mesh.hpp"
 #include "Camera.hpp"
+#include "Renderable.hpp"
 
 GLuint uboViewProj;
  GLuint uboLights;
@@ -185,73 +185,12 @@ void Renderer::updateCamPos() {
 }
 
 void Renderer::loadActorData() {
-    std::vector<TBNBWVertex> actorVertices;
-    std::vector<GLuint> actorIndices;
-    
-    for (int i = 0; i<world->getActorsCount(); i++) { // iterate over actors
-        std::vector<Mesh>* meshes = world->getNthActor(i)->getComponent<GraphicsComponent>()->getModel()->getMeshes(); 
-    
-        for (int j = 0; j<meshes->size(); j++) { // iterate over meshes
-            int marker = actorIndices.size();
-           const std::vector<std::unique_ptr<AnyVertex>>& vertices = meshes->at(j).getVertices();
-        
-            for (int c = 0; c < vertices.size(); c++) {
-                actorVertices.push_back((*static_cast<TBNBWVertex*>(vertices.at(c).get()))); // crash here bad access  
-            }
-              
-            actorIndices.insert(actorIndices.end(), meshes->at(j).getIndices().begin(), meshes->at(j).getIndices().end());
-            for ( marker; marker != actorIndices.size(); marker++) {
-            actorIndices[marker] += actorVertices.size() - meshes->at(j).getVertices().size();
-            }
-        }
-    }
 
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-    
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glBufferData(GL_ARRAY_BUFFER, actorVertices.size() * sizeof(TBNBWVertex), actorVertices.data(), GL_STATIC_DRAW);
-     
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, actorIndices.size() * sizeof(GLuint), actorIndices.data(), GL_STATIC_DRAW);
-    
-    VertexLoader::setupVAOAttribs(VERTEX_TBNBWVERTEX);
-    
-    glBindVertexArray(0); 
 }
 
 void Renderer::loadMapData() {
-    std::vector<TBNVertex> mapVertices;
-    
-    GraphicsComponent& gc = world->getMap().getGraphics();
-    VertexData* mesh = gc.getVertexData();
 
-    const std::vector<std::unique_ptr<AnyVertex>>& vertices = mesh->getVertices();
-    
-    mapVertices.resize(vertices.size());
-    
-    for (int c = 0; c < vertices.size(); c++) {
-                mapVertices[c] = *static_cast<TBNVertex*>(vertices.at(c).get());
-    }
-     
-    glGenVertexArrays(1, &mVAO);
-    glBindVertexArray(mVAO);
-      
-    glGenBuffers(1, &mVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-    glBufferData(GL_ARRAY_BUFFER,  sizeof(TBNVertex)*vertices.size(), mapVertices.data(), GL_STATIC_DRAW);
-      
-    glGenBuffers(1, &mEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh->getIndices().size() * sizeof(GLuint), &mesh->getIndices().at(0), GL_STATIC_DRAW);
-       
-    VertexLoader::setupVAOAttribs(VERTEX_TBNVERTEX);
-      
-    glBindVertexArray(0);
 }
 
 void Renderer::loadSkyBoxData() {
@@ -300,7 +239,7 @@ void Renderer::loadSkyBoxData() {
 }
 
 void Renderer::loadParticleData() {
-    
+    /**
     std::vector<ParticleEffect*> particleData = world->getParticleEffects();
     std::vector<ParticleEffect*> deletedParticles = loadedParticles;
     // subtract first or add first?
@@ -386,33 +325,9 @@ void Renderer::loadParticleData() {
            
             loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
         }
-    } 
+    } **/ 
 }
 
-void Renderer::loadQuadData() {
-    std::vector<Vertex> quadVertices;
-    std::vector<GLuint> quadIndices;
-
-    for (int i = 0; i<world->getQuads()->size(); i++) { // iterate over actors
-        quadVertices.insert(quadVertices.end(), world->getQuads()->at(i)->vertices.begin(), world->getQuads()->at(i)->vertices.end());
-        quadIndices.insert(quadIndices.end(), world->getQuads()->at(i)->indices.begin(), world->getQuads()->at(i)->indices.end());
-    }
-
-    glGenVertexArrays(1, &qVAO);
-    glBindVertexArray(qVAO);
-    
-    glGenBuffers(1, &qVBO); 
-    glBindBuffer(GL_ARRAY_BUFFER, qVBO);
-
-    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vertex), quadVertices.data(), GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &qEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, qEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, quadIndices.size() * sizeof(GLuint), quadIndices.data(), GL_STATIC_DRAW);
-    VertexLoader::setupVAOAttribs(VERTEX_VERTEX);
-    
-    glBindVertexArray(0);
-}
 
 void Renderer::checkForUpdates() {
     Updates updates = world->checkforUpdates();
@@ -424,10 +339,6 @@ void Renderer::checkForUpdates() {
         world->updateCleared(PARTICLE_UPDATE);
         loadParticleData();
     }
-    if(updates.quadUpdate == true) {
-        world->updateCleared(QUAD_UPDATE);
-        loadQuadData();
-    } 
     if(updates.textUpdate == true) {
       //  world->updateCleared(TEXT_UPDATE);
      //   print(world->getActiveText());
@@ -453,10 +364,9 @@ void Renderer::render() {
     updateCamPos();
     updateUniformStopWatch();
    renderSky();
-    renderActors();
-    renderMap();
-    renderParticles();
-    renderQuads();
+    //renderActors();
+  //  renderMap();
+    //renderParticles();
     world->drawText(this);
 }
 void Renderer::render2() {
@@ -557,35 +467,9 @@ void Renderer::renderSky() {
     glDisable(GL_CULL_FACE);
 }
 
-void Renderer::renderQuads() {
-    glEnable(GL_BLEND);
-    if (world->getQuads()->size() > 0) {
-        int indiceCount = 0;
-        for (int i = 0; i < world->getQuads()->size(); i++) {
-    Quad* quad = world->getQuads()->at(i);
-    sketchShader->use();
-    glBindVertexArray(qVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, qVBO);
-    glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(Vertex)*quad->vertices.size(),quad->vertices.data());
-    glm::mat4 modelMat = glm::mat4(1.0f);
-
-        glm::vec3 rotations = glm::vec3(glm::radians(quad->rotations.x),glm::radians(quad->rotations.y),glm::radians(quad->rotations.z));
-
-    glUniformMatrix4fv(glGetUniformLocation(sketchShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-        glActiveTexture(GL_TEXTURE0);
-        glUniform1i(glGetUniformLocation(sketchShader->ID, "diffuse"), 0);
-            glUniform1f(glGetUniformLocation(sketchShader->ID, "alpha"), quad->alpha);
-        glBindTexture(GL_TEXTURE_2D, world->getQuads()->at(i)->texture.id);
-        glDrawElements(GL_TRIANGLES, quad->indices.size(), GL_UNSIGNED_INT, (void*) indiceCount);
-            
-            indiceCount += quad->indices.size()*sizeof(GLuint);
-    }
-    }
-    glDepthMask(GL_TRUE);
-}
 
 void Renderer::renderMap() {
-    GraphicsComponent& gc = world->getMap().getGraphics();
+  /**  GraphicsComponent& gc = world->getMap().getGraphics();
     Shader* shader = gc.getShader();
     shader->use();
     
@@ -599,13 +483,13 @@ void Renderer::renderMap() {
     
     glDrawElements(GL_TRIANGLES, gc.getVertexData()->getIndices().size(), GL_UNSIGNED_INT, 0);
     
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);**/
 
 }
 
 void Renderer::renderActors() {
     // actors
-    glBindVertexArray(VAO);
+  /**  glBindVertexArray(VAO);
     int indiceCount = 0;
     for (int i = 0; i<world->getActorsCount(); i++) {
         GraphicsComponent* comp = world->getNthActor(i)->getComponent<GraphicsComponent>();
@@ -625,12 +509,12 @@ void Renderer::renderActors() {
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
-    }
+    }**/
 }
 
 void Renderer::renderParticles() {
     //particles
-   glEnable(GL_BLEND);
+ /**  glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
    glDepthMask(GL_FALSE);
     for (int i = 0; i < world->getParticleEffects().size(); i++) {
@@ -671,7 +555,7 @@ void Renderer::renderParticles() {
     
     glBindTexture(GL_TEXTURE_2D, 0);
     glDepthMask(GL_TRUE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);**/
 }
 
   
@@ -735,3 +619,15 @@ void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
 void Renderer::setUI(const std::shared_ptr<uiLayout>& ui_) {
     ui = ui_;
 }
+
+void Renderer::renderElements(Renderable* r) {
+    r->bind(); 
+    Shader* s = r->getShader();
+    s->use(); 
+    TextureMaps& map = r->getTextureMap();
+    
+    bindTextures(s, map);
+
+    glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+
+} 

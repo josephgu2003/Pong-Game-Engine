@@ -57,12 +57,10 @@ protected:
     std::uniform_int_distribution<int> distribution;
     virtual void refreshParticle() {}
 public:
-    GraphicsComponent graphics;
+    GraphicsComponent* graphics = nullptr;
     virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
     
-    virtual void setGraphics(Shader& shader) {
-        
-    }
+    virtual void setGraphics(Shader* shader) = 0;
     
     std::vector<Force*> forces;
     virtual void setActor(Actor* actor);

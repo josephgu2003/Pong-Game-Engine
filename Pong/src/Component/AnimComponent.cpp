@@ -8,14 +8,16 @@
 #include "AnimComponent.hpp"
 #include <assimp/scene.h>
 #include "Actor.hpp"
+#include "VertexLoader.hpp"
 
-AnimComponent::AnimComponent(Actor& actor) : Component(actor) {
+AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
     globalInverse = glm::mat4(1.0f);
     Component::type = ANIM;
     timeInAnim = 0; 
     boneMatrices.reserve(100);
           for (int i = 0; i < 100; i++)
               boneMatrices.push_back(glm::mat4(1.0f));
+    VertexLoader::loadModelAnimations(this, filePath);
 }
 
 void AnimComponent::tick() {
@@ -95,9 +97,9 @@ void AnimComponent::addAnimation(aiAnimation* animation, const aiScene* scene) {
 
 void AnimComponent::setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap_) {
     BoneDataMap = BoneDataMap_;
-    
-}
 
+} 
+ 
 void AnimComponent::playAnim(const std::string& name) {
     timeInAnim = 0; 
     for (int i = 0; i < animations.size(); i++) {

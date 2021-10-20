@@ -46,8 +46,8 @@ void Model::loadModel(std::string filePath_, AnimComponent* anim_) {
     }    
     path = filePath_;        
     directory = filePath_.substr(0, filePath_.find_last_of('/'));
-    processNode(scene->mRootNode, scene);
-    anim_->setBoneDataMap(BoneDataMap); 
+    processNode(scene->mRootNode, scene); 
+   // anim_->setBoneDataMap(BoneDataMap);
     for (int i = 0; i < scene->mNumAnimations; i ++) { 
         anim_->addAnimation(scene->mAnimations[i], scene);
     } 
@@ -218,7 +218,7 @@ void Model::BoneWeightVertices(std::vector<TBNBWVertex*>& vertices, aiMesh* mesh
       
         std::cout << boneName << "\n" ; 
         if (BoneDataMap.find(boneName) == BoneDataMap.end())
-        {
+        { 
             BoneData data;
             data.id = boneCounter;
             data.offset =

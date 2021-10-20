@@ -26,7 +26,8 @@
 #define MOD_WOLF "Resources/Models/wolf/wolf.fbx" 
 #define MOD_BIRD "Resources/Models/bird/fly.fbx" 
 #define MOD_VAMP "Resources/Models/Vampire/dancing_vampire.dae"
-
+#define MOD_KNIGHT "Resources/Models/Knight/knight.fbx"
+ 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>

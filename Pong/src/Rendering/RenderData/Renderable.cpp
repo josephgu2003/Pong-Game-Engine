@@ -13,19 +13,20 @@ Renderable::Renderable() {
     
     glGenBuffers(1, &VBO);
      
-    glGenBuffers(1, &EBO);
+    glGenBuffers(1, &EBO); 
     
+    shader = new Shader();
     numIndices = 0;
-}
+} 
 
 Shader* Renderable::getShader() {
     return shader;
 }
-
+ 
 void Renderable::setShader(Shader* shader_) {
-    shader = shader_;
+    shader = shader_; 
 }
-
+ 
 TextureMaps& Renderable::getTextureMap() {
     return map;
 }

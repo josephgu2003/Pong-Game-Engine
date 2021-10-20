@@ -10,7 +10,7 @@
 #include <glm/gtx/matrix_transform_2d.hpp>
 
 
-void InkEffect::setGraphics(Shader& shader) {
+void InkEffect::setGraphics(Shader* shader) {
     /**load3DTexture("Resources/Particles/Smokes/smoke000.jpg", texture);
     drawTarget = GL_POINTS;
      textureTarget = GL_TEXTURE_2D_ARRAY;
@@ -20,17 +20,17 @@ void InkEffect::setGraphics(Shader& shader) {
     AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;  
-    shader.init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
-    shader.use();
+    shader->init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
+    shader->use();
     glm::vec4 color = glm::vec4(15.0,4.2,2.4,1.0);  
-    shader.setVec4("color", color);
-    shader.setFloat("size", size); 
+    shader->setVec4("color", color);
+    shader->setFloat("size", size); 
 }
 
 void InkEffect::refreshParticle() {
    glm::vec3 newPos = glm::vec3(0.0);
 
-    int count = 0;
+  /**  int count = 0;
     
     for (int i = 0; i < model->getMeshes()->size(); i++) {
         count += model->getMeshes()->at(i).getVertices().size();
@@ -51,7 +51,7 @@ void InkEffect::refreshParticle() {
             newPos.x = vec.x;
             newPos.z = vec.y;
         } 
-    }
+    }**/ 
      
 particles[firstUnused].posVec = 0.005f*newPos+actor->getPos();
     float a = 0.0005*(distribution(generator)%100);
@@ -66,6 +66,6 @@ particles[firstUnused].texture = texture.id;
 
 void InkEffect::setActor(Actor *actor_) {
     actor = actor_;
-    model = actor->getComponent<GraphicsComponent>()->getModel();
+//    model = actor->getComponent<GraphicsComponent>()->getModel();
 }
 

@@ -17,6 +17,7 @@ ParticleEffect::ParticleEffect() {
 
 
 void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec_, float duration_, float friction_) {
+    graphics = new GraphicsComponent(); 
     Shader* shader = new Shader();
     friction = friction_;
     size = size_;
@@ -36,9 +37,10 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
 
     distribution = std::uniform_int_distribution<int>(1,1000);
     
-    setGraphics(*shader);
-    
-    VertexData* data = new VertexData();
+    setGraphics(shader); 
+     
+    graphics->setShader(shader);
+    /**VertexData* data = new VertexData();
     
     if (drawTarget == GL_TRIANGLES) {
         data->generateTemplate(QUAD_SIMPLE);
@@ -63,8 +65,8 @@ void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, 
         }
         data->setIndices(particleIndices);
     }
-     
-    graphics.init(data, shader);
+     **/
+  //  graphics.init(data, shader); 
      
     extern GLuint uboViewProj;
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);

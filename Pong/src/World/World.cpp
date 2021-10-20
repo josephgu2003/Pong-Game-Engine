@@ -96,16 +96,6 @@ void World::deleteParticleEffect(ParticleEffect *particleEffect) {
     updates.particleUpdate = true;
 }
 
-void World::insertQuad(Quad* quad) {
-    allQuadPtrs.push_back(quad);
-    updates.quadUpdate = true;
-}
-
-void World::deleteQuad(Quad *quad) {
-    allQuadPtrs.erase(std::find(allQuadPtrs.begin(), allQuadPtrs.end(), quad), allQuadPtrs.end());
-    updates.quadUpdate = true;
-}
-
 
 MapObject& World::getMap() {
     return *map;
@@ -130,9 +120,7 @@ float* World::getSkyVertices() {
 std::vector<ParticleEffect*> World::getParticleEffects() {
     return allParticleEffects;
 }
-std::vector<Quad*>* World::getQuads() {
-    return &allQuadPtrs;
-}
+
 
 Updates World::checkforUpdates() {
     return updates;
@@ -144,7 +132,7 @@ void World::updateCleared(int i) {
     if (i == 1)
     updates.particleUpdate = false;
     if (i == 2)
-    updates.quadUpdate = false;
+   // updates.quadUpdate = false;
     if (i == 3)
     updates.textUpdate = false;
     if (i == 4)
@@ -186,7 +174,7 @@ void World::tick() {
     }
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
-    }
+    } 
 
     for(int i = 0; i < allActorPtrs.size(); i++) {
 
@@ -202,25 +190,24 @@ void World::tick() {
     }
     
     for (int i = 0; i < allParticleEffects.size(); i++) {
-        glm::vec3 newForce = glm::vec3(0,0,0);
-        if (allQuadPtrs.size()>0) {
-            for (int j = 0; j < allQuadPtrs.size(); j++) {
-                Quad& quad = *allQuadPtrs.at(j);
-                ParticleEffect& pEffect = *allParticleEffects.at(i);
-                glm::vec3 diff = quad.pos - pEffect.getPos();
-                if (glm::length(diff) < 2) {
-                    newForce += quad.force;
-                }
-                allParticleEffects[i]->setForce(newForce);
-                allParticleEffects[i]->tick();
-            }
-        }
-        else {
+       // glm::vec3 newForce = glm::vec3(0,0,0);
             allParticleEffects[i]->tick();
-        }
+        
     }
     abilityManager.tick();
     
+    for(int i = 0; i < allSoundTexts.size(); i++) {
+
+    }
+
+    for(auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
+        (*i)->getComponent<GraphicsComponent>()->draw(renderer);
+    }
+    
+    for (int i = 0; i < allParticleEffects.size(); i++) {
+       // glm::vec3 newForce = glm::vec3(0,0,0);
+        
+    }
 } 
 
 void World::informActorProximity(Actor& actor, float radius) {
@@ -295,3 +282,6 @@ void World::drawText(Renderer* r)
    r->renderText(activeText);
 }
  
+void World::setRenderer(Renderer *renderer_) {
+    renderer = renderer_;
+}

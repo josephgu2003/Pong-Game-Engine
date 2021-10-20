@@ -13,7 +13,7 @@
 
 class RunicLetters : public ParticleEffect {
 public:
-    virtual void setGraphics(Shader& shader) override;
+    virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;
     virtual void tick() override;
 };

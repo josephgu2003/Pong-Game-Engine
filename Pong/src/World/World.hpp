@@ -34,21 +34,11 @@ struct Weather {
     int sky;
 };
 
-struct Quad {
-    std::vector<Vertex> vertices;
-    std::vector<GLuint> indices;
-    float size;
-    float alpha;
-    Texture texture;
-    glm::vec3 pos;
-    glm::vec3 rotations; //pitch yaw roll
-    glm::vec3 force;
-};
+class Renderer;
 
 struct Updates {
     bool actorUpdate;
     bool particleUpdate;
-    bool quadUpdate;
     bool textUpdate;
     bool lightingUpdate;
 };
@@ -69,7 +59,8 @@ class Actor;
 class World {
     uiText* activeText = NULL;
     MapObject* map = NULL;
-    Updates updates = {false,false,false,false, false};
+    Updates updates = {false,false,false,false};
+    Renderer* renderer = NULL;
     
     std::vector <std::shared_ptr<Actor>> allActorPtrs;
     std::vector <ParticleEffect*> allParticleEffects;
@@ -96,14 +87,13 @@ public:
     void insertMapObj(MapObject* map);
     
     void insertCamera(Camera* camera);
+    void setRenderer(Renderer* renderer);
     
     void insertActor(const std::shared_ptr<Actor>& actor);
     
     void insertParticleEffect(ParticleEffect* particleEffect);
     void deleteParticleEffect(ParticleEffect* particleEffect);
     
-    void insertQuad(Quad* quad);
-    void deleteQuad(Quad* quad);
     void insertForce(Force* force_);
     void deleteForce(Force* force_);
 
@@ -117,7 +107,6 @@ public:
     float* getSkyVertices();
     
     std::vector<ParticleEffect*> getParticleEffects();
-    std::vector<Quad*>* getQuads();
     
     Updates checkforUpdates();
     void updateCleared(int i);

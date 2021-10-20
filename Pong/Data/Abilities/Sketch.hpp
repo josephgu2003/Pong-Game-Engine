@@ -19,7 +19,7 @@
 class Game;
 
 class Sketch: public Ability {
-    Quad quad;
+//    Quad quad;
     bool mode2 = false;
     glm::vec3 dirFired;
 public:

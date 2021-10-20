@@ -16,7 +16,7 @@ Fireworks::Fireworks(glm::vec4 color_) {
     color = color_;
 }
 
-void Fireworks::setGraphics(Shader& shader) {
+void Fireworks::setGraphics(Shader* shader) {
     force = glm::vec3(0.0,-0.05,0.0);
     firstUnusedTrail = numParticles;
     particleRefresh = 0.03;
@@ -28,17 +28,17 @@ void Fireworks::setGraphics(Shader& shader) {
     AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;
-    shader.init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
-    shader.use();
-    shader.setVec4("color", color);
-    shader.setFloat("size", size);
+    shader->init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
+    shader->use();
+    shader->setVec4("color", color);
+    shader->setFloat("size", size);
 }
 
 void Fireworks::setColor(glm::vec4 color_) {
     color = color_;
-    graphics.getShader()->use();
-    graphics.getShader()->setVec4("color", color);
-}
+    graphics->getShader()->use();
+    graphics->getShader()->setVec4("color", color);
+} 
 void Fireworks::tick() {
     if (actor != NULL) {
     posVec = actor->getPos();

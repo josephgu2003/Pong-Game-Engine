@@ -14,11 +14,11 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
     force = new Force();
     force->init(glm::vec3(0,0,0), -0.2);
     force->configureSuctionForce(0.5, FORCE_LINEAR);
-    quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
+   /** quad.pos = actor->getPos() + actor->dirVec + glm::vec3(0,1,0);
     AssetManager::loadTexture(TEX_FISH, &quad.texture, true);
     quad.alpha = 0.0; 
     for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
+        for (int j = 0; j < 50; j++) { 
             Vertex vertex;
             vertex.Pos = glm::vec3( (float)(2.0f*(-0.5f+i/49.0f)),2.0f*(float)(-0.5f+j/49.0f),
                                          (0.0f));
@@ -50,28 +50,28 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
     quad.rotations = glm::vec3(0,-90+actor->getYaw(),0);
     quad.force = glm::vec3(0,0,0);
     duration = duration_;
-    on = true;
+    on = true;**/
 }
 
 Fish::~Fish() {
-    world->deleteQuad(&quad);
+   // world->deleteQuad(&quad);
     world->deleteForce(force);
 }
 
 void Fish::call() {
-    world->insertQuad(&quad);
+  //  world->insertQuad(&quad);
     world->insertForce(force);
     dirFired = actor->dirVec;
     mode2 = true;
-    quad.force = 0.1f*dirFired;
+ //   quad.force = 0.1f*dirFired;
 }
  
 void Fish::tick() {
     actor->getComponent<LifeComponent>()->incStatValue(-0.3, STAT_LIFE);
-    force->setPos(quad.pos);
+   // force->setPos(quad.pos);
     if (step == 0) {
         if (duration > 16.5) { 
-            quad.alpha = (18.0-duration)/1.5;
+         //   quad.alpha = (18.0-duration)/1.5;
         }
         else {
             step++;
@@ -84,8 +84,8 @@ void Fish::tick() {
         for (int j = 0; j < 50; j++) {
             if (i==0) {
                 if (j ==0) {
-                glm::vec3 forwardDir = normalize(quad.vertices.at(50*(i)+j).Pos - quad.vertices.at(50*(i+1)+j).Pos);
-                
+              //  glm::vec3 forwardDir = normalize(quad.vertices.at(50*(i)+j).Pos - quad.vertices.at(50*(i+1)+j).Pos);
+                    glm::vec3 forwardDir;
                 glm::mat4 transform = glm::mat4(1.0f);
                 
                 float k = (float)(sin(duration*3.0f)-sin(duration*3.0f+0.1f))/(1.0f+(sin(duration*3.0f)*sin(duration*3.0f+0.1f)));
@@ -100,19 +100,19 @@ void Fish::tick() {
                 forwardDir = glm::vec3(transform*glm::vec4(forwardDir,1));
         
                     for (int j2 = 0 ; j2 < 50; j2++) {
-                quad.vertices.at((50*i+j2)).Pos += forwardDir;
+            //    quad.vertices.at((50*i+j2)).Pos += forwardDir;
                     }
                 }
             } else {
-                glm::vec3 lastVertex = quad.vertices.at(50*(i-1)+j).Pos;
+//                glm::vec3 lastVertex = quad.vertices.at(50*(i-1)+j).Pos;
                 
-                glm::vec3 dir = lastVertex - quad.vertices.at(50*i+j).Pos;
-                float length = glm::length(dir);
-     float p = 1.0f - 2.0f/49.0f/length;
-                quad.vertices.at(50*i+j).Pos += p * dir;
+           //     glm::vec3 dir = lastVertex - quad.vertices.at(50*i+j).Pos;
+              //  float length = glm::length(dir);
+  //   float p = 1.0f - 2.0f/49.0f/length;
+             //   quad.vertices.at(50*i+j).Pos += p * dir;
             }
         }
-        quad.pos = quad.vertices.at(0).Pos;
+       // quad.pos = quad.vertices.at(0).Pos;
     }
     }
     if (duration < 0) {
@@ -126,3 +126,4 @@ void Fish::freeActor() {
        actor->getComponent<CombatComponent>()->getAffecting()->dispel();
     }
 }
+ 

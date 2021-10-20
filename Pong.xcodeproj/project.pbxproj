@@ -949,7 +949,6 @@
 				5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */,
 				5DE8573B2640E3210062DFC2 /* Renderer.hpp */,
 				5DA7E2AB26801683008845AA /* Batch.cpp */,
-				5DF82DA32680CBA800F4D177 /* uiLayout.cpp */,
 				5D426581263C8E7B0026C24D /* Shader.hpp */,
 				5DEC19B9264B69E20001ABAE /* stb_image.c */,
 				5D426580263C8E7B0026C24D /* Shader.cpp */,
@@ -977,8 +976,6 @@
 				5D479DBE264EDC2200067E35 /* Mesh.cpp */,
 				5D479DBF264EDC2200067E35 /* Mesh.hpp */,
 				5DA9BE6726C0413D00C1BAEC /* Models */,
-				5DB91E9F271BA8B0003AAAA7 /* VertexLoader.cpp */,
-				5DB91EA0271BA8B0003AAAA7 /* VertexLoader.hpp */,
 			);
 			path = RenderData;
 			sourceTree = "<group>";
@@ -1273,6 +1270,7 @@
 				5DF82DA72680D14800F4D177 /* uiPiece.hpp */,
 				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
 				5D8A7D0F26F3E5C900BD8BDB /* HealthMeter.cpp */,
+				5DF82DA32680CBA800F4D177 /* uiLayout.cpp */,
 				5D4BD7C6271BA16800A89C8B /* uiText.cpp */,
 				5DF82DA62680D14800F4D177 /* uiPiece.cpp */,
 			);
@@ -1314,9 +1312,11 @@
 		5DE85CED27148643000D948D /* Loading */ = {
 			isa = PBXGroup;
 			children = (
+				5DB91E9F271BA8B0003AAAA7 /* VertexLoader.cpp */,
 				5D391B87268FD4BF0092623D /* json.hpp */,
 				5D7706282654B082002A0BB0 /* AssetManager.cpp */,
 				5D68FE6D26E8433700E572E5 /* JsonManager.hpp */,
+				5DB91EA0271BA8B0003AAAA7 /* VertexLoader.hpp */,
 				5D68FE6C26E8433600E572E5 /* JsonManager.cpp */,
 				5D7706292654B082002A0BB0 /* AssetManager.hpp */,
 			);

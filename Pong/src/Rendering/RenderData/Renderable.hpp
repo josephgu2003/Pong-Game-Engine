@@ -16,7 +16,9 @@
 
 class Shader;
 
-class Renderable {
+class Renderer;
+
+class Renderable { // benefits: keep VAO VBO EBO in the entity, not in teh renderer, much simpler, finally a way to unify ur rendering stuff
 protected:
     Shader* shader = NULL;
     GLuint VAO;
@@ -30,8 +32,10 @@ public:
     void setShader(Shader* shader);
     TextureMaps& getTextureMap();
     void bind();
-    void unbind();
+    void unbind(); 
     GLuint getNumIndices();
+   virtual void draw(Renderer* r) = 0;     //this is where instanced drawing is cancelled-  world object doesn't know about instanced drawing and stuff
+    
 // - instancing data?
 // - If batch with others: share shader, share vao and vbo, vao and vbo become
 // same as others, draw call becomes function pointer?

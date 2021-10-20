@@ -41,6 +41,8 @@ const static float screenquad[24] =
      1.0f,  1.0f,  1.0f, 1.0f
 };
 
+class Renderable;
+
 class Renderer {
 private:
     std::weak_ptr<uiLayout> ui;
@@ -79,7 +81,6 @@ private:
     void renderMap();
     void renderActors();
     void renderParticles();
-    void renderQuads();
     
     void updateUniformBlocks();
     void updateViewProj();
@@ -100,12 +101,12 @@ public:
     void loadMapData();
     void loadSkyBoxData();
     void loadParticleData();
-    void loadQuadData();
     void render();
     void render2();
     void renderText(uiText* text);
     void checkForUpdates();
     void setUI(const std::shared_ptr<uiLayout>& ui);
+    void renderElements(Renderable* r);
 };
 #endif /* Renderer_hpp */
  

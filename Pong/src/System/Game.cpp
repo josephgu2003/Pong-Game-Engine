@@ -30,7 +30,7 @@ Game::Game() {
     
     glewExperimental = GL_TRUE;
     glewInit();
-     
+      
     glEnable(GL_DEPTH_TEST); // enable depth-testing
     glDepthFunc(GL_LEQUAL);
     
@@ -53,7 +53,7 @@ Game::Game() {
     JsonManager::loadGame(this);
     
     
-    inkGlyphs.setActor(pHero0.get());
+    inkGlyphs->setActor(pHero0.get());
     camera->setActor(pHero0.get());
     
     VertexData* data = new VertexData;
@@ -69,7 +69,7 @@ Game::Game() {
         2, 3, 0
     };
      
-    TextureMaps mapTextures;
+   /** TextureMaps mapTextures;
     Texture t;
     AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
     mapTextures.diffuse = (t);
@@ -108,11 +108,11 @@ Game::Game() {
     shader2->setMat3("transposeInverseModelMat", mat);
     GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
     realMap.setGraphics(graphics2);
-  
+
     Renderer::bindShaderUniblock(shader2,    ViewProj);
     Renderer::bindShaderUniblock(shader2,    Lights); 
     Renderer::bindShaderUniblock(shader2,     StopWatch); 
-
+ **/
     
     screen->print("Preparing the brushes...");
     glfwPollEvents();
@@ -144,7 +144,7 @@ Game::Game() {
     printf("%s\n", glGetString(GL_VERSION));
     
     renderer0->setUI(ui);
-    renderer1->setUI(ui);
+    renderer1->setUI(ui); 
     
     std::shared_ptr<HealthMeter> hm =  std::make_shared<HealthMeter>();
     pHero0->getComponent<LifeComponent>()->addObserver(hm);
@@ -155,14 +155,15 @@ Game::Game() {
     inputHandler.setActiveHero(pHero0);
     activeHero = pHero0;
 
+
     script = new ScriptOne();
     script->init(this);
-
+ 
 }
 
 void Game::initWindow() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); 
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -175,14 +176,20 @@ void Game::initObjects() {
     camera = std::make_shared<Camera>();
     renderer1 = new Renderer; 
      renderer0 = new Renderer;
+     
+    mist = new Mist();
     
-    mist.init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
-     inkGlyphs.init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
+    inkGlyphs = new InkEffect();
     
-     fireworks.init(0.2, glm::vec3(0,27,0), glm::vec3(0,0,0), 300, 20, 1000, 0.995);
-    fireworks.setColor(glm::vec4(0.3,1.2,3.0,1.0));
-     realMap.init(glm::vec3(0,-1.0,0));
-     map.init(glm::vec3(0,-0.14,0));
+    fireworks = new Fireworks(); 
+    
+    mist->init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
+         inkGlyphs->init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
+       
+     fireworks->init(0.2, glm::vec3(0,27,0), glm::vec3(0,0,0), 300, 20, 1000, 0.995);
+    fireworks->setColor(glm::vec4(0.3,1.2,3.0,1.0));
+    // realMap.init(glm::vec3(0,-1.0,0));
+     //map.init(glm::vec3(0,-0.14,0));
 
 }
                    
@@ -190,6 +197,9 @@ void Game::linkObjects() {
     renderer0->setWorld(&world0);
     renderer1->setWorld(&world1);
                  
+    world0.setRenderer(renderer0);
+    world1.setRenderer(renderer1);
+    
     DirectionalLight  dl2(glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),glm::vec3(1.0,1.0,1.0),glm::vec3(-1,-1,0));
     world1.setWeather(dl2, 0);  
          
@@ -201,12 +211,12 @@ void Game::linkObjects() {
  
     world0.insertCamera(camera.get());
         
-    world0.insertParticleEffect(&fireworks);
-    world0.insertParticleEffect(&mist);
+    world0.insertParticleEffect(fireworks);
+    world0.insertParticleEffect(mist);
 
-    world0.insertParticleEffect(&inkGlyphs);
-    world0.setMap(map);
-    world1.setMap(realMap);
+    world0.insertParticleEffect(inkGlyphs);
+   // world0.setMap(map);
+   // world1.setMap(realMap);
  
     inputHandler.setCamera(camera);
 }
@@ -247,14 +257,24 @@ void Game::tick() {
     }
 
     script->tick();
-
-    world0.tick();
+    
+    if (activeRenderer == renderer0) { // yes MAKES NO SENSE GO FIX IT
+        world1.tick();
+        activeRenderer->render();
+        world0.tick();
+        
+        ui->renderAll(activeRenderer);
+        activeRenderer->render2();
+    } else {
+        world0.tick();
+        
+    activeRenderer->render();
 
     world1.tick();
     
-    activeRenderer->render();
     ui->renderAll(activeRenderer);
-    activeRenderer->render2(); 
+    activeRenderer->render2();
+    }
 
     glfwPollEvents();
     glfwSwapBuffers(window);

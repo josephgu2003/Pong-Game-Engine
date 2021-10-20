@@ -7,14 +7,14 @@
 
 #include "RunicLetters.hpp"
 
-void RunicLetters::setGraphics(Shader& shader_) {
+void RunicLetters::setGraphics(Shader* shader_) {
     AssetManager::loadTexture(TEX_PEACH, &texture, false); //***
     textureTarget = GL_TEXTURE_2D; 
     drawTarget = GL_TRIANGLES;
-    shader_.init("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
-    shader_.use();
-    shader_.setFloat("size", size);
-    shader_.setFloat("brightness", 2.0);
+    shader_->init("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
+    shader_->use();
+    shader_->setFloat("size", size);
+    shader_->setFloat("brightness", 2.0);
 } 
   
 void RunicLetters::refreshParticle() {

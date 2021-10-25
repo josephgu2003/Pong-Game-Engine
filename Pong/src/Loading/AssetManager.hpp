@@ -19,8 +19,10 @@
 #define TEX_DANCE "Resources/Textures/Dance/dance000.png"
 #define TEX_GRADIENT "Resources/Utility/radial.png"
 #define TEX_VORONOI "Resources/Utility/voronoi.png"
+#define TEX_UIMENU_0 "Resources/Textures/uimenu0.png"
+#define TEX_UIMENU_1 "Resources/Textures/uimenu1.png"
 
-#define MOD_JUGGERNAUT "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
+#define MOD_JUGGERNAUT  "Resources/Models/juggernaut/juggernaut/materials/juggernaut_econ.fbx"
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
 #define MOD_HOODY "Resources/Models/journey7.obj" 
 #define MOD_WOLF "Resources/Models/wolf/wolf.fbx" 

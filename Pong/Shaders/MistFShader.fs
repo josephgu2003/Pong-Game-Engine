@@ -7,11 +7,12 @@ uniform sampler2D gradient;
 
     void main()
     {
+        if (duration < 0.0) discard; 
         vec4 sampled = texture(diffuse, gl_PointCoord);
         vec3 colors = sampled.rgb;
        // sampled.w *= 5*log(duration);
         float intensity = texture(gradient, gl_PointCoord).b;
         sampled.a *= 0.04*intensity*intensity*intensity;
-        sampled.a *= min(duration,1);
+        sampled.a *= min(duration,1.0);
         FragColor = vec4(colors, sampled.a);
     }

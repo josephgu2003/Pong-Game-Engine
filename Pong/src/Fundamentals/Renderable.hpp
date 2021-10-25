@@ -25,16 +25,23 @@ protected:
     GLuint VBO;
     GLuint EBO;
     GLuint numIndices;
+
+    GLuint instanceCount; 
     TextureMaps map;
+    GLenum drawTarget;
+    void makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount);
+    void updateInstanceBuffer(const std::vector<float>& v);
 public:
+    GLuint instanceVBO;
     Renderable();
     Shader* getShader();
     void setShader(Shader* shader);
     TextureMaps& getTextureMap();
+    GLenum getDrawTarget();
     void bind();
     void unbind(); 
     GLuint getNumIndices();
-   virtual void draw(Renderer* r) = 0;     //this is where instanced drawing is cancelled-  world object doesn't know about instanced drawing and stuff
+    virtual void draw(Renderer* r) = 0;     //this is where instanced drawing is cancelled-  world object doesn't know about instanced drawing and stuff
     
 // - instancing data?
 // - If batch with others: share shader, share vao and vbo, vao and vbo become

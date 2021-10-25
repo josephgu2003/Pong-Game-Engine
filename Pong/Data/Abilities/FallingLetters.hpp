@@ -10,16 +10,15 @@
 
 #include <stdio.h>
 #include "Ability.hpp"
-#include "World.hpp"
-#include "Actor.hpp"
-#include "RunicLetters.hpp"
+#include "Particle.hpp"
 #include <memory>
+
+class World;
+class Actor;
 
 class FallingLetters: public Ability{
 private:
-    RunicLetters* letters = NULL;
-    Force* force = NULL;
-    Force* up = NULL;
+    ParticleSystem* letters = NULL;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
     ~FallingLetters();

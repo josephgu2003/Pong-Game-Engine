@@ -12,7 +12,7 @@
 #include <glm/glm.hpp>
 #include "Positionable.hpp"
 
-class Camera : public Positionable{
+class Camera : public Positionable {
     friend class Renderer;
 protected:
     Actor* actor = NULL;
@@ -24,6 +24,6 @@ public:
     void updateVecs();
     void orientActor();
     void tick();
-};
+}; 
 
 #endif /* Camera_hpp */

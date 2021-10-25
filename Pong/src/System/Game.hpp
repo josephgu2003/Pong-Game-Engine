@@ -19,11 +19,11 @@
 #include "InputHandler.hpp"
 #include <vector>
 #include "Sketch.hpp"
-#include "Mist.hpp"
+
 #include "LoadingScreen.hpp"
-#include "InkEffect.hpp"
+
 #include "MapObject.hpp"
-#include "Fireworks.hpp"
+
 #include "ScriptOne.hpp"
 #include "Watch.hpp"
 #include "uiLayout.hpp"
@@ -65,11 +65,11 @@ private:
     bool firstTime = true;
     float draws;
     
-    InkEffect* inkGlyphs = nullptr;
-    Fireworks* fireworks = nullptr;
+    ParticleSystem* inkGlyphs = nullptr;
+    ParticleSystem* fireworks = nullptr;
    // MapObject map;
    // MapObject realMap;
-    Mist* mist = nullptr;
+    ParticleSystem* mist = nullptr;
     ScriptOne* script;
     
     void initWindow();
@@ -79,7 +79,7 @@ public:
     bool running = false;
     Game();
     ~Game();
-    void tick();
+    void tick(); 
 
    // void setNumberable(Numberable* numberable, int i);
    // Numberable* getNumberable(unsigned int ID_);
@@ -89,6 +89,8 @@ public:
     void end();
     InputHandler& getInputHandler();
     void swapWorld();
+    std::shared_ptr<uiLayout>& getUI();
+    
 };
 
 #endif /* Game_hpp */

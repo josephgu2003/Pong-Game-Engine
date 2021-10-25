@@ -19,10 +19,9 @@
 #include <memory>
 #include <map>
 #include <queue>
+#include "InputCallback.hpp"
  
 class Game;
-
-typedef void (*keyCallback) (Game*);
 
 struct KeyEvent {
     int key;
@@ -37,7 +36,7 @@ struct KeyEvent {
 class InputHandler { //detects input, executes associated action
 private:
     std::queue<KeyEvent> keyEventQ;
-    std::map<int, keyCallback> keyCallbacks;
+    std::map<int, InputCallback> keyCallbacks;
     std::shared_ptr<Camera> activeCamera;     
     std::shared_ptr<Actor> activeHero; 
     
@@ -57,7 +56,7 @@ private:
     std::string readText;
     
     Game* game = NULL;
-    void setCallbackforKey(int i, keyCallback); 
+    void setCallbackforKey(int i, const InputCallback& cbk);
 public:
     InputHandler();
     ~InputHandler();
@@ -73,6 +72,8 @@ public:
     void setActiveHero(const std::shared_ptr<Actor>& act);
     void setCamera(const std::shared_ptr<Camera>& cam);
     void addKeyEventToQ(int key, int action, int mods);
+    void setCursorMode(GLenum g);
 };
 
 #endif /* InputHandler_hpp */
+ 

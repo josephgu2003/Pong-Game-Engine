@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "Particle.hpp"
 
-class InkEffect : public ParticleEffect {
+class InkEffect : public ParticleSystem {
 public:
     virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;

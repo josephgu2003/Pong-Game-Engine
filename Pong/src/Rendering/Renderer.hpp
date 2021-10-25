@@ -16,8 +16,6 @@
 #include "Shader.hpp"
 #include "World.hpp"
 #include <string>
-#include "uiLayout.hpp"
-#include "Batch.hpp"
 #include <memory>
 
 extern GLuint uboViewProj;
@@ -45,15 +43,8 @@ class Renderable;
 
 class Renderer {
 private:
-    std::weak_ptr<uiLayout> ui;
     
-    GLuint VBO, VAO, EBO, mVBO, mVAO, mEBO, sVBO, sVAO, tVBO, tVAO, qVBO, qVAO, qEBO;
-    Batch<ParticleEffect> pointParticles;
-    Batch<ParticleEffect> quadParticles;
-    Batch<uiLayout> uiStuff;
-    Batch<SoundText> soundTexts;
-    
-    std::vector<ParticleEffect*> loadedParticles;
+    GLuint mVBO, mVAO, mEBO, sVBO, sVAO, qVBO, qVAO, qEBO;
     
     DoubleFrame frame2C;
     Frame frame0;
@@ -78,10 +69,6 @@ private:
     World* world = NULL;
     float lighting;
     
-    void renderMap();
-    void renderActors();
-    void renderParticles();
-    
     void updateUniformBlocks();
     void updateViewProj();
     void updateCamPos();
@@ -97,16 +84,13 @@ public:
     ~Renderer();
     void setWorld(World* world_);
     void setCamera(Camera* camera_);
-    void loadActorData();
-    void loadMapData();
     void loadSkyBoxData();
-    void loadParticleData();
     void render();
     void render2();
     void renderText(uiText* text);
     void checkForUpdates();
-    void setUI(const std::shared_ptr<uiLayout>& ui);
     void renderElements(Renderable* r);
+    void renderParticles(Renderable* r, int instanceCount);
 };
 #endif /* Renderer_hpp */
  

@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "Particle.hpp"
 
-class RunicLetters : public ParticleEffect {
+class RunicLetters : public ParticleSystem {
 public:
     virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;

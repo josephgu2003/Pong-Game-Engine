@@ -19,7 +19,7 @@ int VertexLoader::boneCounter = 0;
 std::map<std::string, BoneInfoMap> VertexLoader::loadedBoneDataMaps;
 int VertexLoader::indexOffset = 0;
 
-void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, TextureMaps& map) {
+void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, TextureMaps& map, glm::vec2 position) {
     glBindVertexArray(vao); 
     
     std::map<char, Character> characters; 
@@ -27,8 +27,8 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", characters, map);
 
     std::string::const_iterator c;
-    float x = -0.6;
-    float y = -0.8;
+    float x = position.x;
+    float y = position.y;
     float scale = 0.0002;  
         
     std::vector<SimpleVertex> newVertices;
@@ -39,7 +39,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     for (c = text.begin(); c != text.end(); c++)
         {
             if (*c == '\n') {  
-                x = -0.6;
+                x = position.x;
                 y -= 0.07;
                 continue; 
             }
@@ -443,3 +443,37 @@ void VertexLoader::reset() {
     boneCounter = 0; //might have other erferences to this
 }
   
+void VertexLoader::setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout) { // assumes floats
+    int byteCounter = 0;
+    int bytesPerInstance = 0;
+    for (int i = 0; i < layout.size(); i++) {
+        bytesPerInstance += sizeof(float)*layout.at(i);
+    }
+    
+    for (int i = 0; i < layout.size(); i++) {
+        int attrib = i+firstAttribLocation;
+        glVertexAttribPointer(attrib, layout.at(i), GL_FLOAT, GL_FALSE, bytesPerInstance, (void*)(byteCounter));
+        glEnableVertexAttribArray(attrib);
+        glVertexAttribDivisor(attrib, 1);
+        byteCounter += layout.at(i)*sizeof(float);
+    }
+}
+
+void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+    glBindVertexArray(vao);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    
+    SimpleVertex s(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0);
+        
+    glBufferData(GL_ARRAY_BUFFER, sizeof(SimpleVertex), &s, GL_STATIC_DRAW);
+    
+    GLuint i = 0;
+    
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint), &i, GL_STATIC_DRAW);
+    
+    numIndices = 1;
+    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
+    glBindVertexArray(0); 
+}

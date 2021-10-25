@@ -68,11 +68,6 @@ Renderer::Renderer() {
     AssetManager::generateFramebuffer(&frame0, GL_RGBA16F, 0.5* WINDOW_WIDTH , 0.5 * WINDOW_HEIGHT);
     AssetManager::generateFramebuffer(&frame1, GL_RGBA16F,  0.5* WINDOW_WIDTH , 0.5 * WINDOW_HEIGHT);
 
-    std::vector<int> vector {3,1}; 
-    pointParticles.init(1000, 500000, vector,  VERTEX_SIMPLEVERTEX, GL_POINTS, GL_DYNAMIC_DRAW);
-    std::vector<int> vector2 {16,1};
-    quadParticles.init(1000, 500000, vector2, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
-    soundTexts.init(10000, 10000, VERTEX_SIMPLEVERTEX, GL_TRIANGLES, GL_DYNAMIC_DRAW);
 }
 
 Renderer::~Renderer() { 
@@ -84,7 +79,6 @@ void Renderer::setWorld(World *world_) {
 }
 
 void Renderer::setCamera(Camera *camera_) {
-    
     camera = camera_;
 
     glEnable(GL_POINT_SPRITE);
@@ -123,13 +117,10 @@ void Renderer::setCamera(Camera *camera_) {
 }
 
 void Renderer::updateUniformBlocks() {
-//
-
     updateViewProj();
     updateLights();
     updateCamPos();
     updateUniformStopWatch();
-    
 }
 
 void Renderer::updateUniformStopWatch() {
@@ -148,7 +139,6 @@ void Renderer::updateViewProj() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 void Renderer::updateLights() {
-    
     DirectionalLight dl = world->getWeather().dirLight;
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
      
@@ -184,14 +174,6 @@ void Renderer::updateCamPos() {
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void Renderer::loadActorData() {
-
-}
-
-void Renderer::loadMapData() {
-
-
-}
 
 void Renderer::loadSkyBoxData() {
     int imageWidth, imageHeight, channels;
@@ -238,113 +220,9 @@ void Renderer::loadSkyBoxData() {
     glBindVertexArray(0);
 }
 
-void Renderer::loadParticleData() {
-    /**
-    std::vector<ParticleEffect*> particleData = world->getParticleEffects();
-    std::vector<ParticleEffect*> deletedParticles = loadedParticles;
-    // subtract first or add first?
-    for (int i = 0; i < particleData.size(); i++) { // loop world particles
-        bool updateNeeded = true;
-        for (int j = 0; j < loadedParticles.size(); j++) { // compare to known particles
-            if (particleData.at(i) == loadedParticles.at(j)) {
-                deletedParticles.erase(std::find(deletedParticles.begin(), deletedParticles.end(), particleData.at(i)));
-                updateNeeded = false; // if match, no update needed
-                break;
-            }
-        }
-        
-        if (updateNeeded) {
-            loadedParticles.push_back(particleData.at(i));
-            if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
-                quadParticles.updateVertexData(particleData.at(i)->graphics.getVertexData(), particleData.at(i));
-            }
-            if (particleData.at(i)->drawTarget == GL_POINTS) {
-                pointParticles.updateVertexData(particleData.at(i)->graphics.getVertexData(), particleData.at(i));
-            }
-        }
-       if (particleData.at(i)->drawTarget == GL_TRIANGLES) {
-            std::vector<float> instanceData;
-           int numParticles = particleData.at(i)->getNumParticles();
-           int vecLength = 17*numParticles;
-           instanceData.resize(vecLength);
-           int counter = 0;
-            for (int c = 0; c < particleData.at(i)->getNumParticles(); c++) {
-                glm::vec3& pos = particleData.at(i)->getNthParticle(c).posVec;
-                glm::mat4 modelMatr = glm::mat4(1.0f);
-                 
-                modelMatr = glm::translate(modelMatr, pos);
-                modelMatr = glm::rotate(modelMatr,    -glm::radians(particleData.at(i)->getNthParticle(c).pyrAngles.y), glm::vec3(0,1,0));
-
-                float* mat = glm::value_ptr(modelMatr[0]);
-                for (int l = 0; l < 16; l++) {
-                    instanceData[counter] = (mat[l]);
-                    counter++;
-                }
-                instanceData[counter] = 10.0;
-                counter++; 
-            }
-            quadParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData, particleData.at(i));
-        }
-        
-        if (particleData.at(i)->drawTarget == GL_POINTS) {
-            std::vector<float> instanceData;
-            int numParticles = particleData.at(i)->getNumParticles();
-            int vecLength = 4*numParticles;
-            instanceData.resize(vecLength);
-            int counter = 0;
-            for (int c = 0; c < particleData.at(i)->getNumParticles(); c++) {
-                glm::vec3& pos = particleData.at(i)->getNthParticle(c).posVec;
-                instanceData[counter] = pos.x;
-                counter++;
-                instanceData[counter] = pos.y;
-                counter++;
-                instanceData[counter] = pos.z;
-                counter++;
-                instanceData[counter] = (particleData.at(i)->getNthParticle(c).duration);
-                counter++;
-            }
-            pointParticles.updateInstanceData(particleData.at(i)->graphics.getVertexData(),instanceData, particleData.at(i));
-        }
-    }
-    
-    for (int i = 0; i < deletedParticles.size(); i++) { // delete particles
-        int bytes = 0;
-        for (int c = 0; c < deletedParticles.at(i)->getNumParticles(); c++) {
-            bytes += 4 * sizeof(float);
-        }
-        if (deletedParticles.at(i)->drawTarget == GL_TRIANGLES) {
-            quadParticles.deleteInstanceData(bytes, deletedParticles.at(i));
-            quadParticles.deleteVertexData(deletedParticles.at(i));
-
-            loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
-        }
-        if (deletedParticles.at(i)->drawTarget == GL_POINTS) {
-            pointParticles.deleteInstanceData(bytes, deletedParticles.at(i));
-
-            pointParticles.deleteVertexData(deletedParticles.at(i));
-           
-            loadedParticles.erase(std::find(loadedParticles.begin(), loadedParticles.end(), deletedParticles.at(i)));
-        }
-    } **/ 
-}
-
-
 void Renderer::checkForUpdates() {
     Updates updates = world->checkforUpdates();
-    if(updates.actorUpdate == true) {
-        world->updateCleared(ACTOR_UPDATE);
-        loadActorData();
-    }
-    if(updates.particleUpdate == true) {
-        world->updateCleared(PARTICLE_UPDATE);
-        loadParticleData();
-    }
-    if(updates.textUpdate == true) {
-      //  world->updateCleared(TEXT_UPDATE);
-     //   print(world->getActiveText());
-        //wishlist: function to get renderer all the relevant soundtext objects
-      //  world->fillBatchTextData(&soundTexts, glm::vec3(camera->getPos()));
-    }
+
     if(updates.lightingUpdate == true) {
         world->updateCleared(LIGHTING_UPDATE);
         updateLights(); 
@@ -353,7 +231,6 @@ void Renderer::checkForUpdates() {
 
 void Renderer::render() {
     checkForUpdates();
-    loadParticleData();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      
     glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo); //draw to 2C framebuffer
@@ -364,13 +241,9 @@ void Renderer::render() {
     updateCamPos();
     updateUniformStopWatch();
    renderSky();
-    //renderActors();
-  //  renderMap();
-    //renderParticles();
     world->drawText(this);
 }
 void Renderer::render2() {
-     
     glDisable(GL_DEPTH_TEST);
     glBindVertexArray(frame2C.fvao);
     bool horizontal = true;
@@ -424,7 +297,12 @@ void Renderer::render2() {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 0);
     glBindTexture(GL_TEXTURE_2D, frame2C.ftexture0);
-      
+    
+    
+    glActiveTexture(GL_TEXTURE4);
+    glUniform1i(glGetUniformLocation(frameShader->ID, "gradient"), 4);
+    glBindTexture(GL_TEXTURE_2D, gradient.id);
+       
     glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);
     
     glDrawArrays(GL_TRIANGLES, 0, 6); 
@@ -435,16 +313,13 @@ void Renderer::render2() {
 
 
 void Renderer::renderUI(uiPiece* uip) {
-    if (!ui.lock()) return;
-    Shader* s = uip->getShader();
+    Shader* s = uip->getShader(); 
     s->use();
     uip->bind();
     bindTextures(s, uip->getTextureMap());
     glDrawElements(GL_TRIANGLES, uip->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     uip->unbind();
 }
-
-
 
 void Renderer::renderSky() {
     //sky
@@ -467,111 +342,7 @@ void Renderer::renderSky() {
     glDisable(GL_CULL_FACE);
 }
 
-
-void Renderer::renderMap() {
-  /**  GraphicsComponent& gc = world->getMap().getGraphics();
-    Shader* shader = gc.getShader();
-    shader->use();
-    
-    glBindVertexArray(mVAO);
-    
-    glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture.id);
-    
-    TextureMaps& map = gc.getVertexData()->getTextures();
-    
-    bindTextures(shader, map);
-    
-    glDrawElements(GL_TRIANGLES, gc.getVertexData()->getIndices().size(), GL_UNSIGNED_INT, 0);
-    
-    glActiveTexture(GL_TEXTURE0);**/
-
-}
-
-void Renderer::renderActors() {
-    // actors
-  /**  glBindVertexArray(VAO);
-    int indiceCount = 0;
-    for (int i = 0; i<world->getActorsCount(); i++) {
-        GraphicsComponent* comp = world->getNthActor(i)->getComponent<GraphicsComponent>();
-    std::vector<Mesh>* meshes = comp->getModel()->getMeshes();
-        Shader* shader = comp->getShader();
-        shader->use();
-        for (int j = 0; j < meshes->size(); j++) {
-            TextureMaps& map = meshes->at(j).getTextures();
-  
-            bindTextures(shader, map);
-
-            glDrawElements(GL_TRIANGLES, meshes->at(j).getIndices().size(), GL_UNSIGNED_INT, (void*) indiceCount);
-            
-            indiceCount += (meshes->at(j).getIndices().size())*sizeof(GLuint);
-        
-            glBindTexture(GL_TEXTURE_2D, 0);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-    }**/
-}
-
-void Renderer::renderParticles() {
-    //particles
- /**  glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-   glDepthMask(GL_FALSE);
-    for (int i = 0; i < world->getParticleEffects().size(); i++) {
-        ParticleEffect& effect = *world->getParticleEffects().at(i);
-        Batch<ParticleEffect>* batch;
-        int elementsPerInstance = 3;
-        if (effect.drawTarget == GL_TRIANGLES) {
-            batch = &quadParticles;
-            elementsPerInstance = 6;
-        }
-        if (effect.drawTarget == GL_POINTS) {
-            batch = &pointParticles;
-    
-            elementsPerInstance = 1;
-        }
-        batch->bindVAO();
-        batch->bindInstanceBuffer(&effect);
-        Shader* shaderRef = effect.graphics.getShader();
-        shaderRef->use();
-        GLuint shader = shaderRef->ID;
-        
-        glActiveTexture(GL_TEXTURE1);
-        if (glGetUniformLocation(shader, "gradient") != -1) {
-        glUniform1i(glGetUniformLocation(shader, "gradient"), 1);
-        glBindTexture(GL_TEXTURE_2D, gradient.id);
-        }
-        if (glGetUniformLocation(shader, "diffuse") != -1) {
-         glActiveTexture(GL_TEXTURE0); 
-            glUniform1i(glGetUniformLocation(shader, "diffuse"), 0);
-        glBindTexture(effect.textureTarget, effect.texture.id);
-        }
-        
-        glDrawElementsInstanced(effect.drawTarget, elementsPerInstance, GL_UNSIGNED_INT, (void*)(batch->getIndexByteStride(&effect)), effect.getNumParticles());
-        glBindTexture(effect.textureTarget, 0);
-    } 
-    glBindVertexArray(0); 
-    glActiveTexture(GL_TEXTURE0);
-    
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDepthMask(GL_TRUE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);**/
-}
-
-  
 void Renderer::renderText(uiText* text) {
-   /** textShader->use();
-    glEnable(GL_DEPTH_TEST); 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  //  glBindVertexArray(tVAO);
-    soundTexts.bindVAO();   
-    int verticeCount = 0;   
-    for (int i = 0; i < soundTexts.getNumDrawables(); i++) { // wtf bro u really texture swapping per character??
-        glBindTexture(GL_TEXTURE_2D_ARRAY,   soundTexts.getVertexDataMap().at(i).first->data.getTextures().diffuse.id); //hahahaha
-        glDrawElements(GL_TRIANGLES, soundTexts.getVertexDataMap().at(i).first->data.getIndices().size(), GL_UNSIGNED_INT, (void*) verticeCount);
-        verticeCount += soundTexts.getVertexDataMap().at(i).first->data.getIndices().size();
-    }
-    soundTexts.unbindVAO(); **/
     text->getShader()->use(); 
   //  glBindVertexArray(tVAO);
     text->bind();
@@ -582,6 +353,7 @@ void Renderer::renderText(uiText* text) {
    
  
 void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
+    
     if (map.diffuse.id != -1) {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
@@ -589,45 +361,85 @@ void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
     }
     
     if (map.specular.id != -1) {
-  glActiveTexture(GL_TEXTURE1);
-    glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
-    glBindTexture(GL_TEXTURE_2D, map.specular.id);
+        glActiveTexture(GL_TEXTURE1);
+        glUniform1i(glGetUniformLocation(shader->ID, "specular"), 1);
+        glBindTexture(GL_TEXTURE_2D, map.specular.id);
     }
-    
-    
+     
     if (map.normMap.id != -1) {
     glActiveTexture(GL_TEXTURE2);
       glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
       glBindTexture(GL_TEXTURE_2D, map.normMap.id);
-    }
+    } 
     
-    if (map.voronoi.id != -1) { 
+    if (map.voronoi.id != -1) {  
     glActiveTexture(GL_TEXTURE3);
       glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
       glBindTexture(GL_TEXTURE_2D, map.voronoi.id);
     }
-    
-    if (map.voronoi.id != -1) {
-    glActiveTexture(GL_TEXTURE4);
+     
+    if (glGetUniformLocation(shader->ID, "noise") != -1) {
+        glActiveTexture(GL_TEXTURE6);
+        glUniform1i(glGetUniformLocation(shader->ID, "noise"), 6);
+        glBindTexture(GL_TEXTURE_2D, gradient.id);
+    }
+
+    if (map.noise.id != -1) {
+        glActiveTexture(GL_TEXTURE4);
       glUniform1i(glGetUniformLocation(shader->ID, "noise"), 4);
       glBindTexture(GL_TEXTURE_2D, noise.id);
     }
     
+    if (glGetUniformLocation(shader->ID, "gradient") != -1) {
+        glActiveTexture(GL_TEXTURE5);
+        glUniform1i(glGetUniformLocation(shader->ID, "gradient"), 5);
+        glBindTexture(GL_TEXTURE_2D, gradient.id);
+    }
+
     glActiveTexture(GL_TEXTURE0);
 }
 
-void Renderer::setUI(const std::shared_ptr<uiLayout>& ui_) {
-    ui = ui_;
-}
 
 void Renderer::renderElements(Renderable* r) {
     r->bind(); 
     Shader* s = r->getShader();
     s->use(); 
-    TextureMaps& map = r->getTextureMap();
-    
+    TextureMaps& map = r->getTextureMap(); 
     bindTextures(s, map);
-
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    r->unbind();
+}
 
-} 
+void Renderer::renderParticles(Renderable* r, int instanceCount) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+     
+    r->bind();
+    Shader* s = r->getShader(); 
+    s->use(); 
+    TextureMaps& map = r->getTextureMap();
+    bindTextures(s, map);
+  /**  int byteCounter = 0;
+    int bytesPerInstance = 0;
+    std::vector<float> layout = {4,4,4,4,1};
+      
+    glBindBuffer(GL_ARRAY_BUFFER, r->instanceVBO);
+    for (int i = 0; i < layout.size(); i++) {
+        bytesPerInstance += sizeof(float)*layout.at(i);
+    }
+    
+    for (int i = 0; i < layout.size(); i++) {
+        int attrib = i+2;
+        glVertexAttribPointer(attrib, layout.at(i), GL_FLOAT, GL_FALSE, bytesPerInstance, (void*)(byteCounter));
+        glEnableVertexAttribArray(attrib);
+        glVertexAttribDivisor(attrib, 1);
+        byteCounter += layout.at(i)*sizeof(float);
+    }**/   
+      
+    glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, instanceCount);
+    r->unbind();
+    glDepthMask(GL_TRUE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+

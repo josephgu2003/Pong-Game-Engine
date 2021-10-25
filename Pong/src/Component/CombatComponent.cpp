@@ -8,8 +8,9 @@
 #include "CombatComponent.hpp"
 #include "Actor.hpp"
 #include "World.hpp"
-CombatComponent::CombatComponent(Actor& actor) : Component(actor) {
+CombatComponent::CombatComponent(Actor& actor) : ActorComp(actor) {
     Component::type = COMBAT;
+    biggestTarget = std::make_shared<Actor>(); 
 }
 
 void CombatComponent::tick() {
@@ -35,7 +36,7 @@ bool CombatComponent::hasTarget() {
     if (biggestTarget.get() != NULL) {
         return true;
     }
-    return false;
+    return false; 
 }
 bool CombatComponent::QHasAbilities() {
     if (abilityQ.size() > 0) {

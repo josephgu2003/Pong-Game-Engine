@@ -11,12 +11,12 @@
 #include <stdio.h>
 
 #include <glm/glm.hpp>
-#include "Component.hpp"
+#include "ActorComp.hpp"
 
 class Actor;
 class World;
 
-class PhysicsComponent : public Component {
+class PhysicsComponent : public ActorComp {
     friend class World;
 protected:
     bool gravityOn = true;

@@ -12,7 +12,7 @@
 #include "Particle.hpp"
 #include <glm/glm.hpp>
 
-class Fireworks : public ParticleEffect {
+class Fireworks : public ParticleSystem {
     glm::vec4 color;
     float numberSparks;
     float particleRefresh = 0; 

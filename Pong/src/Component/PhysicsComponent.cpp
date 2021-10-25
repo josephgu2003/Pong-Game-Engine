@@ -10,8 +10,9 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include "Actor.hpp"
+#include "Component.hpp" 
 
-PhysicsComponent::PhysicsComponent(Actor& actor, bool gravityOn_) : Component(actor) {
+PhysicsComponent::PhysicsComponent(Actor& actor, bool gravityOn_) : ActorComp(actor) {
     gravityOn = gravityOn_;
     Component::type = PHYSICS;
 } 

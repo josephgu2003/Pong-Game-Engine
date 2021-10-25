@@ -10,7 +10,7 @@
 #include "Actor.hpp"
 #include "VertexLoader.hpp"
 
-AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
+AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : ActorComp(actor) {
     globalInverse = glm::mat4(1.0f);
     Component::type = ANIM;
     timeInAnim = 0; 

@@ -42,7 +42,7 @@ struct Updates {
     bool textUpdate;
     bool lightingUpdate;
 };
-
+ 
 struct SoundText {
     std::string text;
     glm::vec3 pos;
@@ -55,15 +55,17 @@ struct SoundText {
 };
 class Actor;
 
+// map: read from height map, 9 chunks at once, repeat vertices at edges (one vertex is one pixel)
+// 4 x 4 chunks, 
 
 class World {
     uiText* activeText = NULL;
     MapObject* map = NULL;
     Updates updates = {false,false,false,false};
     Renderer* renderer = NULL;
-    
+      
     std::vector <std::shared_ptr<Actor>> allActorPtrs;
-    std::vector <ParticleEffect*> allParticleEffects;
+    std::vector <ParticleSystem*> allParticleEffects;
     std::vector <MapObject*> allMapObjPtrs;
     std::vector <Camera*> allCameraPtrs;
     std::vector <Force*> allForces;
@@ -91,8 +93,8 @@ public:
     
     void insertActor(const std::shared_ptr<Actor>& actor);
     
-    void insertParticleEffect(ParticleEffect* particleEffect);
-    void deleteParticleEffect(ParticleEffect* particleEffect);
+    void insertParticleEffect(ParticleSystem* particleEffect);
+    void deleteParticleEffect(ParticleSystem* particleEffect);
     
     void insertForce(Force* force_);
     void deleteForce(Force* force_);
@@ -106,7 +108,7 @@ public:
     std::vector<std::string>* getSkyTextureFiles();
     float* getSkyVertices();
     
-    std::vector<ParticleEffect*> getParticleEffects();
+    std::vector<ParticleSystem*> getParticleEffects();
     
     Updates checkforUpdates();
     void updateCleared(int i);
@@ -117,7 +119,7 @@ public:
     void tick();
     
     void informActorProximity(Actor& actor, float radius);
-    bool informParticlesForce(ParticleEffect* effect);
+    bool informParticlesForce(ParticleSystem* effect);
     
     const ActorList getNearActorsWith(Actor* actor, CompType ct)
     {

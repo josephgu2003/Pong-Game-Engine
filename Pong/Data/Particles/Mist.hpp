@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "Particle.hpp"
 
-class Mist : public ParticleEffect {
+class Mist : public ParticleSystem {
 public:
     virtual void setGraphics(Shader* shader) override;
     virtual void refreshParticle() override;

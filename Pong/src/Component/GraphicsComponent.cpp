@@ -8,8 +8,8 @@
 #include "GraphicsComponent.hpp"
 #include "Renderer.hpp"
 
-GraphicsComponent::GraphicsComponent() : Renderable::Renderable() {
-    Component::type = GRAPHICS;
+GraphicsComponent::GraphicsComponent(Actor& actor) : ActorComp(actor), Renderable::Renderable() {
+    Component::type = GRAPHICS; 
 }
  
 void GraphicsComponent::tick() {

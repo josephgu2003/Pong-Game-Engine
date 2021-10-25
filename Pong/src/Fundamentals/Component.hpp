@@ -11,9 +11,6 @@
 #include <stdio.h>
 #include <memory>
 
-class Actor;
-class World;
-
 enum CompType {
     AI,
     CHAR,
@@ -25,14 +22,20 @@ enum CompType {
     GRAPHICS
 };
 
+template <typename T>  // ???
 class Component {
 protected:
+    T* actor = nullptr;
     CompType type;
-    Actor* actor = NULL;
 public:
-    Component();
-    Component(Actor& actor);
-    CompType getType();
+    Component(T& compUser_) {
+        actor = &compUser_;
+    }
+
+    CompType getType() {
+        return type;
+    }
+
     virtual void tick() = 0;
 };
 

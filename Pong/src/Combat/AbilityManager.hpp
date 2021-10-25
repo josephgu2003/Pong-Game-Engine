@@ -10,16 +10,17 @@
 
 #include <stdio.h>
 #include "Ability.hpp"
-#include <memory>
+#include <memory> 
 #include "Actor.hpp"
+
+class CombatComponent;
 
 class AbilityManager {
 private:
     std::vector<std::shared_ptr<Ability>> abilities;
-    std::vector<std::shared_ptr<Actor>> actors;
 public:
     AbilityManager();
     void tick();
-    void insertActor(const std::shared_ptr<Actor>& actor);
+    void handleCombatComp(CombatComponent* cc);
 };
 #endif /* AbilityManager_hpp */

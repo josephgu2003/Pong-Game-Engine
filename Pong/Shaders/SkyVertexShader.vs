@@ -3,7 +3,6 @@
     
     out vec3 TexVec;
 
-
 uniform mat4 viewProjMat2;
 
     void main()

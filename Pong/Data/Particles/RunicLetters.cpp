@@ -8,17 +8,17 @@
 #include "RunicLetters.hpp"
 
 void RunicLetters::setGraphics(Shader* shader_) {
-    AssetManager::loadTexture(TEX_PEACH, &texture, false); //***
+/**    AssetManager::loadTexture(TEX_PEACH, &texture, false); //***
     textureTarget = GL_TEXTURE_2D; 
     drawTarget = GL_TRIANGLES;
     shader_->init("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
     shader_->use();
     shader_->setFloat("size", size);
-    shader_->setFloat("brightness", 2.0);
+    shader_->setFloat("brightness", 2.0);**/
 } 
   
 void RunicLetters::refreshParticle() {
-    int j = (distribution(generator)%100);
+ /**   int j = (distribution(generator)%100);
     int k = (distribution(generator)%100);
     int l = (distribution(generator)%100);
     if (j%2 ==1) j = j*(-1);
@@ -34,7 +34,7 @@ void RunicLetters::refreshParticle() {
 particles[firstUnused].velVec = (glm::vec3(a-0.5,0.2*b-0.7,c-0.5));
     particles[firstUnused].pyrAngles += glm::vec3(0,20.0*b,0);
     particles[firstUnused].duration = 10; 
-particles[firstUnused].texture = texture.id;
+particles[firstUnused].texture = texture.id;**/
 }
  
 void RunicLetters::tick() {

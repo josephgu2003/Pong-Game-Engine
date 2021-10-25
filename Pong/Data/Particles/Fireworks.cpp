@@ -25,22 +25,22 @@ void Fireworks::setGraphics(Shader* shader) {
     for(int i = numberSparks; i < numParticles; i++) {
         particles.push_back(Particle());
     }
-    AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
+  /**  AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;
     shader->init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
     shader->use();
     shader->setVec4("color", color);
-    shader->setFloat("size", size);
+    shader->setFloat("size", size);**/
 }
 
 void Fireworks::setColor(glm::vec4 color_) {
     color = color_;
-    graphics->getShader()->use();
-    graphics->getShader()->setVec4("color", color);
+  //  graphics->getShader()->use();
+  //  graphics->getShader()->setVec4("color", color);
 } 
 void Fireworks::tick() {
-    if (actor != NULL) {
+   /** if (actor != NULL) {
     posVec = actor->getPos();
     }
     
@@ -92,11 +92,12 @@ void Fireworks::tick() {
     if (myWatch.getTime() > particleRefresh) {
       //  particleRefresh = 0.02 + 0.0002*(distribution(generator)%100);
         myWatch.resetTime();
-    }
+    }*
+    */
 }
 
 void Fireworks::refreshParticle() {
-    int j = (distribution(generator)%100);
+   /** int j = (distribution(generator)%100);
     int k = (distribution(generator)%100);
     int l = (distribution(generator)%100);
     if (j%2 ==1) j = j*(-1);
@@ -114,5 +115,5 @@ particles[firstUnused].posVec = posVec+glm::vec3(m,n,o);
     c -= 0.15;
 particles[firstUnused].velVec = 4.0f*glm::normalize(glm::vec3(a,b,c));
 particles[firstUnused].duration = 2.0f;
-particles[firstUnused].texture = texture.id;
+particles[firstUnused].texture = texture.id;**/
 }

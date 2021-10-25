@@ -52,87 +52,24 @@ Game::Game() {
     
     JsonManager::loadGame(this);
     
-    
-    inkGlyphs->setActor(pHero0.get());
     camera->setActor(pHero0.get());
-    
-    VertexData* data = new VertexData;
-    AnyVertex* a = new TBNVertex(glm::vec3(-50,0,-50),glm::vec3(0,1,0),glm::vec2(0,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    AnyVertex* b = new TBNVertex(glm::vec3(50,0,-50),glm::vec3(0,1,0),glm::vec2(1,0), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    AnyVertex* c = new TBNVertex(glm::vec3(50,0,50),glm::vec3(0,1,0),glm::vec2(1,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    AnyVertex* d = new TBNVertex(glm::vec3(-50,0,50),glm::vec3(0,1,0),glm::vec2(0,1), glm::vec3(0,0,0), glm::vec3(0,0,0));
-    std::vector<AnyVertex*> mapVertices = {a, b, c, d
-    };
-    
-    std::vector<GLuint> mapIndices = {
-        0, 1, 2,
-        2, 3, 0
-    };
-     
-   /** TextureMaps mapTextures;
-    Texture t;
-    AssetManager::loadNullTexture(1600, 1600, &t.id, GL_RGBA);
-    mapTextures.diffuse = (t);
-    data->setVertexData(mapVertices, mapIndices, mapTextures, VERTEX_TBNVERTEX);
-    Shader* shader = new Shader("Shaders/WaterVertexShader.vs", "Shaders/WaterFragmentShader.fs");
-    glm::mat4 modelMat = glm::mat4(1.0);
-    modelMat = glm::translate(modelMat, glm::vec3(map.getPos()));
-    
-    shader->use();
-    shader->setMat4("modelMat", modelMat);
-    glm::mat3 mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    shader->setMat3("transposeInverseModelMat", mat);
-    GraphicsComponent* graphics = new GraphicsComponent(data, shader);
-    map.setGraphics(graphics);
-     
-    Renderer::bindShaderUniblock(shader, ViewProj);
-    Renderer::bindShaderUniblock(shader,   Lights);
-    Renderer::bindShaderUniblock(shader, StopWatch);
- //memeleak
-    
-    Model*  model = new Model();
-    AssetManager::loadModel("Resources/Map/snow3.obj", model);
-    TextureMaps maps2;
-    
-    AssetManager::loadTexture(TEX_VORONOI, &maps2.voronoi, false);
 
-    model->setMeshTexture(0, maps2);
-    VertexData* data2 = &model->getMeshes()->at(0);
-    Shader* shader2 = new Shader("Shaders/SnowVertexShader.vs", "Shaders/SnowFragmentShader.fs");
-    modelMat = glm::mat4(1.0);
-    modelMat = glm::translate(modelMat, glm::vec3(realMap.getPos()));
-    shader2->use();
-    shader2->setMat4("modelMat", modelMat);
-    shader2->setFloat("size", 15); 
-    mat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    shader2->setMat3("transposeInverseModelMat", mat);
-    GraphicsComponent* graphics2 = new GraphicsComponent(data2, shader2);
-    realMap.setGraphics(graphics2);
-
-    Renderer::bindShaderUniblock(shader2,    ViewProj);
-    Renderer::bindShaderUniblock(shader2,    Lights); 
-    Renderer::bindShaderUniblock(shader2,     StopWatch); 
- **/
-    
+  
     screen->print("Preparing the brushes...");
     glfwPollEvents();
     glfwSwapBuffers(window);
-    
-    renderer0->loadActorData();
+
     
     screen->print("Opening the books...");
     glfwPollEvents();
     glfwSwapBuffers(window);
     
-    renderer0->loadMapData();
     renderer0->loadSkyBoxData();
     
     screen->print("Putting on a fresh canvas...");
     glfwPollEvents();
     glfwSwapBuffers(window);
-    
-    renderer1->loadActorData();
-    renderer1->loadMapData();
+
     renderer1->loadSkyBoxData();
     
     screen->print("Flipping the pages...");
@@ -143,8 +80,6 @@ Game::Game() {
 
     printf("%s\n", glGetString(GL_VERSION));
     
-    renderer0->setUI(ui);
-    renderer1->setUI(ui); 
     
     std::shared_ptr<HealthMeter> hm =  std::make_shared<HealthMeter>();
     pHero0->getComponent<LifeComponent>()->addObserver(hm);
@@ -153,11 +88,12 @@ Game::Game() {
     activeRenderer = renderer0;
     activeWorld = &world0; 
     inputHandler.setActiveHero(pHero0);
-    activeHero = pHero0;
+    activeHero = pHero0; 
 
-
-    script = new ScriptOne();
-    script->init(this);
+    audio.playMusic();
+        
+    script = new ScriptOne();  
+    script->init(this); 
  
 }
 
@@ -177,17 +113,17 @@ void Game::initObjects() {
     renderer1 = new Renderer; 
      renderer0 = new Renderer;
      
-    mist = new Mist();
+    mist = new ParticleSystem();
     
-    inkGlyphs = new InkEffect();
+    inkGlyphs = new ParticleSystem();
     
-    fireworks = new Fireworks(); 
+    fireworks = new ParticleSystem();
     
-    mist->init(3.0, glm::vec3(0,1.0,0), glm::vec3(15, 0.3, 15), 900, 9, 1000, 0.99);
-         inkGlyphs->init(0.008, glm::vec3(0,-0.5,0), glm::vec3(0.5, 0.5, 0.5), 2810, 700, 2, 0.995);
+    mist->init(PE_MIST, glm::vec3(0,1.0,0));
        
-     fireworks->init(0.2, glm::vec3(0,27,0), glm::vec3(0,0,0), 300, 20, 1000, 0.995);
-    fireworks->setColor(glm::vec4(0.3,1.2,3.0,1.0));
+    fireworks->init(PE_FIREWORKS, glm::vec3(0,27,0));
+    
+    inkGlyphs->init(PE_BODYSPARKS, glm::vec3(0,1.0,0)); 
     // realMap.init(glm::vec3(0,-1.0,0));
      //map.init(glm::vec3(0,-0.14,0));
 
@@ -266,7 +202,7 @@ void Game::tick() {
         ui->renderAll(activeRenderer);
         activeRenderer->render2();
     } else {
-        world0.tick();
+        world0.tick(); 
         
     activeRenderer->render();
 
@@ -281,7 +217,6 @@ void Game::tick() {
 }
 
 
- 
 World& Game::getWorld(int i) {
     if (i == 0) return world0;
     if (i == 1) return world1; 
@@ -329,3 +264,8 @@ void Game::swapWorld() {
 Actor* Game::getActivePlayerHero() {
     return activeHero.get();
 }
+
+std::shared_ptr<uiLayout>& Game::getUI() {
+    return ui;
+}
+ 

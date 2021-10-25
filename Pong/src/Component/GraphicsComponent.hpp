@@ -14,18 +14,18 @@
 #include <memory> 
 #include "AssetManager.hpp"
 #include "Renderable.hpp"
+#include "ActorComp.hpp"
 
 struct FrameAndShader {
     Frame* frame = NULL;
     Shader* shader = NULL;
 };
 
-class GraphicsComponent : public Component, public Renderable { // for actors
+class GraphicsComponent : public ActorComp, public Renderable { // for actors
 protected:
     std::map<Texture*, FrameAndShader> animatedTextures;
 public:  
-    GraphicsComponent();
-    
+    GraphicsComponent(Actor& actor);
     void init(Shader* shader, const std::string& model, const TextureMaps& map);
     virtual void tick() override;
     virtual void draw(Renderer* r) override;

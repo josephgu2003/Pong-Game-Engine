@@ -11,13 +11,13 @@
 #include "VertexLoader.hpp"
 #include "AssetManager.hpp"
 
-HealthMeter::HealthMeter() : uiPiece(){
+HealthMeter::HealthMeter() : uiPiece(glm::vec2(-0.8, 0.8), glm::vec2(0.2,0.2)){
     shader  = new Shader("Shaders/Simple2D.vs", "Shaders/HealthMeter.fs");
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(0.2,0.2), glm::vec2(-0.8, 0.8));
-    AssetManager::loadTexture(TEX_FISH, &map.diffuse, true); 
+    AssetManager::loadTexture("Resources/Textures/flowerhp.png", &map.diffuse, true); 
     shader->use();
     shader->setFloat("ratio", 1.0f);
-}
+} 
   
 void HealthMeter::notify(const Subject& s, GameEvent ge) { 
     if (ge == SUBJ_HP_CHANGED) {

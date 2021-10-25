@@ -15,6 +15,14 @@
 #include "Fish.hpp"
 #include "NameComponent.hpp"
 #include "CombatComponent.hpp"
+#include "uiText.hpp"
+#include "uiMenu.hpp"
+
+#define EMPTY_KEYCALLBACK [] (Game* ) {}
+
+#define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
+
+#define CREDITS "WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"
 
 void onetap_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
@@ -29,40 +37,39 @@ void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
 void InputHandler::dumpTextToPlayer() {
     setReadTextMode(false);
     game->getActivePlayerHero()->getComponent<NameComponent>()->speak(readText, 3.0);
-    setCallbackforKey(GLFW_KEY_ENTER,  [](Game* game){
-        game->getInputHandler().setReadTextMode(true);
-        game->getInputHandler().setCallbackforKey(GLFW_KEY_ENTER, [](Game* game){
-            game->getInputHandler().dumpTextToPlayer();
-        });
-    });
     readText = ""; 
 }
 
 InputHandler::InputHandler() {
     readText = "";
     
-    setCallbackforKey(GLFW_KEY_ENTER,  [](Game* game){
+    auto enterA = [](Game* game){
         game->getInputHandler().setReadTextMode(true);
-        game->getInputHandler().setCallbackforKey(GLFW_KEY_ENTER, [](Game* game){
-            game->getInputHandler().dumpTextToPlayer();
-        });
-    });
+    };
+    auto enterB = [](Game* game){
+        game->getInputHandler().dumpTextToPlayer();
+    };
     
-    setCallbackforKey(GLFW_KEY_X, [](Game* game){
+    auto enterCall = InputCallback(enterA, enterB);
+    enterCall.enableToggle();
+    
+    setCallbackforKey(GLFW_KEY_ENTER, enterCall);
+    
+    setCallbackforKey(GLFW_KEY_X, InputCallback([](Game* game){
         game->swapWorld();
-    });
+    }, EMPTY_KEYCALLBACK));
     
-    setCallbackforKey(GLFW_KEY_SPACE, [](Game* game){
+    setCallbackforKey(GLFW_KEY_SPACE, InputCallback([](Game* game){
         game->getActivePlayerHero()->jump();
-    });
+    }, EMPTY_KEYCALLBACK));
 
-    setCallbackforKey(GLFW_KEY_Z, [](Game* game){
+    setCallbackforKey(GLFW_KEY_Z, InputCallback([](Game* game){
         Actor* ph = game->getActivePlayerHero();
         std::shared_ptr<Ability> fish = std::make_shared<Fish>(&ph->getWorld(), ph, 18.0);
         ph->getComponent<CombatComponent>()->newAbility(fish);
-    });
+    }, EMPTY_KEYCALLBACK));
     
-    setCallbackforKey(GLFW_KEY_G, [](Game* game){
+    setCallbackforKey(GLFW_KEY_G, InputCallback([](Game* game){
         Actor* ph = game->getActivePlayerHero();
         std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&ph->getWorld(), ph, 6.0);
         auto comb = ph->getComponent<CombatComponent>();
@@ -70,15 +77,48 @@ InputHandler::InputHandler() {
             letters->setTarget(comb->getBigTarget());
         }
         comb->newAbility(letters);
-    });
+    }, EMPTY_KEYCALLBACK));
     
-    setCallbackforKey(GLFW_KEY_Q, [](Game* game){
+    setCallbackforKey(GLFW_KEY_Q, InputCallback([](Game* game){
         Actor* ph = game->getActivePlayerHero();
-        std::vector<std::string> lines = {"WASD - Move", "don't touch E, R, T - old features that need new purpose", "Z - summon fish and break stuns", "X - swap world", "The boss ahead will dialogue you", "Then stun, press Z after", "Joseph Gu - Programmer", "Yirou Guo - Creative Consultant and Artist", "Jonathan Ran - Mathematical and Physics Consultant", "Matthew Ding - Deployment Help"};
+        std::vector<std::string> lines = {CREDITS};
         std::shared_ptr<Ability> speech = std::make_shared<Speech>(&ph->getWorld(), ph, 6.0, lines);
         ph->getComponent<CombatComponent>()->newAbility(speech);
-    });
+    }, EMPTY_KEYCALLBACK));
     
+    setCallbackforKey(GLFW_KEY_M, InputCallback([](Game* game){
+        Actor* ph = game->getActivePlayerHero();
+        std::vector<std::string> lines = {POEM};
+        std::shared_ptr<Ability> speech = std::make_shared<Speech>(&ph->getWorld(), ph, 6.0, lines);
+        ph->getComponent<CombatComponent>()->newAbility(speech);
+    }, EMPTY_KEYCALLBACK));
+    
+    auto yCall = InputCallback(
+[](Game* game){
+        std::shared_ptr<uiMenu> u = std::make_shared<uiMenu>(glm::vec2(0, 0), glm::vec2(0.5,0.5), TEX_UIMENU_1);
+        game->getUI()->insertNode(u);
+        std::shared_ptr<uiText> t1 = std::make_shared<uiText>("Option 1", 0.25, 0.45);
+        std::shared_ptr<uiText> t2 = std::make_shared<uiText>("Option 2", 0.25, 0.35);
+        std::shared_ptr<uiText> t3 = std::make_shared<uiText>("Option 3", 0.25, 0.25);
+        game->getUI()->insertNode(t1);
+        game->getUI()->insertNode(t2);
+        game->getUI()->insertNode(t3);},
+[](Game* game){
+        // delete menu
+        
+    });
+    yCall.enableToggle();
+                               
+    setCallbackforKey(GLFW_KEY_Y, yCall);
+    
+    auto shiftCall = InputCallback(
+[] (Game* g) {
+        g->getInputHandler().setCursorMode(GLFW_CURSOR_NORMAL);
+    }, [] (Game* g) {
+        g->getInputHandler().setCursorMode(GLFW_CURSOR_DISABLED);
+    });
+    shiftCall.enableToggle();  
+    setCallbackforKey(GLFW_KEY_LEFT_SHIFT, shiftCall);
 
 }
 
@@ -86,11 +126,12 @@ InputHandler::~InputHandler() {
     
 }
 
-void InputHandler::setCallbackforKey(int i, keyCallback kc) {
+void InputHandler::setCallbackforKey(int i, const InputCallback& cbk) {
     if (keyCallbacks.find(i) == keyCallbacks.end()) {
-        keyCallbacks.insert(std::pair<int, keyCallback>(i, kc));
+        keyCallbacks.insert(std::pair<int, InputCallback>(i, cbk));
     } else {
-        keyCallbacks.find(i)->second = kc; 
+        keyCallbacks.find(i)->second.undoEffects(game);
+        keyCallbacks.find(i)->second = cbk;
     }
 }
 
@@ -116,21 +157,26 @@ void InputHandler::tick() {
     if (readKeysToTextMode) { // read text isntead of controls
         while (!keyEventQ.empty()) {
             KeyEvent& ke = keyEventQ.front();
-            if (ke.key == GLFW_KEY_ENTER) {
-                processInput(ke);
-            }
-            const char* key_name = glfwGetKeyName(ke.key, 0);
             keyEventQ.pop();
-            if (!key_name) continue;
-            readText.append(key_name);
+            
+            if (ke.action == GLFW_PRESS)  {
+                if (ke.key == GLFW_KEY_ENTER) {
+                    processInput(ke);
+                }
+                const char* key_name = glfwGetKeyName(ke.key, 0);
+                if (!key_name) continue;
+                readText.append(key_name);
+            }
         }
         return;
     }
+    
     while (!keyEventQ.empty()) {
         KeyEvent& ke = keyEventQ.front();
         processInput(ke);
         keyEventQ.pop();
     }
+    
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             activeHero->posDir(0.03);
         }
@@ -171,16 +217,22 @@ void InputHandler::setReadTextMode(bool b) {
     readKeysToTextMode = b;
 }
 
+void InputHandler::setCursorMode(GLenum g) {
+    glfwSetInputMode(window, GLFW_CURSOR, g);
+}
+
 int InputHandler::processInput(const KeyEvent& ke) {
     auto call = keyCallbacks.find(ke.key);
     if (ke.action == GLFW_PRESS && call != keyCallbacks.end()) {
-        (*(call->second))(game); 
+        call->second.execute(game);
         return 0;
     }
     
-    int key = ke.key;
-    int action = ke.action;
-    int mod = ke.mod; 
+    
+    
+   // int key = ke.key;
+   // int action = ke.action;
+   // int mod = ke.mod;
 //    unique_lock<mutex> lock() 
  /**   if (scheme == 3) {
         int nextBranch;

@@ -58,7 +58,7 @@ void Positionable::randomPosAround(glm::vec3 pivot) {
 
 void Positionable::rotate(glm::vec3 eulers) {
     eulerAngles += eulers;
-}
+} 
 
 float Positionable::getYaw() {
     return eulerAngles.y;

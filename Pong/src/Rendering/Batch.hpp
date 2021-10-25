@@ -16,7 +16,7 @@
 #include <map>
 #include "VertexData.hpp"
 #include "VertexLoader.hpp"
-
+/**
 struct VertexIndexByteStride {
     unsigned int VertexByteStride;
     unsigned int IndexByteStride;
@@ -404,6 +404,6 @@ public:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
        // glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxIndicesSize, nullptr, drawMode);
     } 
-}; 
+}; **/
 
 #endif /* Batch_hpp */

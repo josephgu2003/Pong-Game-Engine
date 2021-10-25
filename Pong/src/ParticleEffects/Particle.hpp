@@ -10,75 +10,82 @@
 
 #include <glm/glm.hpp>
 #include <vector>
-#include <random>
-#include <algorithm>
-#include <map>
-#include <functional>
-#include "Actor.hpp"
-#include "Shader.hpp"
-#include "GraphicsComponent.hpp" 
-#include "Force.hpp"
-#include "Watch.hpp"
 #include "Positionable.hpp"
- 
-struct Particle { // implies a set of vertices, don't store it or too much memory
-    glm::vec3 posVec, velVec, pyrAngles;
-    GLuint texture;
-    float duration;
+#include "Componentable.hpp" 
+
+
+struct Particle {
+    glm::vec3 posVec = glm::vec3(0);
+    glm::vec3 pyrAngles = glm::vec3(0);
+    float duration = 0.0;
 };
+
 
 struct Character;
 
 class World;
 
-class ParticleEffect : public Positionable {
+class Shader;
+
+enum ParticleEffectSeed {
+    PE_FIREWORKS,
+    PE_MIST,
+    PE_BODYSPARKS,
+    PE_RUNICLETTERS,
+};
+
+class ParticleSystem : public Positionable, public Componentable<ParticleSystem> {
 protected:
-    float friction;
-    bool useTexture = true;
-    float size;
-    
-    std::vector<Particle> particles;
-    
-    Actor* actor = NULL;
+  //  std::vector<Particle> particles;
     World* world = NULL;
     
     int numParticles;
-    float x,y,z;
-    
-    int firstUnused;
 
-    float ptcPerSec;
     float duration;
-    Watch myWatch;
     
-    glm::vec3 force = glm::vec3(0,0,0);
-    
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution;
     virtual void refreshParticle() {}
+    Particle* particles = NULL;
 public:
-    GraphicsComponent* graphics = nullptr;
-    virtual void init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec, float duration, float friction);
+    virtual void init(ParticleEffectSeed PESeed, glm::vec3 posVec_);
     
-    virtual void setGraphics(Shader* shader) = 0;
+    void setWorld(World* world);  
     
-    std::vector<Force*> forces;
-    virtual void setActor(Actor* actor);
-    void setWorld(World* world);
-    float getSize();
-    
-    Texture texture;
-    GLenum textureTarget;
-    GLenum drawTarget;
-    
-    ParticleEffect();
+    ParticleSystem();
 
-    virtual ~ParticleEffect();
+    virtual ~ParticleSystem();
     virtual void tick();
     
     int getNumParticles();
+    Particle* getParticles();
     Particle& getNthParticle(int n);
-    void setForce(glm::vec3 force_);
+    const glm::vec3& getPos();
 };
+/**
+glm::vec3 force = glm::vec3(0,0,0);
+void setForce(glm::vec3 force_);
+std::vector<Force*> forces;
+float friction;
+bool useTexture = true;
+float size;
+
+, velVec, pyrAngles;
+GLuint texture;
+float duration;**/
+
+// particle effect modules:
+// physics/ force
+// graphics
+// refresh comp
+//trail
+
+// exmaple firework
+// graphics : comp for point graphics, use no rotation data
+// expects uniforms of color and updating the instancing buffer with positions
+// and lifetimes
+// physics : move the particles in explosion
+// trail : add trail particles ?? how ?? trail can be a separate effect but wierd
+// lifetime and refresh : refresh particles differently trail and not trail??
+
+
 
 #endif /* Particle_hpp */

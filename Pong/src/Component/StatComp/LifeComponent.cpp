@@ -6,12 +6,12 @@
 //
 
 #include "LifeComponent.hpp"
-#define GLFW_DLL
+#define GLFW_DLL 
 #include <GLFW/glfw3.h>
 
 #define HUNGER_RATE 0.001
 
-LifeComponent::LifeComponent(Actor& actor) : Component(actor) {
+LifeComponent::LifeComponent(Actor& actor) : ActorComp(actor) {
     type = LIFE;
 }
 

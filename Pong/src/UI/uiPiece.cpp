@@ -8,10 +8,16 @@
 #include "uiPiece.hpp"
 #include "Renderer.hpp"
 
-uiPiece::uiPiece() : Renderable::Renderable() {
-
+uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_) : Renderable::Renderable() {
+    position = position_;
+    dimensions = dimensions_;
 } 
 
 void uiPiece::draw(Renderer* r) {
     r->renderUI(this); 
+}
+
+void uiPiece::insertChild(const std::shared_ptr<uiPiece>& uip) {
+    std::shared_ptr<uiPiece> ui = uip;
+    children.push_back(std::move(ui));
 }

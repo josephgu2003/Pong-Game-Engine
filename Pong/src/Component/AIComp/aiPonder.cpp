@@ -18,11 +18,11 @@ void aiPonder::tick(Actor *actor) {
         actor->rotate(glm::vec3(0, 3.1, 0));
     } 
     else {
-        actor->getComponent<NameComponent>()->speak("I am thinking!", 3.0);
+        actor->getComponent<NameComponent>()->speak("Hmmmm...", 3.0);
         myWatch.resetTime();
         interest -= 1.0f;
     }
-}
+} 
  
 
  

@@ -28,9 +28,12 @@ private:
     std::string name2;
     float rsIntensity;
     RelationShipType rst;
+    std::string nn1;
+    std::string nn2;
 public:
-    Relationship(std::string name1, std::string name2, float intensity, RelationShipType rst);
+    Relationship(std::string name1, std::string name2, float intensity, RelationShipType rst, std::string nn1, std::string nn2);
     std::string getName(RelationshipSide rs);
+    std::string getNickName(const std::string& myName);
     RelationShipType getType();
     float getIntensity();
 };

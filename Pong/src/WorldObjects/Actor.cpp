@@ -6,7 +6,6 @@
 //
 
 #include "Actor.hpp"
-#include "World.hpp"
 #include <stdio.h>
 #include <string>
 #include "AssetManager.hpp"
@@ -17,7 +16,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "CombatComponent.hpp"
-#include "AnimComponent.hpp"
+#include "AnimComponent.hpp" 
 #include "NameComponent.hpp"  
 #include "LifeComponent.hpp"
 #include "Renderer.hpp"
@@ -109,23 +108,23 @@ void Actor::accelerate(glm::vec3 accel) {
 void Actor::init(int i ) {
     dummy = false;
     if (i == 0) {
-        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
+        std::shared_ptr<ActorComp> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
             
-        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        std::shared_ptr<ActorComp> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
             
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, true);
         addComp(pc);
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
             addComp(cc);
         
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.005);
-        shader->setFloat("brightness", 3.0);
-            
+        shader->setFloat("brightness", 0.0);
+             
         Renderer::bindShaderUniblock(shader, ViewProj);
         Renderer::bindShaderUniblock(shader, Lights);
         TextureMaps map;
@@ -136,9 +135,9 @@ void Actor::init(int i ) {
         
     }
     if (i == 1) {
-        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
+        std::shared_ptr<ActorComp> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
-        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        std::shared_ptr<ActorComp> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
         
         state = STATE_FLYING;
@@ -146,7 +145,7 @@ void Actor::init(int i ) {
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.005); 
-        shader->setFloat("brightness", 1.0);
+        shader->setFloat("brightness", 0.0);
         
         Renderer::bindShaderUniblock(shader, ViewProj);
         Renderer::bindShaderUniblock(shader, Lights);
@@ -154,21 +153,21 @@ void Actor::init(int i ) {
         TextureMaps map;
         AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
-        
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+         
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
         static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_HOODY, map);
         addComp(gc);
 
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
 
     }
     if (i == 2) {
-        std::shared_ptr<Component> nc = std::make_shared<NameComponent>(*this);
+        std::shared_ptr<ActorComp> nc = std::make_shared<NameComponent>(*this);
         addComp(nc);
-        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        std::shared_ptr<ActorComp> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
         
         state = STATE_FLYING;
@@ -177,7 +176,7 @@ void Actor::init(int i ) {
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.002); 
-        shader->setFloat("brightness", 1.0);
+        shader->setFloat("brightness", 0.0);
         Renderer::bindShaderUniblock(shader, ViewProj);
 
         Renderer::bindShaderUniblock(shader, Lights);
@@ -186,15 +185,15 @@ void Actor::init(int i ) {
         AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true); 
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
   
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
         static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_BIRD, map);
         addComp(gc);
         
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc); 
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, MOD_BIRD);
+        std::shared_ptr<ActorComp> ac = std::make_shared<AnimComponent>(*this, MOD_BIRD);
        // Model* model = new Model; 
        // AssetManager::loadModel(MOD_BIRD, model,   static_pointer_cast<AnimComponent>(ac).get());
         static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Take 001");
@@ -203,13 +202,13 @@ void Actor::init(int i ) {
 
     }
     if (i == 3) {
-        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
+        std::shared_ptr<ActorComp> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
-        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        std::shared_ptr<ActorComp> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
         
         state = STATE_FLYING;
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, MOD_VAMP);
+        std::shared_ptr<ActorComp> ac = std::make_shared<AnimComponent>(*this, MOD_VAMP);
 
 
         static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("");
@@ -218,7 +217,7 @@ void Actor::init(int i ) {
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setFloat("size", 0.005);
-        shader->setFloat("brightness", 1.0);
+        shader->setFloat("brightness", 0.0);
         
         Renderer::bindShaderUniblock(shader, ViewProj);
         Renderer::bindShaderUniblock(shader, Lights);
@@ -227,25 +226,25 @@ void Actor::init(int i ) {
         AssetManager::loadTexture("Resources/Models/Vampire/Vampire_diffuse.png", &map.diffuse, true);
         AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
   
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, false);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, false);
         addComp(pc);
         
 
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
         static_pointer_cast<GraphicsComponent>(gc)->init(shader, MOD_VAMP, map);
         addComp(gc);
 
     }
     if (i == 4) {
-        std::shared_ptr<Component> aic = std::make_shared<AIComponent>(*this);
+        std::shared_ptr<ActorComp> aic = std::make_shared<AIComponent>(*this);
         addComp(aic);
-        std::shared_ptr<Component> nc = std::make_shared<CharacterComponent>(*this);
+        std::shared_ptr<ActorComp> nc = std::make_shared<CharacterComponent>(*this);
         addComp(nc);
-        std::shared_ptr<Component> lc = std::make_shared<LifeComponent>(*this);
+        std::shared_ptr<ActorComp> lc = std::make_shared<LifeComponent>(*this);
         addComp(lc);
-
+ 
           
     TextureMaps map;
     AssetManager::loadTexture("/Users/josephgu/Downloads/hollow_knight_-_vr_chat_-_free_download/textures/Knight_baseColor.png", &map.diffuse, true);
@@ -254,22 +253,22 @@ void Actor::init(int i ) {
 
     Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
     shader->use();
-    shader->setFloat("size", 0.007);
-    shader->setFloat("brightness", 3.0);
+    shader->setFloat("size", 0.007); 
+    shader->setFloat("brightness", 0.0);
         
         Renderer::bindShaderUniblock(shader,      ViewProj);
 
         Renderer::bindShaderUniblock(shader,      Lights);
         
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, true);
         addComp(pc);
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
         static_pointer_cast<GraphicsComponent>(gc)->init(shader, "Resources/Models/Knight/knight.fbx", map);
         addComp(gc);
-        std::shared_ptr<Component> ac = std::make_shared<AnimComponent>(*this, "Resources/Models/Knight/knight.fbx");
+        std::shared_ptr<ActorComp> ac = std::make_shared<AnimComponent>(*this, "Resources/Models/Knight/knight.fbx");
 
     static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("HollowKnight__Armature|Walk");
     addComp(ac);
@@ -291,21 +290,20 @@ void Actor::init(int i ) {
 
         Renderer::bindShaderUniblock(shader,      Lights);
         
-        std::shared_ptr<Component> pc = std::make_shared<PhysicsComponent>(*this, true);
+        std::shared_ptr<ActorComp> pc = std::make_shared<PhysicsComponent>(*this, true);
         addComp(pc);
-        std::shared_ptr<Component> cc = std::make_shared<CombatComponent>(*this);
+        std::shared_ptr<ActorComp> cc = std::make_shared<CombatComponent>(*this);
         addComp(cc);
         
-        std::shared_ptr<Component> gc = std::make_shared<GraphicsComponent>();
+        std::shared_ptr<ActorComp> gc = std::make_shared<GraphicsComponent>(*this);
     //   static_pointer_cast<GraphicsComponent>(gc)->setModel(model);
         addComp(gc);
         
-    }
+    }  
 }
 
 void Actor::setWorld(World* world_) {
     world = world_;
-    Componentable::init(this, world);
 }
 
 void Actor::setState(State state_) {
@@ -315,8 +313,8 @@ State Actor::getState() {
     return state; 
 }
 
-void Actor::addComp(const std::shared_ptr<Component>& comp) {
+void Actor::addComp(const std::shared_ptr<Component<Actor>>& comp) {
     Componentable::addComp(comp);
     if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }
- 
+  

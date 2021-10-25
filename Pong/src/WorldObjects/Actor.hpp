@@ -15,7 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Model.hpp"
 #include <vector>
-#include "Component.hpp"
+#include "ActorComp.hpp"
 #include <algorithm>
 #include "GraphicsComponent.hpp"
 #include <memory>
@@ -38,13 +38,13 @@ enum State {
 };
 
 enum ActorEvent {
-    
+     
 };
 
-class Actor : public Componentable, public Positionable {
+class Actor : public Componentable<Actor>, public Positionable {
     friend class Camera;
-    friend class Renderer;
-protected: 
+    friend class Renderer; 
+protected:  
     World* world = NULL;
     std::shared_ptr<GraphicsComponent> graphics = NULL;
     glm::mat4 modelMat = glm::mat4(1.0f);  
@@ -53,11 +53,11 @@ protected:
 public:
     bool dummy = true;
 
-    Actor();
+    Actor(); 
     ~Actor();
-     
-    void addComp(const std::shared_ptr<Component>& comp) override;
     
+    virtual void addComp(const std::shared_ptr<Component<Actor>>& comp) override;
+     
     virtual void tick();
     virtual void init(int i);
     void setWorld(World* world_);

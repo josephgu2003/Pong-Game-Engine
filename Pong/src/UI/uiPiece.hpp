@@ -14,11 +14,15 @@
 #include <glm/glm.hpp>
 #include "Renderable.hpp"
 
-class uiPiece : public Renderable {
-private:
+class uiPiece : public Renderable { // maybe do position relative in constructor, store real position internally?
+protected:
+    std::vector<std::shared_ptr<uiPiece>> children;
+    glm::vec2 position;
+    glm::vec2 dimensions;
 public:
-    uiPiece();
+    uiPiece(glm::vec2 position, glm::vec2 dimensions);
     virtual void draw(Renderer* r) override;
+    void insertChild(const std::shared_ptr<uiPiece>& uip);
 };
 
 #endif /* uiPiece_hpp */

@@ -52,11 +52,11 @@ void JsonManager::loadGame(Game* game) {
                     auto field = (*i)["Relationships"];
                     for (int i = 0; i < field.size(); i++) {
                         auto entry = field.at(i);
-                        if (!checkRelationshipLoaded(entry["IDName1"], entry["IDName2"], entry["RelationshipType"], relationships)) {
-                            std::shared_ptr<Relationship> rs = std::make_shared<Relationship>(entry["IDName1"],entry["IDName2"], entry["RelationshipIntensity"],entry["RelationshipType"]);
+                 
+                            std::shared_ptr<Relationship> rs = std::make_shared<Relationship>(entry["IDName1"],entry["IDName2"], entry["RelationshipIntensity"],entry["RelationshipType"], entry["SecretNickname1"], entry["SecretNickname2"]);
                             charc->newRelationship(rs);
-                        }
-                    }
+                        
+                    } 
                 }
             }
             LifeComponent* lc = actor->getComponent<LifeComponent>();

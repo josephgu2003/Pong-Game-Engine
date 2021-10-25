@@ -13,7 +13,7 @@
 
 class uiText : public uiPiece {
 public:
-    uiText();
+    uiText(const std::string& s, float x, float y);
     void setText(const std::string& s);
 };
 #endif /* uiText_hpp */

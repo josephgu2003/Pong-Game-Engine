@@ -17,14 +17,14 @@ void InkEffect::setGraphics(Shader* shader) {
      shader.init("Shaders/SmokeVShader.vs", "Shaders/SmokeFShader.fs");  
     shader.use();
     shader.setFloat("size", size);**/
-    AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
+/**    AssetManager::loadTexture(TEX_GRADIENT, &texture, false);
     textureTarget = GL_TEXTURE_2D;
     drawTarget = GL_POINTS;  
     shader->init("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
     shader->use();
     glm::vec4 color = glm::vec4(15.0,4.2,2.4,1.0);  
     shader->setVec4("color", color);
-    shader->setFloat("size", size); 
+    shader->setFloat("size", size); **/
 }
 
 void InkEffect::refreshParticle() {
@@ -52,7 +52,7 @@ void InkEffect::refreshParticle() {
             newPos.z = vec.y;
         } 
     }**/ 
-     
+ /**
 particles[firstUnused].posVec = 0.005f*newPos+actor->getPos();
     float a = 0.0005*(distribution(generator)%100);
     float b = 0.0005*(distribution(generator)%100);
@@ -61,11 +61,11 @@ particles[firstUnused].posVec = 0.005f*newPos+actor->getPos();
 particles[firstUnused].velVec = (glm::vec3(a-0.025,b-0.025,c-0.025));
   
 particles[firstUnused].duration = 5.0f;
-particles[firstUnused].texture = texture.id;
+particles[firstUnused].texture = texture.id;**/
 }
 
 void InkEffect::setActor(Actor *actor_) {
-    actor = actor_;
+   // actor = actor_;
 //    model = actor->getComponent<GraphicsComponent>()->getModel();
 }
 

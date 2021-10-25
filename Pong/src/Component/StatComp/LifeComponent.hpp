@@ -9,7 +9,7 @@
 #define LifeComponent_hpp
 
 #include <stdio.h>
-#include "Component.hpp"
+#include "ActorComp.hpp"
 #include "Subject.hpp"
 
 struct Stat {
@@ -26,7 +26,7 @@ enum StatType {
 
 // survival aspect, deals with staying alive
 
-class LifeComponent : public Component, public Subject {
+class LifeComponent : public ActorComp, public Subject {
 private:
     Stat life; //hp, life stat, healthiness, affected by illness poison mental stuff
     Stat hunger; //necessitates eating and drinking, depletes over time

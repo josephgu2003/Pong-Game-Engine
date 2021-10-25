@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include "Component.hpp"
+#include "ActorComp.hpp"
 #include "Animation.hpp"
 #include "Bone.hpp"
 #include <assimp/Importer.hpp>
@@ -18,7 +18,7 @@
 
 typedef std::map<std::string, BoneData> BoneInfoMap;
 
-class AnimComponent : public Component {
+class AnimComponent : public ActorComp {
 protected:
     glm::mat4 globalInverse;
     float timeInAnim;
@@ -27,7 +27,7 @@ protected:
     std::vector<Animation> animations;
     BoneInfoMap BoneDataMap;
     std::vector<glm::mat4>  boneMatrices; 
-    void updateBoneMatrices(float t);
+    void updateBoneMatrices(float t); 
 public:
     AnimComponent(Actor& actor, const std::string& filePath);
     virtual void tick() override;

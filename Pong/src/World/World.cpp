@@ -14,6 +14,7 @@
 #include "Actor.hpp"
 #include "Renderable.hpp"
 #include "Renderer.hpp"
+#include "PGraphicsComponent.hpp" 
 
 World::World() {
     float skyVerticesCopy[] = {
@@ -76,24 +77,21 @@ void World::insertCamera(Camera* camera) {
 }
 
 void World::insertActor(const std::shared_ptr<Actor>& actor) {
-    activeText = new uiText(); // lmfao???
+    activeText = new uiText("", -0.8, -0.9);  // lmfao???
     std::shared_ptr<Actor> p = actor;
     allActorPtrs.push_back(std::move(p));
     actor -> setWorld(this);
-    if (actor->getComponent<CombatComponent>()) {
-        abilityManager.insertActor(actor);
-    }
 }
  
-void World::insertParticleEffect(ParticleEffect* particleEffect) {
+void World::insertParticleEffect(ParticleSystem* particleEffect) {
     allParticleEffects.push_back(particleEffect);
     particleEffect->setWorld(this);
-    updates.particleUpdate = true;
+
 }
 
-void World::deleteParticleEffect(ParticleEffect *particleEffect) {
+void World::deleteParticleEffect(ParticleSystem *particleEffect) {
     allParticleEffects.erase(std::find(allParticleEffects.begin(), allParticleEffects.end(), particleEffect)); 
-    updates.particleUpdate = true;
+
 }
 
 
@@ -117,7 +115,7 @@ float* World::getSkyVertices() {
     return &skyVertices[0];
 }
 
-std::vector<ParticleEffect*> World::getParticleEffects() {
+std::vector<ParticleSystem*> World::getParticleEffects() {
     return allParticleEffects;
 }
 
@@ -172,6 +170,7 @@ void World::tick() {
     if (updates.textUpdate) {
         updateActiveText();
     }
+    
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
     } 
@@ -179,6 +178,10 @@ void World::tick() {
     for(int i = 0; i < allActorPtrs.size(); i++) {
 
         allActorPtrs[i]->tick();
+        auto cc =allActorPtrs[i]->getComponent<CombatComponent>();
+        if (cc && cc->QHasAbilities()) {
+            abilityManager.handleCombatComp(cc);
+        }
     }
     for(int i = 0; i < allForces.size(); i++) {
 
@@ -195,19 +198,16 @@ void World::tick() {
         
     }
     abilityManager.tick();
-    
-    for(int i = 0; i < allSoundTexts.size(); i++) {
 
-    }
 
     for(auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
         (*i)->getComponent<GraphicsComponent>()->draw(renderer);
     }
     
-    for (int i = 0; i < allParticleEffects.size(); i++) {
-       // glm::vec3 newForce = glm::vec3(0,0,0);
-        
+    for(auto i = allParticleEffects.begin(); i != allParticleEffects.end(); i++) {
+        (*i)->getComponent<PGraphicsComponent>()->draw(renderer);
     }
+     
 } 
 
 void World::informActorProximity(Actor& actor, float radius) {
@@ -220,8 +220,8 @@ void World::informActorProximity(Actor& actor, float radius) {
     }
 } 
  
-bool World::informParticlesForce(ParticleEffect* effect) {
-    glm::vec3 uniformstraightforce = glm::vec3(0);
+bool World::informParticlesForce(ParticleSystem* effect) {
+ /**   glm::vec3 uniformstraightforce = glm::vec3(0);
     bool b = false;
     effect->forces.clear();
     for (int i = 0; i < allForces.size(); i++) {
@@ -233,6 +233,8 @@ bool World::informParticlesForce(ParticleEffect* effect) {
     }
     effect->setForce(uniformstraightforce);
     return b;
+  **/
+    return true; 
 }
 
 void World::insertMapObj(MapObject* map) {
@@ -265,17 +267,19 @@ void World::newSoundText(const std::string& text, const glm::vec3& pos, float du
     updates.textUpdate = true;
 }
   
-  
+   
 void World::updateActiveText() {
-    std::string s;
+    if (allCameraPtrs.size() == 0) return; //spaggetti
+    std::string s = "";
     for (int i = 0; i < allSoundTexts.size(); i++) {
-        s.append(allSoundTexts.at(i)->text + "\n");
-    }
+        if (glm::length(allSoundTexts.at(i)->pos - allCameraPtrs.at(0)->getPos()) < 10.0)
+         s.append(allSoundTexts.at(i)->text + "\n");
+    } 
     activeText->setText(s);
     updates.textUpdate = false;
 }
  
-
+ 
 void World::drawText(Renderer* r)
 { //lmfao?
    if (activeText)

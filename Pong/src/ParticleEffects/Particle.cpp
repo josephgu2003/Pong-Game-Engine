@@ -6,156 +6,124 @@
 //
 
 #include "Particle.hpp"
-#include <stdlib.h>
-#include <time.h>
-#include <memory>
-#include "AssetManager.hpp"
 #include "World.hpp"
+#include "PGraphicsComponent.hpp"
+#include "PPointGraphicsComponent.hpp"
+#include "PQuadGraphicsComponent.hpp"
+#include "AssetManager.hpp"
+#include "PRefreshComponent.hpp"
+#include "PPhysicsComponent.hpp"
+#include "PSpinComponent.hpp"
 
-ParticleEffect::ParticleEffect() {
+ParticleSystem::ParticleSystem() {
+ 
 }
 
-
-void ParticleEffect::init(float size_, glm::vec3 posVec_, glm::vec3 dimensions, int numParticles_, float ptcPerSec_, float duration_, float friction_) {
-    graphics = new GraphicsComponent(); 
-    Shader* shader = new Shader();
-    friction = friction_;
-    size = size_;
+void ParticleSystem::init(ParticleEffectSeed PESeed, glm::vec3 posVec_) {
     posVec = posVec_;
-    force = glm::vec3(0,0,0); 
-    x = dimensions.x;
-    y = dimensions.y;
-    z = dimensions.z;
-    numParticles = numParticles_;
-    ptcPerSec = ptcPerSec_;
-    duration = duration_;
+    Shader* shader;
+    TextureMaps map;
+      
+    switch (PESeed) {
+        case PE_FIREWORKS: {
+            numParticles = 200;
+            particles = new Particle[numParticles];
+            duration = 100.0f;
+            shader = new Shader("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
+            std::shared_ptr<PGraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*this, numParticles, 0.1, shader, map);
+            pgc->setColor(0.5, 0.5, 8.0);
+            addComp(pgc); 
+            std::shared_ptr<PRefreshComponent> prc = std::make_shared<PRefreshComponent>(*this, 3.0, 200, 3.0, glm::vec3(1,1,1), glm::vec3(-0.03, -0.03, -0.03), glm::vec3(0.03, 0.03, 0.03));
+            addComp(prc);
+            std::shared_ptr<PPhysicsComponent> ppc = std::make_shared<PPhysicsComponent>(*this, 0.002, 0.999);
+            addComp(ppc);
+            break;
+        }; 
+            
+        case PE_MIST: {
+            numParticles = 500;
+            particles = new Particle[numParticles];
+            duration = 1000.0f;
+            AssetManager::loadTexture(TEX_MIST, &map.diffuse, false);
+            shader = new Shader("Shaders/MistVShader.vs", "Shaders/MistFShader.fs");
+            std::shared_ptr<PGraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*this, numParticles, 2.5, shader, map);
+            addComp(pgc);
+            std::shared_ptr<PRefreshComponent> prc =   std::make_shared<PRefreshComponent>(*this, 10.0, 2, 20.0, glm::vec3(40,2,40), glm::vec3(0, 0, 0), glm::vec3(0.1, 0, 0));
+            addComp(prc);
+            std::shared_ptr<PPhysicsComponent> ppc = std::make_shared<PPhysicsComponent>(*this, 0, 1.0);
+            addComp(ppc);
+            break;
+        };
+            
+        case PE_BODYSPARKS:  {
+            numParticles = 200;
+            particles = new Particle[numParticles];
+            duration = 100.0f;
+            shader = new Shader("Shaders/ColorPartV.vs", "Shaders/ColorPartF.fs");
+            std::shared_ptr<PGraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*this, numParticles, 0.01, shader, map);
+            pgc->setColor(0.5, 0.5, 3.0);
+            addComp(pgc);
+            std::shared_ptr<PRefreshComponent> prc = std::make_shared<PRefreshComponent>(*this, 3.0, 100, 0.2, glm::vec3(1,1,1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+            addComp(prc);
+            break;
+        };
+             
+        case PE_RUNICLETTERS: {
+            numParticles = 100;
+            particles = new Particle[numParticles];
+            duration = 100.0f;
+            shader = new Shader("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
+            shader->use();
+            shader->setFloat("brightness", 2.0);
+            AssetManager::loadTexture("Resources/Particles/Project.png", &map.diffuse, true);
+            std::shared_ptr<PGraphicsComponent> pgc =  std::make_shared<PQuadGraphicsComponent>(*this, numParticles, 0.3, shader, map);
+            addComp(pgc); 
+            std::shared_ptr<PRefreshComponent> prc = std::make_shared<PRefreshComponent>(*this, 5.0, 2, 0.1, glm::vec3(5,5,5), glm::vec3(0, -0.1, 0), glm::vec3(0, 0, 0));
+            addComp(prc);  
+            std::shared_ptr<PPhysicsComponent> ppc = std::make_shared<PPhysicsComponent>(*this, 0, 0.9985);
+            addComp(ppc);
+            std::shared_ptr<PSpinComponent> psc = std::make_shared<PSpinComponent>(*this, glm::vec3(0,1,0));
+            addComp(psc);
+            break;
+        };
+    }  
     
     for (int i = 0; i < numParticles; i++)
-        particles.push_back(Particle());
-    
-    firstUnused = 0;
-
-    distribution = std::uniform_int_distribution<int>(1,1000);
-    
-    setGraphics(shader); 
-     
-    graphics->setShader(shader);
-    /**VertexData* data = new VertexData();
-    
-    if (drawTarget == GL_TRIANGLES) {
-        data->generateTemplate(QUAD_SIMPLE);
+    {
+        particles[i] = Particle();
     }
     
-    if (drawTarget == GL_POINTS) {
-
-        std::vector<GLuint> particleIndices;
-        
-        AnyVertex* v1 = new SimpleVertex(glm::vec3(0,0,0), glm::vec2(0,0), 0);
-
-        std::vector<AnyVertex*> newVertices;
-        newVertices.push_back(v1);
-         
-        data->setVertices(newVertices, VERTEX_SIMPLEVERTEX);
-         
-        for (int i = 0; i < numParticles; i++) {
-            std::vector<GLuint> newIndices = {
-                0
-            };
-            particleIndices.insert(particleIndices.end(), newIndices.begin(), newIndices.end());
-        }
-        data->setIndices(particleIndices);
-    }
-     **/
-  //  graphics.init(data, shader); 
-     
-    extern GLuint uboViewProj;
-    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void ParticleEffect::setActor(Actor* actor_) {
-    actor = actor_;
-}
 
-ParticleEffect::~ParticleEffect() {
+ParticleSystem::~ParticleSystem() {
 
 }
 
-void ParticleEffect::tick() {
-    if (actor != NULL) {
-    posVec = actor->getPos();
+void ParticleSystem::tick() {
+    Componentable::tick();
+    for (int i = 0; i < numParticles; i++) {
+        particles[i].duration -= glfwGetTime();
     }
-    
-    if (world != NULL) {
-          world->informParticlesForce(this);
-    }
-    
-    float dt = glfwGetTime();
-        
-    if (myWatch.getTime() > 0.2) {
-        myWatch.resetTime();
-        for (int i = 0; i < ptcPerSec/5.0; i++) { 
-        refreshParticle();
-        if(firstUnused == (particles.size()-1)) {
-            firstUnused = 0;
-        }
-        else if(particles[firstUnused+1].duration<=0) firstUnused++;
-    }
-    }
-    
-    if (forces.size() == 0) {
-    for (int i = 0; i < particles.size(); i++) {
-        if (particles[i].duration > 0) {
-            particles[i].velVec += force;
-            particles[i].velVec *= friction;
-        if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
-            particles[i].posVec.x += particles[i].velVec.x*dt;
-            particles[i].posVec.y += particles[i].velVec.y*dt;
-            particles[i].posVec.z += particles[i].velVec.z*dt;
-            particles[i].duration -= dt;
-        }
-    }
-    } 
-    else {
-        for (int i = 0; i < particles.size(); i++) { 
-            if (particles[i].duration > 0) {
-
-             
-                for (int j = 0; j < forces.size(); j++) { 
-                    forces.at(j)->affectVelAt(particles[i].posVec, particles[i].velVec);
-                }
-                particles[i].velVec *= (friction);
-              //  particles[i].velVec *= (friction-0.002*pow(glm::length(particles[i].velVec),2));
-            if (glm::length(particles[i].velVec) < 0.03) particles[i].velVec = glm::vec3 (0,0,0);
-
-                particles[i].duration -= dt;
-                particles[i].posVec.x += particles[i].velVec.x*dt;
-                particles[i].posVec.y += particles[i].velVec.y*dt;
-                particles[i].posVec.z += particles[i].velVec.z*dt;
-            }
-        }
-    }
-    duration -= dt;
+    duration -= glfwGetTime();
 }
 
-int ParticleEffect::getNumParticles() {
-    return particles.size();
+int ParticleSystem::getNumParticles() {
+    return numParticles;
 }
 
-Particle& ParticleEffect::getNthParticle(int n) {
+Particle& ParticleSystem::getNthParticle(int n) {
     return particles[n];
 }
 
-float ParticleEffect::getSize() {
-    return size;
-}
-
-void ParticleEffect::setForce(glm::vec3 force_) {
-    force = force_;
-}
-
-void ParticleEffect::setWorld(World *world_) {
+void ParticleSystem::setWorld(World *world_) {
     world  = world_;
 }
+
+Particle* ParticleSystem::getParticles() {
+    return particles;
+}
+const glm::vec3& ParticleSystem::getPos() {
+    return posVec;
+}
+ 

@@ -9,7 +9,7 @@
 #include "Actor.hpp"
 #include "World.hpp"
 
-NameComponent::NameComponent(Actor& actor) : Component(actor) {
+NameComponent::NameComponent(Actor& actor) : ActorComp(actor) {
     Component::type = NAME;
 }
 

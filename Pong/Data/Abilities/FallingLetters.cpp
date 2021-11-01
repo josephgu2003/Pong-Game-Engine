@@ -30,10 +30,10 @@ void FallingLetters::call() {
     letters = new ParticleSystem();
     letters->init(PE_RUNICLETTERS, actor->getPos()+glm::vec3(0,3,0));
   
-    world->insertParticleEffect(letters); 
+    world->insertParticleEffect(letters);
     world->blur= true;
 
-}
+} 
 
 void FallingLetters::tick() { 
     duration -= glfwGetTime();

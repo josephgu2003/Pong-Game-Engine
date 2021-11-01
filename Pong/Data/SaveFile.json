@@ -1,0 +1,223 @@
+[
+    {
+        "ActorEnum": 4,
+        "Energy": [
+            100.0,
+            100.0
+        ],
+        "Hunger": [
+            91.3544921875,
+            100.0
+        ],
+        "Life": [
+            100.0,
+            100.0
+        ],
+        "Name": "Joe",
+        "Position": [
+            3.878674268722534,
+            0.0,
+            31.940771102905273
+        ],
+        "Relationships": [
+            {
+                "Name1": "Joe",
+                "Name2": "Jeff",
+                "RelationshipIntensity": 5.0,
+                "RelationshipType": 1,
+                "SecretNickname1": "Jojo",
+                "SecretNickname2": "Jeffy"
+            },
+            {
+                "Name1": "Joe",
+                "Name2": "Ted",
+                "RelationshipIntensity": 5.0,
+                "RelationshipType": 2,
+                "SecretNickname1": "",
+                "SecretNickname2": ""
+            }
+        ],
+        "Stamina": [
+            94.00606536865234,
+            100.0
+        ],
+        "SubType": "PlayerHero",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "ActorEnum": 4,
+        "Energy": [
+            100.0,
+            100.0
+        ],
+        "Hunger": [
+            91.3544921875,
+            100.0
+        ],
+        "Life": [
+            100.0,
+            100.0
+        ],
+        "Name": "Joe",
+        "Position": [
+            3.878674268722534,
+            0.0,
+            31.940771102905273
+        ],
+        "Stamina": [
+            94.00606536865234,
+            100.0
+        ],
+        "SubType": "PlayerHero",
+        "Type": "Actor",
+        "WorldID": 1
+    },
+    {
+        "ActorEnum": 4,
+        "Energy": [
+            0.0,
+            1.0
+        ],
+        "Hunger": [
+            90.17655181884766,
+            100.0
+        ],
+        "Life": [
+            9.917545318603516,
+            10.0
+        ],
+        "Name": "Jeff",
+        "Position": [
+            4.804248809814453,
+            0.0,
+            35.59663391113281
+        ],
+        "Relationships": [
+            {
+                "Name1": "Joe",
+                "Name2": "Jeff",
+                "RelationshipIntensity": 5.0,
+                "RelationshipType": 1,
+                "SecretNickname1": "Jojo",
+                "SecretNickname2": "Jeffy"
+            }
+        ],
+        "Stamina": [
+            93.44955444335938,
+            100.0
+        ],
+        "SubType": "NPC",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "ActorEnum": 4,
+        "Energy": [
+            0.0,
+            1.0
+        ],
+        "Hunger": [
+            89.82317352294922,
+            100.0
+        ],
+        "Life": [
+            99.91590881347656,
+            100.0
+        ],
+        "Name": "Fred",
+        "PersonalityTraits": [
+            0,
+            1,
+            2
+        ],
+        "Position": [
+            5.150012016296387,
+            0.0,
+            34.00005340576172
+        ],
+        "Stamina": [
+            93.12907409667969,
+            100.0
+        ],
+        "SubType": "NPC",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "ActorEnum": 4,
+        "Energy": [
+            0.0,
+            1.0
+        ],
+        "Hunger": [
+            89.716064453125,
+            100.0
+        ],
+        "Life": [
+            99.77743530273438,
+            100.0
+        ],
+        "Name": "Ted",
+        "Position": [
+            6.79998779296875,
+            0.0,
+            34.90003967285156
+        ],
+        "Relationships": [
+            {
+                "Name1": "Joe",
+                "Name2": "Ted",
+                "RelationshipIntensity": 5.0,
+                "RelationshipType": 2,
+                "SecretNickname1": "",
+                "SecretNickname2": ""
+            }
+        ],
+        "Stamina": [
+            93.05260467529297,
+            100.0
+        ],
+        "SubType": "NPC",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "ActorEnum": 2,
+        "Energy": [
+            0.0,
+            1.0
+        ],
+        "Hunger": [
+            90.80748748779297,
+            100.0
+        ],
+        "Life": [
+            97.98886108398438,
+            100.0
+        ],
+        "Name": "Mysterious Figure",
+        "Position": [
+            18.478355407714844,
+            0.0,
+            6.249467849731445
+        ],
+        "Stamina": [
+            94.0003433227539,
+            100.0
+        ],
+        "SubType": "NPC",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "Name": "Script",
+        "Position": [
+            0.0,
+            10.0,
+            10.0
+        ],
+        "Type": null,
+        "WorldID": 0
+    }
+]

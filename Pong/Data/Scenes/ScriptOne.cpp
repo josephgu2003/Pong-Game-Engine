@@ -97,6 +97,7 @@ void ScriptOne::tick() {
 }
 
 void ScriptOne::init(Game* game) {
-    pHero = game->getWorld(0).getActorNamed("pHero0").get();
-    ball = game->getWorld(0).getActorNamed("LightChar").get();
+    pHero = game->getWorld(0).getActorNamed("Joe").get();
+    ball = game->getWorld(0).getActorNamed("Mysterious Figure").get();
 }
+ 

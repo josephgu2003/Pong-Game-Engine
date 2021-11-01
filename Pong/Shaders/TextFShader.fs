@@ -8,6 +8,7 @@ in vec2 TexCoords;
     in float arrayTexID; 
 
     uniform sampler2DArray textTexture;
+uniform float brightness;
 
     void main()
     {
@@ -55,4 +56,7 @@ in vec2 TexCoords;
             
         }**/
         FragColor = vec4(color,alpha);
+        if (brightness > 0.0) {
+        BrightColor = brightness * FragColor;
+        }
     }

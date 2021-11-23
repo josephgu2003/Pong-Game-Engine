@@ -13,29 +13,25 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtc/quaternion.hpp> 
 #include <glm/gtx/quaternion.hpp>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "CombatComponent.hpp"
 #include "AnimComponent.hpp" 
-#include "NameComponent.hpp"  
+#include "NameComponent.hpp"
 #include "LifeComponent.hpp"
 #include "Renderer.hpp"
 #include "AIComponent.hpp"
 #include "Shader.hpp"
  
+
 #define JUMP_SPEED 0.05f
 
-Actor::Actor() {
+Actor::Actor() : Positionable() {
     state = STATE_IDLE;
-        posVec.x = 0.0f;
-        posVec.y = 0.0f;
-        posVec.z = 0.0f;
-        dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
-        velVec = glm::vec3(0.0f, 0.0f, 0.0f);
-        rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    eulerAngles = glm::vec3(0,0,0);
+    velVec = glm::vec3(0.0f, 0.0f, 0.0f); 
 } 
-
+ 
 Actor::~Actor() {
  
 } 
@@ -115,8 +111,9 @@ State Actor::getState() {
     return state; 
 }
 
-void Actor::addComp(const std::shared_ptr<Component<Actor>>& comp) {
+void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
     if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }
   
+ 

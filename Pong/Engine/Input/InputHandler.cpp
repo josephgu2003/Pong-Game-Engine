@@ -20,7 +20,7 @@
 #include "CharacterComponent.hpp"
 #include "aiDialogueAction.hpp"
 
-#define EMPTY_KEYCALLBACK [] (Game*, void* ref) {}
+
 
 #define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
 
@@ -67,7 +67,7 @@ void InputHandler::loadKeyCallbacks(KeyCallbackSet kcs) {
                 Actor* ph = game->getActivePlayerHero();
                 std::shared_ptr<Ability> fish = std::make_shared<Fish>(&ph->getWorld(), ph, 18.0);
                 ph->getComponent<CombatComponent>()->newAbility(fish);
-            });
+            }); 
             
             setCallbackforKey(GLFW_KEY_G, [](Game* game){
                 Actor* ph = game->getActivePlayerHero();
@@ -189,22 +189,22 @@ void InputHandler::tick() {
             } else {
                 processInput(ke);
             }
-        }
+        } 
     }
     
     auto player = game->getActivePlayerHero();
     
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            player->posDir(0.03);
+            player->posDir(0.09);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            player->posDir(-0.03);
+            player->posDir(-0.09);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            player->posRight(0.03);
+            player->posRight(0.09);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            player->posRight(-0.03);
+            player->posRight(-0.09); 
         }
       
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){

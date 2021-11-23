@@ -4,8 +4,8 @@
 //
 //  Created by Joseph Gu on 6/3/21.
 //
-#define WINDOW_WIDTH 2000
-#define WINDOW_HEIGHT 1300
+#define WINDOW_WIDTH 1000
+#define WINDOW_HEIGHT 650
 
 #include "Game.hpp"
 #include <iostream>
@@ -36,19 +36,16 @@ Game::Game() {
     initObjects();
   
     linkObjects();
-    
-    renderer1->setCamera(camera.get());
-    renderer0->setCamera(camera.get());
 
     printf("%s\n", glGetString(GL_VERSION));
 
     activeRenderer = renderer0;
     activeWorld = &world0;
     
-    renderer0->loadSkyBoxData();
-    renderer1->loadSkyBoxData();
+    renderer0->loadSkyBoxData(); // sus
+    renderer1->loadSkyBoxData(); //sus
 
-    audio.playMusic();
+    audio.playMusic(); //sus 
 }
 
 void Game::initWindow() {
@@ -56,10 +53,10 @@ void Game::initWindow() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); 
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    
-    window = glfwCreateWindow(0.5*WINDOW_WIDTH, 0.5*WINDOW_HEIGHT, "OpenGL", NULL, NULL);
-    glfwMakeContextCurrent(window);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);   
+        
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", NULL, NULL);
+    glfwMakeContextCurrent(window); 
 }
   
 void Game::initObjects() { 
@@ -67,10 +64,9 @@ void Game::initObjects() {
     camera = std::make_shared<Camera>();
     renderer1 = new Renderer;
     renderer0 = new Renderer;
-
 }
-                   
-void Game::linkObjects() {
+                    
+void Game::linkObjects() {  
     inputHandler.setWindow(window);
     inputHandler.setGame(this);
     
@@ -80,9 +76,11 @@ void Game::linkObjects() {
     world0.setRenderer(renderer0);
     world1.setRenderer(renderer1);
  
-    world0.insertCamera(camera.get());
+    world0.insert<Camera>(camera);
     
     inputHandler.setCamera(camera);
+    renderer1->setCamera(camera.get()); 
+    renderer0->setCamera(camera.get());
 }
 
  
@@ -112,7 +110,7 @@ void Game::tick() {
         printf("Fps is %f\n", fps);
         fpsTimer = 0.0;
         draws = 0.0;  
-    }
+    }  
 
     inputHandler.tick();
 
@@ -122,20 +120,20 @@ void Game::tick() {
     
     if (activeRenderer == renderer0) { // yes MAKES NO SENSE GO FIX IT
         world1.tick();
-        activeRenderer->render();
-        world0.tick();
+        activeRenderer->renderInitial();
+        world0.tick(); 
           
         ui->renderAll(activeRenderer);
-        activeRenderer->render2();
+        activeRenderer->renderFinal();
     } else {
         world0.tick(); 
         
-        activeRenderer->render();
+        activeRenderer->renderInitial();
 
         world1.tick();
     
         ui->renderAll(activeRenderer);
-        activeRenderer->render2();
+        activeRenderer->renderFinal();
     }
 
     glfwPollEvents();
@@ -171,7 +169,7 @@ void Game::swapWorld() {
         activeHero = pHero1;
         activeWorld = &world1;
         activeRenderer = renderer1;
-        activeRenderer->updateLights();
+        activeRenderer->updateAllUniblocks();
         if(pHero1.get())
         camera->setActor(pHero1.get());
         return;
@@ -180,7 +178,7 @@ void Game::swapWorld() {
         activeHero = pHero0;
         activeWorld = &world0;
         activeRenderer = renderer0;
-        activeRenderer->updateLights();
+        activeRenderer->updateAllUniblocks(); 
         if (pHero0.get())
         camera->setActor(pHero0.get());
         return;
@@ -196,11 +194,12 @@ std::shared_ptr<uiLayout>& Game::getUI() {
     return ui;
 }
  
-void Game::init() {
+void Game::init() { 
     load();
-    activeHero = pHero0;
+    activeHero = pHero0; 
 }
-  
+   
 void Game::load() {
     
 }
+  

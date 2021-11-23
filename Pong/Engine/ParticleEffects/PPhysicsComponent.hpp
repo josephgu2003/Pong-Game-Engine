@@ -9,14 +9,15 @@
 #define PPhysicsComponent_hpp
 
 #include <stdio.h>
-#include "ParticleComp.hpp"
+#include "Component.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 #include "Force.hpp"
 
 class ParticleSystem;
+struct Particle; 
 
-class PPhysicsComponent : public ParticleComp {
+class PPhysicsComponent : public Component {
 private:
     Particle* particles = NULL;
     glm::vec3* velocities = NULL;

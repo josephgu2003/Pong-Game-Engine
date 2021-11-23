@@ -8,29 +8,7 @@
 #ifndef AssetManager_hpp
 #define AssetManager_hpp
 
-#define TEX_ENERGY "Resources/Particles/aura.png" 
-#define TEX_PEACH "Resources/Particles/rosa copy.png"
-#define TEX_EMPTY "Resources/Utility/BLANK_ICON3.png"
-#define TEX_INKPAPER "Resources/Textures/inkpaper.jpg"
-#define TEX_MIST "Resources/Particles/imageedit_7_4243532340.png"
-#define TEX_FISH "Resources/Models/Flag/fish.png"
-#define TEX_SMOKES "Resources/Particles/Smokes/smoke000.jpg"
-#define TEX_DANCE "Resources/Textures/Dance/dance000.png"
-#define TEX_GRADIENT "Resources/Utility/radial.png"
-#define TEX_VORONOI "Resources/Utility/voronoi.png"
-#define TEX_UIMENU_0 "Resources/Textures/uimenu0.png" 
-#define TEX_UIMENU_1 "Resources/Textures/uimenu1.png"
-#define TEX_UIMENU_2 "Resources/Textures/uimenu2.png"
-#define TEX_BLANK_NORMALS "Resources/Utility/Screen Shot 2021-07-20 at 9.15.42 AM.png"
-#define TEX_SNOW "Resources/Map/Screen Shot 2021-07-20 at 8.56.47 AM.png"
-#define TEX_UIMENU_3 "Resources/Textures/uimenu3.png"
-
-#define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
-#define MOD_HOODY "Resources/Models/journey7.obj"
-#define MOD_BIRD "Resources/Models/bird/fly.fbx" 
-#define MOD_VAMP "Resources/Models/Vampire/dancing_vampire.dae"
-#define MOD_KNIGHT "Resources/Models/Knight/knight.fbx"
- 
+#include "Filepaths.hpp"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -55,6 +33,8 @@ struct Character {
 };
 
 struct Frame {
+    int width;
+    int height;
     GLuint fbo;
     GLuint fvao;
     GLuint fvbo;
@@ -69,6 +49,8 @@ struct DoubleFrame {
     GLuint frbo;
     GLuint ftexture0;
     GLuint ftexture1;
+    int width;
+    int height;
 };
 
 struct Texture {

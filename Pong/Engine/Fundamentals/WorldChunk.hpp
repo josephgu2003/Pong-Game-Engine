@@ -9,13 +9,21 @@
 #define WorldChunk_hpp
 
 #include <stdio.h>
-#include "Renderable.hpp" 
+#include "GraphicsObject.hpp"
+
+#define CHUNK_DIM_PXLS 256
+ 
 class Renderer;
 
-class MapChunk : public Renderable {
-    public :
-    MapChunk(int chunkX, int chunkY); 
+class MapChunk : public GraphicsObject {
+private:
+    float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS]; // to find height at point here,
+    glm::vec3 scaling;
+    glm::vec2 transformToLocal;
+public :
+    MapChunk(const std::string& src, int indexX, int indexY, glm::vec2 transformToLocal_, glm::vec3 scaling);
     virtual void draw(Renderer* r);
+    float getHeightAt(glm::vec2 xz);
 };
   
 

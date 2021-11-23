@@ -10,10 +10,11 @@
 #include "Renderer.hpp"
 #include <glm/glm.hpp>
 
-PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const TextureMaps& map_) : ParticleComp(pe), Renderable(){
+
+PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const TextureMaps& map_) : Component(pe), GraphicsObject(){
     shader = shader_;
     shader->use();
-    shader->setFloat("size", size);
+    shader->setFloat("size", size); 
     Renderer::bindShaderUniblock(shader, ViewProj); 
     // need to load model data to vao vbo,
     map = map_;
@@ -22,8 +23,8 @@ PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* s
 
 
 void PGraphicsComponent::draw(Renderer* r) {
-    r->renderParticles(this, actor->getNumParticles());
-} 
+    r->renderParticles(this, static_cast<ParticleSystem*>(actor)->getNumParticles());
+}  
       
 void PGraphicsComponent::tick() {
     

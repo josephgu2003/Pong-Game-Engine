@@ -153,17 +153,17 @@ void Shader::init(const char *vertexPath, const char *fragmentPath) {
     
     fShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fShader, 1, &fShaderCode, NULL);
-    glCompileShader(fShader);
+    glCompileShader(fShader);  
     
     glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
-    if(!success) 
+    if(!success)  
     {
         glGetProgramInfoLog(fShader, 512, NULL, errorLog);
         std::string error(fragmentPath);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << errorLog << error<< std::endl;
     }
     //make program
-    Shader::ID = glCreateProgram();
+    Shader::ID = glCreateProgram(); 
     glAttachShader(ID, vShader);
     glAttachShader(ID, fShader);
     glLinkProgram(ID);
@@ -188,7 +188,7 @@ void Shader::init(const char* vertexPath,const char* geoPath, const char* fragme
     //files and exceptions
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
-    {
+    { 
         // open files
         vShaderFile.open(vertexPath);
         gShaderFile.open(geoPath);

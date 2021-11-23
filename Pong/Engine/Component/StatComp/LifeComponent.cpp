@@ -6,12 +6,10 @@
 //
 
 #include "LifeComponent.hpp"
-#define GLFW_DLL 
-#include <GLFW/glfw3.h>
-
+#include "Actor.hpp"
 #define HUNGER_RATE 0.001
 
-LifeComponent::LifeComponent(Actor& actor) : ActorComp(actor) {
+LifeComponent::LifeComponent(Actor& actor) : Component(actor) {
     type = LIFE;
 }
 
@@ -98,5 +96,5 @@ void LifeComponent::incStatValue(float increment, StatType st) {
         notifyAll(SUBJ_HP_CHANGED);
     }
 } 
-
+ 
  

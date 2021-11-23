@@ -4,11 +4,14 @@
 //
 //  Created by Joseph Gu on 5/3/21.
 //
-#define WINDOW_WIDTH 2000.0
-#define WINDOW_HEIGHT 1300.0
-
-#include "Renderer.hpp"
-#include "stb_image.h"
+#define WINDOW_WIDTH 1000.0
+#define WINDOW_HEIGHT 650.0
+#define DEFAULT_FRUSTRUM_NEAR 0.01f
+#define DEFAULT_FRUSTRUM_FAR 200.0f
+#define DEFAULT_FOV 60.0f
+ 
+#include "Renderer.hpp" 
+#include "stb_image.h" 
 #include <iostream>
 #include <map>
 #include <glm/gtc/quaternion.hpp>
@@ -18,109 +21,123 @@
 #include "DirectionalLight.hpp"
 #include "AssetManager.hpp"
 #include "Camera.hpp"
-#include "Renderable.hpp"
+#include "GraphicsObject.hpp"
 
-GLuint uboViewProj;
- GLuint uboLights;
- GLuint uboStopWatch;
+GLuint uboViewProj; 
+GLuint uboLights;
+GLuint uboStopWatch;
+GLuint uboDistanceFog;
 
 void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     if (block == ViewProj) {
-    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "ViewProj"), 0);
     }
  
     if (block == Lights) {
-    glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
-    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "Lights"), 1);
     }
     
     if (block == StopWatch) {
-    glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
-    glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "StopWatch"), 2);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "StopWatch"), 2);
+    }
+    
+    if (block == DistanceFog) {
+        glUniformBlockBinding(shader->ID, glGetUniformBlockIndex(shader->ID, "DistanceFog"), 3);
     }
 }
 
 Renderer::Renderer() {
+    fieldOfView = DEFAULT_FOV;
+    frustrumNear = DEFAULT_FRUSTRUM_NEAR;
+    frustrumFar = DEFAULT_FRUSTRUM_FAR;
+    
+    window = glfwGetCurrentContext();
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
-
-    textShader = new Shader("Shaders/Simple2D.vs", "Shaders/TextFShader.fs");
-    sketchShader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
     blurShader = new Shader("Shaders/Simple2D.vs","Shaders/BloomFShader.fs");
     frameShader = new Shader("Shaders/Simple2D.vs", "Shaders/FBufferFShader.fs");
     
     viewMat = glm::mat4(1);
     float ratio = (WINDOW_WIDTH)/(WINDOW_HEIGHT);
-    projMat = glm::perspective(glm::radians(60.0f), ratio, 0.005f, 400.0f);
+    projMat = glm::perspective(glm::radians(fieldOfView), ratio, frustrumNear, frustrumFar); 
     timeT = 0; 
     AssetManager::loadTexture(TEX_GRADIENT, &gradient, false);
     AssetManager::loadTexture("Resources/Utility/noise.png", &noise, false);
- 
     AssetManager::loadTexture(TEX_EMPTY, &texture, false);
        
-    AssetManager::generateFramebuffer2Color(&frame2C, WINDOW_WIDTH, WINDOW_HEIGHT);
-    AssetManager::generateFramebuffer(&frame0, GL_RGBA16F, 0.5* WINDOW_WIDTH , 0.5 * WINDOW_HEIGHT);
-    AssetManager::generateFramebuffer(&frame1, GL_RGBA16F,  0.5* WINDOW_WIDTH , 0.5 * WINDOW_HEIGHT);
-
-}
-
-Renderer::~Renderer() { 
+    int width, height;  
+    glfwGetFramebufferSize(window, &width, &height);
+    scale = width  / float(WINDOW_WIDTH);
+    printf("Window framebuffer is scaled by %f \n", scale);
     
-}  
+    if (scale == 1.0) {
+        scale = 2.0;
+    }
 
-void Renderer::setWorld(World *world_) {
-    world = world_;
-}
-
-void Renderer::setCamera(Camera *camera_) {
-    camera = camera_;
-
+    AssetManager::generateFramebuffer2Color(&frame2C, WINDOW_WIDTH*scale, WINDOW_HEIGHT*scale);
+    AssetManager::generateFramebuffer(&frame0, GL_RGBA16F, 0.5 * WINDOW_WIDTH*scale, 0.5 * WINDOW_HEIGHT*scale);
+    AssetManager::generateFramebuffer(&frame1, GL_RGBA16F,  0.5 * WINDOW_WIDTH*scale,
+                                      0.5 * WINDOW_HEIGHT*scale);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
     glEnable(GL_POINT_SPRITE);
     glEnable(GL_PROGRAM_POINT_SIZE);
     
     glGenBuffers(1, &uboViewProj);
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
     glBufferData(GL_UNIFORM_BUFFER, 64, NULL, GL_DYNAMIC_DRAW); // allocate 152 bytes of memory
-    
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    glUniformBlockBinding(sketchShader->ID, glGetUniformBlockIndex(sketchShader->ID, "ViewProj"), 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
 
     glGenBuffers(1, &uboLights);
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
     glBufferData(GL_UNIFORM_BUFFER, 9*sizeof(glm::vec4), NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
-    
-    
-    glUniformBlockBinding(sketchShader->ID, glGetUniformBlockIndex(sketchShader->ID, "Lights"), 1);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
     
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    updateUniformBlocks();
-    
-    glGenBuffers(1, &uboStopWatch);
-    glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
-    glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
-    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2);
-    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
-    
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    updateUniformBlocks();
+    glGenBuffers(1, &uboStopWatch);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch); 
+    glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboStopWatch);
+     
+    glUniformBlockBinding(frameShader->ID, glGetUniformBlockIndex(frameShader->ID, "StopWatch"), 2); 
+    
+    glGenBuffers(1, &uboDistanceFog);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboDistanceFog);
+    glBufferData(GL_UNIFORM_BUFFER, 32, NULL, GL_DYNAMIC_DRAW); // allocate 152 bytes of memory
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 3, uboDistanceFog);
+    
+    glGenTextures(1, &skyTexture.id);
+    
 }
 
-void Renderer::updateUniformBlocks() {
+Renderer::~Renderer() {  
+    
+}   
+
+void Renderer::setWorld(World *world_) {
+    world = world_;
+    
+   glGenVertexArrays(1, &sVAO);
+   glBindVertexArray(sVAO);
+   
+   glGenBuffers(1, &sVBO);
+   glBindBuffer(GL_ARRAY_BUFFER, sVBO);
+
+   glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), (world->getSkyVertices()), GL_STATIC_DRAW);
+   
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+   glEnableVertexAttribArray(0);
+   glBindVertexArray(0);
+}
+
+void Renderer::setCamera(Camera *camera_) {
+    camera = camera_;
     updateViewProj();
-    updateLights();
     updateCamPos();
-    updateUniformStopWatch();
 }
 
 void Renderer::updateUniformStopWatch() {
@@ -138,6 +155,26 @@ void Renderer::updateViewProj() {
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
+
+
+void Renderer::updateDistanceFog() {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboDistanceFog);
+    auto w = world->getWeather();
+    float fogVars[8];
+    fogVars[0] = w.fogDensity;
+    fogVars[1] = w.fogGradient;
+    fogVars[2] = frustrumNear; 
+    fogVars[3] = frustrumFar;
+    fogVars[4] = w.fogColor.x;
+    fogVars[5] = w.fogColor.y;
+    fogVars[6] = w.fogColor.z;
+    fogVars[7] = 1.0f;
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 32, &fogVars[0]); 
+ 
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
 void Renderer::updateLights() {
     DirectionalLight dl = world->getWeather().dirLight;
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
@@ -174,12 +211,10 @@ void Renderer::updateCamPos() {
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-
 void Renderer::loadSkyBoxData() {
     int imageWidth, imageHeight, channels;
     unsigned char* imageData = NULL;
-    glGenTextures(1, &skyTexture.id);
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0); 
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture.id);
     
     std::vector<std::string>*skyFiles = world->getSkyTextureFiles();
@@ -208,34 +243,32 @@ void Renderer::loadSkyBoxData() {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     stbi_image_free(imageData);
-    
-    glGenVertexArrays(1, &sVAO);
-    glBindVertexArray(sVAO);
-    
-    glGenBuffers(1, &sVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, sVBO);
-
-    glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), (world->getSkyVertices()), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+ 
 }
 
-void Renderer::checkForUpdates() {
+void Renderer::checkForUpdates() { // spaghetti
     Updates updates = world->checkforUpdates();
 
     if(updates.lightingUpdate == true) {
-        world->updateCleared(LIGHTING_UPDATE);
+        world->updateCleared(0);
         updateLights(); 
     }
-}    
+    if(updates.fogUpdate == true) {
+        world->updateCleared(1);
+        updateDistanceFog();
+    }
+    if(updates.skyUpdate == true) {
+        world->updateCleared(3);
+        loadSkyBoxData(); 
+    }
+}     
 
-void Renderer::render() {
+void Renderer::renderInitial() {
     checkForUpdates();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      
     glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo); //draw to 2C framebuffer
+    glViewport(0, 0, frame2C.width, frame2C.height);
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -244,20 +277,23 @@ void Renderer::render() {
     updateUniformStopWatch();
     renderSky();
 }
-void Renderer::render2() { 
+
+void Renderer::renderFinal() { 
     glDisable(GL_DEPTH_TEST);
     glBindVertexArray(frame2C.fvao);
     bool horizontal = true;
     bool first_iteration = true;
     int amount = 6;
     blurShader->use();  
-    glActiveTexture(GL_TEXTURE0);
-    glViewport(0,0, 1000, 650);
+    glActiveTexture(GL_TEXTURE0);  
+    
+   // resizeViewPort();
+    glViewport(0, 0, frame0.width, frame0.height);
    // glBindFramebuffer(GL_FRAMEBUFFER, frame0.fbo);
     for (unsigned int i = 0; i < amount; i++)
     {
         if (horizontal) {
-        glBindFramebuffer(GL_FRAMEBUFFER, frame0.fbo);
+            glBindFramebuffer(GL_FRAMEBUFFER, frame0.fbo);
         }
         else {
             glBindFramebuffer(GL_FRAMEBUFFER, frame1.fbo);
@@ -273,15 +309,15 @@ void Renderer::render2() {
             glBindTexture(GL_TEXTURE_2D, frame0.ftexture);
         }
         glDrawArrays(GL_TRIANGLES, 0, 6);
-       horizontal = (!horizontal);
+        horizontal = (!horizontal);
         if (first_iteration)
             first_iteration = false;
     }
-    
-    glViewport(0,0, 2000, 1300);
              
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0.0f,0.0f,0.0f,1.0f);
+    resizeViewPort();
+    
+    glClearColor(0.0f,1.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     frameShader->use();
     glBindVertexArray(frame2C.fvao);
@@ -305,30 +341,29 @@ void Renderer::render2() {
         
     glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);
     
-    glDrawArrays(GL_TRIANGLES, 0, 6); 
+    glDrawArrays(GL_TRIANGLES, 0, 6);  
      
     timeT += (float)glfwGetTime();
 }
 
 
-
 void Renderer::renderUI(uiPiece* uip) {
-  /**  Shader* s = uip->getShader();
+    Shader* s = uip->getShader();
     s->use();
     uip->bind();
     bindTextures(s, uip->getTextureMap());
     glDrawElements(GL_TRIANGLES, uip->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
-    uip->unbind();**/
+    uip->unbind();
 }
 
 void Renderer::renderSky() {
     //sky
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK); 
+    glCullFace(GL_BACK);
     glDepthMask(GL_FALSE);
     skyShader->use();
-    
-    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 2.5*world->getWeather().dirLight.getDiffuse().x);
+     
+    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 1.0);
     viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
     glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
     camViewMat = projMat * camViewMat;
@@ -395,17 +430,18 @@ void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
 }
 
 
-void Renderer::renderElements(Renderable* r) {
-    r->bind();
-    Shader* s = r->getShader();
-    s->use(); 
+void Renderer::renderActor(GraphicsObject* r) {
+    r->bind();  
+    Shader* s = r->getShader();  
+    s->use();  
     TextureMaps& map = r->getTextureMap(); 
     bindTextures(s, map);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
-}
+} 
+ 
 
-void Renderer::renderParticles(Renderable* r, int instanceCount) {
+void Renderer::renderParticles(GraphicsObject* r, int instanceCount) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
@@ -422,9 +458,7 @@ void Renderer::renderParticles(Renderable* r, int instanceCount) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-
 void Renderer::renderText(uiText* text) {
-
     text->getShader()->use();
     text->bind();
     glActiveTexture(GL_TEXTURE0);
@@ -434,3 +468,43 @@ void Renderer::renderText(uiText* text) {
     text->unbind();
 }
    
+void Renderer::renderTerrain(GraphicsObject* r) {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    r->bind();
+    Shader* s = r->getShader(); 
+    s->use();
+    TextureMaps& map = r->getTextureMap();
+    bindTextures(s, map);
+    glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    r->unbind();
+    glDisable(GL_CULL_FACE);
+}
+
+void Renderer::renderFoliage(GraphicsObject* r) {
+    glDepthMask(GL_FALSE);
+    r->bind();
+    Shader* s = r->getShader();
+    s->use();
+    TextureMaps& map = r->getTextureMap();
+    bindTextures(s, map);
+    glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    r->unbind();
+    glDepthMask(GL_TRUE);
+}
+ 
+void Renderer::resizeViewPort() {
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
+}
+ 
+void Renderer::updateAllUniblocks() {
+    updateLights();
+    updateCamPos();
+    updateDistanceFog();
+    updateViewProj();
+}
+ 
+ 
+ 

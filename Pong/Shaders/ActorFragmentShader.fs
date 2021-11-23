@@ -68,7 +68,7 @@ void main()
 
 vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
     
-    vec3 dirlightDir = normalize(-fs_in.TangentLightDir);
+    vec3 dirlightDir = normalize(fs_in.TangentLightDir);
     
     float diff = 0;
     float spec = 0;
@@ -77,8 +77,8 @@ vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
         
     diff = max(dot(norm,dirlightDir),0.0);
         
-        vec3 reflectDir = reflect(-dirlightDir, norm);
-        spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 reflectDir = reflect(-dirlightDir, norm);
+    spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     
     vec3 ambient = (vec3(brightness, brightness, brightness)+dirLight.ambient)*vec3(texture(diffuse, fs_in.TexCoords));
 

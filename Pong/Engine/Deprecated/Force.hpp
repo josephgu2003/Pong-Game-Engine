@@ -16,7 +16,7 @@
 enum ForceGradient {
     FORCE_UNIFORM, 
     FORCE_LINEAR,
-    FORCE_QUADRATIC
+    FORCE_QUADRATIC 
 };
 enum ForceType {
     FORCE_DIRECT,

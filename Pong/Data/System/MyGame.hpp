@@ -11,10 +11,15 @@
 #include <stdio.h>
 #include "Game.hpp"
 #include "MyActorFactory.hpp"
+#include "ParticleFactory.hpp"
+#include "PropFactory.hpp"
+#include "ScriptFactory.hpp"
  
 class MyGame : public Game {
     MyActorFactory actorFactory;
-    ParticleSystem* mist = nullptr;
+    ParticleFactory particleFactory;
+    PropFactory propFactory;
+    ScriptFactory scriptFactory;
 public:
     MyGame();
     virtual void load() override;

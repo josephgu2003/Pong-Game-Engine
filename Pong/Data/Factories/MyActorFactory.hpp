@@ -18,7 +18,8 @@ enum ActorEnum {
     ACTOR_EVIL_HOODY, 
     ACTOR_BIRD,
     ACTOR_VAMP, 
-    ACTOR_KNIGHT
+    ACTOR_KNIGHT,
+    ACTOR_FISH
 };
 class MyActorFactory : public AbstractActorFactory {
 private:

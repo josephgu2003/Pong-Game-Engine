@@ -5,11 +5,11 @@
 //  Created by Joseph Gu on 10/16/21.
 //
 
-#include "Renderable.hpp"
+#include "GraphicsObject.hpp"
 #include "Shader.hpp"
 #include "VertexLoader.hpp"
 
-Renderable::Renderable() {
+GraphicsObject::GraphicsObject() {
     glGenVertexArrays(1, &VAO);
     
     glGenBuffers(1, &VBO);
@@ -23,35 +23,35 @@ Renderable::Renderable() {
     instanceCount = 1;
 }
  
-GLenum Renderable::getDrawTarget() {
+GLenum GraphicsObject::getDrawTarget() {
     return drawTarget;
 }
 
-Shader* Renderable::getShader() {
+Shader* GraphicsObject::getShader() {
     return shader;
 }
  
-void Renderable::setShader(Shader* shader_) {
+void GraphicsObject::setShader(Shader* shader_) {
     shader = shader_; 
 }
  
-TextureMaps& Renderable::getTextureMap() {
+TextureMaps& GraphicsObject::getTextureMap() {
     return map;
 }
 
-void Renderable::bind() {
+void GraphicsObject::bind() {
     glBindVertexArray(VAO);
 }
-void Renderable::unbind() { 
+void GraphicsObject::unbind() { 
     glBindVertexArray(0);
 }
 
  
-GLuint Renderable::getNumIndices() {
+GLuint GraphicsObject::getNumIndices() {
     return numIndices; 
 }
 
-void Renderable::makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount_) {
+void GraphicsObject::makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount_) {
     instanceCount = instanceCount_;
    glBindVertexArray(VAO);
    glGenBuffers(1,  &instanceVBO);
@@ -61,7 +61,7 @@ void Renderable::makeInstanceBuffer(int dataSize_, int firstAttribLocation, cons
    glBindVertexArray(0);
 }
 
-void Renderable::updateInstanceBuffer(const std::vector<float>& vec) {
+void GraphicsObject::updateInstanceBuffer(const std::vector<float>& vec) {
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
     glBufferSubData(GL_ARRAY_BUFFER, 0, vec.size()*sizeof(float), (void*) vec.data());
     glBindBuffer(GL_ARRAY_BUFFER, 0);

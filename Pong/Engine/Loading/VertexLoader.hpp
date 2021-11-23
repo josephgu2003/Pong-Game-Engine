@@ -6,81 +6,21 @@
 //
 
 #ifndef VertexLoader_hpp
-#define VertexLoader_hpp
+#define VertexLoader_hpp 
 
-#include <stdio.h>
+#include <stdio.h> 
 #include <map>
 #include <assimp/scene.h>
 #include <GL/glew.h>
+#include "MapManager.hpp"
+#include "Vertices.hpp"
 #include "AnimComponent.hpp"
 
-struct TextureMaps;
-
-
-struct AnyVertex {};
-
-enum VertexType {
-    VERTEX_VERTEX, VERTEX_SIMPLEVERTEX, VERTEX_TBNVERTEX, VERTEX_TBNBWVERTEX
-};
-
-struct Vertex : AnyVertex {
-    glm::vec3 Pos;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-    Vertex( glm::vec3 Pos_,
-           glm::vec3 Normal_,
-           glm::vec2 TexCoords_) {
-        Pos = Pos_;
-        Normal = Normal_;
-        TexCoords = TexCoords_;
-    }
-    Vertex() {
-        
-    }
-};
-
-struct TBNVertex : AnyVertex {
-    TBNVertex();
-    TBNVertex(    glm::vec3 Pos,
-              glm::vec3 Normal,
-              glm::vec2 TexCoords,
-              glm::vec3 Tan,
-              glm::vec3 BiTan);
-    glm::vec3 Pos;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-    glm::vec3 Tan;
-    glm::vec3 BiTan;
-};
-
-struct TBNBWVertex : AnyVertex {
-    TBNBWVertex();
-    TBNBWVertex(    glm::vec3 Pos,
-              glm::vec3 Normal,
-              glm::vec2 TexCoords,
-              glm::vec3 Tan,
-              glm::vec3 BiTan, int* boneIDs, float* boneWeights);
-    glm::vec3 Pos;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-    glm::vec3 Tan;
-    glm::vec3 BiTan;
-    int boneIDs[MAX_BONE_WEIGHTS];
-    float boneWeights[MAX_BONE_WEIGHTS];
-};
-
-struct SimpleVertex : AnyVertex {
-    SimpleVertex(    glm::vec3 Pos,
-              glm::vec2 TexCoords, int arraytexID_);
-    glm::vec3 Pos;
-    glm::vec2 TexCoords;
-    float arraytexID;
-    SimpleVertex() {}
-};
-
-
+struct TextureMaps; 
+class MeshComponent; 
 class VertexLoader {
 private:
+    static glm::vec3 calcNormalWithHeights(float cH, float dH, float uH, float rH, float lH);
     static int indexOffset;
     static std::map<std::string, BoneInfoMap> loadedBoneDataMaps;
     static BoneInfoMap inProgBoneMap;
@@ -106,8 +46,10 @@ public:
     static void setupVAOAttribs(VertexType vt);
     static void setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout);
     static void load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position);
-    static void loadMapChunk(const std::string& src, int chunkX, int chunkY, int subdivisions, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
-
-};
+    static void loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const std::string& src, int chunkX, int chunkY, glm::vec2 transformToLocal, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
+    
+    static void loadSimpleVertexGrid(int verticesX, int verticesY, float scale, std::vector<PosVertex>& mesh, unsigned int VAO, unsigned int VBO, unsigned int EBO, unsigned int& numIndices);
+   
+}; 
   
 #endif /* VertexLoader_hpp */

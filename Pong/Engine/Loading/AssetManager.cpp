@@ -18,13 +18,12 @@ std::vector<Texture> AssetManager::loadedTextures;
 void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb) {
  for (int j = 0; j < loadedTextures.size(); j++) {
        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-           std::cout << "Already loaded:" << loadedTextures[j].path.data() << "\n";
            texture->id = loadedTextures[j].id;
            texture->path = loadedTextures[j].path;
         texture->textureTarget = GL_TEXTURE_2D;
          texture->dimensions = loadedTextures[j].dimensions;
            return;
-       }
+       } 
    }
    int imageWidth = 0;
    int imageHeight = 0;
@@ -51,7 +50,7 @@ void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb
 
        glGenerateMipmap(GL_TEXTURE_2D);
    } else {
-       std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
+       std::cout << "Failed to load texture: " << std::string(filePath) << "\n" << stbi_failure_reason() << "\n";
    }
     
    stbi_image_free(imageData);
@@ -127,7 +126,7 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
     if (imageData) {
         imageDatas.push_back(imageData);
     } else {
-        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
+        std::cout << "Failed to load texture: " << std::string(filePath) << "\n" << stbi_failure_reason() << "\n";
         stbi_image_free(imageData);
         break;
     }
@@ -174,7 +173,6 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
 int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, TextureMaps& map) {
     for (int i = 0; i < loadedGlyphs.size(); i++) {
         if (std::strcmp(loadedGlyphs.at(i).first.path.data(), filePath) == 0) {
-            printf("Font already loaded \n");
             Characters = loadedGlyphs.at(i).second;
             map.diffuse.id = loadedGlyphs.at(i).first.id;
             return 0;
@@ -198,7 +196,7 @@ int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Ch
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
     
-    int maxX = 0;
+    int maxX = 0;  
     int maxY = 0;
     
     for (unsigned char c = 0; c < 126; c++) {
@@ -438,6 +436,8 @@ void AssetManager::loadModel(const char* filePath, Model*& model, AnimComponent*
 
 
 void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
+    frame->width = x;
+    frame->height = y;
     glGenFramebuffers(1, &frame->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
     
@@ -487,6 +487,8 @@ void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int 
 
 
 void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
+    frame->width = x;
+    frame->height = y;
     glGenFramebuffers(1, &frame->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
     
@@ -511,7 +513,7 @@ void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
     glDrawBuffers(2, attachments);
     
-   glGenRenderbuffers(1, &frame->frbo);
+    glGenRenderbuffers(1, &frame->frbo);
     glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
@@ -540,11 +542,12 @@ void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     
     VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
-    
 
 }
 
 void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y) {
+    frame->width = x;
+    frame->height = y;
     glGenFramebuffers(1, &frame->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, frame->fbo);
     

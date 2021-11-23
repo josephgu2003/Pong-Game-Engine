@@ -8,16 +8,14 @@
 #include "Camera.hpp"
 #include "Actor.hpp"
 #include <stdio.h>
+#include "World.hpp"
 
-Camera::Camera() {
-    posVec = glm::vec3 (0.0f,0.0f,0.0f);
-    eulerAngles = glm::vec3(0.0f, -90.0f, 0.0f);
+#define CAM_OFFSET glm::vec3(0,0.5,0)
+Camera::Camera() : Positionable() {
 }
 
-Camera::Camera(Actor* actor_) {
+Camera::Camera(Actor* actor_) : Positionable() {
     setActor(actor_);
-    posVec = glm::vec3 (0.0f,0.0f,0.0f);
-    eulerAngles = glm::vec3(0.0f, -90.0f, 0.0f);
     updateVecs();
 }
 
@@ -35,26 +33,22 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
     dirVec.x = std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
     dirVec.y = std::sin(glm::radians(pitch));
     dirVec.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
-    dirVec = glm::normalize(dirVec);
-    rightVec = glm::cross(glm::vec3(0,1,0),dirVec);
-    rightVec = glm::normalize(rightVec);
-    upVec = glm::cross(dirVec,rightVec); 
-    upVec = glm::normalize(upVec);
-    posVec = actor->getPos()-dirVec*5.0f+actor->camFocus+glm::vec3(0.0,1.0,0);
-    if (posVec.y < -0.11) {
-        posVec.x += (-0.11f-posVec.y)*dirVec.x/dirVec.y;
-        posVec.z += (-0.11f-posVec.y)*dirVec.z/dirVec.y;
-        posVec.y += (-0.11f-posVec.y);  
+    Positionable::GramSchmidtAndNormalizeOrientations();
+    posVec = actor->getPos()-dirVec*7.0f+CAM_OFFSET+actor->getDir();
+    float h = actor->getPos().y;
+    if (posVec.y < h) {
+        posVec.x += (h-posVec.y)*dirVec.x/dirVec.y;
+        posVec.z += (h-posVec.y)*dirVec.z/dirVec.y; 
+        posVec.y += (h-posVec.y);
     }
 }
   
-void Camera::orientActor() {
-    float yaw = eulerAngles.y;
-    if (actor) actor->orient(yaw);
+void Camera::rotate(glm::vec3 angles) {
+    eulerAngles += angles;
 }
-
+ 
 void Camera::tick() {
     float yaw = eulerAngles.y;
     if (actor)  actor->orient(yaw);
-    updateVecs();
 }
+ 

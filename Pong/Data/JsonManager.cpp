@@ -8,35 +8,65 @@
 #include "JsonManager.hpp"
 #include "Game.hpp"
 #include <fstream>
-#include "NameComponent.hpp"
+#include "NameComponent.hpp" 
 #include "CharacterComponent.hpp"
-#include "LifeComponent.hpp"
+#include "LifeComponent.hpp" 
 #include "Dialogue.hpp"
 #include "AbstractActorFactory.hpp"
+#include "PropFactory.hpp"
+#include "ScriptFactory.hpp"
 
 nlohmann::json JsonManager::dialogues;
 
-void JsonManager::loadGame(Game* game, AbstractActorFactory* af) {
+void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf) {
     nlohmann::json saveFile;
     std::ifstream inStream(SAVE_PATH);
     inStream >> saveFile;
-     
+      
     for (auto i = saveFile.begin(); i != saveFile.end(); i++) {
         std::vector<std::shared_ptr<Relationship>> relationships;
         // possible errors for relationships: corrupted in one actor's json, how to fix?
-        // or the actorEnum doesn't generate a CharacterComponent
+        // or the FactoryEnum doesn't generate a CharacterComponent
+        if ((*i)["Type"] == "Script") {
+            int FactoryEnum = (*i)["FactoryEnum"];
+            int worldID = (*i)["WorldID"]; 
+            World& world = game->getWorld(worldID);
         
-        if ((*i)["Type"] == "Actor") {
-            int actorEnum = (*i)["ActorEnum"];
-            std::shared_ptr<Actor> actor = af->makeActor(actorEnum);
+            std::shared_ptr<Script> script = sf->makeScript(FactoryEnum, &world);
+            glm::vec3 pos;
+            pos.x =    (*i)["Position"][0];
+            pos.z =    (*i)["Position"][2];
+            pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
+            
+            script->setPos(pos); 
+            game->getWorld(worldID).insert<Script>(script);
+        }  
+        
+        if ((*i)["Type"] == "Prop") {
+            int FactoryEnum = (*i)["FactoryEnum"];
+            std::shared_ptr<Prop> actor = propf->makeProp(FactoryEnum); // lmao still "actor"??
+            int worldID = (*i)["WorldID"];
+            World& world = game->getWorld(worldID);
+        
+            glm::vec3 pos;
+            pos.x =    (*i)["Position"][0];
+            pos.z =    (*i)["Position"][2];
+            pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
+            
+            actor->setPos(pos);
+            actor->setWorld(&game->getWorld(worldID)); 
+            game->getWorld(worldID).insert<Prop>(actor); 
+        }
+        
+        if ((*i)["Type"] == "Actor") { 
+            int FactoryEnum = (*i)["FactoryEnum"];
+            std::shared_ptr<Actor> actor = af->makeActor(FactoryEnum);
             int worldID = (*i)["WorldID"];
         
             glm::vec3 pos;
             pos.x =    (*i)["Position"][0];
             pos.y =   (*i)["Position"][1];
             pos.z =    (*i)["Position"][2];
-             
-          //  actor->init(actorEnum);
             
             NameComponent* nc = actor->getComponent<NameComponent>();
             if (nc) {

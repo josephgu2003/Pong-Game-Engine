@@ -7,7 +7,7 @@
 
 #include "World.hpp"
 #include <iostream>
-#include <stdio.h>
+#include <stdio.h> 
 #include "AssetManager.hpp"
 #include "CombatComponent.hpp"
 #include "NameComponent.hpp"
@@ -16,7 +16,7 @@
 #include "Renderer.hpp"
 #include "PGraphicsComponent.hpp" 
 #include "WorldChunk.hpp"
- 
+  
 World::World() {
     float skyVerticesCopy[] = {
         -1.0f,  1.0f, -1.0f,
@@ -62,54 +62,38 @@ World::World() {
          1.0f, -1.0f,  1.0f
     };
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
-    skyTextureFiles.push_back("Resources/Skybox/right.png");
+  /**  skyTextureFiles.push_back("Resources/Skybox/right.png");
     skyTextureFiles.push_back("Resources/Skybox/left.png");
     skyTextureFiles.push_back("Resources/Skybox/top.png");
     skyTextureFiles.push_back("Resources/Skybox/bottom.png");
     skyTextureFiles.push_back("Resources/Skybox/back.png");
-    skyTextureFiles.push_back("Resources/Skybox/front.png");
+    skyTextureFiles.push_back("Resources/Skybox/front.png");**/
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_left.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_right.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_top.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_bottom.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_front.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_back.jpg");
 }
 
 World::~World() {
-    
-}
-
-
-void World::insertCamera(Camera* camera) {
-    allCameraPtrs.push_back(camera);
+     
 }
 
 void World::insertActor(const std::shared_ptr<Actor>& actor) {
-    activeText = new uiText("", -0.8, -0.7);  // lmfao???
+    activeText = new uiText("", -0.5, -0.7);  // lmfao???
     std::shared_ptr<Actor> p = actor;
     allActorPtrs.push_back(std::move(p)); 
-    actor -> setWorld(this);
+    actor -> setWorld(this); 
 }
- 
-void World::insertParticleEffect(ParticleSystem* particleEffect) {
-    allParticleEffects.push_back(particleEffect);
-    particleEffect->setWorld(this);
-
-}
-
-void World::deleteParticleEffect(ParticleSystem *particleEffect) {
-    allParticleEffects.erase(std::find(allParticleEffects.begin(), allParticleEffects.end(), particleEffect)); 
-    map = new MapChunk(0,0);
-} 
-
  
 std::vector<std::string>* World::getSkyTextureFiles() {
-    return &skyTextureFiles;
+    return &weather.skyTextureFiles;
 }
 
 float* World::getSkyVertices() {
     return &skyVertices[0];
 }
-
-std::vector<ParticleSystem*> World::getParticleEffects() {
-    return allParticleEffects;
-}
-
 
 Updates World::checkforUpdates() {
     return updates;
@@ -117,28 +101,28 @@ Updates World::checkforUpdates() {
 
 void World::updateCleared(int i) {
     if (i == 0)
-    updates.actorUpdate = false;
+    updates.lightingUpdate = false;
     if (i == 1)
-    updates.particleUpdate = false;
-    if (i == 2)
-   // updates.quadUpdate = false;
+    updates.fogUpdate = false;
     if (i == 3)
-    updates.textUpdate = false;
-    if (i == 4)
-    updates.lightingUpdate = false; 
+    updates.skyUpdate = false;
 }
  
-void World::setWeather(DirectionalLight dirLight_, int sky_) {
+void World::setWeather(DirectionalLight dirLight_, float fogDensity_, float fogGradient_, glm::vec3 fogColor_, std::vector<std::string> skyTextureFiles_) {
     weather.dirLight = dirLight_;
-} 
+    weather.fogDensity = fogDensity_;
+    weather.fogGradient = fogGradient_;
+    weather.fogColor = fogColor_;
+    updates.lightingUpdate = true;
+    updates.fogUpdate = true;
+    updates.skyUpdate = true; 
+}
 
 Weather World::getWeather() {
     return weather;
 }
 
-void World::tick() { 
-
-
+void World::tick() {
     for(int i = 0; i < allSoundTexts.size(); i++) {
         allSoundTexts.at(i)->duration -= (float) glfwGetTime();
         if (allSoundTexts.at(i)->duration <= 0.0) {
@@ -150,26 +134,36 @@ void World::tick() {
     if (updates.textUpdate) {
         updateActiveText();
     }
-    
+
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
-    } 
+    }
+    
+
+    for(int i = 0; i < allCameraPtrs.size(); i++) {
+        allCameraPtrs[i]->updateVecs();
+    }
+     
+    
+    for(int i = 0; i < allScripts.size(); i++) {
+        allScripts[i]->tick();
+    }
 
     for(int i = 0; i < allActorPtrs.size(); i++) {
-
         allActorPtrs[i]->tick();
         auto cc =allActorPtrs[i]->getComponent<CombatComponent>();
         if (cc && cc->QHasAbilities()) {
             abilityManager.handleCombatComp(cc);
         }
-    }
+    } 
     for(int i = 0; i < allForces.size(); i++) {
 
         allForces[i]->tick();
     }
 
-    for(int i = 0; i < allCameraPtrs.size(); i++) {
-        allCameraPtrs[i]->updateVecs();
+
+    for(auto i = allProps.begin(); i != allProps.end(); i++) {
+        (*i)->tick(); 
     }
     
     for (int i = 0; i < allParticleEffects.size(); i++) {
@@ -177,18 +171,23 @@ void World::tick() {
             allParticleEffects[i]->tick();
         
     }
+    
     abilityManager.tick();
-  
-if (map)    map->draw(renderer);
-      
+ 
+    mapManager.drawChunks(renderer); 
+    
     for(auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
         (*i)->getComponent<GraphicsComponent>()->draw(renderer);
     }
+    for(auto i = allProps.begin(); i != allProps.end(); i++) {
+        (*i)->getComponent<GraphicsComponent>()->draw(renderer);
+    }
      
+      
     for(auto i = allParticleEffects.begin(); i != allParticleEffects.end(); i++) {
         (*i)->getComponent<PGraphicsComponent>()->draw(renderer);
     }
-    if (activeText)
+    if (activeText) 
     renderer->renderText(activeText);
 }  
 
@@ -220,13 +219,6 @@ bool World::informParticlesForce(ParticleSystem* effect) {
 }
 
 
-void World::insertForce(Force* force_) {
-    allForces.push_back(force_);
-}
-void World::deleteForce(Force* force_) {
-    allForces.erase(std::find(allForces.begin(), allForces.end(), force_), allForces.end());
-}
-
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
     for (auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
         auto namec = i->get()->getComponent<NameComponent>();
@@ -244,15 +236,15 @@ void World::newSoundText(const std::string& text, const glm::vec3& pos, float du
     std::shared_ptr<SoundText> st = std::make_shared<SoundText>(text, pos, duration);
     allSoundTexts.push_back(std::move(st));
     updates.textUpdate = true;
-}
+} 
   
    
 void World::updateActiveText() {
     if (allCameraPtrs.size() == 0) return; //spaggetti
     std::string s = "";
     for (int i = 0; i < allSoundTexts.size(); i++) {
-        if (glm::length(allSoundTexts.at(i)->pos - allCameraPtrs.at(0)->getPos()) < 10.0)
-         s.append(allSoundTexts.at(i)->text + "\n");
+        if (glm::length(allSoundTexts.at(i)->pos - allCameraPtrs.at(0)->getPos()) < 15.0)
+         s.append(allSoundTexts.at(i)->text + "\n"); 
     } 
     activeText->setText(s);
     updates.textUpdate = false;
@@ -262,4 +254,31 @@ void World::updateActiveText() {
 void World::setRenderer(Renderer *renderer_) {
     renderer = renderer_;
 }
+
+void World::setMap(const std::string& filePath, int pixelsX, int pixelsY, glm::vec3 scaling) {
+    mapManager.setMap(filePath, pixelsX, pixelsY, scaling);
+    mapManager.loadChunks(allCameraPtrs.at(0)->getPos());
+} 
  
+float World::getHeightAt(glm::vec2 xz) {
+    return mapManager.getHeightAt(xz); 
+}  
+// next steps:
+// world objects class hierarchy
+// terrain height for chars
+// terrain normals
+ 
+// actors - actorcomp
+// lights
+// forces
+// camera
+// terrain chunk
+// particle effect - particle comp
+// trees grass etc 
+ 
+// components shared between things:
+// static mesh
+// dynamic mesh
+// physics?
+// animation
+// graphics

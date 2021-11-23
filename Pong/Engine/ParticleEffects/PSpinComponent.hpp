@@ -9,12 +9,13 @@
 #define PSpinComponent_hpp
 
 #include <stdio.h>
-#include "ParticleComp.hpp"
+#include "Component.hpp"
 #include <glm/glm.hpp>
 
 class ParticleSystem;
+struct Particle; 
 
-class PSpinComponent : public ParticleComp {
+class PSpinComponent : public Component {
 private:
     Particle* particles = NULL;
     float numParticles;

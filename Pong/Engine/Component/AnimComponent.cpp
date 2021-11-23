@@ -10,7 +10,7 @@
 #include "Actor.hpp"
 #include "VertexLoader.hpp"
 
-AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : ActorComp(actor) {
+AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
     globalInverse = glm::mat4(1.0f);
     Component::type = ANIM;
     timeInAnim = 0; 
@@ -23,9 +23,12 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : ActorC
 void AnimComponent::tick() {
     if (activeAnim) {
         timeInAnim += (float)activeAnim->getTicksPerSec()*glfwGetTime();
+        if (timeInAnim > activeAnim->getDuration()) {
+            playDefault();
+        } 
         timeInAnim = (float)fmod((double)timeInAnim, (double)activeAnim->getDuration());
-        updateBoneMatrices(timeInAnim); 
-   
+        updateBoneMatrices(timeInAnim);
+      
         if (actor->getComponent<GraphicsComponent>()) {
             Shader* shader =  actor->getComponent<GraphicsComponent>()->getShader();
             shader->use();
@@ -73,7 +76,7 @@ void AnimComponent::updateBoneMatrices(float t) {
             int index = BoneDataMap[boneName].id;
    
             boneMatrices[index] = localTransform;
-
+            
         }
         else {
             printf("ERROR: AnimComponent's transform node not found in final bone matrices \n");
@@ -85,8 +88,7 @@ void AnimComponent::updateBoneMatrices(float t) {
         {
             int index = BoneDataMap[boneName].id;
             glm::mat4 offset = BoneDataMap[boneName].offset;
- 
-               boneMatrices[index] = globalInverse*boneMatrices[index] * offset;
+            boneMatrices[index] = globalInverse*boneMatrices[index] * offset;
         }
     }
 }
@@ -101,13 +103,13 @@ void AnimComponent::setBoneDataMap(const std::map<std::string, BoneData>& BoneDa
 } 
  
 void AnimComponent::playAnim(const std::string& name) {
-    timeInAnim = 0; 
+    timeInAnim = 0;
     for (int i = 0; i < animations.size(); i++) {
         if (animations.at(i).getName() == name) {
             activeAnim = &animations.at(i);
             globalInverse = activeAnim->getGlobalInv();
             return;
-        } 
+        }
     }
 } 
 
@@ -117,5 +119,10 @@ void AnimComponent::setDefaultAnim(const std::string& name) {
             defaultAnim = &animations.at(i);
         }
     }
+    activeAnim = defaultAnim; 
+}
+
+void AnimComponent::playDefault() {
     activeAnim = defaultAnim;
+    timeInAnim = 0;
 }

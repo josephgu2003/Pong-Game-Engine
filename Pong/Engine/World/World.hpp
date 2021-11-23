@@ -18,28 +18,33 @@
 #include "AbilityManager.hpp" 
 #include <memory>
 #include "Batch.hpp"
-#include "uiText.hpp"
+#include "uiText.hpp" 
 #include "Watch.hpp"
-#define ACTOR_UPDATE 0
-#define PARTICLE_UPDATE 1
-#define QUAD_UPDATE 2
-#define TEXT_UPDATE 3 
-#define LIGHTING_UPDATE 3
+#include <unordered_map>
+#include "MapManager.hpp"
+#include "Prop.hpp"
+#include "Script.hpp"
+
 
 typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
 struct Weather {
     DirectionalLight dirLight;
-    int sky;
+    float fogDensity;
+    float fogGradient;
+    glm::vec3 fogColor;
+    std::vector<std::string> skyTextureFiles;
 };
+
 
 class Renderer;
 class MapChunk;
+
 struct Updates {
-    bool actorUpdate;
-    bool particleUpdate;
-    bool textUpdate;
     bool lightingUpdate;
+    bool fogUpdate;
+    bool textUpdate;
+    bool skyUpdate;
 };
  
 struct SoundText {
@@ -52,23 +57,26 @@ struct SoundText {
         duration = duration_;
     }
 };
+
 class Actor;
 
 // map: read from height map, 9 chunks at once, repeat vertices at edges (one vertex is one pixel)
 // 4 x 4 chunks, 
 
 class World {
-    MapChunk* map;
+private: 
+    MapManager mapManager;
     uiText* activeText = NULL;
-    Updates updates = {false,false,false,false};
+    Updates updates = {false,false, false};
     Renderer* renderer = NULL;
       
-    std::vector <std::shared_ptr<Actor>> allActorPtrs;
-    std::vector <ParticleSystem*> allParticleEffects;
-    std::vector <Camera*> allCameraPtrs;
-    std::vector <Force*> allForces; 
+    std::vector<std::shared_ptr<Actor>> allActorPtrs;
+    std::vector<std::shared_ptr<ParticleSystem>> allParticleEffects;
+    std::vector<std::shared_ptr<Camera>> allCameraPtrs;
+    std::vector<std::shared_ptr<Force>> allForces;
+    std::vector<std::shared_ptr<Prop>> allProps;
+    std::vector<std::shared_ptr<Script>> allScripts;
     std::vector<std::shared_ptr<SoundText>> allSoundTexts;
-    std::vector<std::string> skyTextureFiles;
     
     float skyVertices [108] = {0};
     
@@ -81,33 +89,92 @@ class World {
 public:
     bool blur = false;
     World();
-    ~World();
+    ~World(); 
     
+    template <typename T> // hahaha templates are cool even if u coulda done Positionable*
+    void insert(const std::shared_ptr<T>& placeable) {
+        if (typeid(T) == typeid(Prop)) {
+            allProps.push_back(dynamic_pointer_cast<Prop>(placeable));
+        } 
+        if (typeid(T) == typeid(Actor)) {
+            allActorPtrs.push_back(dynamic_pointer_cast<Actor>(placeable));
+        }
+        if (typeid(T) == typeid(ParticleSystem)) {
+            allParticleEffects.push_back(dynamic_pointer_cast<ParticleSystem>(placeable));
+        }
+        if (typeid(T) == typeid(Force)) {
+            allForces.push_back(dynamic_pointer_cast<Force>(placeable));
+        }
+        if (typeid(T) == typeid(Camera)) {
+            allCameraPtrs.push_back(dynamic_pointer_cast<Camera>(placeable));
+        }
+        if (typeid(T) == typeid(Script)) {
+            allScripts.push_back(dynamic_pointer_cast<Script>(placeable));
+        }
+    }
+     
+    template <typename T>
+    void deleteX(T* t) {
+        if (typeid(T) == typeid(Script)) {
+            for (int i = 0; i < allScripts.size(); i++) {
+                if (dynamic_cast<Script*>(t) == allScripts.at(i).get()) {
+                    allScripts.erase(allScripts.begin()+i);
+                } 
+            }
+        }
+        if (typeid(T) == typeid(Prop)) {
+            for (int i = 0; i < allProps.size(); i++) {
+                if (dynamic_cast<Prop*>(t) == allProps.at(i).get()) {
+                    allProps.erase(allProps.begin()+i);
+                }
+            }
+        }
+        if (typeid(T) == typeid(Actor)) {
+            for (int i = 0; i < allActorPtrs.size(); i++) {
+                if (dynamic_cast<Actor*>(t) == allActorPtrs.at(i).get()) {
+                    allActorPtrs.erase(allActorPtrs.begin()+i);
+                }
+            }
+        }
+        if (typeid(T) == typeid(ParticleSystem)) {
+            for (int i = 0; i < allParticleEffects.size(); i++) {
+                if (dynamic_cast<ParticleSystem*>(t) == allParticleEffects.at(i).get()) {
+                    allParticleEffects.erase(allParticleEffects.begin()+i);
+                }
+            }
+        }
+        if (typeid(T) == typeid(Force)) {
+            for (int i = 0; i < allForces.size(); i++) {
+                if (dynamic_cast<Force*>(t) == allForces.at(i).get()) {
+                    allForces.erase(allForces.begin()+i);
+                }
+            }
+        }
+        if (typeid(T) == typeid(Camera)) {
+            for (int i = 0; i < allCameraPtrs.size(); i++) {
+                if (dynamic_cast<Camera*>(t) == allCameraPtrs.at(i).get()) {
+                    allCameraPtrs.erase(allCameraPtrs.begin()+i);
+                }
+            } 
+        }
+    }
+    
+    void setMap(const std::string& filePath, int pixelsX, int pixelsY, glm::vec3 scaling);
 
-    
-    void insertCamera(Camera* camera);
     void setRenderer(Renderer* renderer);
     
     void insertActor(const std::shared_ptr<Actor>& actor);
     
-    void insertParticleEffect(ParticleSystem* particleEffect);
-    void deleteParticleEffect(ParticleSystem* particleEffect);
-    
-    void insertForce(Force* force_);
-    void deleteForce(Force* force_);
-
-    
-    
     std::vector<std::string>* getSkyTextureFiles();
     float* getSkyVertices();
     
-    std::vector<ParticleSystem*> getParticleEffects();
+    //std::vector<ParticleSystem*> getParticleEffects();
     
     Updates checkforUpdates();
     void updateCleared(int i);
     
-    void setWeather(DirectionalLight dirLight, int sky);
-    Weather getWeather(); 
+    void setWeather(DirectionalLight dirLight_, float fogDensity_, float fogGradient_, glm::vec3 fogColor_, std::vector<std::string> skyTextureFiles_);
+    Weather getWeather();  
      
     void tick();
     
@@ -150,8 +217,16 @@ public:
     
     void newSoundText(const std::string& text, const glm::vec3& pos, float duration);
     
+    float getHeightAt(glm::vec2 xz);
 
 };
  
 
 #endif /* World_hpp */
+ 
+// we want:
+// sky - special render
+// terrain - heightmap loading, mesh stored 
+// sun and moon
+// clouds
+// weather

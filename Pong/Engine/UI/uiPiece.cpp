@@ -8,7 +8,7 @@
 #include "uiPiece.hpp"
 #include "Renderer.hpp"
 
-uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_) : Renderable::Renderable() {
+uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_) : GraphicsObject::GraphicsObject() {
     position = position_;
     dimensions = dimensions_;
 } 

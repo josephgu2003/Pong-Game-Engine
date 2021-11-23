@@ -24,16 +24,9 @@ struct Character;
 
 class World;
 
-class Shader;
+class Shader;  
 
-enum ParticleEffectSeed {
-    PE_FIREWORKS,
-    PE_MIST,
-    PE_BODYSPARKS,
-    PE_RUNICLETTERS,
-};
-
-class ParticleSystem : public Positionable, public Componentable<ParticleSystem> {
+class ParticleSystem : public Positionable, public Componentable {
 protected:
   //  std::vector<Particle> particles;
     World* world = NULL;
@@ -45,11 +38,9 @@ protected:
     virtual void refreshParticle() {}
     Particle* particles = NULL;
 public:
-    virtual void init(ParticleEffectSeed PESeed, glm::vec3 posVec_);
-    
     void setWorld(World* world);  
     
-    ParticleSystem();
+    ParticleSystem(int numParticles, float duration);
 
     virtual ~ParticleSystem();
     virtual void tick();

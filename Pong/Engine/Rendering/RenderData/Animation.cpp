@@ -149,11 +149,11 @@ glm::mat4& Animation::getGlobalInv() {
 int Animation::getTicksPerSec() {
     return ticksPerSec;
 }
-
+ 
 const aiNode* Animation::findRootBone(const aiScene* scene, std::map<std::string, BoneData>& map_) {
     std::vector<const aiNode*> nodesNextLvl; // precursors
     std::vector<const aiNode*> buffer;
-    
+     
     nodesNextLvl.push_back(scene->mRootNode);
     
     while (!nodesNextLvl.empty()){

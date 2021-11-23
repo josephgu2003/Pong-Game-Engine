@@ -10,7 +10,7 @@
 
 
 
-#define MAX_BONE_WEIGHTS 4
+//#define MAX_BONE_WEIGHTS 4
 
 
 

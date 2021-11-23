@@ -85,7 +85,7 @@ void Sketch::tick() {
 }
 
 void Sketch::call2() {
-    dirFired = actor->dirVec;
+    dirFired = actor->getDir(); 
     mode2 = true;
   //  quad.force = 0.1f*dirFired;
    /** for (int i = 0; i < 2500; i++) {

@@ -9,7 +9,7 @@
 #define PRefreshComponent_hpp
 
 #include <stdio.h>
-#include "ParticleComp.hpp"
+#include "Component.hpp"
 #include "Watch.hpp"
 #include "Dice.hpp"
 #include <glm/glm.hpp>
@@ -18,7 +18,9 @@ class ParticleSystem;
 
 class PPhysicsComponent;
 
-class PRefreshComponent : public ParticleComp {
+struct Particle; 
+
+class PRefreshComponent : public Component {
 private:
     Watch myWatch; 
     Dice mainDice;
@@ -40,6 +42,7 @@ public:
     PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond, float refreshInterval, glm::vec3 dimensions, glm::vec3 velRangeLow, glm::vec3 velRangeHigh);
     virtual void tick() override;
     void refreshParticle();
+    float getParticleLifetime();
 };
 
 

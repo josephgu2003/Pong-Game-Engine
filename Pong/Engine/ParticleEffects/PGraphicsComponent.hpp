@@ -6,13 +6,15 @@
 //
 
 #ifndef PGraphicsComponent_hpp
-#define PGraphicsComponent_hpp
+#define PGraphicsComponent_hpp 
 
 #include <stdio.h>
-#include "Renderable.hpp"
-#include "ParticleComp.hpp"
+#include "GraphicsObject.hpp"
+#include "Component.hpp"
 
-class PGraphicsComponent : public Renderable, public ParticleComp {
+class ParticleSystem;
+
+class PGraphicsComponent : public GraphicsObject, public Component {
 public:
     PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader, const TextureMaps& map);
     virtual void draw(Renderer* r) override;

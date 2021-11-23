@@ -20,12 +20,12 @@ uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath)
 }
 
 void uiMenu::draw(Renderer* r) {
-    r->renderElements(this); 
-    for (auto i : children) {
+    r->renderUI(this); 
+    for (auto i : children) { 
         (i)->draw(r);
     }
-} 
-
+}
+ 
 void uiMenu::notify(const Subject& s, GameEvent ge) {
     auto x = static_cast<const InputHandler*>(&s);
     if (ge == KEY_PRESSED && x) {

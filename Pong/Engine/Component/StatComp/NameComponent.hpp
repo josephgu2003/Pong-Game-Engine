@@ -9,10 +9,11 @@
 #define NameComponent_hpp
 
 #include <stdio.h>
-#include "ActorComp.hpp"
+#include "Component.hpp"
 #include <string>
 
-class NameComponent : public ActorComp { 
+class Actor; 
+class NameComponent : public Component { 
 protected:
     std::string name;
 public:

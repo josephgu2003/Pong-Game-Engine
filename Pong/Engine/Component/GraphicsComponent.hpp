@@ -11,27 +11,37 @@
 #include "Component.hpp"
 #include <memory> 
 #include "AssetManager.hpp"
-#include "Renderable.hpp"
-#include "ActorComp.hpp"
+#include "GraphicsObject.hpp"
+#include "Component.hpp"
+#include "VertexMesh.hpp"
   
 class Shader;
 
-struct FrameAndShader {
+struct FrameAndShader { 
     Frame* frame = NULL;
     Shader* shader = NULL;
 };
 
-class GraphicsComponent : public ActorComp, public Renderable { // for actors
+class Componentable;
+
+class GraphicsComponent;
+
+typedef void (*DrawCall) (Renderer*, GraphicsComponent*);
+
+class GraphicsComponent : public Component, public GraphicsObject { // for actors
 protected:
     std::map<Texture*, FrameAndShader> animatedTextures;
+    VertexMesh* mesh = nullptr;
+    DrawCall drawCall;
 public:  
-    GraphicsComponent(Actor& actor);
-    void init(Shader* shader, const std::string& model, const TextureMaps& map);
+    GraphicsComponent(Componentable& actor, Shader* shader, const TextureMaps& map);
+    void initModel(const std::string& model); 
+    void initGrid(int verticesX, int verticesY, float scale, VertexMesh*& mesh);
     virtual void tick() override;
     virtual void draw(Renderer* r) override;
-
+    void setDrawCall(DrawCall dc);
     void animateTexture(Texture* texture, Shader* shader);
 };
-
+ 
 
 #endif /* GraphicsComponent_hpp */

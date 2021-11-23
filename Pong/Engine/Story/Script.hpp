@@ -10,15 +10,29 @@
 
 #include <stdio.h>
 #include <vector>
+#include <unordered_map>
+#include "Positionable.hpp"
+#include "Actor.hpp"
+#include "Watch.hpp"
+class World;
 
-class Game;
-
-class Script {
+class Script : public Positionable {
+private:
+    bool checkAllHere();
+    std::shared_ptr<Actor> dummy;
+    float lastTime;
 protected:
-    int step; 
+    Watch stopWatch;
+    int step;
+    World* world = nullptr;
+    std::unordered_map<std::string, std::shared_ptr<Actor>> actors;
+    void incStep(bool resetTime);
+    void waitFor(float duration);
+    bool isWaiting();
 public:
-    virtual void tick() = 0;
-    virtual void init(Game* game) = 0;
+    Script(World* world, std::vector<std::string> crew);
+    void tick();
+    virtual void act() = 0; 
 };
 
 #endif /* ScriptEvent_hpp */

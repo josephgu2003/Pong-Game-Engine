@@ -9,9 +9,9 @@
 #include "Particle.hpp"
 #include "PPhysicsComponent.hpp"
 
-PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond_, float refreshInterval_, glm::vec3 dimensions_, glm::vec3 velRangeLow_, glm::vec3 velRangeHigh_) : ParticleComp(pe){
+PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond_, float refreshInterval_, glm::vec3 dimensions_, glm::vec3 velRangeLow_, glm::vec3 velRangeHigh_) : Component(pe){
     ptcPerSecond = ptcPerSecond_;
-    refreshInterval = refreshInterval_;
+    refreshInterval = refreshInterval_; 
     myWatch.resetTime();
     firstUnused = 0;
     particles = pe.getParticles();
@@ -31,7 +31,7 @@ PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDurati
     
     hasPhysics = false;
 } 
-
+ 
 void PRefreshComponent::tick() {
     ppc = actor->getComponent<PPhysicsComponent>();
     if (ppc) {
@@ -60,12 +60,12 @@ void PRefreshComponent::refreshParticle() {
         }
     }
     
-    particles[firstUnused].posVec = actor->getPos() + displacement;
+    particles[firstUnused].posVec = static_cast<ParticleSystem*>(actor)->getPos() + displacement;
     
     particles[firstUnused].pyrAngles = glm::vec3(0,(mainDice.roll() % 180),0);
      
     particles[firstUnused].duration = particleMaxDuration;
-    
+     
     if(firstUnused == (numParticles-1)) {
         firstUnused = 0;
     } else if (particles[firstUnused+1].duration<=0) {
@@ -73,3 +73,7 @@ void PRefreshComponent::refreshParticle() {
     }
  
 } 
+
+float PRefreshComponent::getParticleLifetime() {
+    return particleMaxDuration;
+}

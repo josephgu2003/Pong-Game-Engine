@@ -8,13 +8,11 @@
 #ifndef Actor_hpp
 #define Actor_hpp
 
-#include <GL/glew.h>
-#define GLFW_DLL
-#include <GLFW/glfw3.h>
+ 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
-#include "ActorComp.hpp"
+#include "Component.hpp"
 #include <algorithm>
 #include "GraphicsComponent.hpp"
 #include <memory>
@@ -35,7 +33,7 @@ enum State {
     STATE_JUMPING 
 };
 
-class Actor : public Componentable<Actor>, public Positionable { // any character really
+class Actor : public Componentable, public Positionable { // any character really
 private:
 protected:  
     World* world = NULL;
@@ -49,7 +47,7 @@ public:
     Actor(); 
     ~Actor();
     
-    virtual void addComp(const std::shared_ptr<Component<Actor>>& comp) override;
+    virtual void addComp(const std::shared_ptr<Component>& comp) override;
      
     virtual void tick();
     void setWorld(World* world_);

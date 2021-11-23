@@ -14,50 +14,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include "stb_image.h"
-
-
-TBNBWVertex::TBNBWVertex() {
-    
-}
-TBNBWVertex::TBNBWVertex(    glm::vec3 Pos_,
-          glm::vec3 Normal_,
-          glm::vec2 TexCoords_,
-          glm::vec3 Tan_,
-                   glm::vec3 BiTan_, int* boneIDs_, float* boneWeights_) {
-    Pos = Pos_;
-    Normal = Normal_;
-    TexCoords = TexCoords_;
-    Tan = Tan_;
-    BiTan = BiTan_;
-    for (int i = 0; i < MAX_BONE_WEIGHTS; i++) {
-        boneIDs[i] = boneIDs_[i];
-        boneWeights[i] = boneWeights_[i];
-    }
-}
-
-TBNVertex::TBNVertex() {
-    
-}
-
-TBNVertex::TBNVertex(    glm::vec3 Pos_,
-          glm::vec3 Normal_,
-          glm::vec2 TexCoords_,
-          glm::vec3 Tan_,
-          glm::vec3 BiTan_) {
-    Pos = Pos_;
-    Normal = Normal_;
-    TexCoords = TexCoords_;
-    Tan = Tan_;
-    BiTan = BiTan_;
-}
-
-SimpleVertex::SimpleVertex(    glm::vec3 Pos_,
-                           glm::vec2 TexCoords_, int arraytexID_) {
-    Pos = Pos_;
-    TexCoords = TexCoords_;
-    arraytexID = arraytexID_;
-}
-
+#include "World.hpp"
 
 BoneInfoMap VertexLoader::inProgBoneMap;
 int VertexLoader::boneCounter = 0; 
@@ -74,7 +31,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     std::string::const_iterator c;
     float x = position.x;
     float y = position.y;
-    float scale = 0.0002;  
+    float scale = 0.0003;
         
     std::vector<SimpleVertex> newVertices;
     std::vector<GLuint> newIndices;
@@ -230,7 +187,7 @@ void VertexLoader::loadModel(std::string filePath_, unsigned int vao, unsigned i
         Assimp::Importer importer;
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
     const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
-       
+        
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
             printf("%s", s.c_str());
@@ -242,7 +199,7 @@ void VertexLoader::loadModel(std::string filePath_, unsigned int vao, unsigned i
     processNode(scene->mRootNode, scene, vertices, indices);
     
     glBindVertexArray(vao);
-    
+     
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(TBNBWVertex), vertices.data(), GL_STATIC_DRAW);
@@ -337,10 +294,10 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
         for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
            {
                boneIDs[i] = -1;
-               boneWeights[i] = 0.25f;
+               boneWeights[i] = 0.25f; 
            }
         
-       
+        
         TBNBWVertex v(pos_, norm_, texCoords_, Tan_, BiTan_, boneIDs, boneWeights);
         newVertices.push_back(v);
     }
@@ -403,7 +360,6 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
 
 void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                                const aiScene* scene) {
-    printf("Here: %f \n", (float)mesh->mNumBones);
     int x = mesh->mNumBones;
 
     for (int boneIndex = 0; boneIndex < x; ++boneIndex) {
@@ -423,7 +379,7 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
         else {
             id = inProgBoneMap[boneName].id;
             if (inProgBoneMap[boneName].offset !=   ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix)) {
-                printf("Very error! \n");
+                printf("Error : %s offset differs across meshes \n", boneName.c_str());
             }
         } 
         // id of bone from mesh obtained,  or new bone added to map
@@ -506,7 +462,6 @@ void VertexLoader::setupVAOAttribsInstancing(int firstAttribLocation, const std:
 
 void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
     glBindVertexArray(vao);
-    
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     
     SimpleVertex s(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0);
@@ -523,90 +478,88 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
     glBindVertexArray(0); 
 }
 
-void VertexLoader::loadMapChunk(const std::string& src, int chunkX, int chunkY, int subdivisions, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+ void VertexLoader::loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const std::string& src, int chunkX, int chunkY, glm::vec2 transformToLocal, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
     // DRAW A FRICKIN DIAGRAM IF U WANNA UNDERSTAND THIS
-    
     int imageWidth = 0;
-    int imageHeight = 0;
+    int imageHeight = 0; 
     int channels = 0;
     unsigned char* imageData;
-
+  
     imageData = stbi_load(src.c_str(), &imageWidth, &imageHeight, &channels, 0);
-    if (channels != 1) {
+    if (channels != 1) { 
+        printf("Warning: Heightmap is not grayscale\n");
         return;
     }
-    
-    std::vector<Vertex> vertices;
-    
-    int chunkWidth = std::round(imageWidth / (float) subdivisions);
-    int chunkHeight = std::round(imageHeight / (float) subdivisions);
-    
-    int pixelX = chunkWidth * chunkX; // chunkX starts at 0
-    
-    int pixelY = chunkHeight * chunkY;
-    
-    int startingIndex = pixelX + pixelY * chunkWidth;
-
+      
+     int chunkWidth = 0; // in vertices
+     int chunkHeight = 0; // in vertices
+     int pixelX = 0;
+     int pixelY = 0;
+     
+     if (chunkX == 0) {
+         chunkWidth = CHUNK_DIM_PXLS;
+         pixelX = 0;
+     } else {
+         chunkWidth = CHUNK_DIM_PXLS + 1;
+         pixelX = CHUNK_DIM_PXLS*chunkX-1; // to overlap vertices so no gap
+     }
+     
+     if (chunkY == 0) {
+         chunkHeight = CHUNK_DIM_PXLS;
+         pixelY = 0;
+     } else {
+         chunkHeight = CHUNK_DIM_PXLS + 1;
+         pixelY = CHUNK_DIM_PXLS*chunkY-1; // to overlap vertices so no gap
+     }
+     
+    int startingIndex = pixelX + pixelY * imageWidth;
+      
+    std::vector<Vertex> vertices;  
+      
+    float xCoord = transformToLocal.x;
+    float yCoord = transformToLocal.y;
+  
     vertices.resize(chunkHeight*chunkWidth);  
     int c = 0;
+    float scaleY = scaling.y;
+         
+    auto fetchHeightAt = [=] (int i, int j, unsigned char* data) {
+         int index = (startingIndex + j + i * imageWidth);
+         int height = int(data[index]);
+         float h = height * scaleY; // possible undefined behaviour
+         return h;    
+     };
+                   
     for (int i = 0; i < chunkHeight; i++) { 
-        for (int j = 0; j < chunkWidth; j++) {
-            int index = (startingIndex + j + i * chunkWidth); 
-            int height = (int)imageData[index];
-            float h = (float) height / 100.0f;
+        for (int j = 0; j < chunkWidth; j++) { 
             Vertex v;
-            float x= float(pixelX)+j;
-            float z = float(pixelY) +i;
+            float x= xCoord+j*scaling.x;
+            float h = fetchHeightAt(i, j, imageData);
+            float z = yCoord +i*scaling.z;
             v.Pos = glm::vec3(x, h,z);
-            v.Normal = glm::vec3(0.0,1.0,0.0); 
+            v.Normal = calcNormalWithHeights(h, fetchHeightAt(i+1, j, imageData), fetchHeightAt(i-1, j, imageData), fetchHeightAt(i, j+1, imageData), fetchHeightAt(i, j-1, imageData));
             v.TexCoords = glm::vec2((float)std::remainder(j,2),(float)std::remainder(i,2));
             vertices[c] = v; // FIX DUMBASS
-            c++; 
-            printf("%i\n",height);
+            heightMesh[j][i] = h;
+            c++;
         }
-    }
+    } 
      
     std::vector<GLuint> indices;
     
     for (int i = 0; i < chunkHeight-1; i++) {
         for (int j = 0; j < chunkWidth-1; j++) {
-        indices.push_back(0.0f+j+chunkWidth*i);
-        indices.push_back(0.0f+j+chunkWidth*i+1);
-        indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
+            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
+            indices.push_back(0.0f+j+chunkWidth*i+1);
+            indices.push_back(0.0f+j+chunkWidth*i);
+            indices.push_back(0.0f+j+chunkWidth*i+1);
+            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
+            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth+1);
         }
-    }
-    for (int i = 0; i < chunkHeight-1; i++) {
-        for (int j = 0; j < chunkWidth-1; j++) {
-        indices.push_back(0.0f+j+chunkWidth*i+1);
-        indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
-        indices.push_back(0.0f+j+chunkWidth*i+chunkWidth+1);
-        }
-    }
-        /**
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
-            Vertex vertex;
-            vertex.Pos = glm::vec3( (float)(2.0f*(-0.5f+i/49.0f)),2.0f*(float)(-0.5f+j/49.0f),
-                                         (0.0f));
-            vertex.Normal = glm::vec3(0,0,1);
-     
-            vertex.TexCoords = glm::vec2( (float)(0.0f+i/49.0f), (float)(0.0f+j/49.0f));
-            
-            vertices.push_back(vertex);
-        }
-    }
-        
-    std::vector<GLuint> indices;
-    for (int i = 0; i < 49; i++) {
-        for (int j = 0; j < 49; j++) {
-        indices.push_back(0.0f+j+50*i);
-        indices.push_back(0.0f+j+50*i+1);
-        indices.push_back(0.0f+j+50*i+50);
-        }
-    }**/
+    } 
+
     stbi_image_free(imageData);
     glBindVertexArray(vao);
-     
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
         
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
@@ -616,6 +569,57 @@ void VertexLoader::loadMapChunk(const std::string& src, int chunkX, int chunkY, 
     
     numIndices = indices.size();
     setupVAOAttribs(VERTEX_VERTEX);
+    glBindVertexArray(0);
+}
+//problems : graphics component is responsible for creating meshes too?
+ 
+glm::vec3 VertexLoader::calcNormalWithHeights(float cH, float dH, float uH, float rH, float lH) {
+    glm::vec3 normal = glm::vec3(lH - rH, 2.0, dH - uH);
+    normal = glm::normalize(normal);
+    return normal;
+}
+
+void VertexLoader::loadSimpleVertexGrid(int verticesX, int verticesY, float scale, std::vector<PosVertex>& mesh, unsigned int VAO, unsigned int VBO, unsigned int EBO, unsigned int& numIndices) { // will load the grid upright and in the xy plane
+    std::vector<SimpleVertex> vertices;
+    vertices.resize(verticesX * verticesY);
+    mesh.resize(verticesX * verticesY);
+     
+    int c = 0; 
+    for (int i = 0; i < verticesY; i++) { 
+        for (int j = 0; j < verticesX; j++) {
+            SimpleVertex v;
+            v.Pos = glm::vec3(scale*(-0.5f+j/float(verticesX-1)), scale*(-0.5f+i/float(verticesY - 1)), 0.0f);
+            v.TexCoords = glm::vec2(j/float(verticesX-1), i/float(verticesY-1));
+            v.arraytexID = 0; 
+            vertices[c] = v; // FIX DUMBASS
+            mesh[c] = PosVertex(v.Pos);
+            c++;
+        }
+    }
+     
+    std::vector<GLuint> indices;
+     
+    for (int i = 0; i < verticesY-1; i++) {
+        for (int j = 0; j < verticesX-1; j++) {
+            indices.push_back(0.0f+j+verticesX*i+verticesX);
+            indices.push_back(0.0f+j+verticesX*i+1);
+            indices.push_back(0.0f+j+verticesX*i);
+            indices.push_back(0.0f+j+verticesX*i+1);
+            indices.push_back(0.0f+j+verticesX*i+verticesX);
+            indices.push_back(0.0f+j+verticesX*i+verticesX+1);
+        }
+    }
+    
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        
+    glBufferData(GL_ARRAY_BUFFER, sizeof(SimpleVertex)*vertices.size(), vertices.data(), GL_DYNAMIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_DYNAMIC_DRAW);
+    
+    numIndices = indices.size();
+    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
 }
  

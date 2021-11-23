@@ -13,7 +13,6 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include "Script.hpp"
-
 #include "World.hpp"
 #include "Actor.hpp"
 #include <glm/glm.hpp>
@@ -38,7 +37,7 @@ class ScriptOne : public Script {
     std::shared_ptr<Ability> currentAbility;
     std::shared_ptr<Ability> currentAbility2;
 public:
-    virtual void tick() override;
-    virtual void init(Game* game) override;
+   // virtual void tick() override;
+  //  virtual void init(Game* game) override;
 };
 #endif /* ScriptOne_hpp */

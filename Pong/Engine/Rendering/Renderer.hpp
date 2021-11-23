@@ -8,6 +8,8 @@
 #ifndef Renderer_hpp
 #define Renderer_hpp
 
+#define RENDER_DISTANCE 200.0
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #define GLFW_DLL
@@ -21,10 +23,10 @@
 extern GLuint uboViewProj;
 extern GLuint uboLights; 
 extern GLuint uboStopWatch;
-
+extern GLuint uboDistanceFog;
 
 enum Uniblock {
-    ViewProj, Lights, StopWatch
+    ViewProj, Lights, StopWatch, DistanceFog
 };
 
 class Camera;
@@ -39,11 +41,12 @@ const static float screenquad[24] =
      1.0f,  1.0f,  1.0f, 1.0f
 };
 
-class Renderable;
+class GraphicsObject;
 
 class Renderer {
 private:
-    
+    float scale = 0;
+    float fieldOfView, frustrumNear, frustrumFar;
     GLuint mVBO, mVAO, mEBO, sVBO, sVAO, qVBO, qVAO, qEBO;
     
     DoubleFrame frame2C;
@@ -55,9 +58,7 @@ private:
     Texture gradient;
     Texture noise;
 
-    Shader* skyShader;
-    Shader* textShader;
-    Shader* sketchShader;
+    Shader* skyShader; 
     Shader* blurShader;
     Shader* frameShader;
     Shader* uiShader;
@@ -67,30 +68,35 @@ private:
     
     Camera* camera = NULL;
     World* world = NULL;
+    GLFWwindow* window = NULL; 
     float lighting;
     
-    void updateUniformBlocks();
+    void updateDistanceFog();
     void updateViewProj();
     void updateCamPos();
+    void updateLights();
     void updateUniformStopWatch();
     float timeT;
     void bindTextures(Shader* shader, TextureMaps& map);
+    void resizeViewPort();
 public:
     static void bindShaderUniblock(Shader* shader, Uniblock block);
+    void updateAllUniblocks();
     void renderUI(uiPiece* uip);
-    void updateLights();
-    void renderSky();
+    void renderSky(); 
     Renderer();
     ~Renderer();
     void setWorld(World* world_);
     void setCamera(Camera* camera_);
     void loadSkyBoxData();
-    void render();
-    void render2();
-    void renderText(uiText* text);
+    void renderInitial();
+    void renderFinal();
+    void renderText(uiText* text); 
     void checkForUpdates();
-    void renderElements(Renderable* r);
-    void renderParticles(Renderable* r, int instanceCount);
+    void renderActor(GraphicsObject* r);
+    void renderParticles(GraphicsObject* r, int instanceCount);
+    void renderTerrain(GraphicsObject* r);
+    void renderFoliage(GraphicsObject* r);
 };
 #endif /* Renderer_hpp */
  

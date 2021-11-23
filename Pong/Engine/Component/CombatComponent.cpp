@@ -8,14 +8,14 @@
 #include "CombatComponent.hpp"
 #include "Actor.hpp"
 #include "World.hpp"
-CombatComponent::CombatComponent(Actor& actor) : ActorComp(actor) {
+CombatComponent::CombatComponent(Actor& actor) : Component(actor) {
     Component::type = COMBAT;
     biggestTarget = std::make_shared<Actor>(); 
 }
 
 void CombatComponent::tick() {
-    actor->getWorld().informActorProximity(*actor, 5);
-}
+    static_cast<Actor*>(actor)->getWorld().informActorProximity(*static_cast<Actor*>(actor), 5);
+} 
 void CombatComponent::clearAffecting() {
     affecting.reset();
 }

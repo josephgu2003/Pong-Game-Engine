@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "Ability.hpp"
 #include "Particle.hpp"
+#include "ParticleFactory.hpp"
 #include <memory>
 
 class World;
@@ -18,7 +19,8 @@ class Actor;
 
 class FallingLetters: public Ability{
 private:
-    ParticleSystem* letters = NULL;
+    ParticleFactory pf;
+    std::shared_ptr<ParticleSystem> letters;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
     ~FallingLetters();

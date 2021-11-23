@@ -9,7 +9,7 @@
 #include "Actor.hpp"
 #include "World.hpp"
 
-NameComponent::NameComponent(Actor& actor) : ActorComp(actor) {
+NameComponent::NameComponent(Actor& actor) : Component(actor) {
     Component::type = NAME;
     name = "";
 }
@@ -28,6 +28,7 @@ void NameComponent::tick() {
 
 void NameComponent::speak(const std::string& speech, float duration) {
     std::string s = std::string(name + ": " + speech);
-    actor->getWorld().newSoundText(s, actor->getPos(), duration); 
+    static_cast<Actor*>(actor)->getWorld().newSoundText(s, static_cast<Actor*>(actor)->getPos(), duration);
 } 
   
+ 

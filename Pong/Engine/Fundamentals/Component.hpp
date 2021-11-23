@@ -17,18 +17,20 @@ enum CompType {
     LIFE,
     NAME,
     COMBAT,
+    PARTICLESPIN,
     ANIM,
     PHYSICS,
     GRAPHICS
 };
 
-template <typename T>  // ???
+class Componentable; 
+
 class Component {
 protected:
-    T* actor = nullptr;
+    Componentable* actor = nullptr;
     CompType type;
 public:
-    Component(T& compUser_) {
+    Component(Componentable& compUser_) {
         actor = &compUser_;
     }
 

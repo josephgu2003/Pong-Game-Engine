@@ -9,7 +9,7 @@
 #define CombatComponent_hpp
 
 #include <stdio.h>
-#include "ActorComp.hpp"
+#include "Component.hpp"
 #include <memory>
 #include "Actor.hpp"
 #include "Ability.hpp"
@@ -17,7 +17,7 @@
 //for abilities and fighting people, prob do some stuf with buffs, debuffs
 // lvl blah blah
 
-class CombatComponent : public ActorComp {
+class CombatComponent : public Component {
 private:
     std::shared_ptr<Ability> currentAbility;
     std::shared_ptr<Actor> biggestTarget;

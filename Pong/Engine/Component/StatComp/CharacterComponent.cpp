@@ -21,9 +21,9 @@ CharacterComponent::CharacterComponent(Actor& actor) : NameComponent(actor) {
     currentAction = std::make_shared<aiPonder>(10.0f);
 }
 
-void CharacterComponent::tick() {
+void CharacterComponent::tick() { 
     if (currentAction.get()) {
-        currentAction->tick(actor);
+        currentAction->tick(static_cast<Actor*>(actor));
         if (currentAction->isDone()) {
             currentAction.reset();
         }

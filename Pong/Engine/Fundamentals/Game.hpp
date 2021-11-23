@@ -48,12 +48,12 @@ protected:
     Renderer* renderer0 = NULL;
     Renderer* renderer1 = NULL;
     Renderer* activeRenderer = NULL;
-    
+     
     InputHandler inputHandler;
     
     Audio audio;
-      
-    std::shared_ptr<Actor> pHero0;
+       
+    std::shared_ptr<Actor> pHero0; 
     std::shared_ptr<Actor> pHero1;
     std::shared_ptr<Actor> activeHero;
     

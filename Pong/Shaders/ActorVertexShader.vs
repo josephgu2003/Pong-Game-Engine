@@ -63,7 +63,6 @@ layout (std140) uniform Lights
 };
 
 
-
     void main()
     {
 

@@ -24,6 +24,7 @@ public:
     void updateVecs();
     void orientActor();
     void tick();
+    virtual void rotate(glm::vec3 angles) override;
 }; 
 
 #endif /* Camera_hpp */

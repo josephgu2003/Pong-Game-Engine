@@ -9,7 +9,7 @@
 #define AIComponent_hpp
 
 #include <stdio.h>
-#include "ActorComp.hpp"
+#include "Component.hpp"
 #include "Dice.hpp" 
 #include "AIAction.hpp"
 #include <memory>
@@ -75,7 +75,7 @@ const static aiActionAffinity aiFriendActions[NUM_FRIEND_ACTS] = {
 
 class Actor;
 
-class AIComponent : public ActorComp {
+class AIComponent : public Component {
 private:
     aiActionAffinity* actionTable = NULL;
     Actor* target = NULL;

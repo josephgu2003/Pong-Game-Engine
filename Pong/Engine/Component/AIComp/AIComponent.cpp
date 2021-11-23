@@ -19,7 +19,7 @@
 
 typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
-AIComponent::AIComponent(Actor& actor) : ActorComp(actor) {
+AIComponent::AIComponent(Actor& actor) : Component(actor) {
     type = AI; 
     dice = Dice(0, DICE_MAX);
     entriesInTable = 0;
@@ -29,14 +29,14 @@ AIComponent::AIComponent(Actor& actor) : ActorComp(actor) {
 
 void AIComponent::tick() {
     if (!getCharComp->hasCurrentAction()) { // if we have not a current action
-        const ActorList al = actor->getWorld().getNearActorsWith(actor, CHAR);
+        const ActorList al = static_cast<Actor*>(actor)->getWorld().getNearActorsWith(static_cast<Actor*>(actor), CHAR);
         for (auto i = al.begin(); i != al.end(); i++) {
             auto x = (*i).get();
             resetTable(getCharComp->getRelationshipTypeWith(x));
-            calcProbabilities(actor, x);
-            calcNextAction(actor, x);
+            calcProbabilities(static_cast<Actor*>(actor), x);
+            calcNextAction(static_cast<Actor*>(actor), x);
             if (getCharComp->hasCurrentAction()) return;
-        }  
+        }
     }
 }
   
@@ -52,7 +52,7 @@ void AIComponent::calcNextAction(Actor* actor, Actor* target) {
             };
         }
         c -= 1;
-    }
+    } 
 }
  
 void AIComponent::calcProbabilities(Actor* actor, Actor* target) {

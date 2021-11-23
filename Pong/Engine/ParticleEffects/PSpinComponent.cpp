@@ -6,12 +6,13 @@
 //
 
 #include "PSpinComponent.hpp"
+#include "Particle.hpp"
 
-PSpinComponent::PSpinComponent(ParticleSystem& pe, glm::vec3 spin_) : ParticleComp(pe){
+PSpinComponent::PSpinComponent(ParticleSystem& pe, glm::vec3 spin_) : Component(pe){
     spin = spin_;
     particles = pe.getParticles();
     numParticles = pe.getNumParticles();
-    type = ANIM; 
+    type = PARTICLESPIN; 
 }
 void PSpinComponent::tick() {
     for (int i = 0; i < numParticles; i++){

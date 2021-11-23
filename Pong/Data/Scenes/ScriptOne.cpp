@@ -12,7 +12,7 @@
 #include "Speech.hpp"  
 #include "CombatComponent.hpp"
 #include "AnimComponent.hpp"
-
+/**
 void ScriptOne::tick() {
     switch (state) {
         case STATE_PASSIVE: {
@@ -97,7 +97,8 @@ void ScriptOne::tick() {
 }
 
 void ScriptOne::init(Game* game) {
-    pHero = game->getWorld(0).getActorNamed("Joe").get();
+    pHero = game->getWorld(0).getActorNamed("Floro").get();
     ball = game->getWorld(0).getActorNamed("Mysterious Figure").get();
 }
  
+**/

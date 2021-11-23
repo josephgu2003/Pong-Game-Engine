@@ -13,10 +13,9 @@
 #include "Component.hpp"
 #include <memory>
 
-template <typename T>
 class Componentable {
 private:
-    std::vector<std::shared_ptr<Component<T>>> components;
+    std::vector<std::shared_ptr<Component>> components;
 public:
     Componentable() {
         
@@ -30,12 +29,12 @@ public:
     
     template <typename compType, typename... Args>
     void addComp(Args&& ... arg) {
-        std::shared_ptr<Component<T>> comp_ = std::make_shared<compType>(arg...);  // fowards??
+        std::shared_ptr<Component> comp_ = std::make_shared<compType>(arg...);  // fowards??
        if (components.size() == 0) {
            components.push_back(std::move(comp_));
            return; 
        } 
-       for (int i = 0; i < components.size(); i++) {
+       for (int i = 0; i < components.size(); i++) { 
            if (components.at(i)->getType() == comp_->getType()) {
                components.erase(components.begin()+i); //!
                components.insert(components.begin()+i,std::move(comp_)); 
@@ -55,8 +54,8 @@ public:
            }
        }
    }
-    virtual void addComp(const std::shared_ptr<Component<T>>& comp) {
-        std::shared_ptr<Component<T>> comp_ = comp;
+    virtual void addComp(const std::shared_ptr<Component>& comp) {
+        std::shared_ptr<Component> comp_ = comp;
         if (components.size() == 0) {
             components.push_back(std::move(comp_));
             return;

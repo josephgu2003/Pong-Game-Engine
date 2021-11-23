@@ -18,7 +18,10 @@ uiText::uiText(const std::string& s, float x, float y): uiPiece::uiPiece(glm::ve
    
 void uiText::setText(const std::string& s) {
     VertexLoader::loadTextData(s, VAO, VBO, EBO, numIndices, map, position);
-}
+    if (s != "") {
+        
+    } 
+}  
   
 void uiText::hover(bool b) {
     if (b) { 
@@ -37,6 +40,5 @@ void uiText::setFireCallback(fireCallback f, Game* g_) {
 }
 
 void uiText::fire() {
-    
     callback(g);
 }

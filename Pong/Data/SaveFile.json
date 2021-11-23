@@ -1,35 +1,35 @@
 [
     {
-        "ActorEnum": 4,
         "Energy": [
             100.0,
             100.0
         ],
+        "FactoryEnum": 4,
         "Hunger": [
-            91.3544921875,
+            90.28128051757813,
             100.0
         ],
         "Life": [
             100.0,
             100.0
         ],
-        "Name": "Joe",
+        "Name": "Floro",
         "Position": [
-            3.878674268722534,
-            0.0,
-            31.940771102905273
+            37.43040466308594,
+            53.11391830444336,
+            -4.433756351470947
         ],
         "Relationships": [
             {
-                "Name1": "Joe",
-                "Name2": "Jeff",
+                "Name1": "Floro",
+                "Name2": "Moonbell",
                 "RelationshipIntensity": 5.0,
                 "RelationshipType": 1,
-                "SecretNickname1": "Jojo",
-                "SecretNickname2": "Jeffy"
+                "SecretNickname1": "Flowy",
+                "SecretNickname2": "Bell"
             },
             {
-                "Name1": "Joe",
+                "Name1": "Floro",
                 "Name2": "Ted",
                 "RelationshipIntensity": 5.0,
                 "RelationshipType": 2,
@@ -38,7 +38,7 @@
             }
         ],
         "Stamina": [
-            94.00606536865234,
+            92.93285369873047,
             100.0
         ],
         "SubType": "PlayerHero",
@@ -46,27 +46,27 @@
         "WorldID": 0
     },
     {
-        "ActorEnum": 4,
         "Energy": [
             100.0,
             100.0
         ],
+        "FactoryEnum": 4,
         "Hunger": [
-            91.3544921875,
+            90.28128051757813,
             100.0
         ],
         "Life": [
             100.0,
             100.0
         ],
-        "Name": "Joe",
+        "Name": "Floro",
         "Position": [
-            3.878674268722534,
-            0.0,
-            31.940771102905273
+            37.43040466308594,
+            53.11391830444336,
+            -4.433756351470947
         ],
         "Stamina": [
-            94.00606536865234,
+            92.93285369873047,
             100.0
         ],
         "SubType": "PlayerHero",
@@ -74,51 +74,90 @@
         "WorldID": 1
     },
     {
-        "ActorEnum": 4,
-        "Energy": [
-            0.0,
-            1.0
-        ],
-        "Hunger": [
-            90.17655181884766,
-            100.0
-        ],
-        "Life": [
-            9.917545318603516,
-            10.0
-        ],
-        "Name": "Jeff",
+        "FactoryEnum": 0,
         "Position": [
-            4.804248809814453,
-            0.0,
-            35.59663391113281
-        ],
-        "Relationships": [
-            {
-                "Name1": "Joe",
-                "Name2": "Jeff",
-                "RelationshipIntensity": 5.0,
-                "RelationshipType": 1,
-                "SecretNickname1": "Jojo",
-                "SecretNickname2": "Jeffy"
-            }
-        ],
-        "Stamina": [
-            93.44955444335938,
-            100.0
+            37.91379928588867,
+            25.56078338623047,
+            -13.109893321990967
         ],
         "SubType": "NPC",
-        "Type": "Actor",
+        "Type": "Prop",
         "WorldID": 0
     },
     {
-        "ActorEnum": 4,
+        "FactoryEnum": 0,
+        "Position": [
+            0.913799285888672,
+            25.56078338623047,
+            -4.109893321990967
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
+        "FactoryEnum": 0,
+        "Position": [
+            3.913799285888672,
+            25.56078338623047,
+            40.10989332199097
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
+        "FactoryEnum": 0,
+        "Position": [
+            -60.91379928588867,
+            25.56078338623047,
+            5.109893321990967
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
+        "FactoryEnum": 0,
+        "Position": [
+            0.913799285888672,
+            25.56078338623047,
+            -0.109893321990967
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
+        "FactoryEnum": 0,
+        "Position": [
+            35.91379928588867,
+            25.56078338623047,
+            1.109893321990967
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
+        "FactoryEnum": 0,
+        "Position": [
+            27.913799285888672,
+            25.56078338623047,
+            88.10989332199097
+        ],
+        "SubType": "NPC",
+        "Type": "Prop",
+        "WorldID": 0
+    },
+    {
         "Energy": [
             0.0,
             1.0
         ],
+        "FactoryEnum": 4,
         "Hunger": [
-            89.82317352294922,
+            88.74786376953125,
             100.0
         ],
         "Life": [
@@ -132,12 +171,12 @@
             2
         ],
         "Position": [
-            5.150012016296387,
-            0.0,
-            34.00005340576172
+            6.500017166137695,
+            43.24005126953125,
+            3.600048065185547
         ],
         "Stamina": [
-            93.12907409667969,
+            92.05376434326172,
             100.0
         ],
         "SubType": "NPC",
@@ -145,13 +184,56 @@
         "WorldID": 0
     },
     {
-        "ActorEnum": 4,
         "Energy": [
             0.0,
             1.0
         ],
+        "FactoryEnum": 4,
         "Hunger": [
-            89.716064453125,
+            88.74625396728516,
+            100.0
+        ],
+        "Life": [
+            83.27903747558594,
+            100.0
+        ],
+        "Name": "Moonbell",
+        "PersonalityTraits": [
+            0,
+            1,
+            2
+        ],
+        "Position": [
+            39.0,
+            52.79999923706055,
+            -1.0
+        ],
+        "Relationships": [
+            {
+                "Name1": "Floro",
+                "Name2": "Moonbell",
+                "RelationshipIntensity": 5.0,
+                "RelationshipType": 1,
+                "SecretNickname1": "Flowy",
+                "SecretNickname2": "Bell"
+            }
+        ],
+        "Stamina": [
+            92.05215454101563,
+            100.0
+        ],
+        "SubType": "NPC",
+        "Type": "Actor",
+        "WorldID": 0
+    },
+    {
+        "Energy": [
+            0.0,
+            1.0
+        ],
+        "FactoryEnum": 4,
+        "Hunger": [
+            88.6363754272461,
             100.0
         ],
         "Life": [
@@ -161,12 +243,12 @@
         "Name": "Ted",
         "Position": [
             6.79998779296875,
-            0.0,
-            34.90003967285156
+            52.0000114440918,
+            35.000038146972656
         ],
         "Relationships": [
             {
-                "Name1": "Joe",
+                "Name1": "Floro",
                 "Name2": "Ted",
                 "RelationshipIntensity": 5.0,
                 "RelationshipType": 2,
@@ -175,7 +257,7 @@
             }
         ],
         "Stamina": [
-            93.05260467529297,
+            91.97291564941406,
             100.0
         ],
         "SubType": "NPC",
@@ -183,27 +265,27 @@
         "WorldID": 0
     },
     {
-        "ActorEnum": 2,
         "Energy": [
             0.0,
             1.0
         ],
+        "FactoryEnum": 2,
         "Hunger": [
-            90.80748748779297,
+            90.11746978759766,
             100.0
         ],
         "Life": [
-            97.98886108398438,
+            97.9052734375,
             100.0
         ],
-        "Name": "Mysterious Figure",
+        "Name": "Phoenix",
         "Position": [
-            18.478355407714844,
-            0.0,
-            6.249467849731445
+            50.478355407714844,
+            27.800214767456055,
+            6.499468803405762
         ],
         "Stamina": [
-            94.0003433227539,
+            93.3103256225586,
             100.0
         ],
         "SubType": "NPC",
@@ -211,13 +293,13 @@
         "WorldID": 0
     },
     {
-        "Name": "Script",
+        "FactoryEnum": 0,
         "Position": [
-            0.0,
+            39.0,
             10.0,
-            10.0
+            -1.0
         ],
-        "Type": null,
+        "Type": "Script",
         "WorldID": 0
     }
 ]

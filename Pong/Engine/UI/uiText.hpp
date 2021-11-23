@@ -19,7 +19,7 @@ class uiText : public uiPiece {
 private:
     Game* g = nullptr; //spaggetttiiiii
     fireCallback callback;
-public:
+public: 
     uiText(const std::string& s, float x, float y);
     void setFireCallback(fireCallback f, Game *g );
     void setText(const std::string& s);

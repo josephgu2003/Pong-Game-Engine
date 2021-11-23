@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "PGraphicsComponent.hpp"
 
+class ParticleSystem;
+ 
 class PQuadGraphicsComponent : public PGraphicsComponent {
     public:
     PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const TextureMaps& map);

@@ -8,7 +8,7 @@
 #include "GraphicsComponent.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp" 
-GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const TextureMaps& map_) : Component(actor), GraphicsObject::GraphicsObject() {
+GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_) : Component(actor), GraphicsObject::GraphicsObject() {
     Component::type = GRAPHICS; 
     shader = shader_;
     map = map_;

@@ -170,7 +170,7 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
   texture->dimensions = newTex.dimensions;
 }
 
-int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, TextureMaps& map) {
+int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, Material& map) {
     for (int i = 0; i < loadedGlyphs.size(); i++) {
         if (std::strcmp(loadedGlyphs.at(i).first.path.data(), filePath) == 0) {
             Characters = loadedGlyphs.at(i).second;

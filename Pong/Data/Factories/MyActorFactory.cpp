@@ -45,7 +45,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
                  
             Renderer::bindShaderUniblock(shader, ViewProj); 
             Renderer::bindShaderUniblock(shader, Lights);
-            TextureMaps map;
+            Material map;
             AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
@@ -68,7 +68,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Renderer::bindShaderUniblock(shader, ViewProj);
             Renderer::bindShaderUniblock(shader, Lights);
 
-            TextureMaps map;
+            Material map;
             AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
              
@@ -95,7 +95,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
 
             Renderer::bindShaderUniblock(shader, Lights);
              
-            TextureMaps map;
+            Material map;
             AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
       
@@ -129,7 +129,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Renderer::bindShaderUniblock(shader, ViewProj);
             Renderer::bindShaderUniblock(shader, Lights);
             
-            TextureMaps map;
+            Material map;
             AssetManager::loadTexture("Resources/Models/Vampire/Vampire_diffuse.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
       
@@ -147,7 +147,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             actor->Componentable::addComp<NameComponent>(*(actor.get()));
             actor->Componentable::addComp<LifeComponent>(*(actor.get()));
         
-            TextureMaps map;  
+            Material map;  
             AssetManager::loadTexture("Resources/Models/Knight/hollowknight.png", &map.diffuse, true);
             
             AssetManager::loadTexture(TEX_BLANK_NORMALS, &map.normMap, false);
@@ -155,7 +155,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
             shader->use();
             shader->setFloat("size", 0.003);
-            shader->setFloat("brightness", 0.5); 
+            shader->setFloat("brightness", 0.0);
               
             Renderer::bindShaderUniblock(shader,      ViewProj);
             Renderer::bindShaderUniblock(shader,      Lights);
@@ -174,7 +174,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             
         }
         case ACTOR_FISH: { // maybe actor would want to know about ability field variables??
-            TextureMaps map;
+            Material map;
             AssetManager::loadTexture(TEX_FISH, &map.diffuse, true); 
 
             Shader* shader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
@@ -243,7 +243,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
         }
         default: {
                
-        TextureMaps map;
+        Material map;
         AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
             
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");

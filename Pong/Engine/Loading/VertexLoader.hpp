@@ -16,7 +16,7 @@
 #include "Vertices.hpp"
 #include "AnimComponent.hpp"
 
-struct TextureMaps; 
+struct Material; 
 class MeshComponent; 
 class VertexLoader {
 private:
@@ -34,15 +34,15 @@ private:
     static void setVertexBoneData(TBNBWVertex* v, int id, float weight);
     static void reset();
 public: 
-   // static std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
-  //  static GLuint getTextureFromFile(std::string path);
+    static std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName); 
+ //   static GLuint getTextureFromFile(std::string path);
     // ^^ what about making them work??
     
     static void loadModel(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModelAnimations(AnimComponent* anim_, std::string filePath_);
     static void loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
      
-    static void loadTextData(const std::string& s, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, TextureMaps& map, glm::vec2 position);
+    static void loadTextData(const std::string& s, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
     static void setupVAOAttribs(VertexType vt);
     static void setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout);
     static void load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position);

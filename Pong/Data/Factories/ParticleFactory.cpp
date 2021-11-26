@@ -18,7 +18,7 @@
 std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSeed PESeed, glm::vec3 posVec_) {
     std::shared_ptr<ParticleSystem> particle;
     Shader* shader = new Shader();
-    TextureMaps map;
+    Material map;
     switch (PESeed) {
         case PE_FIREWORKS: {
             int numParticles = 200;
@@ -68,15 +68,15 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,1,0));
             break;
         };
-        case PE_SNOW: {
+        case PE_SNOW: { 
             int numParticles = 2000;
-            particle = std::make_shared<ParticleSystem>(numParticles, 1000.0);
+            particle = std::make_shared<ParticleSystem>(numParticles, 2000.0);
             shader->init("Shaders/PointPart.vs", "Shaders/ColorPartF.fs");
             std::shared_ptr<PGraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*particle.get(), numParticles, 0.03, shader, map);
-            pgc->setColor(1.0, 1.0, 1.0);
-            particle->addComp(pgc);
-            particle->addComp<PRefreshComponent>(*particle.get(), 4.0, 300, 0.2, glm::vec3(10,9,10), glm::vec3(0, -0.03, 0), glm::vec3(0.08, -0.07, 0));
-            particle->addComp<PPhysicsComponent>(*particle.get(), 0, 1);
+            pgc->setColor(0.1, 0.1, 0.1);
+            particle->addComp(pgc); 
+            particle->addComp<PRefreshComponent>(*particle.get(), 3.0, 600, 0.2, glm::vec3(30,9,30), glm::vec3(0, -0.03, 0), glm::vec3(0.08, -0.07, 0));
+            particle->addComp<PPhysicsComponent>(*particle.get(), 0, 1); 
             break;
         }; 
         default: {

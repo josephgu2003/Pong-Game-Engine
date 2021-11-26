@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 
 
-PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const TextureMaps& map_) : Component(pe), GraphicsObject(){
+PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const Material& map_) : Component(pe), GraphicsObject(){
     shader = shader_;
     shader->use();
     shader->setFloat("size", size); 

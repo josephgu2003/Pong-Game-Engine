@@ -35,7 +35,7 @@ void GraphicsObject::setShader(Shader* shader_) {
     shader = shader_; 
 }
  
-TextureMaps& GraphicsObject::getTextureMap() {
+Material& GraphicsObject::getTextureMap() {
     return map;
 }
 

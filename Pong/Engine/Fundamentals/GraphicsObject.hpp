@@ -28,7 +28,7 @@ protected:
     GLuint EBO;
     GLuint numIndices;  
     GLuint instanceCount;  
-    TextureMaps map;
+    Material map;
     GLenum drawTarget;
     void makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount);
     void updateInstanceBuffer(const std::vector<float>& v);
@@ -48,7 +48,7 @@ public:
     GraphicsObject();
     Shader* getShader();
     void setShader(Shader* shader);
-    TextureMaps& getTextureMap();
+    Material& getTextureMap();
     GLenum getDrawTarget();
     void bind();
     void unbind(); 

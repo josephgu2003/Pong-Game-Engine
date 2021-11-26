@@ -14,7 +14,6 @@
 #include "Particle.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
-#include "Force.hpp"
 #include "AbilityManager.hpp" 
 #include <memory>
 #include "Batch.hpp"
@@ -39,6 +38,7 @@ struct Weather {
 
 class Renderer;
 class MapChunk;
+class uiFrame;
 
 struct Updates {
     bool lightingUpdate;
@@ -67,13 +67,15 @@ class World {
 private: 
     MapManager mapManager;
     uiText* activeText = NULL;
+    uiFrame* textFrame = NULL; 
     Updates updates = {false,false, false};
     Renderer* renderer = NULL;
       
+    std::weak_ptr<Actor> playerHero;
+    
     std::vector<std::shared_ptr<Actor>> allActorPtrs;
     std::vector<std::shared_ptr<ParticleSystem>> allParticleEffects;
     std::vector<std::shared_ptr<Camera>> allCameraPtrs;
-    std::vector<std::shared_ptr<Force>> allForces;
     std::vector<std::shared_ptr<Prop>> allProps;
     std::vector<std::shared_ptr<Script>> allScripts;
     std::vector<std::shared_ptr<SoundText>> allSoundTexts;
@@ -101,9 +103,6 @@ public:
         }
         if (typeid(T) == typeid(ParticleSystem)) {
             allParticleEffects.push_back(dynamic_pointer_cast<ParticleSystem>(placeable));
-        }
-        if (typeid(T) == typeid(Force)) {
-            allForces.push_back(dynamic_pointer_cast<Force>(placeable));
         }
         if (typeid(T) == typeid(Camera)) {
             allCameraPtrs.push_back(dynamic_pointer_cast<Camera>(placeable));
@@ -143,13 +142,6 @@ public:
                 }
             }
         }
-        if (typeid(T) == typeid(Force)) {
-            for (int i = 0; i < allForces.size(); i++) {
-                if (dynamic_cast<Force*>(t) == allForces.at(i).get()) {
-                    allForces.erase(allForces.begin()+i);
-                }
-            }
-        }
         if (typeid(T) == typeid(Camera)) {
             for (int i = 0; i < allCameraPtrs.size(); i++) {
                 if (dynamic_cast<Camera*>(t) == allCameraPtrs.at(i).get()) {
@@ -179,7 +171,6 @@ public:
     void tick();
     
     void informActorProximity(Actor& actor, float radius);
-    bool informParticlesForce(ParticleSystem* effect);
     
     const ActorList getNearActorsWith(Actor* actor, CompType ct)
     {
@@ -219,6 +210,7 @@ public:
     
     float getHeightAt(glm::vec2 xz);
 
+    void setPlayerHero(const std::shared_ptr<Actor>& ph);
 };
  
 

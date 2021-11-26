@@ -24,7 +24,7 @@
 
 //loads textures and assets
 
-struct Character {
+struct Character { 
     GLuint id;
     glm::ivec2   size;       // Size of glyph
     glm::ivec2   bearing;    // Offset from baseline to left/top of glyph
@@ -55,20 +55,17 @@ struct DoubleFrame {
 
 struct Texture {
     GLuint id = -1;
-    std::string type;
     std::string path;
     glm::vec3 dimensions;
     GLenum textureTarget;
 };
 
-struct TextureMaps {
+struct Material {
     Texture diffuse;
     Texture specular;
     Texture normMap;
-    Texture noise;
-    Texture gradient;
-    Texture voronoi;
-};
+    float shininess = 0.5;
+}; 
  
 class AssetManager {
 private:
@@ -79,7 +76,7 @@ private:
 public:
     static void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
 
-    static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters, TextureMaps& map);
+    static int loadGlyphs(const char* filePath, std::map<char, Character>& Characters, Material& map);
 
     static void load3DTexture(const char* filePath, Texture* texture);
 

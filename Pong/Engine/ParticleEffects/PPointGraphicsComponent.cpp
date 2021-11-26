@@ -10,7 +10,7 @@
 #include "Particle.hpp"
 #include "PRefreshComponent.hpp"
 
-PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const TextureMaps& map_) : PGraphicsComponent(pe, size, shader, map_){
+PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map_) : PGraphicsComponent(pe, size, shader, map_){
     int datasize = numberParticles * 4 * sizeof(float);
     std::vector<int> v = {3,1};
     VertexLoader::loadPoint(VAO, VBO, EBO, numIndices);

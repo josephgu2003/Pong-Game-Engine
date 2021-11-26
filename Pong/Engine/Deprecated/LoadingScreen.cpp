@@ -9,7 +9,7 @@
 
 LoadingScreen::LoadingScreen() {
     frameShader = Shader("Shaders/LoadScreenV.vs", "Shaders/LoadScreenF.fs");
-    textShader = Shader("Shaders/Simple2D.vs", "Shaders/TextFShader.fs");
+    textShader = Shader("Shaders/UI.vs", "Shaders/TextFShader.fs");
       
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);

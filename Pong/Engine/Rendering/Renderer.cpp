@@ -53,8 +53,8 @@ Renderer::Renderer() {
     
     window = glfwGetCurrentContext();
     skyShader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
-    blurShader = new Shader("Shaders/Simple2D.vs","Shaders/BloomFShader.fs");
-    frameShader = new Shader("Shaders/Simple2D.vs", "Shaders/FBufferFShader.fs");
+    blurShader = new Shader("Shaders/UI.vs","Shaders/BloomFShader.fs");
+    frameShader = new Shader("Shaders/UI.vs", "Shaders/FBufferFShader.fs");
     
     viewMat = glm::mat4(1);
     float ratio = (WINDOW_WIDTH)/(WINDOW_HEIGHT);
@@ -62,7 +62,8 @@ Renderer::Renderer() {
     timeT = 0; 
     AssetManager::loadTexture(TEX_GRADIENT, &gradient, false);
     AssetManager::loadTexture("Resources/Utility/noise.png", &noise, false);
-    AssetManager::loadTexture(TEX_EMPTY, &texture, false);
+    AssetManager::loadTexture(TEX_EMPTY, &empty, false);
+    AssetManager::loadTexture(TEX_VORONOI, &voronoi, false);
        
     int width, height;  
     glfwGetFramebufferSize(window, &width, &height);
@@ -110,8 +111,8 @@ Renderer::Renderer() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 3, uboDistanceFog);
     
-    glGenTextures(1, &skyTexture.id);
-    
+    glGenTextures(1, &skyTexture.id); 
+    glUniformBlockBinding(skyShader->ID, glGetUniformBlockIndex(skyShader->ID, "DistanceFog"), 3);
 }
 
 Renderer::~Renderer() {  
@@ -216,7 +217,7 @@ void Renderer::loadSkyBoxData() {
     unsigned char* imageData = NULL;
     glActiveTexture(GL_TEXTURE0); 
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyTexture.id);
-    
+
     std::vector<std::string>*skyFiles = world->getSkyTextureFiles();
     for (unsigned int i = 0; i < skyFiles->size(); i++) {
         imageData = stbi_load(skyFiles->at(i).c_str(), &imageWidth, &imageHeight, &channels, 0);
@@ -224,7 +225,7 @@ void Renderer::loadSkyBoxData() {
             GLenum format = 4;
                    if (channels == 1)
                        format = GL_RED;
-                   else if (channels == 3)
+                   else if (channels == 3) 
                        format = GL_RGB; 
                    else if (channels == 4)
                        format = GL_RGBA;
@@ -243,7 +244,7 @@ void Renderer::loadSkyBoxData() {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     stbi_image_free(imageData);
- 
+    
 }
 
 void Renderer::checkForUpdates() { // spaghetti
@@ -383,8 +384,7 @@ void Renderer::renderSky() {
 }
 
  
-void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
-    
+void Renderer::bindTextures(Shader* shader, Material& map) {
     if (map.diffuse.id != -1) {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(glGetUniformLocation(shader->ID, "diffuse"), 0);
@@ -403,22 +403,16 @@ void Renderer::bindTextures(Shader* shader, TextureMaps& map) {
       glBindTexture(GL_TEXTURE_2D, map.normMap.id);
     } 
     
-    if (map.voronoi.id != -1) {  
+    if (glGetUniformLocation(shader->ID, "voronoi") != -1) {
     glActiveTexture(GL_TEXTURE3);
       glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
-      glBindTexture(GL_TEXTURE_2D, map.voronoi.id);
+      glBindTexture(GL_TEXTURE_2D, voronoi.id);
     }
      
     if (glGetUniformLocation(shader->ID, "noise") != -1) {
         glActiveTexture(GL_TEXTURE6);
         glUniform1i(glGetUniformLocation(shader->ID, "noise"), 6);
         glBindTexture(GL_TEXTURE_2D, gradient.id);
-    }
-
-    if (map.noise.id != -1) {
-        glActiveTexture(GL_TEXTURE4);
-      glUniform1i(glGetUniformLocation(shader->ID, "noise"), 4);
-      glBindTexture(GL_TEXTURE_2D, noise.id);
     }
     
     if (glGetUniformLocation(shader->ID, "gradient") != -1) {
@@ -434,7 +428,7 @@ void Renderer::renderActor(GraphicsObject* r) {
     r->bind();  
     Shader* s = r->getShader();  
     s->use();  
-    TextureMaps& map = r->getTextureMap(); 
+    Material& map = r->getTextureMap(); 
     bindTextures(s, map);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
@@ -449,7 +443,7 @@ void Renderer::renderParticles(GraphicsObject* r, int instanceCount) {
     r->bind();
     Shader* s = r->getShader();
     s->use(); 
-    TextureMaps& map = r->getTextureMap();
+    Material& map = r->getTextureMap();
     bindTextures(s, map);
     
     glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, instanceCount);
@@ -474,7 +468,7 @@ void Renderer::renderTerrain(GraphicsObject* r) {
     r->bind();
     Shader* s = r->getShader(); 
     s->use();
-    TextureMaps& map = r->getTextureMap();
+    Material& map = r->getTextureMap();
     bindTextures(s, map);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
@@ -486,7 +480,7 @@ void Renderer::renderFoliage(GraphicsObject* r) {
     r->bind();
     Shader* s = r->getShader();
     s->use();
-    TextureMaps& map = r->getTextureMap();
+    Material& map = r->getTextureMap();
     bindTextures(s, map);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();

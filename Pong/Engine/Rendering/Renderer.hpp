@@ -53,10 +53,11 @@ private:
     Frame frame0;
     Frame frame1;
     
-    Texture texture;
+    Texture empty;
     Texture skyTexture;
     Texture gradient;
     Texture noise;
+    Texture voronoi;
 
     Shader* skyShader; 
     Shader* blurShader;
@@ -77,7 +78,7 @@ private:
     void updateLights();
     void updateUniformStopWatch();
     float timeT;
-    void bindTextures(Shader* shader, TextureMaps& map);
+    void bindTextures(Shader* shader, Material& map);
     void resizeViewPort();
 public:
     static void bindShaderUniblock(Shader* shader, Uniblock block);

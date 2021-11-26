@@ -29,7 +29,7 @@ bool Script::checkAllHere() { // slow???
     bool allHere = true;
     for (auto i = actors.begin() ; i != actors.end(); i++){
         auto x = world->getActorNamed(i->first);
-        if ((x->dummy) || (x->getDistanceTo(this)) > 5.0) { 
+        if ((x->dummy) || (x->getDistanceTo(this)) > 30.0) { 
             allHere = false;
         } else if (i->second->dummy){
             i->second = x;
@@ -42,19 +42,19 @@ void Script::incStep(bool resetTime) {
     step++;
     if (resetTime) stopWatch.resetTime();
 }
- 
+  
 void Script::waitFor(float duration) {
-    if (lastTime < 0) {
+    if (lastTime < 0.0f) {
         lastTime = stopWatch.getTime();
     }
     if ((stopWatch.getTime() - lastTime) > duration) {
         step++;
-        lastTime = -1.0f; 
-    }
+        lastTime = -1.0f;
+    } 
 }
 
 bool Script::isWaiting() {
-    if (lastTime < 0) {
+    if (lastTime < 0.0f) {
         return false;
     }
     return true;

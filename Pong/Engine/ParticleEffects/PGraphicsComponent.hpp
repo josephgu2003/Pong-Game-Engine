@@ -16,7 +16,7 @@ class ParticleSystem;
 
 class PGraphicsComponent : public GraphicsObject, public Component {
 public:
-    PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader, const TextureMaps& map);
+    PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader, const Material& map);
     virtual void draw(Renderer* r) override;
     virtual void tick() override;
     void setColor(float r, float g, float b);

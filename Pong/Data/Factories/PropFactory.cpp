@@ -20,27 +20,27 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     }; 
     switch (pe) {
         case PROP_TREE: {
-            TextureMaps map;
+            Material map;  
           //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/tree/source/treediffuse.png", &map.diffuse, true);
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setFloat("size", 0.02); 
+            shader->setFloat("size", 1.0);
             shader->setFloat("brightness", 0.0); 
-                  
+                   
             Renderer::bindShaderUniblock(shader,      ViewProj);
-   
+    
             Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map);
-            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree2.fbx");
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree3.fbx");
             prop->addComp(gc);
             break;
         }
             
         case PROP_GRASS: {
-            TextureMaps map;
+            Material map;
           //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/flowers/flower.png", &map.diffuse, true);
             

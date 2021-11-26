@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "World.hpp"
 
-#define CAM_OFFSET glm::vec3(0,0.5,0)
+#define CAM_OFFSET glm::vec3(0,1.5,0)
 Camera::Camera() : Positionable() {
 }
 

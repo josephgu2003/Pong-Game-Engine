@@ -11,12 +11,11 @@
 #include "InputHandler.hpp"
 #include "uiText.hpp"
 
-uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath) : uiPiece(pos, dimensions) {
+uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath) : uiPiece(pos, dimensions, "Shaders/UI.vs", "Shaders/GenericUI.fs") {
     AssetManager::loadTexture(filePath.c_str(), &map.diffuse, true);
-    setShader(new Shader("Shaders/Simple2D.vs", "Shaders/GenericUI.fs"));
-    shader->use(); 
+    shader->use();  
     shader->setFloat("ratio", 0.2);  
-    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, dimensions, pos);
+    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, dimensions, glm::vec3(0));
 }
 
 void uiMenu::draw(Renderer* r) {

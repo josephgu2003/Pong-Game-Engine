@@ -35,12 +35,12 @@ private:
 protected:
     Watch watch;
     
-    GLFWwindow* window; // Windowed
+    GLFWwindow* window = NULL; // Windowed
     
     std::shared_ptr<Camera> camera;
     std::shared_ptr<uiLayout> ui;
     
-    World world0;
+    World world0; // a Level can have multiple world
     World world1;
     
     World* activeWorld = NULL;
@@ -73,7 +73,6 @@ public:
     InputHandler& getInputHandler();
     void swapWorld();
     std::shared_ptr<uiLayout>& getUI();
-    
 };
 
 #endif /* Game_hpp */

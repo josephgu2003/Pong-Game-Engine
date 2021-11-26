@@ -45,7 +45,7 @@ Game::Game() {
     renderer0->loadSkyBoxData(); // sus
     renderer1->loadSkyBoxData(); //sus
 
-    audio.playMusic(); //sus 
+  //  audio.playMusic(); //sus 
 }
 
 void Game::initWindow() {

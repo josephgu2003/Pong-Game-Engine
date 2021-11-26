@@ -12,7 +12,6 @@
 #include "Component.hpp"
 #include <glm/glm.hpp>
 #include <vector>
-#include "Force.hpp"
 
 class ParticleSystem;
 struct Particle; 
@@ -21,7 +20,6 @@ class PPhysicsComponent : public Component {
 private:
     Particle* particles = NULL;
     glm::vec3* velocities = NULL;
-    std::vector<std::unique_ptr<Force>> forces;
     int numParticles;
     float gravity;
     float friction;

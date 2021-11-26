@@ -8,12 +8,15 @@
 #include "uiPiece.hpp"
 #include "Renderer.hpp"
 
-uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_) : GraphicsObject::GraphicsObject() {
+uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_, std::string vs, std::string fs) : GraphicsObject::GraphicsObject() {
     position = position_;
     dimensions = dimensions_;
+    setShader(new Shader(vs.c_str(), fs.c_str()));
+    shader->use();
+    shader->setVec3("position", glm::vec3(position_.x, position_.y, 0));
 } 
 
-void uiPiece::draw(Renderer* r) {
+void uiPiece::draw(Renderer* r) { 
     r->renderUI(this); 
 }
  

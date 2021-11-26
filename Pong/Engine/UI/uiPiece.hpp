@@ -20,7 +20,7 @@ protected:
     glm::vec2 position;
     glm::vec2 dimensions;
 public:
-    uiPiece(glm::vec2 position, glm::vec2 dimensions);
+    uiPiece(glm::vec2 position, glm::vec2 dimensions, std::string vs, std::string fs);
     virtual void draw(Renderer* r) override;
     void insertChild(const std::shared_ptr<uiPiece>& uip);
 };

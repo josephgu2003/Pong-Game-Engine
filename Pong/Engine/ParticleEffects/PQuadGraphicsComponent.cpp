@@ -12,7 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Particle.hpp"
 
-PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const TextureMaps& map) : PGraphicsComponent(pe, size, shader, map){
+PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map) : PGraphicsComponent(pe, size, shader, map){
     int datasize = numberParticles * 17 * sizeof(float);
     std::vector<int> v = {4,4,4,4,1};
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(size, size), glm::vec2(0,0));

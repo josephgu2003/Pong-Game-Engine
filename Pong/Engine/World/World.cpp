@@ -16,6 +16,7 @@
 #include "Renderer.hpp"
 #include "PGraphicsComponent.hpp" 
 #include "WorldChunk.hpp"
+#include "uiFrame.hpp"
   
 World::World() {
     float skyVerticesCopy[] = {
@@ -62,28 +63,24 @@ World::World() {
          1.0f, -1.0f,  1.0f
     };
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
-  /**  skyTextureFiles.push_back("Resources/Skybox/right.png");
-    skyTextureFiles.push_back("Resources/Skybox/left.png");
-    skyTextureFiles.push_back("Resources/Skybox/top.png");
-    skyTextureFiles.push_back("Resources/Skybox/bottom.png");
-    skyTextureFiles.push_back("Resources/Skybox/back.png");
-    skyTextureFiles.push_back("Resources/Skybox/front.png");**/
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_left.jpg");
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_right.jpg");
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_top.jpg");
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_bottom.jpg");
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_front.jpg");
-    weather.skyTextureFiles.push_back("Resources/Skybox/NightStars/BlueNebular_back.jpg");
+    weather.skyTextureFiles.push_back("Resources/Skybox/right.png");
+    weather.skyTextureFiles.push_back("Resources/Skybox/left.png");
+    weather.skyTextureFiles.push_back("Resources/Skybox/top.png");
+    weather.skyTextureFiles.push_back("Resources/Skybox/bottom.png");
+    weather.skyTextureFiles.push_back("Resources/Skybox/back.png");
+    weather.skyTextureFiles.push_back("Resources/Skybox/front.png");
 }
 
 World::~World() {
-     
+      
 }
 
 void World::insertActor(const std::shared_ptr<Actor>& actor) {
-    activeText = new uiText("", -0.5, -0.7);  // lmfao???
+    activeText = new uiText("", -0.5, -0.8);  // lmfao???
+    textFrame = new uiFrame(glm::vec2(-0.7, -0.9), glm::vec2(1.5,0.23), TEX_BLACK_GRADIENT);
+    textFrame->insertChild(std::shared_ptr<uiText>(activeText));
     std::shared_ptr<Actor> p = actor;
-    allActorPtrs.push_back(std::move(p)); 
+    allActorPtrs.push_back(std::move(p));
     actor -> setWorld(this); 
 }
  
@@ -113,6 +110,7 @@ void World::setWeather(DirectionalLight dirLight_, float fogDensity_, float fogG
     weather.fogDensity = fogDensity_;
     weather.fogGradient = fogGradient_;
     weather.fogColor = fogColor_;
+    weather.skyTextureFiles = skyTextureFiles_; 
     updates.lightingUpdate = true;
     updates.fogUpdate = true;
     updates.skyUpdate = true; 
@@ -155,12 +153,7 @@ void World::tick() {
         if (cc && cc->QHasAbilities()) {
             abilityManager.handleCombatComp(cc);
         }
-    } 
-    for(int i = 0; i < allForces.size(); i++) {
-
-        allForces[i]->tick();
     }
-
 
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
         (*i)->tick(); 
@@ -187,8 +180,8 @@ void World::tick() {
     for(auto i = allParticleEffects.begin(); i != allParticleEffects.end(); i++) {
         (*i)->getComponent<PGraphicsComponent>()->draw(renderer);
     }
-    if (activeText) 
-    renderer->renderText(activeText);
+    if (textFrame)
+    textFrame->draw(renderer);
 }  
 
 void World::informActorProximity(Actor& actor, float radius) {
@@ -200,23 +193,6 @@ void World::informActorProximity(Actor& actor, float radius) {
         }
     }
 } 
- 
-bool World::informParticlesForce(ParticleSystem* effect) {
- /**   glm::vec3 uniformstraightforce = glm::vec3(0);
-    bool b = false;
-    effect->forces.clear();
-    for (int i = 0; i < allForces.size(); i++) {
-        if (glm::length(effect->getPos()-allForces.at(i)->getPos()) < 5) {
-            uniformstraightforce += allForces.at(i)->getUniStraightForce();
-            b = true;
-            effect->forces.push_back( allForces.at(i));
-        }
-    }
-    effect->setForce(uniformstraightforce);
-    return b;
-  **/
-    return true; 
-}
 
 
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
@@ -257,12 +233,18 @@ void World::setRenderer(Renderer *renderer_) {
 
 void World::setMap(const std::string& filePath, int pixelsX, int pixelsY, glm::vec3 scaling) {
     mapManager.setMap(filePath, pixelsX, pixelsY, scaling);
-    mapManager.loadChunks(allCameraPtrs.at(0)->getPos());
+    if (auto x = playerHero.lock()) {
+        mapManager.loadChunks(x->getPos());
+    }
 } 
  
 float World::getHeightAt(glm::vec2 xz) {
     return mapManager.getHeightAt(xz); 
-}  
+}
+
+void World::setPlayerHero(const std::shared_ptr<Actor>& ph) {
+    playerHero = ph;
+}
 // next steps:
 // world objects class hierarchy
 // terrain height for chars

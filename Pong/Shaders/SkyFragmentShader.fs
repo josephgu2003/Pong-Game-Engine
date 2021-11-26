@@ -5,11 +5,22 @@
     uniform samplerCube skyBox;
     uniform float brightness;
 
+layout (std140) uniform DistanceFog
+{
+    float fogDensity;
+    float fogGradient;
+    float frustrumNear;
+    float frustrumFar;
+    vec3 fogColor;
+};
+
     void main()
     {
-        vec4 fragColor = (brightness)*texture(skyBox, TexVec); //brightness
-        vec3 direction = vec3(TexVec.x,0.0,TexVec.z);
-        float gradient = dot(normalize(TexVec), normalize(direction));
+        vec4 fragColor = texture(skyBox, TexVec); //brightness
+        float gradient = TexVec.y;
+        gradient = 1.0 - gradient;
+        fragColor.rgb = mix(fragColor.rgb, fogColor, pow(gradient,2));
+        fragColor.rgb *= 0.5; 
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

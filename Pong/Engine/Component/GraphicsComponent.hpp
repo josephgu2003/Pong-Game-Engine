@@ -34,7 +34,7 @@ protected:
     VertexMesh* mesh = nullptr;
     DrawCall drawCall;
 public:  
-    GraphicsComponent(Componentable& actor, Shader* shader, const TextureMaps& map);
+    GraphicsComponent(Componentable& actor, Shader* shader, const Material& map);
     void initModel(const std::string& model); 
     void initGrid(int verticesX, int verticesY, float scale, VertexMesh*& mesh);
     virtual void tick() override;

@@ -9,21 +9,20 @@
 #include "VertexLoader.hpp" 
 #include "Shader.hpp"
 #include <glm/glm.hpp>
-uiText::uiText(const std::string& s, float x, float y): uiPiece::uiPiece(glm::vec2(x,y), glm::vec2(1,1)) {
-    setShader(new Shader("Shaders/Simple2D.vs", "Shaders/TextFShader.fs"));
+uiText::uiText(const std::string& s, float x, float y): uiPiece::uiPiece(glm::vec2(x,y), glm::vec2(1,1), "Shaders/UI.vs", "Shaders/TextFShader.fs") {
     shader->use(); 
-    shader->setFloat("brightness", 0.0);
-    VertexLoader::loadTextData(s, VAO, VBO, EBO, numIndices, map, position);
+    shader->setFloat("brightness", 0.0); 
+    VertexLoader::loadTextData(s, VAO, VBO, EBO, numIndices, map, glm::vec3(0)); 
 } 
    
 void uiText::setText(const std::string& s) {
-    VertexLoader::loadTextData(s, VAO, VBO, EBO, numIndices, map, position);
+    VertexLoader::loadTextData(s, VAO, VBO, EBO, numIndices, map, glm::vec3(0));
     if (s != "") {
         
-    } 
+    }
 }  
   
-void uiText::hover(bool b) {
+void uiText::hover(bool b) { 
     if (b) { 
         shader->use();
         shader->setFloat("brightness", 1.0);
@@ -33,7 +32,6 @@ void uiText::hover(bool b) {
     }
 }
   
-
 void uiText::setFireCallback(fireCallback f, Game* g_) {
     callback = f;
     g = g_;

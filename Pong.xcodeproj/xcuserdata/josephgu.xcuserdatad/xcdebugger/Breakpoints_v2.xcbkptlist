@@ -4947,8 +4947,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "492"
+            endingLineNumber = "492"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4963,8 +4963,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
             landmarkName = "MyGame::MyGame()"
             landmarkType = "7">
             <Locations>
@@ -5027,8 +5027,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5043,8 +5043,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5059,8 +5059,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5075,8 +5075,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5091,8 +5091,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5107,8 +5107,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5123,8 +5123,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "Renderer::loadSkyBoxData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5139,8 +5139,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5155,8 +5155,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5171,8 +5171,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "569"
-            endingLineNumber = "569"
+            startingLineNumber = "573"
+            endingLineNumber = "573"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5187,8 +5187,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "533"
-            endingLineNumber = "533"
+            startingLineNumber = "537"
+            endingLineNumber = "537"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5235,8 +5235,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5957,8 +5957,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5973,8 +5973,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -6053,8 +6053,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "521"
-            endingLineNumber = "521"
+            startingLineNumber = "522"
+            endingLineNumber = "522"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6069,8 +6069,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "548"
-            endingLineNumber = "548"
+            startingLineNumber = "552"
+            endingLineNumber = "552"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6085,8 +6085,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "564"
-            endingLineNumber = "564"
+            startingLineNumber = "568"
+            endingLineNumber = "568"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6117,8 +6117,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
+            startingLineNumber = "575"
+            endingLineNumber = "575"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6133,8 +6133,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "547"
-            endingLineNumber = "547"
+            startingLineNumber = "551"
+            endingLineNumber = "551"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6149,8 +6149,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "560"
-            endingLineNumber = "560"
+            startingLineNumber = "564"
+            endingLineNumber = "564"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6165,8 +6165,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "494"
-            endingLineNumber = "494"
+            startingLineNumber = "495"
+            endingLineNumber = "495"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6197,24 +6197,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "523"
-            endingLineNumber = "523"
-            landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "14A5D486-A168-468B-8760-3C21E8B3F09D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "529"
-            endingLineNumber = "529"
+            startingLineNumber = "524"
+            endingLineNumber = "524"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6229,8 +6213,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "565"
-            endingLineNumber = "565"
+            startingLineNumber = "569"
+            endingLineNumber = "569"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6245,8 +6229,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "518"
-            endingLineNumber = "518"
+            startingLineNumber = "519"
+            endingLineNumber = "519"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6325,8 +6309,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "World::getHeightAt(xz)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6389,8 +6373,8 @@
             filePath = "Pong/Engine/Fundamentals/MapManager.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "MapManager::loadChunks(pos)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6453,8 +6437,8 @@
             filePath = "Pong/Engine/Fundamentals/MapManager.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
             landmarkName = "MapManager::loadChunks(pos)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6469,8 +6453,8 @@
             filePath = "Pong/Engine/Fundamentals/MapManager.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "MapManager::getHeightAt(xz)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6485,8 +6469,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517"
+            startingLineNumber = "518"
+            endingLineNumber = "518"
             landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6533,8 +6517,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "464"
-            endingLineNumber = "464"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "Renderer::renderText(text)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6549,8 +6533,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "World::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -6565,8 +6549,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "465"
-            endingLineNumber = "465"
+            startingLineNumber = "459"
+            endingLineNumber = "459"
             landmarkName = "Renderer::renderText(text)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6575,150 +6559,6 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0CE12B98-A794-4ADC-8DEE-A161B69AF421"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/UI/uiText.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "uiText::setText(s)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3AFDF895-228A-4220-88BB-9197581E91D4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
-            landmarkName = "World::updateActiveText()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "64C594FA-1125-4AA0-916A-8BA1B0C3351E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "World::newSoundText(text, pos, duration)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F6507294-9659-44C4-AADD-0CA750D6605E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "World::tick()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BD47A7FA-044E-471A-97CB-B8D2459F7A02"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "World::updateActiveText()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FE76C8BD-7863-438F-AB24-D74BEC6E5F9E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
-            landmarkName = "World::tick()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D77DE93E-0AD2-42D5-BFE1-073EC558D375"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
-            landmarkName = "World::updateActiveText()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2739EF7E-1FFE-454E-BC17-ADBFE61711DE"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/World/World.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "248"
-            endingLineNumber = "248"
-            landmarkName = "World::updateActiveText()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A5C13F96-8678-4D7A-A755-93320454A343"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/UI/uiText.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "uiText::setText(s)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "63E77717-D2D7-4A6B-81E7-B23C438D2438"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -6734,7 +6574,135 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AA41D201-B09D-4762-B494-04BFACB3C3EF"
+            uuid = "3AFDF895-228A-4220-88BB-9197581E91D4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "World::updateActiveText()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "64C594FA-1125-4AA0-916A-8BA1B0C3351E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "World::newSoundText(text, pos, duration)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F6507294-9659-44C4-AADD-0CA750D6605E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "World::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BD47A7FA-044E-471A-97CB-B8D2459F7A02"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
+            landmarkName = "World::updateActiveText()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FE76C8BD-7863-438F-AB24-D74BEC6E5F9E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "World::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D77DE93E-0AD2-42D5-BFE1-073EC558D375"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "World::updateActiveText()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2739EF7E-1FFE-454E-BC17-ADBFE61711DE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "World::updateActiveText()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A5C13F96-8678-4D7A-A755-93320454A343"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/UI/uiText.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "uiText::setText(s)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "63E77717-D2D7-4A6B-81E7-B23C438D2438"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -6743,6 +6711,22 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "18"
             endingLineNumber = "18"
+            landmarkName = "uiText::setText(s)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AA41D201-B09D-4762-B494-04BFACB3C3EF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/UI/uiText.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>
@@ -6789,8 +6773,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "585"
-            endingLineNumber = "585"
+            startingLineNumber = "589"
+            endingLineNumber = "589"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6805,8 +6789,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "594"
-            endingLineNumber = "594"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6821,8 +6805,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "599"
-            endingLineNumber = "599"
+            startingLineNumber = "603"
+            endingLineNumber = "603"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6853,8 +6837,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "621"
-            endingLineNumber = "621"
+            startingLineNumber = "625"
+            endingLineNumber = "625"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6901,8 +6885,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "593"
-            endingLineNumber = "593"
+            startingLineNumber = "597"
+            endingLineNumber = "597"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6917,8 +6901,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "615"
-            endingLineNumber = "615"
+            startingLineNumber = "619"
+            endingLineNumber = "619"
             landmarkName = "VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh, VAO, VBO, EBO, numIndices)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6933,8 +6917,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "Renderer::renderActor(r)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6949,8 +6933,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
+            startingLineNumber = "432"
+            endingLineNumber = "432"
             landmarkName = "Renderer::renderActor(r)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6997,8 +6981,8 @@
             filePath = "Pong/Engine/World/World.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "insert(placeable)"
             landmarkType = "7">
             <Locations>
@@ -7075,8 +7059,8 @@
             filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7107,8 +7091,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "World::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7187,8 +7171,8 @@
             filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7443,8 +7427,8 @@
             filePath = "Pong/Data/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7507,8 +7491,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "493"
+            endingLineNumber = "493"
             landmarkName = "Renderer::resizeViewPort()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7523,8 +7507,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "Renderer::Renderer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7539,8 +7523,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "Renderer::Renderer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7555,8 +7539,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "Renderer::Renderer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7779,8 +7763,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "Renderer::updateDistanceFog()"
             landmarkType = "7">
          </BreakpointContent>
@@ -7795,9 +7779,537 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "Renderer::updateDistanceFog()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D427243D-C044-4B3C-A9CA-AD59932F7E82"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "VertexLoader::loadModel(filePath_, vao, vbo, ebo, numIndices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "66393189-D623-478F-8D11-05C292551C06"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
+            landmarkName = "VertexLoader::loadMaterialTextures(material, type_, typeName)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9900E9A2-9A1C-44EC-87CA-81340BCA2191"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "315"
+            endingLineNumber = "315"
+            landmarkName = "VertexLoader::processMesh(mesh, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EE6C78F2-E9F7-44A3-9B07-73B19E75F273"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
+            landmarkName = "VertexLoader::processMesh(mesh, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F3A13012-9C48-4227-BD68-E03A8DE92CB8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
+            landmarkName = "VertexLoader::processMesh(mesh, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4601BF41-39B1-44A4-BFD8-67D4BF0BD146"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
+            landmarkName = "VertexLoader::processMesh(mesh, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "70B06747-143F-4ACB-BD0B-F20E2EAC2C8A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "VertexLoader::processMesh(mesh, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AAE2356D-C5E5-48D9-A287-BA66E72BC964"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "VertexLoader::processNode(node, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "78A7CFA8-8687-45E6-B7C5-705995C1C93F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "257"
+            endingLineNumber = "257"
+            landmarkName = "VertexLoader::processNode(node, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A1C51994-8905-4E9D-9771-EA782CCCB631"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "VertexLoader::processNode(node, scene, vertices, indices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0265221E-6D71-4EAD-89CF-F2E1350EDCCB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "536"
+            endingLineNumber = "536"
+            landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "80D95D65-47BD-4C82-95DD-9F4AF2FF8874"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
+            landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4B5A8E11-0961-47B7-8790-6AD0F62A4716"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
+            landmarkName = "VertexLoader::loadModel(filePath_, vao, vbo, ebo, numIndices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F43A1224-DC0C-4FDE-B466-8008080D4DF2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "VertexLoader::loadModelAnimations(anim_, filePath_)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9648E58E-1D27-431B-9531-89E14345E7A5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
+            landmarkName = "VertexLoader::loadMaterialTextures(material, type_, typeName)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "139E566D-342B-4D64-9D40-869B4C656931"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
+            landmarkName = "VertexLoader::loadMaterialTextures(material, type_, typeName)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "81131398-F473-49C3-B0DB-9A1CF06C33E2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B0AC9019-34CC-40DD-91C3-015F04559E10"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9883DBD3-95BF-49C7-98B0-7BC425C827C2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CB2A6375-CD74-455A-962F-A5A01D6A3487"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3DB3231B-C631-4B38-ADD3-5222CC322404"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "605B4B92-668F-4893-81BD-4EDB3921F0DC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3540E144-DF54-4608-8BE5-0FB40C8E57A1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1C5D419B-979E-4A78-A859-1500029C1ACD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "62706F14-7B02-4C0A-96DC-A7A2AF3994C9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "60133DD2-3337-43FB-AEFC-8E5F3A88805A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BD978B63-E913-43A4-9990-D11F6C48BB88"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C4AE2E00-F221-4230-8A0E-800FF41719A5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8CF1906E-7F3D-460C-8853-D376FC5010BC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "60095FC7-274D-47B2-A780-91EAB22652E9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Data/Scenes/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C1C2812D-7BAE-49EB-A838-A6E367FC1151"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "516"
+            endingLineNumber = "516"
+            landmarkName = "VertexLoader::loadMapChunk(, src, chunkX, chunkY, transformToLocal, scaling, vao, vbo, ebo, numIndices)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B29A7F84-1913-4AC6-8BDC-96B66A3AB7C9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/MapManager.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "MapManager::loadChunks(pos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "23FDFE72-F4F5-4884-AC65-A9C6C35772CA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/MapManager.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "MapManager::loadChunks(pos)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

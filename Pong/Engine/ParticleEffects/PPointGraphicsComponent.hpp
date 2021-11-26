@@ -13,7 +13,7 @@
 
 class PPointGraphicsComponent : public PGraphicsComponent {
     public:
-    PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const TextureMaps& map);
+    PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map);
     virtual void tick() override;
 };
 

@@ -21,7 +21,7 @@ int VertexLoader::boneCounter = 0;
 std::map<std::string, BoneInfoMap> VertexLoader::loadedBoneDataMaps;
 int VertexLoader::indexOffset = 0;
 
-void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, TextureMaps& map, glm::vec2 position) {
+void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position) {
     glBindVertexArray(vao); 
     
     std::map<char, Character> characters; 
@@ -42,7 +42,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
         {
             if (*c == '\n') {  
                 x = position.x;
-                y -= 0.07;
+                y -= 0.07; 
                 continue; 
             }
             Character ch = characters[*c];
@@ -83,8 +83,8 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     
     glBufferData(GL_ARRAY_BUFFER, newVertices.size() * sizeof(SimpleVertex), newVertices.data(), GL_STATIC_DRAW);
     
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, newIndices.size() * sizeof(GLuint), newIndices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, newIndices.size() * sizeof(GLuint), newIndices.data(), GL_STATIC_DRAW);
     
     numIndices = newIndices.size();
     setupVAOAttribs(VERTEX_SIMPLEVERTEX);
@@ -193,7 +193,7 @@ void VertexLoader::loadModel(std::string filePath_, unsigned int vao, unsigned i
             printf("%s", s.c_str());
             return;
         }
- 
+  
     std::vector<TBNBWVertex> vertices;
     std::vector<GLuint> indices; 
     processNode(scene->mRootNode, scene, vertices, indices);
@@ -258,7 +258,7 @@ void VertexLoader::processNode(aiNode* node, const aiScene* scene, std::vector<T
 }
 
 void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNBWVertex>& vertices, std::vector<GLuint>& indices) {
-    
+     
     std::vector<TBNBWVertex> newVertices;
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
         glm::vec3 pos_;
@@ -309,32 +309,31 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
             indices.push_back(ind);
         }
     }
-     
-   /** if (mesh->mMaterialIndex >= 0) {
+       
+    if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        if (diffuseMaps.size() != 0)
-        textures.diffuse = diffuseMaps.at(0); //???? lol who would have more than 1 texture
+      //  if (diffuseMaps.size() != 0)
+      //  textures.diffuse = diffuseMaps.at(0); //???? lol who would have more than 1 texture
         std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        if (specularMaps.size() != 0)
-        textures.specular = specularMaps.at(0);
+      //  if (specularMaps.size() != 0)
+       // textures.specular = specularMaps.at(0);
     }
-    **/
     BoneWeightVertices(newVertices, mesh, scene);
     vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
     indexOffset += mesh->mNumVertices;
 }
 
-/**std::vector<Texture> VertexLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
+std::vector<Texture> VertexLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < material->GetTextureCount(type_); i++) {
         aiString string;
-        
+         
         material->GetTexture(type_, i, &string);
         bool texIsRepeat = false;
         std::string string_ = (std::string)string.C_Str();
         std::string fileName = string_.substr(string_.find_last_of("\\")+ 1);
-        std::string filePath = directory+"/"+fileName;
+       /** std::string filePath = directory+"/"+fileName;
         
         for (int j = 0; j < loadedTextures.size(); j++) {
             if (std::strcmp(loadedTextures[j].path.data(), filePath.c_str()) == 0) {
@@ -354,9 +353,10 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
             textures.push_back(texture);
             loadedTextures.push_back(texture);
         }
+        }**/
     }
     return textures;
-}**/
+}
 
 void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                                const aiScene* scene) {
@@ -478,6 +478,7 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
     glBindVertexArray(0); 
 }
 
+
  void VertexLoader::loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const std::string& src, int chunkX, int chunkY, glm::vec2 transformToLocal, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
     // DRAW A FRICKIN DIAGRAM IF U WANNA UNDERSTAND THIS
     int imageWidth = 0;
@@ -487,14 +488,14 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
   
     imageData = stbi_load(src.c_str(), &imageWidth, &imageHeight, &channels, 0);
     if (channels != 1) { 
-        printf("Warning: Heightmap is not grayscale\n");
+        printf("Warning: Heightmap is not grayscale or does not exist\n");
         return;
     }
-      
+        
      int chunkWidth = 0; // in vertices
      int chunkHeight = 0; // in vertices
-     int pixelX = 0;
-     int pixelY = 0;
+     int pixelX = 0; 
+     int pixelY = 0; 
      
      if (chunkX == 0) {
          chunkWidth = CHUNK_DIM_PXLS;
@@ -525,11 +526,14 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
          
     auto fetchHeightAt = [=] (int i, int j, unsigned char* data) {
          int index = (startingIndex + j + i * imageWidth);
-         int height = int(data[index]);
+        if (index < 0) {
+            return 0.0f;
+        }
+         int height = int(data[index]); 
          float h = height * scaleY; // possible undefined behaviour
-         return h;    
-     };
-                   
+         return h;
+     };     
+             
     for (int i = 0; i < chunkHeight; i++) { 
         for (int j = 0; j < chunkWidth; j++) { 
             Vertex v;
@@ -542,8 +546,8 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
             vertices[c] = v; // FIX DUMBASS
             heightMesh[j][i] = h;
             c++;
-        }
-    } 
+        } 
+    }  
      
     std::vector<GLuint> indices;
     

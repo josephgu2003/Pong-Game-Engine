@@ -6,7 +6,7 @@
 //
 
 #include "JsonManager.hpp"
-#include "Game.hpp"
+#include "GameLevel.hpp"
 #include <fstream>
 #include "NameComponent.hpp" 
 #include "CharacterComponent.hpp"
@@ -18,7 +18,7 @@
 
 nlohmann::json JsonManager::dialogues;
 
-void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf) {
+void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf) {
     nlohmann::json saveFile;
     std::ifstream inStream(SAVE_PATH);
     inStream >> saveFile;
@@ -30,7 +30,7 @@ void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* pr
         if ((*i)["Type"] == "Script") {
             int FactoryEnum = (*i)["FactoryEnum"];
             int worldID = (*i)["WorldID"]; 
-            World& world = game->getWorld(worldID);
+            World& world = level->getWorld(worldID);
         
             std::shared_ptr<Script> script = sf->makeScript(FactoryEnum, &world);
             glm::vec3 pos;
@@ -39,14 +39,14 @@ void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* pr
             pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
             
             script->setPos(pos); 
-            game->getWorld(worldID).insert<Script>(script);
+            level->getWorld(worldID).insert<Script>(script);
         }  
         
         if ((*i)["Type"] == "Prop") {
             int FactoryEnum = (*i)["FactoryEnum"];
             std::shared_ptr<Prop> actor = propf->makeProp(FactoryEnum); // lmao still "actor"??
             int worldID = (*i)["WorldID"];
-            World& world = game->getWorld(worldID);
+            World& world = level->getWorld(worldID);
         
             glm::vec3 pos;
             pos.x =    (*i)["Position"][0];
@@ -54,8 +54,8 @@ void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* pr
             pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
             
             actor->setPos(pos);
-            actor->setWorld(&game->getWorld(worldID)); 
-            game->getWorld(worldID).insert<Prop>(actor); 
+            actor->setWorld(&level->getWorld(worldID));
+            level->getWorld(worldID).insert<Prop>(actor);
         }
         
         if ((*i)["Type"] == "Actor") { 
@@ -112,17 +112,20 @@ void JsonManager::loadGame(Game* game, AbstractActorFactory* af, PropFactory* pr
                lc->init(clife, mlife, chunger, mhunger, cstamina, mstamina, cenergy, menergy);
             }
             actor->setPos(pos);
-            actor->setWorld(&game->getWorld(worldID));
-            game->getWorld(worldID).insertActor(actor);
-            
+             
+            World& world = level->getWorld(worldID);
+            actor->setWorld(&world);
+            world.insertActor(actor);
+             
             if ((*i)["SubType"] == "PlayerHero") {
-                game->setPlayerHero(actor, worldID);
+              //  game->setPlayerHero(actor, worldID);
+                world.markPlayerHero(actor.get());
             }
-        } 
+        }
     }
-}
+} 
 
-void JsonManager::saveGame(Game* game) {
+void JsonManager::saveGameLevel(GameLevel* level) {
     nlohmann::json saveFile;
     std::ifstream i(SAVE_PATH);
     i >> saveFile;
@@ -130,10 +133,10 @@ void JsonManager::saveGame(Game* game) {
     for (auto i = saveFile.begin(); i != saveFile.end(); i++) {
         if ((*i)["Type"] == "Actor") {
             std::string id = (*i)["Name"];
-            Actor* actor = game->getWorld(0).getActorNamed(id).get();
+            Actor* actor = level->getWorld(0).getActorNamed(id).get();
              
             if (actor->dummy) {
-                actor = game->getWorld(1).getActorNamed(id).get();
+                actor = level->getWorld(1).getActorNamed(id).get();
             }
             
             if (actor->dummy) {

@@ -21,11 +21,11 @@ void MapManager::setMap(const std::string& filePath, int pixelsX, int pixelsY, g
     assert(fmod(mapDescriptor.subdivisionsX, 1) == 0);
     assert(fmod(mapDescriptor.subdivisionsY, 1) == 0);
     mapDescriptor.xdim = (pixelsX-1) * scaling.x; // 5 fingers, 4 spaces
-    mapDescriptor.ydim = (pixelsY-1) * scaling.z; // ^^ 
+    mapDescriptor.ydim = (pixelsY-1) * scaling.z; // ^^  
     mapDescriptor.scalings = scaling;
 }
-    
-void MapManager::loadChunks(glm::vec3 pos) { // protocol: to avoid gaps between chunks, all chunks include the prior row/column vertices
+     
+void MapManager::loadChunks(glm::vec3 pos) { // protocol: to avoid gaps between chunks, all chunks include the prior row/column vertices 
     float xPosLocal = pos.x + mapDescriptor.xdim / 2.0f;
     float zPosLocal = pos.z + mapDescriptor.ydim / 2.0f;
     int indexX = 0;
@@ -34,7 +34,6 @@ void MapManager::loadChunks(glm::vec3 pos) { // protocol: to avoid gaps between 
     float smallChunkHeight = (CHUNK_DIM_PXLS-1)*mapDescriptor.scalings.z;
     glm::vec2 transformToLocal = glm::vec2(-0.5*mapDescriptor.xdim, -0.5*mapDescriptor.ydim);
       
-     
     if (xPosLocal > smallChunkWidth) {
         indexX = 1+std::floor((xPosLocal-smallChunkWidth)/ CHUNK_DIM_PXLS / mapDescriptor.scalings.x); // 5 fingers, 4 spaces, but an extra space cuz extra vertices
         transformToLocal.x += (indexX-1)*(CHUNK_DIM_PXLS)*mapDescriptor.scalings.x+smallChunkWidth;
@@ -64,3 +63,4 @@ void MapManager::drawChunks(Renderer* renderer) {
         mapChunks.sideChunks[i]->draw(renderer);
     }
 }
+ 

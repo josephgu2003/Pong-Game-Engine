@@ -15,7 +15,7 @@
 // doesnt make everything in the game tick have same time, we need a time thats updated per tick but not between ticks in that case
 class Watch {
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> t0;
+    std::chrono::time_point<std::chrono::steady_clock> t0;
 public:
     Watch();
     float getTime();

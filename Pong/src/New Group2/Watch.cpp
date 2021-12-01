@@ -8,11 +8,11 @@
 #include "Watch.hpp"
 
 Watch::Watch() {
-    t0 = std::chrono::high_resolution_clock::now();
+    t0 = std::chrono::steady_clock::now();
 }
 
 float Watch::getTime() {
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::steady_clock::now();
  
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t1-t0);
 
@@ -22,5 +22,5 @@ float Watch::getTime() {
 }
 
 void Watch::resetTime() {
-    t0 = std::chrono::high_resolution_clock::now();
-}
+    t0 = std::chrono::steady_clock::now();
+} 

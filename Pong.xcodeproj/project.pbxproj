@@ -56,6 +56,7 @@
 		5D4BD7C8271BA16800A89C8B /* uiText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BD7C6271BA16800A89C8B /* uiText.cpp */; };
 		5D556DFA274D7E42006CAB4A /* uiFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D556DF8274D7E42006CAB4A /* uiFrame.cpp */; };
 		5D556DFD275166DE006CAB4A /* GameLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D556DFB275166DD006CAB4A /* GameLevel.cpp */; };
+		5D556E0027545A95006CAB4A /* FPSControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D556DFE27545A94006CAB4A /* FPSControl.cpp */; };
 		5D63AD4D2749E12D0074F165 /* hollowknight.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D63AD4C2749E12D0074F165 /* hollowknight.png */; };
 		5D63AD532749FC840074F165 /* snow01.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D63AD522749FC840074F165 /* snow01.png */; };
 		5D63AD58274AA9DC0074F165 /* landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D63AD57274AA9DC0074F165 /* landscape.png */; };
@@ -417,6 +418,8 @@
 		5D556DF9274D7E42006CAB4A /* uiFrame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = uiFrame.hpp; sourceTree = "<group>"; };
 		5D556DFB275166DD006CAB4A /* GameLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameLevel.cpp; sourceTree = "<group>"; };
 		5D556DFC275166DD006CAB4A /* GameLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameLevel.hpp; sourceTree = "<group>"; };
+		5D556DFE27545A94006CAB4A /* FPSControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FPSControl.cpp; sourceTree = "<group>"; };
+		5D556DFF27545A94006CAB4A /* FPSControl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FPSControl.hpp; sourceTree = "<group>"; };
 		5D63AD4B2749E1280074F165 /* hollowknight.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = hollowknight.fbx; sourceTree = "<group>"; };
 		5D63AD4C2749E12D0074F165 /* hollowknight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hollowknight.png; sourceTree = "<group>"; };
 		5D63AD522749FC840074F165 /* snow01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow01.png; sourceTree = "<group>"; };
@@ -1317,6 +1320,8 @@
 				5D4BD7C4271B6A9900A89C8B /* GraphicsObject.hpp */,
 				5DEE580D266292A40080446C /* Component.hpp */,
 				5DAC1807266994AE0021DC31 /* Game.hpp */,
+				5D556DFE27545A94006CAB4A /* FPSControl.cpp */,
+				5D556DFF27545A94006CAB4A /* FPSControl.hpp */,
 				5DEE580C266292A40080446C /* Component.cpp */,
 				5D4BD7C3271B6A9900A89C8B /* GraphicsObject.cpp */,
 				5D556DFB275166DD006CAB4A /* GameLevel.cpp */,
@@ -1858,6 +1863,7 @@
 				5DB2C97D272E3837009E6CA3 /* MyActorFactory.cpp in Sources */,
 				5DB91EA7271D0554003AAAA7 /* Subject.cpp in Sources */,
 				5DE85CEC271354FC000D948D /* Dice.cpp in Sources */,
+				5D556E0027545A95006CAB4A /* FPSControl.cpp in Sources */,
 				5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */,
 				5D4BD7C0271B13D900A89C8B /* Positionable.cpp in Sources */,
 				5DDAE8B4272B5F4D0053DFEA /* Dialogue.cpp in Sources */,

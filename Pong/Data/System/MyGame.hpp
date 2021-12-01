@@ -20,6 +20,8 @@ class MyGame : public Game {
     ParticleFactory particleFactory;
     PropFactory propFactory;
     ScriptFactory scriptFactory;
+    LevelBuilder myLvlBuilder;
+    void setupLvlBuilder();
 public:
     MyGame();
     virtual void load() override;

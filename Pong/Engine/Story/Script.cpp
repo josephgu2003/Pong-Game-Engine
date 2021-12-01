@@ -8,9 +8,9 @@
 #include "Script.hpp"
 #include "World.hpp"
 
-Script::Script(World* world_, std::vector<std::string> crew) {
+Script::Script(World* world_, std::vector<std::string> crew) : Positionable() {
     world = world_;
-    dummy = std::make_shared<Actor>();
+    dummy = std::make_shared<Actor>(); 
     for (int i = 0; i < crew.size(); i++) { 
         actors.insert(std::pair<std::string, std::shared_ptr<Actor>>(crew.at(i), std::shared_ptr<Actor>(dummy)));
     }

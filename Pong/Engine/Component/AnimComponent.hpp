@@ -15,13 +15,14 @@
 #include "Bone.hpp"
 #include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
-
+#include "Watch.hpp"
 class Actor; 
 
 typedef std::map<std::string, BoneData> BoneInfoMap;
 
 class AnimComponent : public Component {
 protected:
+    Watch stopwatch;
     glm::mat4 globalInverse;
     float timeInAnim;
     Animation* activeAnim = NULL;

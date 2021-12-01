@@ -19,60 +19,49 @@
 #include "InputHandler.hpp"
 #include <vector>
 #include "MapObject.hpp"
-#include "ScriptOne.hpp"
-#include "Watch.hpp"
 #include "uiLayout.hpp"
 #include "Audio.hpp"
+#include "GameLevel.hpp"
+#include "FPSControl.hpp"
+
+
+typedef std::function<GameLevel* (Game*)> GameLevelCreate;
+typedef std::map<std::string, GameLevelCreate> LevelBuilder;
 
 class Game {
 private:
-    double fpsTimer;
-    int intervalTimer = 0;
-    bool firstTime = true;
-    float draws;
-    Watch timerForTick;
+    LevelBuilder levelBuilder;
+    FPSControl fpsControl;
     virtual void load();
-protected:
-    Watch watch;
-    
     GLFWwindow* window = NULL; // Windowed
-    
+protected:
     std::shared_ptr<Camera> camera;
     std::shared_ptr<uiLayout> ui;
+
+    std::unique_ptr<GameLevel> activeLevel;
     
-    World world0; // a Level can have multiple world
-    World world1;
-    
-    World* activeWorld = NULL;
-    
-    Renderer* renderer0 = NULL;
-    Renderer* renderer1 = NULL;
-    Renderer* activeRenderer = NULL;
+    Renderer* renderer = NULL;
      
     InputHandler inputHandler;
     
     Audio audio;
-       
-    std::shared_ptr<Actor> pHero0; 
-    std::shared_ptr<Actor> pHero1;
-    std::shared_ptr<Actor> activeHero;
     
     void initWindow();
     void initObjects();
     void linkObjects();
+    void setLevelBuilder(LevelBuilder lvlBuilder);
 public:
     bool running = false;
     Game();
     ~Game();
     void tick(); 
     void init();
-    World& getWorld(int i);
-    void setPlayerHero(const std::shared_ptr<Actor>& actor, int i);
-    Actor* getActivePlayerHero();
     void end();
     InputHandler& getInputHandler();
-    void swapWorld();
+    GameLevel& getActiveLevel();
     std::shared_ptr<uiLayout>& getUI();
+    void loadLevel(std::string lvl);
+    Renderer* getRenderer();
 };
 
 #endif /* Game_hpp */

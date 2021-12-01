@@ -22,7 +22,10 @@
 #include "Subject.hpp"
  
 class Game;
+class InputHandler;
+
 typedef void (*keyCallback) (Game*);
+typedef void (*setCallbackSet) (InputHandler*);
 
 struct KeyEvent {
     int key;
@@ -35,7 +38,6 @@ struct KeyEvent {
     }
 };
 
-
 enum KeyCallbackSet{
     KCALL_DEFAULT,
     KCALL_READTEXT,
@@ -47,7 +49,7 @@ class InputHandler : public Subject { //detects input, executes associated actio
 private:
     std::queue<KeyEvent> keyEventQ;
     std::map<int, keyCallback>* keyCallbacks = NULL;
-    
+    std::map<KeyCallbackSet, setCallbackSet>* callBackSetters = NULL;
     std::shared_ptr<Camera> activeCamera;
     
     GLFWwindow* window = NULL;
@@ -62,26 +64,25 @@ private:
     KeyCallbackSet mode;
     
     Game* game = NULL;
-    void setCallbackforKey(int i, keyCallback cbk);
     void clearCallbackforKey(int i);
     void clearCallbacks();
     int processInput(const KeyEvent& ke);
-    void loadKeyCallbacks(KeyCallbackSet kcs);
 public:
+    void loadKeyCallbacks(KeyCallbackSet kcs);
     InputHandler();
     ~InputHandler();
     void setWindow(GLFWwindow* window);
     void dumpTextToPlayer(); //dont need
-     
+    void setCallbackforKey(int i, keyCallback cbk);
     void tick();
     void moveMouse(double mouseX_, double mouseY_);
     void addKeyEventToQ(int key, int action, int mods);
-    
     void setGame(Game* game); //bad code hahaha
     void setCamera(const std::shared_ptr<Camera>& cam);
     void swapCursorMode();
     GLenum getCurrentKeyPress() const;
     void setHandlerMode(KeyCallbackSet set);
+    void attachCallbackSetters(KeyCallbackSet whichSet, setCallbackSet setCallbacks);
 };
 
 #endif /* InputHandler_hpp */

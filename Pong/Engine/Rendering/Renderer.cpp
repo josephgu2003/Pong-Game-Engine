@@ -276,7 +276,7 @@ void Renderer::renderInitial() {
     
     updateCamPos();
     updateUniformStopWatch();
-    renderSky();
+    renderSky();  
 }
 
 void Renderer::renderFinal() { 

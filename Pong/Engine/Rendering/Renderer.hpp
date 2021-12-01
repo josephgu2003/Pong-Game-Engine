@@ -19,6 +19,7 @@
 #include "World.hpp"
 #include <string>
 #include <memory>
+#include "Observer.hpp"
 
 extern GLuint uboViewProj;
 extern GLuint uboLights; 

@@ -34,6 +34,9 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
     dirVec.y = std::sin(glm::radians(pitch));
     dirVec.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
     Positionable::GramSchmidtAndNormalizeOrientations();
+    if (!actor) {
+        return; 
+    }
     posVec = actor->getPos()-dirVec*7.0f+CAM_OFFSET+actor->getDir();
     float h = actor->getPos().y;
     if (posVec.y < h) {

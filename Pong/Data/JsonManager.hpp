@@ -19,7 +19,7 @@
 
 class AbstractActorFactory;
 
-class Game;
+class GameLevel;
   
 class PropFactory;
 class ParticleFactory;
@@ -35,8 +35,8 @@ static nlohmann::json dialogues;
     static void buildTree(DialogueTree*& tree, int i, int branchID);
 public:
     static void loadDialogue(Dialogue* dialogue, int id);
-    static void loadGame(Game* game, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf);
-    static void saveGame(Game* game);
+    static void loadGameLevel(GameLevel* game, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf);
+    static void saveGameLevel(GameLevel* game);
     static bool checkRelationshipLoaded(std::string aname, std::string bname, RelationShipType type, const std::vector<std::shared_ptr<Relationship>>&  loaded);
 }; 
 

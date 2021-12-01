@@ -49,3 +49,8 @@ void uiLayout::setActivePopup(const std::shared_ptr<uiPiece>& piece) {
     insertNode(piece); 
 }
  
+
+void uiLayout::clear() {
+    activePiece.reset();
+    uiPieces.clear(); 
+}

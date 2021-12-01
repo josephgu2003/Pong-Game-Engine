@@ -25,6 +25,7 @@ public:
     void removeNode(uiPiece* piece);
     void deleteActivePopup();
     void setActivePopup(const std::shared_ptr<uiPiece>& piece);
+    void clear();
    // void tick(); // really man? still ticking?
 };
 

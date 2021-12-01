@@ -25,4 +25,4 @@ void HealthMeter::notify(const Subject& s, GameEvent ge) {
         shader->use(); 
         shader->setFloat("ratio", ratio);
     } 
-} 
+}  

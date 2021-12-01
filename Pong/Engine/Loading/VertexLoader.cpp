@@ -483,10 +483,10 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
     // DRAW A FRICKIN DIAGRAM IF U WANNA UNDERSTAND THIS
     int imageWidth = 0;
     int imageHeight = 0; 
-    int channels = 0;
-    unsigned char* imageData;
+    int channels = 0; 
+    unsigned short* imageData;
   
-    imageData = stbi_load(src.c_str(), &imageWidth, &imageHeight, &channels, 0);
+    imageData = (unsigned short*) stbi_load_16(src.c_str(), &imageWidth, &imageHeight, &channels, 0);
     if (channels != 1) { 
         printf("Warning: Heightmap is not grayscale or does not exist\n");
         return;
@@ -524,16 +524,16 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
     int c = 0;
     float scaleY = scaling.y;
          
-    auto fetchHeightAt = [=] (int i, int j, unsigned char* data) {
+    auto fetchHeightAt = [=] (int i, int j, unsigned short* data) {
          int index = (startingIndex + j + i * imageWidth);
         if (index < 0) {
             return 0.0f;
         }
-         int height = int(data[index]); 
+         float height = float(data[index]);
          float h = height * scaleY; // possible undefined behaviour
          return h;
-     };     
-             
+     };
+              
     for (int i = 0; i < chunkHeight; i++) { 
         for (int j = 0; j < chunkWidth; j++) { 
             Vertex v;

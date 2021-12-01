@@ -10,11 +10,23 @@
 
 #include <stdio.h>
 #include "World.hpp"
+#include "uiLayout.hpp"
+#include "InputHandler.hpp"
+#include <map>
+
+class Renderer;
+
 class GameLevel {
 private:
-    std::vector<World> worlds;
+    std::vector<std::shared_ptr<World>> worlds;
+    std::weak_ptr<World> activeWorld;
+    std::string nextLevel = "";
 public:
-    GameLevel(int numWorlds);
+    GameLevel(Renderer* r, int numWorlds);
+    std::string tick();
+    World* getActiveWorld();
+    World& getWorld(int i);
+    void changeLevel(std::string newLevel);
 };
 
 #endif /* GameState_hpp */

@@ -88,9 +88,11 @@ private:
     
     AbilityManager abilityManager;
     void updateActiveText();
+    void loadChunks(glm::vec3 pos);
 public:
     bool blur = false;
     World();
+    World(Renderer* r);
     ~World(); 
     
     template <typename T> // hahaha templates are cool even if u coulda done Positionable*
@@ -193,12 +195,12 @@ public:
         bool hasNear = false;
         for (int i = 0 ; i < allActorPtrs.size(); i++) {
             auto x = allActorPtrs.at(i);
-            if (x.get()==actor) continue;
+            if (x.get() == actor) continue;
             if (x->hasComponent(ct)) {
                 if (nearest == NULL || actor->getDistanceTo(x.get()) < actor->getDistanceTo(nearest)) {
                     nearest = x.get();
                     hasNear = true;
-                }
+                } 
             }
         }
         return hasNear;
@@ -210,7 +212,8 @@ public:
     
     float getHeightAt(glm::vec2 xz);
 
-    void setPlayerHero(const std::shared_ptr<Actor>& ph);
+    void markPlayerHero(const Actor* ph);
+    Actor* getPlayerHero();
 };
  
 

@@ -18,15 +18,16 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Compon
           for (int i = 0; i < 100; i++)
               boneMatrices.push_back(glm::mat4(1.0f));
     VertexLoader::loadModelAnimations(this, filePath);
+    stopwatch.resetTime();
 }
 
 void AnimComponent::tick() {
     if (activeAnim) {
-        timeInAnim += (float)activeAnim->getTicksPerSec()*glfwGetTime();
+        timeInAnim += (float)activeAnim->getTicksPerSec()*stopwatch.getTime();
+        stopwatch.resetTime(); 
         if (timeInAnim > activeAnim->getDuration()) {
             playDefault();
-        } 
-        timeInAnim = (float)fmod((double)timeInAnim, (double)activeAnim->getDuration());
+        }
         updateBoneMatrices(timeInAnim);
       
         if (actor->getComponent<GraphicsComponent>()) {
@@ -107,10 +108,10 @@ void AnimComponent::playAnim(const std::string& name) {
     for (int i = 0; i < animations.size(); i++) {
         if (animations.at(i).getName() == name) {
             activeAnim = &animations.at(i);
-            globalInverse = activeAnim->getGlobalInv();
+            //globalInverse = activeAnim->getGlobalInv();
             return;
         }
-    }
+    } 
 } 
 
 void AnimComponent::setDefaultAnim(const std::string& name) {
@@ -125,4 +126,5 @@ void AnimComponent::setDefaultAnim(const std::string& name) {
 void AnimComponent::playDefault() {
     activeAnim = defaultAnim;
     timeInAnim = 0;
-}
+    globalInverse = glm::mat4(1.0f);
+} 

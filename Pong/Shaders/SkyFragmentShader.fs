@@ -20,7 +20,7 @@ layout (std140) uniform DistanceFog
         float gradient = TexVec.y;
         gradient = 1.0 - gradient;
         fragColor.rgb = mix(fragColor.rgb, fogColor, pow(gradient,2));
-        fragColor.rgb *= 0.5; 
+        fragColor.rgb *= 0.3; 
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

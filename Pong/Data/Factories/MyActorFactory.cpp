@@ -166,12 +166,12 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
             actor->addComp(gc);
-            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx"); 
+            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx");
    
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Armature|Passive");
             actor->addComp(ac);
             break;
-            
+             
         }
         case ACTOR_FISH: { // maybe actor would want to know about ability field variables??
             Material map;

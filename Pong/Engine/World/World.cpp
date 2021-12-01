@@ -17,8 +17,10 @@
 #include "PGraphicsComponent.hpp" 
 #include "WorldChunk.hpp"
 #include "uiFrame.hpp"
-  
-World::World() {
+#include "Script.hpp"
+
+World::World(Renderer* r) {
+    renderer = r;
     float skyVerticesCopy[] = {
         -1.0f,  1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
@@ -59,7 +61,7 @@ World::World() {
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f, -1.0f,
          1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f, 
+        -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
     memcpy(skyVertices, skyVerticesCopy, sizeof(skyVerticesCopy));
@@ -72,9 +74,8 @@ World::World() {
 }
 
 World::~World() {
-      
 }
-
+ 
 void World::insertActor(const std::shared_ptr<Actor>& actor) {
     activeText = new uiText("", -0.5, -0.8);  // lmfao???
     textFrame = new uiFrame(glm::vec2(-0.7, -0.9), glm::vec2(1.5,0.23), TEX_BLACK_GRADIENT);
@@ -156,7 +157,7 @@ void World::tick() {
     }
 
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
-        (*i)->tick(); 
+    //    (*i)->tick();
     }
     
     for (int i = 0; i < allParticleEffects.size(); i++) {
@@ -168,12 +169,12 @@ void World::tick() {
     abilityManager.tick();
  
     mapManager.drawChunks(renderer); 
-    
+     
     for(auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
         (*i)->getComponent<GraphicsComponent>()->draw(renderer);
     }
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
-        (*i)->getComponent<GraphicsComponent>()->draw(renderer);
+    //    (*i)->getComponent<GraphicsComponent>()->draw(renderer);
     }
      
       
@@ -234,7 +235,7 @@ void World::setRenderer(Renderer *renderer_) {
 void World::setMap(const std::string& filePath, int pixelsX, int pixelsY, glm::vec3 scaling) {
     mapManager.setMap(filePath, pixelsX, pixelsY, scaling);
     if (auto x = playerHero.lock()) {
-        mapManager.loadChunks(x->getPos());
+        loadChunks(x->getPos()); 
     }
 } 
  
@@ -242,9 +243,44 @@ float World::getHeightAt(glm::vec2 xz) {
     return mapManager.getHeightAt(xz); 
 }
 
-void World::setPlayerHero(const std::shared_ptr<Actor>& ph) {
-    playerHero = ph;
+void World::markPlayerHero(const Actor* ph) {
+    for (auto x : allActorPtrs) {
+        if (x.get() == ph) {
+            playerHero = x;
+        }
+    }
 }
+
+Actor* World::getPlayerHero() {
+    if (auto x = playerHero.lock()) {
+        return x.get();
+    }
+    return nullptr; 
+}
+
+void World::loadChunks(glm::vec3 pos) {
+    mapManager.loadChunks(pos);
+    
+    auto setHeightFor = [&] (Positionable* positionable) {
+        glm::vec3 currentPos = positionable->getPos();
+        glm::vec2 newPos = glm::vec2(currentPos.x, currentPos.z);
+        positionable->setPosY(mapManager.getHeightAt(newPos));
+    }; 
+    
+    for(int i = 0; i < allScripts.size(); i++) {
+        setHeightFor(allScripts[i].get());
+    } 
+ 
+    for(int i = 0; i < allActorPtrs.size(); i++) {
+        setHeightFor(allActorPtrs[i].get());
+    }
+
+    for(auto i = allProps.begin(); i != allProps.end(); i++) {
+        setHeightFor(i->get());
+    } 
+}
+
+
 // next steps:
 // world objects class hierarchy
 // terrain height for chars

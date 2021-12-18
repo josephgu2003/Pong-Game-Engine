@@ -13,12 +13,32 @@
 #include "Shader.hpp"
 #include "Renderer.hpp"
 
-std::shared_ptr<Prop> PropFactory::makeProp(int pe) { 
+std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
+    stbi_set_flip_vertically_on_load(0);
     std::shared_ptr<Prop> prop = std::make_shared<Prop>();
     auto foliageDraw = [] (Renderer* r, GraphicsComponent* gc) {
         r->renderFoliage(gc);
     }; 
     switch (pe) {
+        case PROP_WELL: {
+            Material map; 
+            AssetManager::loadTexture("Resources/Models/Well/Well_Albedo.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Models/Well/Well_NM.jpg", &map.normMap, false);
+            
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
+            shader->use();
+            shader->setFloat("size", 0.03);
+            shader->setFloat("brightness", 0.0);
+                     
+            Renderer::bindShaderUniblock(shader,      ViewProj);
+    
+            Renderer::bindShaderUniblock(shader,      Lights);
+            
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_WELL);
+            prop->addComp(gc);
+            break;
+        } 
         case PROP_TREE: {
             Material map;  
           //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
@@ -33,10 +53,10 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     
             Renderer::bindShaderUniblock(shader,      Lights);
             
-            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map);
-            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree3.fbx");
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree2.fbx");
             prop->addComp(gc);
-            break;
+            break; 
         }
             
         case PROP_GRASS: {
@@ -53,7 +73,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
  
             Renderer::bindShaderUniblock(shader,      Lights); 
             
-            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map);
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/flowers/flowers.fbx");
             static_pointer_cast<GraphicsComponent>(gc)->setDrawCall(foliageDraw);
             prop->addComp(gc);
@@ -64,5 +84,6 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
         default:
             break;
     }
+    stbi_set_flip_vertically_on_load(1);
     return prop;
 }

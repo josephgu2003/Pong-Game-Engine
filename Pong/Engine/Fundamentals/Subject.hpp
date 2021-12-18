@@ -13,7 +13,7 @@
 #include <memory>
 
 enum GameEvent {
-    SUBJ_HP_CHANGED, KEY_PRESSED
+    SUBJ_HP_CHANGED, KEY_PRESSED, SUBJ_MANA_CHANGED, SUBJ_POS_CHANGED
 };
 
 class Observer;

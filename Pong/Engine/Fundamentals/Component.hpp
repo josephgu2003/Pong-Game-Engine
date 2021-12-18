@@ -33,9 +33,11 @@ public:
     Component(Componentable& compUser_) {
         actor = &compUser_;
     }
-
-    CompType getType() {
-        return type;
+    virtual ~Component() {
+        
+    }
+    CompType getType() { 
+        return type; 
     }
 
     virtual void tick() = 0;

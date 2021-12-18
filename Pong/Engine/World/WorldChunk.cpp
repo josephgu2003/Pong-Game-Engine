@@ -11,15 +11,18 @@
 #include "Shader.hpp"
 #include "AssetManager.hpp"  
 
-MapChunk::MapChunk(const std::string& src, int indexX, int indexY, glm::vec2 transformToLocal_, glm::vec3 scaling_) : GraphicsObject() {
-    shader->init("Shaders/TerrainVertex.vs", "Shaders/TerrainFragmentShader.fs");
+MapChunk::MapChunk(const unsigned short* heightMap, Material& mat, int mapWidth, int mapHeight, int indexX_, int indexY_, glm::vec2 originPos_, glm::vec3 scaling_) : GraphicsObject(DRAW_OPAQUE) {
+    
+    shader->init("Shaders/TerrainVertex.vs", "Shaders/TerrainFragmentShader.fs"); 
     Renderer::bindShaderUniblock(shader, DistanceFog); 
-    VertexLoader::loadMapChunk(heightMesh, src, indexX, indexY, transformToLocal_, scaling_, VAO, VBO, EBO, numIndices); 
+    VertexLoader::loadMapChunk(heightMesh, heightMap,mapWidth,mapHeight, indexX_, indexY_, originPos_, scaling_, VAO, VBO, EBO, numIndices);
     scaling = scaling_;  
-    transformToLocal =  transformToLocal_; 
-    AssetManager::loadTexture("Resources/Textures/snow01.png", &map.diffuse, true);
+    originPos =  originPos_;
+    map = mat; 
     Renderer::bindShaderUniblock(shader, ViewProj); 
-    Renderer::bindShaderUniblock(shader, Lights); 
+    Renderer::bindShaderUniblock(shader, Lights);
+    indexX = indexX_;
+    indexY = indexY_;
 }    
         
 void MapChunk::draw(Renderer* r) {  
@@ -27,9 +30,9 @@ void MapChunk::draw(Renderer* r) {
 }
     
 float MapChunk::getHeightAt(glm::vec2 xz) {
-    xz = xz - transformToLocal; 
+    xz = xz - originPos; 
     glm::vec2 pos = xz;
-    xz.x = xz.x/ scaling.x;
+    xz.x = xz.x / scaling.x;
     xz.y = xz.y / scaling.z; 
      
     //xz now in local space and in vertex coords : 1 is one vertex space, etc.
@@ -47,7 +50,7 @@ float MapChunk::getHeightAt(glm::vec2 xz) {
     if (std::fmod(xz.x,1) <= (1.0f - std::fmod(xz.y,1))) { // top triangle
         v1 = glm::vec3(scaling.x*topLeftX, heightMesh[topLeftX][topLeftZ], topLeftZ*scaling.z);
     } else {
-        v1 = glm::vec3((topLeftX+1)*scaling.x, heightMesh[topLeftX+1][topLeftZ+1], (topLeftZ+1)*scaling.z);
+        v1 = glm::vec3((topLeftX+1)*scaling.x, heightMesh[topLeftX+1][topLeftZ+1], (topLeftZ+1)*scaling.z); 
     }
     float det = (v2.z - v3.z) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.z - v3.z);
     float l1 = ((v2.z - v3.z) * (pos.x - v3.x) + (v3.x - v2.x) * (pos.y - v3.z)) / det;
@@ -57,3 +60,9 @@ float MapChunk::getHeightAt(glm::vec2 xz) {
     
 } 
  
+int MapChunk::getIndexX() {
+    return indexX;
+}
+int MapChunk::getIndexY() {
+    return indexY;
+}

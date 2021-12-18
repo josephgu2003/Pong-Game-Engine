@@ -21,7 +21,7 @@ const std::string& NameComponent::getName() {
 void NameComponent::init(const std::string& name_) {
     name = name_;
 }
-
+ 
 void NameComponent::tick() {
     
 }

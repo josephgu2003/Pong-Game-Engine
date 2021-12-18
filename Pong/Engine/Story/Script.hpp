@@ -21,16 +21,19 @@ private:
     bool checkAllHere();
     std::shared_ptr<Actor> dummy;
     float lastTime;
+    float radius;
+    std::unordered_map<std::string, std::weak_ptr<Actor>> actors;
 protected:
     Watch stopWatch;
     int step;
     World* world = nullptr;
-    std::unordered_map<std::string, std::shared_ptr<Actor>> actors;
+    Actor* getActorNamed(std::string name);
     void incStep(bool resetTime);
     void waitFor(float duration);
     bool isWaiting();
+    void newActor(std::string name, const std::shared_ptr<Actor>& actor);
 public:
-    Script(World* world, std::vector<std::string> crew);
+    Script(World* world, std::vector<std::string> crew, float radius);
     void tick();
     virtual void act() = 0; 
 };

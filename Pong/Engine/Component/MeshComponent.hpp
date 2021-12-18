@@ -23,10 +23,13 @@ private:
     // fishy pattern
     // waving flag
     //
-    std::unique_ptr<VertexMesh> mesh;
+    std::shared_ptr<VertexMesh> mesh;
 public:
     MeshComponent(Componentable& c);
-    void setMesh(VertexMesh* mesh);
+    ~MeshComponent(){
+        
+    };
+    void setMesh(std::shared_ptr<VertexMesh>& mesh);
     virtual void tick() override;
     void setMeshAction(MeshAction& meshAction_); // spag
 }; 

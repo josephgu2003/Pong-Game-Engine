@@ -8,6 +8,9 @@
 #ifndef Renderer_hpp
 #define Renderer_hpp
 
+#define WINDOW_WIDTH 1000.0
+#define WINDOW_HEIGHT 650.0
+
 #define RENDER_DISTANCE 200.0
 
 #include <glm/glm.hpp>
@@ -19,7 +22,6 @@
 #include "World.hpp"
 #include <string>
 #include <memory>
-#include "Observer.hpp"
 
 extern GLuint uboViewProj;
 extern GLuint uboLights; 
@@ -81,10 +83,15 @@ private:
     float timeT;
     void bindTextures(Shader* shader, Material& map);
     void resizeViewPort();
+    inline void bindGraphicsObject(GraphicsObject* go) {
+        Shader* s = go->getShader();
+        s->use();
+        go->bind();
+        bindTextures(s, go->getTextureMap());
+    }
 public:
     static void bindShaderUniblock(Shader* shader, Uniblock block);
     void updateAllUniblocks();
-    void renderUI(uiPiece* uip);
     void renderSky(); 
     Renderer();
     ~Renderer();
@@ -93,12 +100,11 @@ public:
     void loadSkyBoxData();
     void renderInitial();
     void renderFinal();
-    void renderText(uiText* text); 
     void checkForUpdates();
-    void renderActor(GraphicsObject* r);
     void renderParticles(GraphicsObject* r, int instanceCount);
     void renderTerrain(GraphicsObject* r);
     void renderFoliage(GraphicsObject* r);
+    void renderGeneric(GraphicsObject* go);
 };
 #endif /* Renderer_hpp */
  

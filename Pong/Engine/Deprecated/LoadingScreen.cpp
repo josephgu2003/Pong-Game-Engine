@@ -58,7 +58,7 @@ void LoadingScreen::print(std::string string) {
     screenText.duration = 0.5;
     screenText.text = string;
     if (screenText.Characters.size() == 0){
-  //  AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", screenText.Characters, );
+  //  AssetManager::loadGlyphs("Resources/GlyphsAndUI/times.ttf", screenText.Characters, );
     }
     screenText.textPosArray = {};
     std::string::const_iterator c;

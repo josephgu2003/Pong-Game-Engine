@@ -14,8 +14,12 @@
 class ParticleSystem;
  
 class PQuadGraphicsComponent : public PGraphicsComponent {
+private:
+    float size;
     public:
     PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map);
+    PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size, Shader* shader, const Material& map);
+    ~PQuadGraphicsComponent();
     virtual void tick() override;
 };
 

@@ -64,15 +64,23 @@ struct Material {
     Texture diffuse;
     Texture specular;
     Texture normMap;
+    Texture alphaMap;
     float shininess = 0.5;
-}; 
+};
+
+struct HeightMap {
+    unsigned short* heightMap = NULL;
+    std::string src;
+    int width;
+    int height;
+};
  
 class AssetManager {
 private:
-    static std::vector<Texture> loadedTextures;
+    static HeightMap heightMap; 
+    static std::vector<Texture> loadedTextures; 
     static std::vector<std::pair<Texture, std::map<char, Character>>> loadedGlyphs;
   //  static std::vector<std::unique_ptr<Model>> loadedModels;
-    static std::vector<Shader> loadedShaders;
 public:
     static void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
 
@@ -91,10 +99,11 @@ public:
     static void generateFramebuffer2Color(DoubleFrame* frame, int x, int y);
 
     static void generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, int y);
-
+    
+    static void loadHeightMap(std::string src, unsigned short*& newHeightMap, int* width, int* height);
 };
 
-
+ 
 
   
 #endif /* AssetManager_hpp */ 

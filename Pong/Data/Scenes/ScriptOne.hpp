@@ -24,7 +24,7 @@ class ScriptOne : public Script {
     float timer = 0;
     
     enum State {
-        STATE_AGGRESSIVE,
+        STATE_AGGRESSIVE, 
         STATE_PASSIVE
     } state = STATE_PASSIVE;
     

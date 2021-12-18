@@ -40,6 +40,9 @@ private:
     PPhysicsComponent* ppc = NULL;
 public:
     PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond, float refreshInterval, glm::vec3 dimensions, glm::vec3 velRangeLow, glm::vec3 velRangeHigh);
+    ~PRefreshComponent() {
+         
+    }
     virtual void tick() override;
     void refreshParticle();
     float getParticleLifetime();

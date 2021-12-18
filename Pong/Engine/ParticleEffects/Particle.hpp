@@ -11,7 +11,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "Positionable.hpp"
-#include "Componentable.hpp"  
+#include "Componentable.hpp"
+#include "Watch.hpp"
 
 struct Particle {
     glm::vec3 posVec = glm::vec3(0);
@@ -32,11 +33,13 @@ protected:
     World* world = NULL;
     
     int numParticles;
+    
+    Watch watch;
 
     float duration;
     
     virtual void refreshParticle() {}
-    Particle* particles = NULL;
+    Particle* particles = NULL; 
 public:
     void setWorld(World* world);  
     

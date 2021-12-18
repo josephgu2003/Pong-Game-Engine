@@ -14,11 +14,6 @@
 Camera::Camera() : Positionable() {
 }
 
-Camera::Camera(Actor* actor_) : Positionable() {
-    setActor(actor_);
-    updateVecs();
-}
-
 Camera::~Camera() { 
     
 }

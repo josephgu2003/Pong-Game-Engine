@@ -20,12 +20,12 @@
 #include <map>
 #include <queue>
 #include "Subject.hpp"
- 
-class Game;
+
+class Game; 
 class InputHandler;
 
 typedef void (*keyCallback) (Game*);
-typedef void (*setCallbackSet) (InputHandler*);
+typedef std::map<int, keyCallback> CallbackSet;
 
 struct KeyEvent {
     int key;
@@ -48,8 +48,8 @@ enum KeyCallbackSet{
 class InputHandler : public Subject { //detects input, executes associated action
 private:
     std::queue<KeyEvent> keyEventQ;
-    std::map<int, keyCallback>* keyCallbacks = NULL;
-    std::map<KeyCallbackSet, setCallbackSet>* callBackSetters = NULL;
+    CallbackSet* keyCallbacks = NULL;
+    std::map<int, CallbackSet> callbackSets;
     std::shared_ptr<Camera> activeCamera;
     
     GLFWwindow* window = NULL;
@@ -64,11 +64,10 @@ private:
     KeyCallbackSet mode;
     
     Game* game = NULL;
-    void clearCallbackforKey(int i);
-    void clearCallbacks();
+
     int processInput(const KeyEvent& ke);
 public:
-    void loadKeyCallbacks(KeyCallbackSet kcs);
+    void clear();
     InputHandler();
     ~InputHandler();
     void setWindow(GLFWwindow* window);
@@ -82,7 +81,6 @@ public:
     void swapCursorMode();
     GLenum getCurrentKeyPress() const;
     void setHandlerMode(KeyCallbackSet set);
-    void attachCallbackSetters(KeyCallbackSet whichSet, setCallbackSet setCallbacks);
 };
 
 #endif /* InputHandler_hpp */

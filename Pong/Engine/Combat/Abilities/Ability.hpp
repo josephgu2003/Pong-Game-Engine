@@ -16,20 +16,19 @@ class Game;
 class World;
 
 class Actor;
-
+ 
 class Ability {
 protected: 
     World* world = NULL;
     Actor* actor = NULL;
-    std::shared_ptr<Actor> target;
+    std::weak_ptr<Actor> target;
     float duration;
-    Game* game = NULL;
     int step;
 public:
     bool on;
-    Ability();
+    Ability(); 
     Ability(World* world_, Actor* actor_, float duration_);
-    virtual void setTarget(const std::shared_ptr<Actor>& actor_);
+    virtual void setTarget(const std::weak_ptr<Actor>& actor_);
     virtual ~Ability();
     virtual void call() = 0;
     virtual void tick() = 0;

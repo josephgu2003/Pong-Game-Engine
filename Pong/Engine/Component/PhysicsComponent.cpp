@@ -30,7 +30,7 @@ void PhysicsComponent::tick() {
 } 
 
 void PhysicsComponent::handleGravity(Actor& ourActor) {
-    float heightMin = ourActor.getWorld().getHeightAt(glm::vec2(ourActor.getPos().x, ourActor.getPos().z));
+    float heightMin = ourActor.getWorld().getHeightAt(glm::vec2(ourActor.getPos().x, ourActor.getPos().z)); 
     switch(ourActor.getState()) {
         case STATE_PARALYZED:
             break;

@@ -10,7 +10,8 @@
 #include "World.hpp"
 CombatComponent::CombatComponent(Actor& actor) : Component(actor) {
     Component::type = COMBAT;
-    biggestTarget = std::make_shared<Actor>(); 
+    biggestTarget = std::weak_ptr<Actor>();
+    affecting = std::weak_ptr<Ability>();
 }
 
 void CombatComponent::tick() {
@@ -22,20 +23,22 @@ void CombatComponent::clearAffecting() {
 void CombatComponent::newAbility(const std::shared_ptr<Ability>& ab) {
     abilityQ.push_back(std::move(ab));
 }
-void CombatComponent::affect(std::shared_ptr<Ability> ab) {
+void CombatComponent::affect(const std::shared_ptr<Ability>& ab) {
     affecting = ab;
 }
 void CombatComponent::setBigTarget(const std::shared_ptr<Actor>& ac) {
-    biggestTarget.reset();
-    biggestTarget = ac;
+    if (ac->getComponent<CombatComponent>()) {
+        biggestTarget.reset();
+        biggestTarget = ac;
+    } 
 }
-std::shared_ptr<Actor>& CombatComponent::getBigTarget() {
+std::weak_ptr<Actor>& CombatComponent::getBigTarget() {
     return biggestTarget;
 }
 bool CombatComponent::hasTarget() {
-    if (biggestTarget.get() != NULL) {
+    if (biggestTarget.lock().get() != NULL) {
         return true;
-    }
+    } 
     return false; 
 }
 bool CombatComponent::QHasAbilities() {
@@ -46,7 +49,7 @@ bool CombatComponent::QHasAbilities() {
 }
   
 
-std::shared_ptr<Ability> CombatComponent::getAffecting() {
+std::weak_ptr<Ability> CombatComponent::getAffecting() {
     return affecting;
 }
 

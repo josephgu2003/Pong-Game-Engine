@@ -89,6 +89,19 @@ public:
             }
         }
     }
+    
+    template <typename compType>
+    bool getComponentRef(std::weak_ptr<compType>& ref)
+    {
+        for (int i = 0 ; i < components.size(); i++) {
+            if (auto x = dynamic_pointer_cast<compType>(components.at(i))) {
+                ref = x;
+                return true;
+            }
+        }
+            return false; // make a null component or something
+ 
+    }
 
     template <typename compType>
     compType* getComponent()

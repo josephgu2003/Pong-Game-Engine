@@ -15,7 +15,7 @@ Model::Model() {
 }
 Model::Model(const char* filePath_) { 
     loadModel(filePath_);
-}
+} 
  
 Model::~Model() {
 }

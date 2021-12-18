@@ -12,15 +12,28 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Particle.hpp"
 
-PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map) : PGraphicsComponent(pe, size, shader, map){
+PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size_, Shader* shader, const Material& map) : PGraphicsComponent(pe, size_, shader, map){ 
+    size = size_;
     int datasize = numberParticles * 17 * sizeof(float);
     std::vector<int> v = {4,4,4,4,1};
-    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(size, size), glm::vec2(0,0));
-    makeInstanceBuffer(datasize, 2, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
-    drawTarget = GL_TRIANGLES; 
+    VertexLoader::loadModelSimple(modelFile, VAO, VBO, EBO, numIndices);
+    makeInstanceBuffer(datasize, 3, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
+    drawTarget = GL_TRIANGLES;
+} 
+PQuadGraphicsComponent::~PQuadGraphicsComponent() {
+     
+}  
+PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size_, Shader* shader, const Material& map) : PGraphicsComponent(pe, size_, shader, map){
+    int datasize = numberParticles * 17 * sizeof(float);
+    size = size_;
+    std::vector<int> v = {4,4,4,4,1};
+    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(1.0, 1.0), glm::vec2(0,0));
+    makeInstanceBuffer(datasize, 3, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
+    drawTarget = GL_TRIANGLES;
 }  
 
 void PQuadGraphicsComponent::tick() {
+    PGraphicsComponent::tick(); 
     std::vector<float> v;
     int n = static_cast<ParticleSystem*>(actor)->getNumParticles();
     Particle* p = static_cast<ParticleSystem*>(actor)->getParticles();
@@ -34,6 +47,7 @@ void PQuadGraphicsComponent::tick() {
         modelMatr = glm::mat4(1.0f); 
         modelMatr = glm::translate(modelMatr, particle.posVec);
         modelMatr = glm::rotate(modelMatr, -glm::radians(particle.pyrAngles.y), glm::vec3(0,1,0));
+        modelMatr = glm::scale(modelMatr, glm::vec3(size,size,size));
         float* mat = glm::value_ptr(modelMatr[0]);
             for (int l = 0; l < 16; l++) {
                 v[counter] = (mat[l]);

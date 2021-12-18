@@ -32,7 +32,7 @@ Actor::Actor() : Positionable() {
     velVec = glm::vec3(0.0f, 0.0f, 0.0f); 
 } 
  
-Actor::~Actor() {
+Actor::~Actor() { 
  
 } 
 
@@ -43,16 +43,16 @@ World& Actor::getWorld() {
 }
 
 
-void Actor::tick() {
-    Componentable::tick();
-    
-    modelMat = glm::mat4(1.0f);
-    modelMat = glm::translate(modelMat, posVec);
+void Actor::tick() {  
+    Componentable::tick();    
+         
+    modelMat = glm::mat4(1.0f); 
+    modelMat = glm::translate(modelMat, posVec); 
     glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
     glm::quat MyQuaternion = glm::quat(rotations);
     
     glm::mat4 RotationMatrix = toMat4(MyQuaternion);
-    modelMat = modelMat * RotationMatrix;
+    modelMat = modelMat * RotationMatrix; 
     
     graphics->getShader()->setMat4("modelMat", modelMat);
     

@@ -16,6 +16,7 @@
 #include "PropFactory.hpp"
 #include "ScriptFactory.hpp"
 
+
 nlohmann::json JsonManager::dialogues;
 
 void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf) {
@@ -23,6 +24,11 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
     std::ifstream inStream(SAVE_PATH);
     inStream >> saveFile;
       
+    auto loadPos = [] (glm::vec3& pos, const nlohmann::json& posdata) {
+        pos.x =    (posdata)["Position"][0];
+        pos.z =    (posdata)["Position"][2];
+        pos.y =   posdata["Position"][1];
+    };
     for (auto i = saveFile.begin(); i != saveFile.end(); i++) {
         std::vector<std::shared_ptr<Relationship>> relationships;
         // possible errors for relationships: corrupted in one actor's json, how to fix?
@@ -33,10 +39,8 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
             World& world = level->getWorld(worldID);
         
             std::shared_ptr<Script> script = sf->makeScript(FactoryEnum, &world);
-            glm::vec3 pos;
-            pos.x =    (*i)["Position"][0];
-            pos.z =    (*i)["Position"][2];
-            pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
+            glm::vec3 pos; 
+            loadPos(pos, (*i));
             
             script->setPos(pos); 
             level->getWorld(worldID).insert<Script>(script);
@@ -49,9 +53,7 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
             World& world = level->getWorld(worldID);
         
             glm::vec3 pos;
-            pos.x =    (*i)["Position"][0];
-            pos.z =    (*i)["Position"][2];
-            pos.y =   world.getHeightAt(glm::vec2(pos.x, pos.z));
+            loadPos(pos, (*i));
             
             actor->setPos(pos);
             actor->setWorld(&level->getWorld(worldID));
@@ -64,9 +66,7 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
             int worldID = (*i)["WorldID"];
         
             glm::vec3 pos;
-            pos.x =    (*i)["Position"][0];
-            pos.y =   (*i)["Position"][1];
-            pos.z =    (*i)["Position"][2];
+            loadPos(pos, (*i));
             
             NameComponent* nc = actor->getComponent<NameComponent>();
             if (nc) {
@@ -98,7 +98,7 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
                     mlife = (*i)["Life"][1] ;
                 }
                 if(i->find("Hunger") != i->end()) {
-                    chunger = (*i)["Hunger"][0] ;
+                    chunger = (*i)["Hunger"][0];
                     mhunger = (*i)["Hunger"][1] ;
                 }
                 if(i->find("Stamina") != i->end()) {
@@ -115,7 +115,7 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
              
             World& world = level->getWorld(worldID);
             actor->setWorld(&world);
-            world.insertActor(actor);
+            world.insert<Actor>(actor);
              
             if ((*i)["SubType"] == "PlayerHero") {
               //  game->setPlayerHero(actor, worldID);

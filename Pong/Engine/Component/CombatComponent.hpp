@@ -19,21 +19,20 @@
 
 class CombatComponent : public Component {
 private:
-    std::shared_ptr<Ability> currentAbility;
-    std::shared_ptr<Actor> biggestTarget;
+    std::weak_ptr<Actor> biggestTarget;
     std::vector<std::shared_ptr<Ability>> abilityQ;
-    std::shared_ptr<Ability> affecting;
+    std::weak_ptr<Ability> affecting;
 public:
     CombatComponent(Actor& actor);
     virtual void tick() override; 
     void newAbility(const std::shared_ptr<Ability>& ab);
     std::vector<std::shared_ptr<Ability>>& getAbilityQ();
-    void affect(std::shared_ptr<Ability> ab);
-    std::shared_ptr<Ability> getAffecting();
+    void affect(const std::shared_ptr<Ability>& ab);
+    std::weak_ptr<Ability> getAffecting();
     void setBigTarget(const std::shared_ptr<Actor>& ac);
-    std::shared_ptr<Actor>& getBigTarget();
-    void clearAffecting();
+    std::weak_ptr<Actor>& getBigTarget();
+    void clearAffecting(); 
     bool hasTarget();
-    bool QHasAbilities();
+    bool QHasAbilities(); 
 };
 #endif /* CombatComponent_hpp */

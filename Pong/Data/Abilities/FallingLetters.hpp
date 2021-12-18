@@ -20,7 +20,7 @@ class Actor;
 class FallingLetters: public Ability{
 private:
     ParticleFactory pf;
-    std::shared_ptr<ParticleSystem> letters;
+    std::weak_ptr<ParticleSystem> letters;
 public:
     FallingLetters(World* world_, Actor* actor_, float duration_);
     ~FallingLetters();

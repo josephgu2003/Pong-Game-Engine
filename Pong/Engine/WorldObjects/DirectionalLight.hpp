@@ -13,7 +13,7 @@
 
 class DirectionalLight : public Light {
     glm::vec3 shineDir;
-public:
+public: 
     DirectionalLight();
     DirectionalLight(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 shineDir);
     void setShineDir(glm::vec3 shineDir_);

@@ -18,7 +18,6 @@ protected:
     Actor* actor = NULL;
 public:
     Camera();
-    Camera(Actor* actor);
     ~Camera();
     void setActor(Actor* actor_);
     void updateVecs();

@@ -12,10 +12,12 @@
 #include "Script.hpp"
 #include "ParticleFactory.hpp"
 #include "Particle.hpp"
+#include "MyActorFactory.hpp"
 
 class ScriptWakeUp : public Script {
 private:
     ParticleFactory pf;
+    MyActorFactory maf;
     std::shared_ptr<ParticleSystem> snow;
 public:
     ScriptWakeUp(World* world);

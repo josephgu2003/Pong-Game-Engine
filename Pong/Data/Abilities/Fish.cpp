@@ -18,7 +18,7 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
 Fish::~Fish() {
     world->deleteX<Actor>(fish.get());
 } 
-
+ 
 void Fish::call() {
 
     world->insert<Actor>(fish); 
@@ -29,11 +29,11 @@ void Fish::call() {
 }
  
 void Fish::tick() {
-    actor->getComponent<LifeComponent>()->incStatValue(-0.03, STAT_LIFE);
+    actor->getComponent<LifeComponent>()->incStatValue(-0.03, STAT_ENERGY);
     if (step == 0) {
         if (duration > 16.5) { 
          //   quad.alpha = (18.0-duration)/1.5;
-        }
+        } 
         else {
             step++;
             freeActor();
@@ -81,11 +81,12 @@ void Fish::tick() {
         on = false;
     }
     duration -= (float)glfwGetTime();
-}
+} 
 
 void Fish::freeActor() {
-    if (actor->getComponent<CombatComponent>()->getAffecting().get() != NULL) {
-       actor->getComponent<CombatComponent>()->getAffecting()->dispel();
+    if (actor->getComponent<CombatComponent>()->getAffecting().lock().get() != NULL) {
+       actor->getComponent<CombatComponent>()->getAffecting().lock()->dispel();
     }
 }
+ 
  

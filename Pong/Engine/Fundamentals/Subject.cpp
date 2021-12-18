@@ -5,7 +5,7 @@
 //  Created by Joseph Gu on 10/17/21.
 //
 
-#include "Subject.hpp"
+#include "Subject.hpp" 
 #include "Observer.hpp"
 void Subject::notifyAll(GameEvent ge) { 
     for (int i = 0 ; i < observers.size(); i++) {

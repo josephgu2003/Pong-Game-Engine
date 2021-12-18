@@ -4,12 +4,11 @@
 //
 //  Created by Joseph Gu on 5/3/21.
 //
-#define WINDOW_WIDTH 1000.0
-#define WINDOW_HEIGHT 650.0
+
 #define DEFAULT_FRUSTRUM_NEAR 0.01f
 #define DEFAULT_FRUSTRUM_FAR 200.0f
 #define DEFAULT_FOV 60.0f
- 
+  
 #include "Renderer.hpp" 
 #include "stb_image.h" 
 #include <iostream>
@@ -27,6 +26,50 @@ GLuint uboViewProj;
 GLuint uboLights;
 GLuint uboStopWatch;
 GLuint uboDistanceFog;
+
+static const float skyVertices[] = {
+    -1.0f,  1.0f, -1.0f,
+    -1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+
+    -1.0f, -1.0f,  1.0f,
+    -1.0f, -1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f,  1.0f,
+    -1.0f, -1.0f,  1.0f,
+
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+
+    -1.0f, -1.0f,  1.0f,
+    -1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f, -1.0f,  1.0f,
+    -1.0f, -1.0f,  1.0f,
+
+    -1.0f,  1.0f, -1.0f,
+     1.0f,  1.0f, -1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+    -1.0f,  1.0f,  1.0f,
+    -1.0f,  1.0f, -1.0f,
+
+    -1.0f, -1.0f, -1.0f,
+    -1.0f, -1.0f,  1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+    -1.0f, -1.0f,  1.0f,
+     1.0f, -1.0f,  1.0f
+};
 
 void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     if (block == ViewProj) {
@@ -65,13 +108,13 @@ Renderer::Renderer() {
     AssetManager::loadTexture(TEX_EMPTY, &empty, false);
     AssetManager::loadTexture(TEX_VORONOI, &voronoi, false);
        
-    int width, height;  
+    int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     scale = width  / float(WINDOW_WIDTH);
     printf("Window framebuffer is scaled by %f \n", scale);
     
     if (scale == 1.0) {
-        scale = 2.0;
+        scale = 2.0;  
     }
 
     AssetManager::generateFramebuffer2Color(&frame2C, WINDOW_WIDTH*scale, WINDOW_HEIGHT*scale);
@@ -80,7 +123,7 @@ Renderer::Renderer() {
                                       0.5 * WINDOW_HEIGHT*scale);
     
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_POINT_SPRITE);
     glEnable(GL_PROGRAM_POINT_SIZE);
     
@@ -97,7 +140,7 @@ Renderer::Renderer() {
     glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
     
 
-    glGenBuffers(1, &uboStopWatch);
+    glGenBuffers(1, &uboStopWatch); 
     glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch); 
     glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // allocate 152 bytes of memory
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -113,26 +156,26 @@ Renderer::Renderer() {
     
     glGenTextures(1, &skyTexture.id); 
     glUniformBlockBinding(skyShader->ID, glGetUniformBlockIndex(skyShader->ID, "DistanceFog"), 3);
+    
+    glGenVertexArrays(1, &sVAO);
+    glBindVertexArray(sVAO); 
+    
+    glGenBuffers(1, &sVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, sVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyVertices[0], GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
 }
 
 Renderer::~Renderer() {  
-    
+     
 }   
 
 void Renderer::setWorld(World *world_) {
     world = world_;
-    
-   glGenVertexArrays(1, &sVAO);
-   glBindVertexArray(sVAO);
-   
-   glGenBuffers(1, &sVBO);
-   glBindBuffer(GL_ARRAY_BUFFER, sVBO);
-
-   glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), (world->getSkyVertices()), GL_STATIC_DRAW);
-   
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-   glEnableVertexAttribArray(0);
-   glBindVertexArray(0);
 }
 
 void Renderer::setCamera(Camera *camera_) {
@@ -229,25 +272,25 @@ void Renderer::loadSkyBoxData() {
                        format = GL_RGB; 
                    else if (channels == 4)
                        format = GL_RGBA;
-            glTexImage2D(
-                         GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                         0, GL_SRGB, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData
-                         );
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_SRGB, imageWidth, imageHeight, 0,format, GL_UNSIGNED_BYTE, imageData  );
+            stbi_image_free(imageData);
         } else {
             std::cout << "Failed to load sky box data \n";
         }
     }
-
+ 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    stbi_image_free(imageData);
-    
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
+ 
 }
 
 void Renderer::checkForUpdates() { // spaghetti
+    if (!world) {
+        return;
+    } 
     Updates updates = world->checkforUpdates();
 
     if(updates.lightingUpdate == true) {
@@ -267,14 +310,14 @@ void Renderer::checkForUpdates() { // spaghetti
 void Renderer::renderInitial() {
     checkForUpdates();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     
+      
     glBindFramebuffer(GL_FRAMEBUFFER, frame2C.fbo); //draw to 2C framebuffer
     glViewport(0, 0, frame2C.width, frame2C.height);
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);  
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    updateCamPos();
+    updateCamPos(); 
     updateUniformStopWatch();
     renderSky();  
 }
@@ -340,22 +383,15 @@ void Renderer::renderFinal() {
     glUniform1i(glGetUniformLocation(frameShader->ID, "gradient"), 4);
     glBindTexture(GL_TEXTURE_2D, gradient.id);
         
-    glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);
+    if (world) {
+        glUniform1i(glGetUniformLocation(frameShader->ID, "blur"), world->blur);    
+    }
     
     glDrawArrays(GL_TRIANGLES, 0, 6);  
      
     timeT += (float)glfwGetTime();
 }
 
-
-void Renderer::renderUI(uiPiece* uip) {
-    Shader* s = uip->getShader();
-    s->use();
-    uip->bind();
-    bindTextures(s, uip->getTextureMap());
-    glDrawElements(GL_TRIANGLES, uip->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
-    uip->unbind();
-}
 
 void Renderer::renderSky() {
     //sky
@@ -401,6 +437,11 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
     glActiveTexture(GL_TEXTURE2);
       glUniform1i(glGetUniformLocation(shader->ID, "normMap"), 2);
       glBindTexture(GL_TEXTURE_2D, map.normMap.id);
+    }
+    if (map.alphaMap.id != -1) {
+        glActiveTexture(GL_TEXTURE7);
+      glUniform1i(glGetUniformLocation(shader->ID, "alphaMap"), 7);
+      glBindTexture(GL_TEXTURE_2D, map.alphaMap.id);
     } 
     
     if (glGetUniformLocation(shader->ID, "voronoi") != -1) {
@@ -412,7 +453,7 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
     if (glGetUniformLocation(shader->ID, "noise") != -1) {
         glActiveTexture(GL_TEXTURE6);
         glUniform1i(glGetUniformLocation(shader->ID, "noise"), 6);
-        glBindTexture(GL_TEXTURE_2D, gradient.id);
+        glBindTexture(GL_TEXTURE_2D, noise.id);
     }
     
     if (glGetUniformLocation(shader->ID, "gradient") != -1) {
@@ -423,75 +464,46 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
     glActiveTexture(GL_TEXTURE0);
 }
 
-
-void Renderer::renderActor(GraphicsObject* r) {
-    r->bind();  
-    Shader* s = r->getShader();  
-    s->use();  
-    Material& map = r->getTextureMap(); 
-    bindTextures(s, map);
-    glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
-    r->unbind();
-} 
- 
-
 void Renderer::renderParticles(GraphicsObject* r, int instanceCount) {
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
-     
-    r->bind();
-    Shader* s = r->getShader();
-    s->use(); 
-    Material& map = r->getTextureMap();
-    bindTextures(s, map);
+    bindGraphicsObject(r);
     
     glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, instanceCount);
     r->unbind();
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
+ 
 
-void Renderer::renderText(uiText* text) {
-    text->getShader()->use();
-    text->bind();
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(text->getShader()->ID, "textTexture"), 0);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, text->getTextureMap().diffuse.id); //hahahaha
-    glDrawElements(GL_TRIANGLES, text->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
-    text->unbind();
-}
-   
 void Renderer::renderTerrain(GraphicsObject* r) {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    r->bind();
-    Shader* s = r->getShader(); 
-    s->use();
-    Material& map = r->getTextureMap();
-    bindTextures(s, map);
+    bindGraphicsObject(r);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
     glDisable(GL_CULL_FACE);
 }
 
+void Renderer::renderGeneric(GraphicsObject* go) {
+    bindGraphicsObject(go);
+    glDrawElements(GL_TRIANGLES, go->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    go->unbind();
+}
+
 void Renderer::renderFoliage(GraphicsObject* r) {
     glDepthMask(GL_FALSE);
-    r->bind();
-    Shader* s = r->getShader();
-    s->use();
-    Material& map = r->getTextureMap();
-    bindTextures(s, map);
+    bindGraphicsObject(r);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
     glDepthMask(GL_TRUE);
 }
- 
+  
 void Renderer::resizeViewPort() {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
-}
+} 
  
 void Renderer::updateAllUniblocks() {
     updateLights();
@@ -499,6 +511,4 @@ void Renderer::updateAllUniblocks() {
     updateDistanceFog();
     updateViewProj();
 }
- 
- 
  

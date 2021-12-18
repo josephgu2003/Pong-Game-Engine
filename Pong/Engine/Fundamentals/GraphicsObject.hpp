@@ -14,14 +14,30 @@
 #include <stdio.h>
 #include "AssetManager.hpp"
 #include "VertexMesh.hpp"
+#include "Watch.hpp"
  
 class Shader; 
 
 class Renderer;
 
+struct TextureAnimation {
+    std::string uniformName;
+    int maxFrames;
+    int currentFrame;
+    float timePerFrame;
+    Watch watch;
+    TextureAnimation(const std::string& name, int maxFrames, float fps);
+};
+
+enum DrawPass {
+  DRAW_OPAQUE,
+    DRAW_TRANSPARENT
+};
 
 class GraphicsObject { // benefits: keep VAO VBO EBO in the entity, not in teh renderer, much simpler, finally a way to unify ur rendering stuff
 protected:
+    std::vector<TextureAnimation> textureAnimations;
+    DrawPass drawPass;
     Shader* shader = NULL;
     GLuint VAO;
     GLuint VBO;
@@ -42,10 +58,13 @@ protected:
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
     }
-
 public:
+    void animateTextures();
+    void setTextureAnimation(std::string frameIndexUniform, int numFrames, float fps);
+    DrawPass getDrawPass();
+    virtual ~GraphicsObject();
     GLuint instanceVBO;
-    GraphicsObject();
+    GraphicsObject(DrawPass dp);
     Shader* getShader();
     void setShader(Shader* shader);
     Material& getTextureMap();
@@ -53,6 +72,7 @@ public:
     void bind();
     void unbind(); 
     GLuint getNumIndices();
+    bool isInstanced();
     virtual void draw(Renderer* r) = 0;     //this is where instanced drawing is cancelled-  world object doesn't know about instanced drawing and stuff
     
 // - instancing data?

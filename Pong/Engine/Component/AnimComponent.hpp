@@ -28,7 +28,7 @@ protected:
     Animation* activeAnim = NULL;
     Animation* defaultAnim = NULL;
     std::vector<Animation> animations;
-    BoneInfoMap BoneDataMap;
+    BoneInfoMap BoneDataMap; 
     std::vector<glm::mat4>  boneMatrices; 
     void updateBoneMatrices(float t);
     void playDefault();

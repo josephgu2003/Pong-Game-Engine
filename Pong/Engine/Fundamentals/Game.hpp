@@ -34,11 +34,10 @@ private:
     FPSControl fpsControl;
     virtual void load();
     GLFWwindow* window = NULL; // Windowed
+    std::unique_ptr<GameLevel> activeLevel;
 protected:
     std::shared_ptr<Camera> camera;
     std::shared_ptr<uiLayout> ui;
-
-    std::unique_ptr<GameLevel> activeLevel;
     
     Renderer* renderer = NULL;
      
@@ -50,7 +49,9 @@ protected:
     void initObjects();
     void linkObjects();
     void setLevelBuilder(LevelBuilder lvlBuilder);
+    void registerGameLevelCreate(std::string levelname, GameLevelCreate glc);
 public:
+    Actor* getPlayerHero();
     bool running = false;
     Game();
     ~Game();
@@ -58,7 +59,7 @@ public:
     void init();
     void end();
     InputHandler& getInputHandler();
-    GameLevel& getActiveLevel();
+    GameLevel* getActiveLevel();
     std::shared_ptr<uiLayout>& getUI();
     void loadLevel(std::string lvl);
     Renderer* getRenderer();

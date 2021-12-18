@@ -26,26 +26,18 @@ void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
 
 void InputHandler::dumpTextToPlayer() {
     setHandlerMode(KCALL_DEFAULT);
-    if (auto x = game->getActiveLevel().getActiveWorld()->getPlayerHero()) {
+    if (auto x = game->getPlayerHero()) {
         x->getComponent<NameComponent>()->speak(readText, 3.0);
     }
     readText = ""; 
-} 
-  
-void InputHandler::loadKeyCallbacks(KeyCallbackSet kcs) {
-    if (!keyCallbacks->empty()) {
-        keyCallbacks->clear();
-    }
-    auto keyLoadScript = callBackSetters->find(kcs);
-    if (keyLoadScript != callBackSetters->end()) {
-        (keyLoadScript->second)(this);
-    }
-}
+}  
 
-InputHandler::InputHandler() {
-    keyCallbacks = new std::map<int, keyCallback>();
-    callBackSetters = new std::map<KeyCallbackSet, setCallbackSet>;
+InputHandler::InputHandler() {// duplicate code, fix when more advanced callback state support is added
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_DEFAULT, CallbackSet()));
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_MENU, CallbackSet()));
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_READTEXT, CallbackSet()));
     mode = KCALL_DEFAULT;
+    keyCallbacks = &(callbackSets[KCALL_DEFAULT]);
     mouseMovesCamera = true;
     readText = "";
 }
@@ -59,7 +51,7 @@ void InputHandler::setCallbackforKey(int i, keyCallback cbk) {
         keyCallbacks->insert(std::pair<int, keyCallback>(i, cbk));
     } else { 
         keyCallbacks->find(i)->second = cbk;
-    }
+    } 
 } 
 
 void InputHandler::addKeyEventToQ(int key, int action, int mods) {
@@ -89,8 +81,8 @@ void InputHandler::tick() {
             }
         }  
     }
-    
-    if (auto player = game->getActiveLevel().getActiveWorld()->getPlayerHero()) {
+     
+    if (auto player = game->getPlayerHero()) {
     
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             player->posDir(0.09);
@@ -169,13 +161,14 @@ GLenum InputHandler::getCurrentKeyPress() const {
 
 void InputHandler::setHandlerMode(KeyCallbackSet set) {
     mode = set;
+    keyCallbacks = &(callbackSets[set]);
 }
 
-
-void InputHandler::attachCallbackSetters(KeyCallbackSet whichSet, setCallbackSet setCallbacks) {
-    if (callBackSetters->find(whichSet) == callBackSetters->end()) {
-        callBackSetters->insert(std::pair<KeyCallbackSet, setCallbackSet>(whichSet, setCallbacks));
-    } else {
-        callBackSetters->find(whichSet)->second = setCallbacks;
-    }
+void InputHandler::clear() { // duplicate code, fix when more advanced callback state support is added
+    callbackSets.clear(); 
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_DEFAULT, CallbackSet()));
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_MENU, CallbackSet()));
+    callbackSets.insert(std::pair<int,CallbackSet>(KCALL_READTEXT, CallbackSet()));
+    mode = KCALL_DEFAULT;
+    keyCallbacks = &(callbackSets[KCALL_DEFAULT]);
 }

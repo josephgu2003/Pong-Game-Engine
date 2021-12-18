@@ -19,7 +19,7 @@ uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath)
 }
 
 void uiMenu::draw(Renderer* r) {
-    r->renderUI(this); 
+    r->renderGeneric(this); 
     for (auto i : children) { 
         (i)->draw(r);
     }

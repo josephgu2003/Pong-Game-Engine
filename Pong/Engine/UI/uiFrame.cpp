@@ -16,7 +16,7 @@ uiFrame::uiFrame(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePat
 }
 
 void uiFrame::draw(Renderer* r) {
-    r->renderUI(this);
+    r->renderGeneric(this);
     for (auto i : children) {
         (i)->draw(r);
     }

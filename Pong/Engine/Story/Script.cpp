@@ -7,12 +7,15 @@
 
 #include "Script.hpp"
 #include "World.hpp"
+#include "NameComponent.hpp"
 
-Script::Script(World* world_, std::vector<std::string> crew) : Positionable() {
+Script::Script(World* world_, std::vector<std::string> crew, float radius_) : Positionable() {
     world = world_;
-    dummy = std::make_shared<Actor>(); 
+    radius = radius_;
+    dummy = std::make_shared<Actor>();
+    std::weak_ptr<Actor> ref = dummy;
     for (int i = 0; i < crew.size(); i++) { 
-        actors.insert(std::pair<std::string, std::shared_ptr<Actor>>(crew.at(i), std::shared_ptr<Actor>(dummy)));
+        actors.insert(std::pair<std::string, std::shared_ptr<Actor>>(crew.at(i), ref));
     }
     step = 0;
     stopWatch.resetTime();
@@ -29,11 +32,11 @@ bool Script::checkAllHere() { // slow???
     bool allHere = true;
     for (auto i = actors.begin() ; i != actors.end(); i++){
         auto x = world->getActorNamed(i->first);
-        if ((x->dummy) || (x->getDistanceTo(this)) > 30.0) { 
+        if ((x->dummy) || (x->getDistanceTo(this)) > radius) {
             allHere = false;
-        } else if (i->second->dummy){
+        } else if (i->second.lock()->dummy){
             i->second = x;
-        }
+        } 
     }
     return allHere;
 }
@@ -53,9 +56,28 @@ void Script::waitFor(float duration) {
     } 
 }
 
+void Script::newActor(std::string name, const std::shared_ptr<Actor>& actor) {
+    actor->getComponent<NameComponent>()->init(name); 
+    std::weak_ptr<Actor> ref = actor;
+    actors.insert(std::pair<std::string, std::weak_ptr<Actor>>(name, ref));
+    world->insert<Actor>(actor);
+}
+
 bool Script::isWaiting() {
     if (lastTime < 0.0f) {
         return false;
     }
     return true;
 }
+
+Actor* Script::getActorNamed(std::string name) {
+    auto actor = actors.find(name);
+    if (actor != actors.end()) {
+        if (auto x = actor->second.lock()) {
+            if (!x->dummy)
+            return x.get();
+        }
+    } 
+    return nullptr;
+}
+ 

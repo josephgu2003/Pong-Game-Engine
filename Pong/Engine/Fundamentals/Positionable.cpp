@@ -35,7 +35,7 @@ void Positionable::turnTowards(const glm::vec3& newDir_) {
    /** eulerAngles -= glm::vec3(0,dYaw,0);
     if (eulerAngles.x < -45.0f) {
         eulerAngles.x = -45.0f;
-    }
+    } 
 
     dirVec = newDir_;
     
@@ -46,21 +46,26 @@ void Positionable::turnTowards(const glm::vec3& newDir_) {
 
 void Positionable::setPos(glm::vec3 pos_) {
     posVec = pos_;
+    Subject::notifyAll(SUBJ_POS_CHANGED);
 }
 
 void Positionable::translatePos(const glm::vec3& translate) {
     posVec += translate;
+    notifyAll(SUBJ_POS_CHANGED);
 }
 
 void Positionable::setPosY(float y_) {
     posVec.y = y_;
+    notifyAll(SUBJ_POS_CHANGED);
 }
-void Positionable::posDir(float speed) {
+void Positionable::posDir(float speed) { 
     posVec += speed * dirVec;
+    notifyAll(SUBJ_POS_CHANGED);
 }
 
 void Positionable::posRight(float speed) {
     posVec += speed * rightVec;
+    notifyAll(SUBJ_POS_CHANGED);
 }
 
 void Positionable::randomPosAround(glm::vec3 pivot) {
@@ -85,9 +90,14 @@ float Positionable::getDistanceTo(Positionable* b) {
     return d;
 }
   
+float Positionable::getDistanceTo(glm::vec3 p) {
+    float d = glm::length(posVec - p); 
+    return d;
+}
 void Positionable::offsetOrientationVectors(glm::vec3 eulers) {
     offsetAngles = eulers;
 }
+
 void Positionable::turnTowards(Positionable* p) {
     turnTowards(p->getPos()-posVec);
 }
@@ -104,7 +114,7 @@ glm::vec3 Positionable::getDir() {
     return dirVec; 
 }
 /**
-#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/vector_angle.hpp> 
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 modelMat = glm::mat4(1.0f);

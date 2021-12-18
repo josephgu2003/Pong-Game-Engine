@@ -14,7 +14,8 @@
 
 enum PropEnum {
     PROP_TREE, 
-    PROP_GRASS 
+    PROP_GRASS,
+    PROP_WELL
 };
 
 

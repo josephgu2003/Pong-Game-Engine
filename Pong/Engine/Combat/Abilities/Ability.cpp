@@ -19,19 +19,22 @@ Ability::Ability(World* world_, Actor* actor_, float duration_) {
     duration = duration_;
     on = true;
     step = 0;
+    target = std::weak_ptr<Actor>();
 };
 
 Ability::~Ability() {
     
 }
 
-void Ability::setTarget(const std::shared_ptr<Actor>& actor_) {
+void Ability::setTarget(const std::weak_ptr<Actor>& actor_) {
     target = actor_;
 }
 
 void Ability::dispel() {
     on = false;
-    target->getComponent<CombatComponent>()->clearAffecting();
+    if (auto x = target.lock()) {
+        x->getComponent<CombatComponent>()->clearAffecting(); 
+    }
 //    static_pointer_cast<CombatComponent>(target->getComp(COMBAT))->clearAffecting();
 }
 

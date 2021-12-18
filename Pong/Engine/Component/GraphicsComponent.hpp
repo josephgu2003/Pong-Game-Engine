@@ -28,20 +28,20 @@ class GraphicsComponent;
 
 typedef void (*DrawCall) (Renderer*, GraphicsComponent*);
 
+
 class GraphicsComponent : public Component, public GraphicsObject { // for actors
 protected:
-    std::map<Texture*, FrameAndShader> animatedTextures;
-    VertexMesh* mesh = nullptr;
+    std::weak_ptr<VertexMesh> mesh;
     DrawCall drawCall;
-public:  
-    GraphicsComponent(Componentable& actor, Shader* shader, const Material& map);
+public:
+    GraphicsComponent(Componentable& actor, Shader* shader, const Material& map, DrawPass dp);
+    virtual ~GraphicsComponent();
     void initModel(const std::string& model); 
-    void initGrid(int verticesX, int verticesY, float scale, VertexMesh*& mesh);
+    void initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh);
     virtual void tick() override;
     virtual void draw(Renderer* r) override;
     void setDrawCall(DrawCall dc);
-    void animateTexture(Texture* texture, Shader* shader);
-};
- 
+}; 
+   
 
 #endif /* GraphicsComponent_hpp */

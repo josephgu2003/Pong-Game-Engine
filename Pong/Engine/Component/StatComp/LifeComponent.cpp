@@ -95,6 +95,10 @@ void LifeComponent::incStatValue(float increment, StatType st) {
     if (st == STAT_LIFE) {
         notifyAll(SUBJ_HP_CHANGED);
     }
-} 
+    if (st == STAT_ENERGY) {
+        notifyAll(SUBJ_MANA_CHANGED);
+    }
+}
+ 
  
  

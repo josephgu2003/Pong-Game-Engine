@@ -11,22 +11,27 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <string>
-
+#include <unordered_map>
+ 
+#define FUNCTION_DEFS "Shaders/Functions.json"
 // manages a shader
-class Actor;
-class Renderer;
-
 class Shader
 {
+private:
+    void fillInFunctions(std::string& shaderCode);
+    static
+    std::unordered_map<std::string, std::string> functions;
+    void makeShader(GLenum shaderType, const char* src, GLuint& shader);
 public:
     // program ID
     GLuint ID;
-    
     // constructor takes source files to build shader
     Shader();
     Shader(const char* vertexPath, const char* fragmentPath);
+    ~Shader();
     
     //use the shader
+    static void loadFunctionDefinitions();
     void use();
     void init(const char* vertexPath, const char* fragmentPath);
     void init(const char* vertexPath,const char* geoPath, const char* fragmentPath);

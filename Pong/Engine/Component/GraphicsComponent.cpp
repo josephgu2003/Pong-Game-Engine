@@ -8,23 +8,27 @@
 #include "GraphicsComponent.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp" 
-GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_) : Component(actor), GraphicsObject::GraphicsObject() {
+GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_, DrawPass dp) : Component(actor), GraphicsObject::GraphicsObject(dp) {
     Component::type = GRAPHICS; 
     shader = shader_;
     map = map_;
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {
-        r->renderActor(gc);
+        r->renderGeneric(gc);
     };
 }
- 
-void GraphicsComponent::tick() {
-    if (mesh) {
-        updateVertexBuffer<SimpleVertex>(mesh); 
-    }
+
+GraphicsComponent::~GraphicsComponent() {
+    
 }
 
+void GraphicsComponent::tick() {
+    if (auto x = mesh.lock()) {
+        updateVertexBuffer<SimpleVertex>(x.get());
+    }
+}
+ 
 void GraphicsComponent::initModel(const std::string& model) {
-    // need to load model data to vao vbo,
+    // need to load model data to vao vbo, 
     VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices);
 }
 
@@ -38,11 +42,12 @@ void GraphicsComponent::draw(Renderer* r) {
     drawCall(r, this);
 } 
    
-void GraphicsComponent::initGrid(int verticesX, int verticesY, float scale, VertexMesh*& mesh_) {
+void GraphicsComponent::initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh_) {
     VertexLoader::loadSimpleVertexGrid(verticesX, verticesY, scale, mesh_->vertices, VAO, VBO, EBO, numIndices);
     mesh = mesh_;
 }
-
+ 
 void GraphicsComponent::setDrawCall(DrawCall dc) {
     drawCall = dc;
 }
+ 

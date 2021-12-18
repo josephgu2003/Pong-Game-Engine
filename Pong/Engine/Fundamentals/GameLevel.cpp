@@ -31,8 +31,11 @@ World* GameLevel::getActiveWorld() {
 }
 
 World& GameLevel::getWorld(int i) {
+    if (i == 1) {
+        int j = 1;
+    }
     return *(worlds.at(i).get()); 
-}
+} 
 
 void GameLevel::changeLevel(std::string newLevel) {
     nextLevel = newLevel;

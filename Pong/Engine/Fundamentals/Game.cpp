@@ -4,9 +4,7 @@
 //
 //  Created by Joseph Gu on 6/3/21.
 //
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 650
-
+ 
 #include "Game.hpp"
 #include <iostream>
 #include <cctype>
@@ -14,28 +12,41 @@
 #include "json.hpp"
 #include "AssetManager.hpp"
 #include "JsonManager.hpp"
+#include "Shader.hpp"
 
-Game::Game() { 
+Game::Game() {
+    glfwInit(); 
     running = true;
     
     initWindow();
     
     glewExperimental = GL_TRUE;
-    glewInit(); 
+    glewInit();
+    
     glEnable(GL_DEPTH_TEST); // enable depth-testing
     glDepthFunc(GL_LEQUAL);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetTime(0);
     glfwSetWindowUserPointer(window, &inputHandler);
 
-    stbi_set_flip_vertically_on_load(0);
+    stbi_set_flip_vertically_on_load(1);
     
     initObjects();
   
     linkObjects();
 
     printf("%s\n", glGetString(GL_VERSION));
+    Shader::loadFunctionDefinitions(); 
   //  audio.playMusic(); //sus 
+}
+
+void Game::registerGameLevelCreate(std::string levelname, GameLevelCreate glc) {
+    auto entry = levelBuilder.find(levelname);
+    if (entry != levelBuilder.end()) {
+        entry->second = glc;
+    } else {
+        levelBuilder.insert(std::pair<std::string, GameLevelCreate>(levelname, glc));
+    }
 }
 
 void Game::initWindow() {
@@ -79,7 +90,7 @@ void Game::tick() {
     } 
 
     renderer->renderInitial();
-      
+       
     std::string nextLvl = activeLevel->tick();
     if (nextLvl != "") {
         loadLevel(nextLvl);
@@ -90,10 +101,11 @@ void Game::tick() {
     glfwPollEvents();
     glfwSwapBuffers(window);
 }
-
+ 
 
 void Game::end() {
     JsonManager::saveGameLevel(activeLevel.get());
+    glfwTerminate(); 
 }
 
 InputHandler& Game::getInputHandler() {
@@ -113,8 +125,8 @@ void Game::load() {
     
 }
   
-GameLevel& Game::getActiveLevel() {
-    return *(activeLevel.get());
+GameLevel* Game::getActiveLevel() {
+    return activeLevel.get();
 }
 
 void Game::setLevelBuilder(LevelBuilder lvlBuilder) {
@@ -124,15 +136,26 @@ void Game::setLevelBuilder(LevelBuilder lvlBuilder) {
 void Game::loadLevel(std::string lvl) {
     auto lvlCreate = levelBuilder.find(lvl);
     if (lvlCreate != levelBuilder.end()) {
+        activeLevel.reset(); // important to let deconst
         activeLevel.reset((lvlCreate->second)(this));
-    }
-    if (auto x = activeLevel->getActiveWorld()->getPlayerHero()) {
-        camera->setActor(activeLevel->getActiveWorld()->getPlayerHero());
-    }
-    activeLevel->getActiveWorld()->insert<Camera>(camera);  
+        if (auto x = activeLevel->getActiveWorld()->getPlayerHero()) {
+            camera->setActor(activeLevel->getActiveWorld()->getPlayerHero());
+        }
+        activeLevel->getActiveWorld()->insert<Camera>(camera);
+    } 
 }
 
 Renderer* Game::getRenderer() {
     return renderer; 
 }
  
+
+Actor* Game::getPlayerHero() {
+    if (auto level = activeLevel.get()) {
+        if (auto world = level->getActiveWorld()) {
+            if (auto player = world->getPlayerHero())
+                return player;
+        }
+    }
+    return nullptr;
+}

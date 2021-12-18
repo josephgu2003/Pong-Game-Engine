@@ -15,7 +15,7 @@ void main()
     
     vec4 fragColor = vec4(0,0,0,1);
     fragColor.a = pow(texture(gradient, gl_PointCoord).r, (1.0-duration)) * pow(duration, 0.25);
-    fragColor.rgb += pow(duration,1.8)*vec3(8.0,8.0,8.0) * fragColor.a;
+    fragColor.rgb += pow(duration,1.8) * color.rgb * fragColor.a;
     FragColor = fragColor;
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
     if(brightness > 0.0)

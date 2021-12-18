@@ -7,7 +7,7 @@
 
 #include "Particle.hpp"
 #include "World.hpp"
-
+ 
 
 ParticleSystem::ParticleSystem(int numParticles_, float duration_) {
     particles = new Particle[numParticles_];
@@ -16,24 +16,24 @@ ParticleSystem::ParticleSystem(int numParticles_, float duration_) {
     {
         particles[i] = Particle();
     }
-    duration = duration_;
+    duration = duration_; 
+    watch.resetTime();
 }
-
-
 
 ParticleSystem::~ParticleSystem() {
-
+    delete[] particles;
 }
-
+  
 void ParticleSystem::tick() {
     Componentable::tick();
-    for (int i = 0; i < numParticles; i++) {
-        particles[i].duration -= glfwGetTime();
+    for (int i = 0; i < numParticles; i++) { 
+        particles[i].duration -= watch.getTime();
     }
-    duration -= glfwGetTime();
+    duration -= watch.getTime();
+    watch.resetTime(); 
 }
-
-int ParticleSystem::getNumParticles() {
+ 
+int ParticleSystem::getNumParticles() { 
     return numParticles;
 }
 

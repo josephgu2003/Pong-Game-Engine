@@ -11,8 +11,8 @@
 #include <glm/glm.hpp>
 
 
-PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const Material& map_) : Component(pe), GraphicsObject(){
-    shader = shader_;
+PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const Material& map_) : Component(pe), GraphicsObject(DRAW_TRANSPARENT){
+    shader = shader_; 
     shader->use();
     shader->setFloat("size", size); 
     Renderer::bindShaderUniblock(shader, ViewProj); 
@@ -21,13 +21,15 @@ PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* s
     type = GRAPHICS;
 }
 
-
+PGraphicsComponent::~PGraphicsComponent() { 
+    
+}
 void PGraphicsComponent::draw(Renderer* r) {
     r->renderParticles(this, static_cast<ParticleSystem*>(actor)->getNumParticles());
 }  
       
 void PGraphicsComponent::tick() {
-    
+    animateTextures();
 }
 
 void PGraphicsComponent::setColor(float r, float g, float b) {

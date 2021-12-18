@@ -10,11 +10,11 @@
 #include "Shader.hpp"
 #include "VertexLoader.hpp"
 #include "AssetManager.hpp" 
-
+ 
 HealthMeter::HealthMeter() : uiPiece(glm::vec2(-0.85, 0.7), glm::vec2(0.2,0.2), "Shaders/UI.vs", "Shaders/HealthMeter.fs") {
-    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(0.2,0.2), glm::vec3(0));
-    AssetManager::loadTexture("Resources/Textures/Project.png", &map.diffuse, true);
-    shader->use();
+    VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(0.2,0.2), glm::vec2(0,0));
+    AssetManager::loadTexture("Resources/GlyphsAndUI/Project.png", &map.diffuse, true);
+    shader->use(); 
     shader->setFloat("ratio", 1.0f); 
 }  
   

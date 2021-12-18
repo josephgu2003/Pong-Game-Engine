@@ -26,7 +26,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     
     std::map<char, Character> characters; 
 
-    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", characters, map);
+    AssetManager::loadGlyphs("Resources/GlyphsAndUI/times.ttf", characters, map);
 
     std::string::const_iterator c;
     float x = position.x;
@@ -79,17 +79,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
               indexOffset += 4;
           }
     
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    
-    glBufferData(GL_ARRAY_BUFFER, newVertices.size() * sizeof(SimpleVertex), newVertices.data(), GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, newIndices.size() * sizeof(GLuint), newIndices.data(), GL_STATIC_DRAW);
-    
-    numIndices = newIndices.size();
-    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
-     
-    glBindVertexArray(0);
+    fillVertexData<SimpleVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, newVertices, newIndices);
 }
 
 void VertexLoader::setupVAOAttribs(VertexType vt) {
@@ -157,32 +147,43 @@ void VertexLoader::setupVAOAttribs(VertexType vt) {
 }
 
 void VertexLoader::load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position) {
-    glBindVertexArray(vao);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     
     std::vector<SimpleVertex> newVertices = {SimpleVertex(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0), SimpleVertex(glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.0, 1.0), 0.0), SimpleVertex(glm::vec3(1.0, 0.0, 0.0), glm::vec2(1.0, 0.0), 0.0), SimpleVertex(glm::vec3(1.0, 1.0, 0.0), glm::vec2(1.0, 1.0), 0.0)};
+    
     for (int i = 0; i < newVertices.size(); i++) {
         SimpleVertex& sv = newVertices.at(i);
         sv.Pos.x *= dimensions.x;
         sv.Pos.y *= dimensions.y;
-        sv.Pos += glm::vec3(position.x, position.y, 0.0f);
+    //    sv.Pos += glm::vec3(position.x, position.y, 0.0f);
     }
-    
-    glBufferData(GL_ARRAY_BUFFER, newVertices.size() * sizeof(SimpleVertex), newVertices.data(), GL_STATIC_DRAW);
-    
-    std::vector<GLuint> newIndices2 = {
+       
+    std::vector<GLuint> indices = {
           0, 1, 3, 0, 2, 3
     };
     
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, newIndices2.size() * sizeof(GLuint), newIndices2.data(), GL_STATIC_DRAW);
-    
-    numIndices = newIndices2.size();
-    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
-    glBindVertexArray(0);
+    fillVertexData<SimpleVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, newVertices, indices);  
 }
 
+void VertexLoader::loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+    
+    Assimp::Importer importer;
+    importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
+    const aiScene* scene = importer.ReadFile(filePath,  aiProcess_Triangulate | aiProcess_FlipUVs);
+    
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
+        printf("%s", s.c_str());
+        return;
+    }
+ 
+std::vector<SimpleVertex> vertices;
+std::vector<GLuint> indices;
+processNode(scene->mRootNode, scene, vertices, indices);
+ 
+fillVertexData<SimpleVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
+    reset(); 
+}
+ 
 void VertexLoader::loadModel(std::string filePath_, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
         Assimp::Importer importer;
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
@@ -198,18 +199,7 @@ void VertexLoader::loadModel(std::string filePath_, unsigned int vao, unsigned i
     std::vector<GLuint> indices; 
     processNode(scene->mRootNode, scene, vertices, indices);
     
-    glBindVertexArray(vao);
-     
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(TBNBWVertex), vertices.data(), GL_STATIC_DRAW);
-    
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
-    
-    numIndices = indices.size(); 
-    setupVAOAttribs(VERTEX_TBNBWVERTEX);
-    glBindVertexArray(0);
+    fillVertexData<TBNBWVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
     
  if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
      loadedBoneDataMaps.insert(std::pair<std::string, BoneInfoMap>(filePath_, inProgBoneMap));
@@ -222,14 +212,14 @@ void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePat
     Assimp::Importer importer;
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
     
-    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate);
        
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
             printf("%s", s.c_str());
             return;
         }
-   
+    
     if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
         std::vector<TBNBWVertex> vertices;
         std::vector<GLuint> indices;
@@ -255,6 +245,50 @@ void VertexLoader::processNode(aiNode* node, const aiScene* scene, std::vector<T
     {
         processNode(node->mChildren[i], scene, vertices, indices);
     }
+}
+void VertexLoader::processNode(aiNode* node, const aiScene* scene, std::vector<SimpleVertex>& vertices,  std::vector<GLuint>& indices) {
+    //load each mesh from node
+    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        processMesh(mesh, scene, vertices, indices);
+    }
+    for(unsigned int i = 0; i < node->mNumChildren; i++)
+    {
+        processNode(node->mChildren[i], scene, vertices, indices);
+    }
+}
+
+
+void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices, std::vector<GLuint>& indices) {
+     
+    std::vector<SimpleVertex> newVertices;
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
+        glm::vec3 pos_;
+        pos_.x = mesh->mVertices[i].x;
+        pos_.y = mesh->mVertices[i].y;
+        pos_.z = mesh->mVertices[i].z;
+
+        glm::vec2 texCoords_;
+        if (mesh->mTextureCoords[0]) {
+            texCoords_.x = mesh->mTextureCoords[0][i].x;
+            texCoords_.y = mesh->mTextureCoords[0][i].y;
+        } else {
+            texCoords_ = glm::vec2(0.0f, 0.0f);
+        }
+        
+        SimpleVertex v(pos_, texCoords_, 0.0f);
+        newVertices.push_back(v);
+    } 
+    
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++) {
+            GLuint ind = face.mIndices[j] + indexOffset;
+            indices.push_back(ind);
+        }
+    }
+    vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
+    indexOffset += mesh->mNumVertices;
 }
 
 void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNBWVertex>& vertices, std::vector<GLuint>& indices) {
@@ -327,7 +361,7 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
 std::vector<Texture> VertexLoader::loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < material->GetTextureCount(type_); i++) {
-        aiString string;
+        aiString string; 
          
         material->GetTexture(type_, i, &string);
         bool texIsRepeat = false;
@@ -460,123 +494,194 @@ void VertexLoader::setupVAOAttribsInstancing(int firstAttribLocation, const std:
     }
 }
 
+void VertexLoader::incTanBitanForTriangle(TBNVertex& v1, TBNVertex& v2, TBNVertex& v3) {
+    glm::vec3 p1 = v1.Pos;
+    glm::vec3 p2 = v2.Pos;
+    glm::vec3 p3 = v3.Pos;
+    
+    glm::vec2 uv1 = v1.TexCoords;
+    glm::vec2 uv2 = v2.TexCoords;
+    glm::vec2 uv3 = v3.TexCoords;
+    
+    glm::vec3 edge1 = p2 - p1;
+    glm::vec3 edge2 = p3 - p1;
+    
+    glm::vec2 dUV1 = uv2 - uv1;
+    glm::vec2 dUV2 = uv3 - uv1;
+    
+    float f = 1.0f / (dUV1.x*dUV2.y - dUV2.x * dUV1.y);
+
+    glm::vec3 tan, bitan;
+    tan = f * (dUV2.y * edge1 - dUV1.y * edge2);
+    bitan = f * (- dUV2.x * edge1 + dUV1.x * edge2);
+
+     
+    auto incTanBitan = [] (TBNVertex& v, glm::vec3& t, glm::vec3& b) {
+        v.Tan += t;
+        v.BiTan += b;
+    };
+      
+    incTanBitan(v1, tan, bitan);
+    incTanBitan(v2, tan, bitan);
+    incTanBitan(v3, tan, bitan);
+}
+
 void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    std::vector<SimpleVertex> vertices;
+    vertices.emplace_back(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0);
+    std::vector<GLuint> indices;
+    indices.push_back(0);
     
-    SimpleVertex s(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0);
-        
-    glBufferData(GL_ARRAY_BUFFER, sizeof(SimpleVertex), &s, GL_STATIC_DRAW);
-    
-    GLuint i = 0;
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint), &i, GL_STATIC_DRAW);
-    
-    numIndices = 1;
-    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
-    glBindVertexArray(0); 
+    fillVertexData<SimpleVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
 }
 
 
- void VertexLoader::loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const std::string& src, int chunkX, int chunkY, glm::vec2 transformToLocal, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+ void VertexLoader::loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS],const unsigned short* heightMap, int imageWidth, int imageHeight, int chunkX, int chunkY, glm::vec2 originPos, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
     // DRAW A FRICKIN DIAGRAM IF U WANNA UNDERSTAND THIS
-    int imageWidth = 0;
-    int imageHeight = 0; 
-    int channels = 0; 
-    unsigned short* imageData;
-  
-    imageData = (unsigned short*) stbi_load_16(src.c_str(), &imageWidth, &imageHeight, &channels, 0);
-    if (channels != 1) { 
-        printf("Warning: Heightmap is not grayscale or does not exist\n");
-        return;
-    }
-        
-     int chunkWidth = 0; // in vertices
-     int chunkHeight = 0; // in vertices
-     int pixelX = 0; 
-     int pixelY = 0; 
      
-     if (chunkX == 0) {
-         chunkWidth = CHUNK_DIM_PXLS;
-         pixelX = 0;
-     } else {
-         chunkWidth = CHUNK_DIM_PXLS + 1;
-         pixelX = CHUNK_DIM_PXLS*chunkX-1; // to overlap vertices so no gap
+     int maxRows = CHUNK_DIM_PXLS;
+     int maxColumns = CHUNK_DIM_PXLS;
+     int imageArea = imageWidth*imageHeight;
+     
+     if (std::floor(float(imageWidth-1)/(CHUNK_DIM_PXLS-1)) == chunkX) {
+         maxColumns--;
+     }
+     if (std::floor(float(imageHeight-1)/(CHUNK_DIM_PXLS-1)) == chunkY) {
+         maxRows--;
      }
      
-     if (chunkY == 0) {
-         chunkHeight = CHUNK_DIM_PXLS;
-         pixelY = 0;
-     } else {
-         chunkHeight = CHUNK_DIM_PXLS + 1;
-         pixelY = CHUNK_DIM_PXLS*chunkY-1; // to overlap vertices so no gap
-     }
+     int startingIndex = chunkX*(CHUNK_DIM_PXLS-1) + chunkY * (CHUNK_DIM_PXLS -1) * imageWidth;
+     int maxIndex = startingIndex + (maxColumns-1)+(maxRows-1)*imageWidth;
      
-    int startingIndex = pixelX + pixelY * imageWidth;
+     std::vector<TBNVertex> vertices;
+     vertices.resize((CHUNK_DIM_PXLS+2)*(2+CHUNK_DIM_PXLS));
       
-    std::vector<Vertex> vertices;  
-      
-    float xCoord = transformToLocal.x;
-    float yCoord = transformToLocal.y;
-  
-    vertices.resize(chunkHeight*chunkWidth);  
-    int c = 0;
-    float scaleY = scaling.y;
-         
-    auto fetchHeightAt = [=] (int i, int j, unsigned short* data) {
+     float xCoord = originPos.x;
+     float yCoord = originPos.y;
+ 
+     float scaleY = scaling.y;
+     
+     int startingIndexExpanded = startingIndex - imageWidth - 1;
+     if (startingIndexExpanded > 0) {
+         startingIndex = startingIndexExpanded;
+     }
+     int maxIndexExpanded = maxIndex+1+imageWidth;
+     if (maxIndexExpanded < imageArea) {
+         maxIndex = maxIndexExpanded;
+     }// we want an extra layer of vertices around the chunk for generating normals
+     
+     auto fetchHeightAt = [=] (int i, int j, const unsigned short* data) {
          int index = (startingIndex + j + i * imageWidth);
-        if (index < 0) {
-            return 0.0f;
-        }
+         if (index < 0 || index > maxIndex) {
+             return 0.0f;
+         }
          float height = float(data[index]);
          float h = height * scaleY; // possible undefined behaviour
          return h;
      };
-              
-    for (int i = 0; i < chunkHeight; i++) { 
-        for (int j = 0; j < chunkWidth; j++) { 
-            Vertex v;
-            float x= xCoord+j*scaling.x;
-            float h = fetchHeightAt(i, j, imageData);
-            float z = yCoord +i*scaling.z;
-            v.Pos = glm::vec3(x, h,z);
-            v.Normal = calcNormalWithHeights(h, fetchHeightAt(i+1, j, imageData), fetchHeightAt(i-1, j, imageData), fetchHeightAt(i, j+1, imageData), fetchHeightAt(i, j-1, imageData));
-            v.TexCoords = glm::vec2((float)std::remainder(j,2),(float)std::remainder(i,2));
-            vertices[c] = v; // FIX DUMBASS
-            heightMesh[j][i] = h;
-            c++;
-        } 
-    }  
      
-    std::vector<GLuint> indices;
-    
-    for (int i = 0; i < chunkHeight-1; i++) {
-        for (int j = 0; j < chunkWidth-1; j++) {
-            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
-            indices.push_back(0.0f+j+chunkWidth*i+1);
-            indices.push_back(0.0f+j+chunkWidth*i);
-            indices.push_back(0.0f+j+chunkWidth*i+1);
-            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth);
-            indices.push_back(0.0f+j+chunkWidth*i+chunkWidth+1);
-        }
-    } 
+     
+     int c = 0;
+     
+    for (int i = 0; i < (CHUNK_DIM_PXLS+2); i++) {
+        for (int j = 0; j < (CHUNK_DIM_PXLS+2); j++) {
+            TBNVertex v; 
+            float x = xCoord+j*scaling.x; 
+            float h = fetchHeightAt(i, j, heightMap);
+            float z = yCoord +i*scaling.z;
+            
+            v.Pos = glm::vec3(x,h,z);
+            v.Normal = glm::vec3(0,0,0);
+           // v.TexCoords = glm::vec2(0.5f*std::fmod(j,2),0.5f*std::fmod(i,2));
+            v.TexCoords = glm::vec2(float(i)/(CHUNK_DIM_PXLS+2), float(j)/(CHUNK_DIM_PXLS+2));
+            v.Tan = glm::vec3(0,0,0);
+            v.BiTan = glm::vec3(0,0,0);
+             
+            vertices[c] = v; // FIX DUMBASS
+            c++;
 
-    stbi_image_free(imageData);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+            if (i < (CHUNK_DIM_PXLS+1) && j < (CHUNK_DIM_PXLS+1) && i > 0 && j >0) {
+                heightMesh[j-1][i-1] = h;
+            }
+        }
+    }
+     for (int i = 1; i < (CHUNK_DIM_PXLS+1); i++) {
+         for (int j = 1; j < (CHUNK_DIM_PXLS+1); j++) {
+             float h = vertices[j+i*(CHUNK_DIM_PXLS+2)].Pos.y;
+             float hUp = vertices[j+(i-1)*(CHUNK_DIM_PXLS+2)].Pos.y;
+             float hDown = vertices[j+(1+i)*(CHUNK_DIM_PXLS+2)].Pos.y;
+             float hRight = vertices[1+j+i*(CHUNK_DIM_PXLS+2)].Pos.y;
+             float hLeft = vertices[j-1+i*(CHUNK_DIM_PXLS+2)].Pos.y;
+             vertices[j+i*(CHUNK_DIM_PXLS+2)].Normal = calcNormalWithHeights(h, hDown, hUp, hRight, hLeft);
+         } 
+     }
+      
+     for (int i = 0; i < CHUNK_DIM_PXLS+1; i++) {
+         for (int j = 0; j < CHUNK_DIM_PXLS+1; j++) {
+                 int dim = (CHUNK_DIM_PXLS+2);
+                 int botL = j+dim*i+dim; 
+                 int botR = j+dim*i+dim+1;
+                 int topL = j+dim*i;
+                 int topR = j+dim*i+1;
+                 incTanBitanForTriangle(vertices.at(botL), vertices.at(topR), vertices.at(topL));
+                 incTanBitanForTriangle(vertices.at(botL),vertices.at(botR), vertices.at(topR));
+             } 
+    }
+       
+    std::vector<TBNVertex> newVertices;
+     newVertices.resize(CHUNK_DIM_PXLS*CHUNK_DIM_PXLS);
+     int counter = 0;
+     for (int i = 0; i < (CHUNK_DIM_PXLS+2); i++) {
+         for (int j = 0; j < (CHUNK_DIM_PXLS+2); j++) {
+             if (i < (CHUNK_DIM_PXLS+1) && j < (CHUNK_DIM_PXLS+1) && i > 0 && j >0) {
+                 newVertices[counter] = vertices[j+i*(CHUNK_DIM_PXLS+2)];
+                 counter++;
+             }
+         }
+     }
+     normalizeTanBitan(newVertices);
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
-    
-    numIndices = indices.size();
-    setupVAOAttribs(VERTEX_VERTEX);
-    glBindVertexArray(0);
+  std::vector<GLuint> indices;
+  
+  for (int i = 0; i < CHUNK_DIM_PXLS-1; i++) {
+      for (int j = 0; j < CHUNK_DIM_PXLS-1; j++) {
+          int dim = (CHUNK_DIM_PXLS);
+          int botL = j+dim*i+dim;
+          int botR = j+dim*i+dim+1;
+          int topL = j+dim*i;
+          int topR = j+dim*i+1;
+          indices.push_back(botL); // bottom left
+          indices.push_back(topR); // top right
+          indices.push_back(topL); // top left
+          indices.push_back(botL); // bottom left
+          indices.push_back(botR); // bottom right
+          indices.push_back(topR); // top right
+      }
+  }
+     
+     fillVertexData<TBNVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, newVertices, indices);
 }
 //problems : graphics component is responsible for creating meshes too?
- 
+void VertexLoader::normalizeTanBitan(std::vector<TBNVertex>& vertices) {
+    int c = 0;
+    for (TBNVertex& vertex : vertices) {
+        glm::vec3& norm = vertex.Normal;
+        glm::vec3& tan = vertex.Tan;
+        glm::vec3& bitan = vertex.BiTan;
+       
+        glm::vec3 newtan = tan - (norm * glm::dot(norm, tan));
+        newtan = glm::normalize(tan);
+           
+        glm::vec3 newbitan = glm::cross(norm, newtan);
+        if (dot(bitan,newbitan) < 0) {
+           // newbitan = newbitan * -1.0f;
+            glm::cross(newtan,norm);
+        }
+        newbitan = glm::normalize(newbitan);
+
+        c++;
+    } 
+}
 glm::vec3 VertexLoader::calcNormalWithHeights(float cH, float dH, float uH, float rH, float lH) {
     glm::vec3 normal = glm::vec3(lH - rH, 2.0, dH - uH);
     normal = glm::normalize(normal);
@@ -614,16 +719,7 @@ void VertexLoader::loadSimpleVertexGrid(int verticesX, int verticesY, float scal
         }
     }
     
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        
-    glBufferData(GL_ARRAY_BUFFER, sizeof(SimpleVertex)*vertices.size(), vertices.data(), GL_DYNAMIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_DYNAMIC_DRAW);
-    
-    numIndices = indices.size();
-    setupVAOAttribs(VERTEX_SIMPLEVERTEX);
-    glBindVertexArray(0);
+    fillVertexData<SimpleVertex>(VAO, VBO, EBO, numIndices, GL_DYNAMIC_DRAW, GL_DYNAMIC_DRAW, vertices, indices);
 }
+ 
  

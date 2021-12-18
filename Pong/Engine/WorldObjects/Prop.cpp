@@ -20,8 +20,8 @@ void Prop::tick() {
     Componentable::tick();
     glm::mat4 modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, posVec);
-    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
-    glm::quat MyQuaternion = glm::quat(rotations);
+    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(eulerAngles.y),glm::radians(eulerAngles.z));
+    glm::quat MyQuaternion = glm::quat(rotations); 
     
     glm::mat4 RotationMatrix = toMat4(MyQuaternion);
     modelMat = modelMat * RotationMatrix;

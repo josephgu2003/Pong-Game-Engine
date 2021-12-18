@@ -20,6 +20,7 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
 
 void PPointGraphicsComponent::tick() {
 //updates displacement, duration basically
+    PGraphicsComponent::tick();
     std::vector<float> v;  
     int n = static_cast<ParticleSystem*>(actor)->getNumParticles();
     auto particlesystem = static_cast<ParticleSystem*>(actor);
@@ -41,3 +42,7 @@ void PPointGraphicsComponent::tick() {
     updateInstanceBuffer(v);
 }
  
+PPointGraphicsComponent::~PPointGraphicsComponent() {
+    
+}
+

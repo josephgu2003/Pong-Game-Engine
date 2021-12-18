@@ -15,7 +15,7 @@
 #include "NameComponent.hpp"
 #include "LifeComponent.hpp"
 #include "AIComponent.hpp"
-#include "Shader.hpp"
+#include "Shader.hpp" 
 #include "Renderer.hpp"
 #include "MeshComponent.hpp"
 #include <functional>
@@ -27,6 +27,7 @@ MyActorFactory::MyActorFactory() {
 }
 
 std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
+    stbi_set_flip_vertically_on_load(0);
     std::shared_ptr<Actor> actor = std::make_shared<Actor>();
     actor->dummy = false;
     switch (i) {
@@ -48,7 +49,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Material map;
             AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_HOODY);
             actor->addComp(gc);
             
@@ -69,10 +70,10 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Renderer::bindShaderUniblock(shader, Lights);
 
             Material map;
-            AssetManager::loadTexture(TEX_INKPAPER, &map.diffuse, true);
+            AssetManager::loadTexture(TEX_FISH, &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
              
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_HOODY);
             actor->addComp(gc);
 
@@ -99,7 +100,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             AssetManager::loadTexture("Resources/Models/bird/Tex_Ride_FengHuang_01a_D_A.tga.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/Screen Shot 2021-07-20 at 9.15.42 AM.png", &map.normMap, false);
       
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_BIRD);
             actor->addComp(gc);
             
@@ -120,7 +121,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
 
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("");
             actor->addComp(ac);
-          //  model = loadModels("Resources/Map/snow3.obj");
+
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
             shader->use();
             shader->setFloat("size", 0.005);
@@ -137,7 +138,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             actor->Componentable::addComp<PhysicsComponent>(*(actor.get()), true);
             
 
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_VAMP);
             actor->addComp(gc);
             break;
@@ -163,7 +164,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             actor->Componentable::addComp<PhysicsComponent>(*(actor.get()), true);
             actor->Componentable::addComp<CombatComponent>(*(actor.get()));
             
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
             actor->addComp(gc);
             ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx");
@@ -175,6 +176,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
         }
         case ACTOR_FISH: { // maybe actor would want to know about ability field variables??
             Material map;
+            stbi_set_flip_vertically_on_load(1); 
             AssetManager::loadTexture(TEX_FISH, &map.diffuse, true); 
 
             Shader* shader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
@@ -185,9 +187,9 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Renderer::bindShaderUniblock(shader,      Lights);
             Renderer::bindShaderUniblock(shader,      StopWatch);
              
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
-            VertexMesh* mesh = new VertexMesh;
-            int gridX = 20;
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
+            std::shared_ptr<VertexMesh> mesh = std::make_shared<VertexMesh>();
+            int gridX = 20; 
             int gridY = 3;
             float length = 1.5;
             static_pointer_cast<GraphicsComponent>(gc)->initGrid(gridX, gridY, length, mesh);
@@ -196,21 +198,22 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             ActComp mc = std::make_shared<MeshComponent>((*(actor.get())));
             static_pointer_cast<MeshComponent>(mc)->setMesh(mesh);
          
+            Actor* actr = actor.get(); 
             std::shared_ptr<float> lastYaw = std::make_shared<float>(0.0f);
             std::shared_ptr<bool> first = std::make_shared<bool>(true);
                 
             std::function<void (VertexMesh*)> meshAction = [=] (VertexMesh* v) { // idiot code to avoid making custom class lmao
                 if (*(first.get())) {
-                    *lastYaw.get() = actor->getYaw();
+                    *lastYaw.get() = actr->getYaw();
           
                     *first.get() = false;  
                     return;
                 }
                  
-                float deltayaw = actor->getYaw() - *lastYaw.get();
+                float deltayaw = actr->getYaw() - *lastYaw.get();
                 deltayaw *= -1; //reverse
                 deltayaw = glm::radians(deltayaw);
-                *lastYaw.get() = actor->getYaw();
+                *lastYaw.get() = actr->getYaw();
 
                 
                 for (int i = 0; i < gridX; i++) { // loop over columns
@@ -233,7 +236,6 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
                     }
             }
                   
-                
             }; 
 
             static_pointer_cast<MeshComponent>(mc)->setMeshAction(meshAction);
@@ -257,12 +259,13 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             
             actor->Componentable::addComp<PhysicsComponent>(*(actor.get()), true);
             
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map);
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/grass1.fbx");
             actor->addComp(gc);
             actor->rotate(glm::vec3(-1.5,0,0));
             break;
         }
 }
+    stbi_set_flip_vertically_on_load(1);
     return actor;
 }

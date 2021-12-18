@@ -9,11 +9,11 @@
 #include "AssetManager.hpp"
 #include <iostream>
 #include "VertexLoader.hpp"
- 
+  
 std::vector<Texture> AssetManager::loadedTextures;
  std::vector<std::pair<Texture, std::map<char, Character>>> AssetManager::loadedGlyphs;
 //std::vector<std::unique_ptr<Model>>  AssetManager::loadedModels;
- std::vector<Shader>  AssetManager::loadedShaders; 
+HeightMap AssetManager::heightMap; 
 
 void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb) {
  for (int j = 0; j < loadedTextures.size(); j++) {
@@ -22,9 +22,11 @@ void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb
            texture->path = loadedTextures[j].path;
         texture->textureTarget = GL_TEXTURE_2D;
          texture->dimensions = loadedTextures[j].dimensions;
+           printf("Texture already loaded: %s \n", filePath);
            return;
-       } 
+       }
    }
+    printf("Load new texture: %s \n", filePath);
    int imageWidth = 0;
    int imageHeight = 0;
    int channels = 0;
@@ -78,15 +80,15 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
  
     for (int j = 0; j < loadedTextures.size(); j++) {
         if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-            std::cout << loadedTextures[j].path.data() << "\n";
             texture->id = loadedTextures[j].id;
             texture->path = loadedTextures[j].path;
-         texture->textureTarget = GL_TEXTURE_2D_ARRAY;
-          texture->dimensions = loadedTextures[j].dimensions;
+            texture->textureTarget = GL_TEXTURE_2D_ARRAY;
+            texture->dimensions = loadedTextures[j].dimensions;
+            printf("Texture already loaded: %s \n", filePath);
             return;
         }
     }
-
+    printf("Load new texture: %s \n", filePath);
     std::vector<unsigned char*> imageDatas;
     
     glGenTextures(1, &texture->id);
@@ -118,11 +120,11 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
         } else {
             framePath = std::string(filePath);
         }
-    counter++;
+    counter++;  
         
 
     imageData = stbi_load(framePath.c_str(), &imageWidth, &imageHeight, &channels, 0);
-        
+         
     if (imageData) {
         imageDatas.push_back(imageData);
     } else {
@@ -162,12 +164,14 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
     newTex.dimensions = glm::vec3(imageWidth, imageHeight, imageDatas.size());
     newTex.textureTarget = GL_TEXTURE_2D_ARRAY;
     loadedTextures.push_back(newTex);
-    stbi_set_flip_vertically_on_load(0);
+    
+    stbi_set_flip_vertically_on_load(1);
+    
     glBindTexture(GL_TEXTURE_2D_ARRAY,0);
 
     texture->path = filePath;
- texture->textureTarget = GL_TEXTURE_2D_ARRAY;
-  texture->dimensions = newTex.dimensions;
+    texture->textureTarget = GL_TEXTURE_2D_ARRAY;
+    texture->dimensions = newTex.dimensions;
 }
 
 int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, Material& map) {
@@ -175,9 +179,12 @@ int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Ch
         if (std::strcmp(loadedGlyphs.at(i).first.path.data(), filePath) == 0) {
             Characters = loadedGlyphs.at(i).second;
             map.diffuse.id = loadedGlyphs.at(i).first.id;
+            map.diffuse.textureTarget = GL_TEXTURE_2D_ARRAY;
+            printf("Font already loaded: %s \n", filePath);
             return 0;
-        }
+        } 
     }
+    printf("Load new texture: %s \n", filePath);
     FT_Library ft;
     if (FT_Init_FreeType(&ft))
     {
@@ -257,7 +264,7 @@ int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Ch
 
 
 void AssetManager::loadNullTexture(int x, int y, GLuint* texture, GLenum format) {
-    
+    printf("Load new null texture \n");
     glGenTextures(1, texture);
     glBindTexture(GL_TEXTURE_2D, *texture);
     
@@ -272,7 +279,39 @@ void AssetManager::loadNullTexture(int x, int y, GLuint* texture, GLenum format)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
+void AssetManager::loadHeightMap(std::string src, unsigned short*& newHeightMap, int* mapWidth, int* mapHeight) {
+    
+    auto copyHeightMap = [&] () {
+        newHeightMap = new unsigned short[heightMap.width*heightMap.height];
+        for (int i = 0; i < heightMap.height*heightMap.width; i++) {
+                newHeightMap[i] = heightMap.heightMap[i];
+        }
+    };
+    
+    if (heightMap.heightMap) {
+        if (src == heightMap.src) {
+            copyHeightMap();
+            *mapWidth = heightMap.width;
+            *mapHeight = heightMap.height;
+            return;
+        } else {
+            delete[] heightMap.heightMap;
+        }
+    }
+ 
+    int channels = 0; 
+    
+    heightMap.heightMap = (unsigned short*) stbi_load_16(src.c_str(), mapWidth, mapHeight, &channels, 0);
+    if (channels != 1) {
+        printf("Warning: Heightmap is not grayscale or does not exist\n");
+        return;
+    }
+    heightMap.src = src;
+    heightMap.height = *mapWidth;
+    heightMap.width = *mapHeight;
+    copyHeightMap();
+    printf("Load new heightmap");
+} 
 
 /**
 static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene) {
@@ -433,7 +472,7 @@ void AssetManager::loadModel(const char* filePath, Model*& model, AnimComponent*
     loadedModels.push_back(std::move(archive));
     model = new Model(filePath, anim);
 }**/
-
+ 
 
 void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
     frame->width = x;

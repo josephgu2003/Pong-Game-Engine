@@ -5,17 +5,14 @@
 //  Created by Joseph Gu on 4/24/21.
 //
 
-#include <GL/glew.h>
-#define GLFW_DLL
-#include <GLFW/glfw3.h>
+
 #include <iostream>
 #include "MyGame.hpp"
 
 int main() {
-    glfwInit();
     
     MyGame game;
-
+ 
     game.init(); 
     while(game.running)
 
@@ -24,7 +21,7 @@ int main() {
     } 
     
     game.end();
-    glfwTerminate();
+
      
     return 0;
     

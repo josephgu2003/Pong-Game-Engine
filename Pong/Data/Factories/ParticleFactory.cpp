@@ -20,7 +20,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
     Shader* shader = new Shader();
     Material map;
     switch (PESeed) {
-        case PE_FIREWORKS: {
+        case PE_FIREWORKS: { 
             int numParticles = 200;
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
             shader->init("Shaders/PointPart.vs", "Shaders/ColorPartF.fs");
@@ -33,7 +33,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
         };
                 
         case PE_MIST: {
-            int numParticles = 1000;
+            int numParticles = 1000; 
             particle = std::make_shared<ParticleSystem>(numParticles, 1000.0);
             AssetManager::loadTexture(TEX_MIST, &map.diffuse, false);
             shader->init("Shaders/PointPart.vs", "Shaders/MistFShader.fs");
@@ -42,7 +42,27 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             particle->addComp<PPhysicsComponent>(*particle.get(), 0, 1.0);
             break;
         };
-                
+        case PE_MOONBELL_SWORDS: {
+            int numParticles = 50;
+            particle = std::make_shared<ParticleSystem>(numParticles, 2000.0);
+            shader->init("Shaders/3DParticle.vs", "Shaders/LightConstruct.fs");
+            shader->use(); 
+            shader->setFloat("brightness", 1.5);
+            shader->setVec3("color", glm::vec3(2.0,1.0,1.0)); 
+            shader->setFloat("alpha", 0.5); 
+            AssetManager::load3DTexture(TEX_SMOKES, &map.diffuse);
+            stbi_set_flip_vertically_on_load(0);
+            AssetManager::loadTexture("Resources/Models/Sword/alpha.png", &map.alphaMap, false);
+            stbi_set_flip_vertically_on_load(1); 
+            std::shared_ptr<PGraphicsComponent> pgc =   std::make_shared<PQuadGraphicsComponent>(*particle.get(),"Resources/Models/Sword/sword.fbx", numParticles, 1.0, shader, map); 
+            pgc->setTextureAnimation("diffuseFrameCounter", 110, 30.0f);
+            particle->addComp(pgc);
+            particle->addComp<PRefreshComponent>(*particle.get(), 8.0, 6, 0.5, glm::vec3(10,10,10), glm::vec3(-0.02, -0.01, -0.02), glm::vec3(0.02, 0.01, 0.02));
+            particle->addComp<PPhysicsComponent>(*particle.get(), 0, 0.997);
+            particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,0.5,0));
+            break;
+        };
+                     
         case PE_BODYSPARKS:  {
             int numParticles = 200;
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
@@ -54,7 +74,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             break;
         };
                  
-        case PE_RUNICLETTERS: {
+        case PE_RUNICLETTERS: { 
             int numParticles = 30;
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
             shader->init("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
@@ -63,22 +83,24 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             AssetManager::loadTexture("Resources/Particles/symbol0.png", &map.diffuse, true);
             std::shared_ptr<PGraphicsComponent> pgc =  std::make_shared<PQuadGraphicsComponent>(*particle.get(), numParticles, 0.1, shader, map);
             particle->addComp(pgc);
-            particle->addComp<PRefreshComponent>(*particle.get(), 2, 8, 0.5, glm::vec3(7,3,7), glm::vec3(-0.03, -0.03, 0), glm::vec3(0.03, -0.05, 0));
+            particle->addComp<PRefreshComponent>(*particle.get(), 2, 8, 0.5, glm::vec3(7,3,7), glm::vec3(0, 0, 0), glm::vec3(0, 0.03, 0));
             particle->addComp<PPhysicsComponent>(*particle.get(), 0, 0.999);
-            particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,1,0));
-            break;
+            //particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,1,0));
+            break; 
         };
+            
         case PE_SNOW: { 
             int numParticles = 2000;
             particle = std::make_shared<ParticleSystem>(numParticles, 2000.0);
             shader->init("Shaders/PointPart.vs", "Shaders/ColorPartF.fs");
             std::shared_ptr<PGraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*particle.get(), numParticles, 0.03, shader, map);
-            pgc->setColor(0.1, 0.1, 0.1);
-            particle->addComp(pgc); 
+            pgc->setColor(0.2, 0.2, 0.2);
+            particle->addComp(pgc);  
             particle->addComp<PRefreshComponent>(*particle.get(), 3.0, 600, 0.2, glm::vec3(30,9,30), glm::vec3(0, -0.03, 0), glm::vec3(0.08, -0.07, 0));
             particle->addComp<PPhysicsComponent>(*particle.get(), 0, 1); 
             break;
-        }; 
+        };
+
         default: {
             int numParticles = 100; 
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
@@ -94,7 +116,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             break;
         };
     }
-    particle->setPos(posVec_); 
+    particle->setPos(posVec_);  
     return particle;
 }
  

@@ -9,12 +9,20 @@
 #include "Shader.hpp"
 #include "VertexLoader.hpp"
 
-GraphicsObject::GraphicsObject() {
+DrawPass GraphicsObject::getDrawPass() {
+    return drawPass;
+}
+ 
+
+GraphicsObject::GraphicsObject(DrawPass dp) {
+    drawPass = dp;
     glGenVertexArrays(1, &VAO);
     
     glGenBuffers(1, &VBO);
      
     glGenBuffers(1, &EBO);
+    
+    glGenBuffers(1, &instanceVBO); 
     
     drawTarget = GL_TRIANGLES;
     
@@ -67,4 +75,40 @@ void GraphicsObject::updateInstanceBuffer(const std::vector<float>& vec) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
  
+   
+GraphicsObject::~GraphicsObject() {
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteBuffers(1, &instanceVBO);
+    glDeleteVertexArrays(1, &VAO);
+    delete shader;
+}
+   
+bool GraphicsObject::isInstanced() {
+    if (instanceCount > 1) {
+        return true;
+    }
+    return false;
+}
+ 
+void GraphicsObject::setTextureAnimation(std::string frameIndexUniform, int numFrames, float fps) {
+    textureAnimations.emplace_back(frameIndexUniform, numFrames,fps);
+}
+
+TextureAnimation::TextureAnimation(const std::string& name_, int maxFrames_, float fps_) {
+    uniformName = name_;
+    maxFrames = maxFrames_;
+    timePerFrame = 1.0f / fps_;
+    watch.resetTime(); 
+    currentFrame = 0;
+} 
+
+void GraphicsObject::animateTextures() {
+    if (textureAnimations.size() > 0) shader->use();;
+    for (auto it = textureAnimations.begin(); it != textureAnimations.end(); it++) {
+        float frameNow = (*it).watch.getTime()/(*it).timePerFrame;
+        (*it).currentFrame = std::fmod(frameNow,(*it).maxFrames);
+        shader->setInt((*it).uniformName, (*it).currentFrame);
+    }
+}
    

@@ -16,7 +16,8 @@ enum ParticleEffectSeed {
     PE_MIST,
     PE_BODYSPARKS,
     PE_RUNICLETTERS,
-    PE_SNOW
+    PE_SNOW,
+    PE_MOONBELL_SWORDS
 };
 
 class ParticleFactory {

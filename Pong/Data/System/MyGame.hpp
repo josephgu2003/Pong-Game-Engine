@@ -13,14 +13,13 @@
 #include "MyActorFactory.hpp"
 #include "ParticleFactory.hpp"
 #include "PropFactory.hpp"
-#include "ScriptFactory.hpp"
+#include "ScriptFactory.hpp" 
  
 class MyGame : public Game {
     MyActorFactory actorFactory;
     ParticleFactory particleFactory;
     PropFactory propFactory;
     ScriptFactory scriptFactory;
-    LevelBuilder myLvlBuilder;
     void setupLvlBuilder();
 public:
     MyGame();

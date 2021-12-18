@@ -19,28 +19,35 @@ FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : 
  
 FallingLetters::~FallingLetters() {
     world->blur = false;
-    world->deleteX<ParticleSystem>(letters.get());
-    if (target != NULL) {
-        target->setState(STATE_IDLE);
+    world->deleteX<ParticleSystem>(letters.lock().get());
+    if (target.lock()) {
+        target.lock()->setState(STATE_IDLE); 
+    } 
+    if (auto anim = actor->getComponent<AnimComponent>()) {
+        anim->playAnim("HollowKnight__Armature|Walk");
     }
-    actor->getComponent<AnimComponent>()->playAnim("HollowKnight__Armature|Walk");  
-}
- 
-void FallingLetters::call() {
-    letters = pf.makeParticles(PE_RUNICLETTERS, actor->getPos()+glm::vec3(0,2,0)); 
+}  
   
-    world->insert<ParticleSystem>(letters);
+void FallingLetters::call() { 
+    std::shared_ptr<ParticleSystem> ps = pf.makeParticles(PE_RUNICLETTERS, actor->getPos()+glm::vec3(0,2,0));
+    letters = ps;
+    world->insert<ParticleSystem>(ps);
     world->blur= true;
-    actor->getComponent<AnimComponent>()->playAnim("HollowKnight__Armature|Channel"); 
+    if (auto anim = actor->getComponent<AnimComponent>()) {
+        anim->playAnim("HollowKnight__Armature|Channel");
+    }
 
-} 
+}  
 
-void FallingLetters::tick() { 
+void FallingLetters::tick() {  
     duration -= glfwGetTime();
-    if (duration < 0) {
+    if (duration < 0) { 
         on = false;
     }
-    if (target->getComponent<LifeComponent>()) {
-        target->getComponent<LifeComponent>()->incStatValue(-0.0005, STAT_LIFE);
+    auto t = target.lock();
+    if (t && t->getComponent<LifeComponent>()) {
+        t->getComponent<LifeComponent>()->incStatValue(-0.0005, STAT_LIFE);
     }
 }
+ 
+ 

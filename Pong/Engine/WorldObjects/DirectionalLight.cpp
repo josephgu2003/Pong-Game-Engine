@@ -18,5 +18,5 @@ void DirectionalLight::setShineDir(glm::vec3 shineDir_) {
 }
 glm::vec3 DirectionalLight::getShineDir() {
     return shineDir;
-}
+} 
 

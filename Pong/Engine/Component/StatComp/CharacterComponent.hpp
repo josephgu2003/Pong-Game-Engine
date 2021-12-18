@@ -45,7 +45,7 @@ enum aiActionEnum {
     ACT_WATCH_SCENERY,
     ACT_DANCE,
     ACT_SING_FRIEND,
-    ACT_GIVE_GIFT,
+    ACT_GIVE_GIFT, 
 };
 
 

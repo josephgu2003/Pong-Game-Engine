@@ -20,7 +20,7 @@ VertexData::VertexData(VertexTemplate vt) {
 VertexData::VertexData(const std::string& text) { 
     std::map<char, Character> characters;
 
-    AssetManager::loadGlyphs("Resources/Glyphs/times.ttf", characters, textures);
+    AssetManager::loadGlyphs("Resources/GlyphsAndUI/times.ttf", characters, textures);
 
     std::string::const_iterator c; 
     float x = -0.9; 

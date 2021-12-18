@@ -17,10 +17,11 @@ layout (std140) uniform DistanceFog
     void main()
     {
         vec4 fragColor = texture(skyBox, TexVec); //brightness
-        float gradient = TexVec.y;
-        gradient = 1.0 - gradient;
-        fragColor.rgb = mix(fragColor.rgb, fogColor, pow(gradient,2));
-        fragColor.rgb *= 0.3; 
+        fragColor.rgb = vec3(0,0,0);
+        vec3 pos = TexVec;
+        float gradient = dot(normalize(pos),normalize(vec3(pos.x,0,pos.z)));
+        gradient = acos(gradient) / 1.5;
+        fragColor.rgb = mix(fogColor, fragColor.rgb, gradient);
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

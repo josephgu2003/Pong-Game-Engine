@@ -24,7 +24,7 @@ public:
     int roll();
 };
 
-
+ 
 
 
 #endif /* Dice_hpp */

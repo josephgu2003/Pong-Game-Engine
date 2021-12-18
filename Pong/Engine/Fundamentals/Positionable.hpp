@@ -10,8 +10,9 @@
 
 #include <stdio.h>
 #include <glm/glm.hpp>
+#include "Subject.hpp"
 
-class Positionable {
+class Positionable : public Subject {
 protected:
     void GramSchmidtAndNormalizeOrientations();
 
@@ -23,8 +24,6 @@ protected:
     glm::vec3 rightVec;
 public:
     Positionable();
-
-
     float getYaw();
     
     glm::vec3 getDir();
@@ -43,6 +42,7 @@ public:
     void offsetOrientationVectors(glm::vec3 eulers);
 
     float getDistanceTo(Positionable* b);
+    float getDistanceTo(glm::vec3 p);
 };
 
 #endif /* Positionable_hpp */

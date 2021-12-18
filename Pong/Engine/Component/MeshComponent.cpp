@@ -8,15 +8,15 @@
 #include "MeshComponent.hpp"
 
 MeshComponent::MeshComponent(Componentable& c) : Component(c) {
-    mesh = std::make_unique<VertexMesh>();
+    mesh = std::shared_ptr<VertexMesh>();
     type = ANIM;
     meshAction = [] (VertexMesh* vm) {
         
     };
 }
 
-void MeshComponent::setMesh(VertexMesh* mesh_) {
-    mesh.reset(mesh_);
+void MeshComponent::setMesh(std::shared_ptr<VertexMesh>& mesh_) {
+    mesh = mesh_;
 }
 
 void MeshComponent::tick() {

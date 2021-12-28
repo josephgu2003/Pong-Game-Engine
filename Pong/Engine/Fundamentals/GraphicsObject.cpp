@@ -45,15 +45,15 @@ void GraphicsObject::setShader(Shader* shader_) {
  
 Material& GraphicsObject::getTextureMap() {
     return map;
-}
+} 
 
 void GraphicsObject::bind() {
     glBindVertexArray(VAO);
-}
+} 
 void GraphicsObject::unbind() { 
-    glBindVertexArray(0);
+    glBindVertexArray(0); 
 }
-
+ 
  
 GLuint GraphicsObject::getNumIndices() {
     return numIndices; 
@@ -104,11 +104,26 @@ TextureAnimation::TextureAnimation(const std::string& name_, int maxFrames_, flo
 } 
 
 void GraphicsObject::animateTextures() {
-    if (textureAnimations.size() > 0) shader->use();;
+    if (textureAnimations.size() > 0) {
+        shader->use();
+    } else {
+        return;
+    }
     for (auto it = textureAnimations.begin(); it != textureAnimations.end(); it++) {
         float frameNow = (*it).watch.getTime()/(*it).timePerFrame;
-        (*it).currentFrame = std::fmod(frameNow,(*it).maxFrames);
-        shader->setInt((*it).uniformName, (*it).currentFrame);
+        (*it).currentFrame = std::fmod(frameNow,(*it).maxFrames); 
+        shader->setUniform((*it).uniformName, (*it).currentFrame);
     }
 }
    
+GLuint GraphicsObject::getInstanceCount() {
+    return instanceCount; 
+}
+
+void GraphicsObject::setSingularMaterial(const Material& map_) {
+    map = map_;
+}
+ 
+Material& GraphicsObject::getSingularMaterial() {
+    return map;
+}

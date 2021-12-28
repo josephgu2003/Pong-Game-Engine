@@ -16,11 +16,13 @@
 #include <assimp/Importer.hpp>
 #include <map>  
 
+
 struct AssimpNodeData
 {
     std::string name;
     glm::mat4 transformation;
     int parentIndex;
+    AssimpNodeData(std::string& name, const aiMatrix4x4& transform, int parentIndex);
 };
 
 struct aiNodeHolder {
@@ -30,26 +32,21 @@ struct aiNodeHolder {
 
 class Animation {     
 private:
-    glm::mat4 globalInverse;
     std::string name;
     std::vector<Bone> bones; 
-    std::vector<AssimpNodeData> boneNodes; 
     int ticksPerSec;
     float duration;
-    void readAssimpTree( std::map<std::string, BoneData>& map, const aiNode* node);
-    glm::mat4 convertMatrixToGLMFormat(const aiMatrix4x4& from);
     void makeBones(const aiAnimation* animation,  std::map<std::string, BoneData>& map);
-    const aiNode* findRootBone(const aiScene* scene, std::map<std::string, BoneData>& map_);
 public: 
     Animation();
-    Animation(aiAnimation* animation, const aiScene* scene, std::map<std::string, BoneData>& map_);
-    const std::string& getName();
+    Animation(aiAnimation* animation, std::map<std::string, BoneData>& map_);
+    const std::string& getName(); 
     float getDuration();
-    std::vector<AssimpNodeData>* getNodeData();
+
     Bone* findBone(const std::string& name);
-    glm::mat4& getGlobalInv();
     int getTicksPerSec();
+    void updateBoneMatrices(std::vector<glm::mat4>& boneMatrices, std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t);
 };
 
-
+ 
 #endif /* Animation_hpp */

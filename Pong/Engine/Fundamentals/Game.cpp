@@ -14,7 +14,7 @@
 #include "JsonManager.hpp"
 #include "Shader.hpp"
 
-Game::Game() {
+Game::Game() { 
     glfwInit(); 
     running = true;
     

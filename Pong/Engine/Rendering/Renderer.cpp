@@ -7,8 +7,8 @@
 
 #define DEFAULT_FRUSTRUM_NEAR 0.01f
 #define DEFAULT_FRUSTRUM_FAR 200.0f
-#define DEFAULT_FOV 60.0f
-  
+#define DEFAULT_FOV 70.0f 
+   
 #include "Renderer.hpp" 
 #include "stb_image.h" 
 #include <iostream>
@@ -302,7 +302,7 @@ void Renderer::checkForUpdates() { // spaghetti
         updateDistanceFog();
     }
     if(updates.skyUpdate == true) {
-        world->updateCleared(3);
+        world->updateCleared(2);
         loadSkyBoxData(); 
     }
 }     
@@ -342,7 +342,7 @@ void Renderer::renderFinal() {
         else {
             glBindFramebuffer(GL_FRAMEBUFFER, frame1.fbo);
         }
-        blurShader->setBool("horizontal", horizontal);
+        blurShader->setUniform("horizontal", horizontal);
         if (first_iteration) {
             glBindTexture(GL_TEXTURE_2D, frame2C.ftexture1);
         }
@@ -419,7 +419,7 @@ void Renderer::renderSky() {
     glDisable(GL_CULL_FACE);
 }
 
- 
+  
 void Renderer::bindTextures(Shader* shader, Material& map) {
     if (map.diffuse.id != -1) {
     glActiveTexture(GL_TEXTURE0);
@@ -449,7 +449,7 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
       glUniform1i(glGetUniformLocation(shader->ID, "voronoi"), 3);
       glBindTexture(GL_TEXTURE_2D, voronoi.id);
     }
-     
+      
     if (glGetUniformLocation(shader->ID, "noise") != -1) {
         glActiveTexture(GL_TEXTURE6);
         glUniform1i(glGetUniformLocation(shader->ID, "noise"), 6);
@@ -463,13 +463,13 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
     }
     glActiveTexture(GL_TEXTURE0);
 }
-
-void Renderer::renderParticles(GraphicsObject* r, int instanceCount) {
+ 
+void Renderer::renderParticles(GraphicsObject* r) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
     bindGraphicsObject(r);
     
-    glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, instanceCount);
+    glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, r->getInstanceCount());
     r->unbind();
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -489,7 +489,7 @@ void Renderer::renderGeneric(GraphicsObject* go) {
     bindGraphicsObject(go);
     glDrawElements(GL_TRIANGLES, go->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     go->unbind();
-}
+} 
 
 void Renderer::renderFoliage(GraphicsObject* r) {
     glDepthMask(GL_FALSE);

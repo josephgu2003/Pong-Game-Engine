@@ -180,7 +180,7 @@ int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Ch
             Characters = loadedGlyphs.at(i).second;
             map.diffuse.id = loadedGlyphs.at(i).first.id;
             map.diffuse.textureTarget = GL_TEXTURE_2D_ARRAY;
-            printf("Font already loaded: %s \n", filePath);
+           // printf("Font already loaded: %s \n", filePath);
             return 0;
         } 
     }

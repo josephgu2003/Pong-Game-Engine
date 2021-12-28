@@ -26,7 +26,6 @@ private:
     static BoneInfoMap inProgBoneMap;
     static int boneCounter;
      
-    static glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
     static void BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                             const aiScene* scene);
     static void processNode(aiNode* node, const aiScene* scene, std::vector<TBNBWVertex>& vertices, std::vector<GLuint>& indices);
@@ -35,7 +34,8 @@ private:
     static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices,  std::vector<GLuint>& indices);
     static void setVertexBoneData(TBNBWVertex* v, int id, float weight);
     static void reset();
-public: 
+public:
+    static void ConvertMatrixToGLMFormat(const aiMatrix4x4& from, glm::mat4& to);
     static std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName); 
  //   static GLuint getTextureFromFile(std::string path);
     // ^^ what about making them work??
@@ -44,8 +44,8 @@ public:
     static void loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModelAnimations(AnimComponent* anim_, std::string filePath_);
     static void loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
-     
-    static void loadTextData(const std::string& s, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
+    static void loadTextData(const std::string& s, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
+    static void loadTextData(const std::string& s, float fontsize, float linespace, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
     static void setupVAOAttribs(VertexType vt);
     static void setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout);
     static void load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position);

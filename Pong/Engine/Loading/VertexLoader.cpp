@@ -21,7 +21,76 @@ int VertexLoader::boneCounter = 0;
 std::map<std::string, BoneInfoMap> VertexLoader::loadedBoneDataMaps;
 int VertexLoader::indexOffset = 0;
 
-void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position) {
+void VertexLoader::loadTextData(const std::string& text, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position) {
+    glBindVertexArray(vao);
+    
+    std::map<char, Character> characters;
+
+    AssetManager::loadGlyphs("Resources/GlyphsAndUI/times.ttf", characters, map);
+
+    std::string::const_iterator c;
+    float x = position.x;
+    float y = position.y;
+    float scale = fontsize;
+        
+    std::vector<SimpleVertex> newVertices;
+    std::vector<GLuint> newIndices;
+        
+    int indexOffset = 0;
+        
+    float currentLineLength = 0.0f;
+    
+    for (c = text.begin(); c != text.end(); c++)
+        {  
+            if (*c == '\n') { 
+                x = position.x;
+                y -= linespace*scale;
+                currentLineLength = 0.0f;
+                continue;
+            }
+            Character ch = characters[*c];
+
+            float xpos = x + ch.bearing.x * scale;
+            float ypos = y - (ch.size.y - ch.bearing.y) * scale;
+
+            float w = ch.size.x * scale;
+            currentLineLength += w;
+             
+            float h = ch.size.y * scale;
+              
+            float texX, texY = 0;
+              
+            texX = ch.texCoords.x;
+            texY = ch.texCoords.y;
+               
+            int id = ch.id;
+               
+            newVertices.emplace_back(glm::vec3(xpos, ypos + h, 0), glm::vec2(0.0f, 0.0f), id);
+            newVertices.emplace_back(glm::vec3(xpos, ypos, 0),  glm::vec2(0.0f, texY), id);
+            newVertices.emplace_back(glm::vec3(xpos + w, ypos, 0),  glm::vec2(texX, texY), id);
+            newVertices.emplace_back(glm::vec3(xpos + w, ypos + h, 0),  glm::vec2(texX, 0.0f), id);
+              
+            std::vector<GLuint> newIndices2 = {
+                  1, 0, 3, 1, 2, 3
+              };
+
+              for (int i = 0; i < newIndices2.size(); i++) {
+                  GLuint ind = newIndices2.at(i) + indexOffset;
+                  newIndices.push_back(ind);
+              }
+              
+              x += (ch.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+              indexOffset += 4;
+            if (currentLineLength > maxlinelength && *c == ' ') {
+                x = position.x; 
+                y -= linespace*scale;
+                currentLineLength = 0.0f;
+            }
+          }
+    
+    fillVertexData<SimpleVertex>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, newVertices, newIndices);
+}
+void VertexLoader::loadTextData(const std::string& text, float fontsize, float linespace, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position) {
     glBindVertexArray(vao); 
     
     std::map<char, Character> characters; 
@@ -31,7 +100,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
     std::string::const_iterator c;
     float x = position.x;
     float y = position.y;
-    float scale = 0.0003;
+    float scale = fontsize;
         
     std::vector<SimpleVertex> newVertices;
     std::vector<GLuint> newIndices;
@@ -42,7 +111,7 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
         {
             if (*c == '\n') {  
                 x = position.x;
-                y -= 0.07; 
+                y -= linespace*scale;
                 continue; 
             }
             Character ch = characters[*c];
@@ -83,57 +152,41 @@ void VertexLoader::loadTextData(const std::string& text, unsigned int vao, unsig
 }
 
 void VertexLoader::setupVAOAttribs(VertexType vt) {
+    auto setVertexAttribsFloat = [] (int vertexSize, std::vector<int>& numFloats, std::vector<int>& offsets) {
+        if (numFloats.size() == offsets.size()) {
+            for (int i = 0; i < numFloats.size(); i++) {
+                glVertexAttribPointer(i, numFloats.at(i), GL_FLOAT, GL_FALSE,vertexSize, (void*)(offsets.at(i)));
+                glEnableVertexAttribArray(i);
+            }
+        }
+    };
+    
     switch (vt) {
-        case VERTEX_SIMPLEVERTEX:
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,sizeof(SimpleVertex), (void*)0);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,  sizeof(SimpleVertex), (void*)(sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE,  sizeof(SimpleVertex), (void*)(sizeof(glm::vec2) + sizeof(glm::vec3)));
-            glEnableVertexAttribArray(2);
+        case VERTEX_SIMPLEVERTEX: {
+            std::vector<int> numFloats = {3,2,1};
+            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(sizeof(glm::vec2) + sizeof(glm::vec3))};
+            setVertexAttribsFloat(sizeof(SimpleVertex), numFloats, offsets);
             break;
+        }
             
-        case VERTEX_VERTEX:
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,  sizeof(Vertex), (void*)(2*sizeof(glm::vec3)));
-            glEnableVertexAttribArray(2);
+        case VERTEX_VERTEX: {
+            std::vector<int> numFloats = {3,3,2};
+            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3))};
+            setVertexAttribsFloat(sizeof(Vertex), numFloats, offsets);
             break;
+        }
             
-        case VERTEX_TBNVERTEX:
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)0);
-            glEnableVertexAttribArray(0);
-            
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-            
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)));
-            glEnableVertexAttribArray(2);
-            
-            glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(3);
-            
-            glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(4);
+        case VERTEX_TBNVERTEX: {
+            std::vector<int> numFloats = {3,3,2,3,3};
+            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
+            setVertexAttribsFloat(sizeof(TBNVertex), numFloats, offsets);
             break;
+        }
             
-        case VERTEX_TBNBWVERTEX:
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)0);
-            glEnableVertexAttribArray(0);
-            
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-            
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)));
-            glEnableVertexAttribArray(2);
-            
-            glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(2*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(3);
-            
-            glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(3*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(4);
+        case VERTEX_TBNBWVERTEX: {
+            std::vector<int> numFloats = {3,3,2,3,3};
+            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
+            setVertexAttribsFloat(sizeof(TBNBWVertex), numFloats, offsets); 
             
             glVertexAttribIPointer(5, MAX_BONE_WEIGHTS, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
             glEnableVertexAttribArray(5);
@@ -142,10 +195,11 @@ void VertexLoader::setupVAOAttribs(VertexType vt) {
             glEnableVertexAttribArray(6);
             
             break;
+        }
             
     }
 }
-
+ 
 void VertexLoader::load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position) {
     
     std::vector<SimpleVertex> newVertices = {SimpleVertex(glm::vec3(0.0, 0.0, 0.0), glm::vec2(0.0, 0.0), 0.0), SimpleVertex(glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.0, 1.0), 0.0), SimpleVertex(glm::vec3(1.0, 0.0, 0.0), glm::vec2(1.0, 0.0), 0.0), SimpleVertex(glm::vec3(1.0, 1.0, 0.0), glm::vec2(1.0, 1.0), 0.0)};
@@ -225,9 +279,10 @@ void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePat
         std::vector<GLuint> indices;
         processNode(scene->mRootNode, scene, vertices, indices);
         loadedBoneDataMaps.insert(std::pair<std::string, BoneInfoMap>(filePath_, inProgBoneMap));
-    }
+    }  
     BoneInfoMap& bim = loadedBoneDataMaps.find(filePath_)->second;
     anim_->setBoneDataMap(bim);
+    anim_->readAssimpTree(scene->mRootNode);
     for (int i = 0; i < scene->mNumAnimations; i ++) {
         anim_->addAnimation(scene->mAnimations[i], scene);
     }
@@ -404,15 +459,16 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
         {
             BoneData data;
             data.id = boneCounter;
-            data.offset =
-                 ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
+                 ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix, data.offset);
             inProgBoneMap[boneName] = data;
             id = inProgBoneMap.size()-1;
             boneCounter++;
         }
         else {
             id = inProgBoneMap[boneName].id;
-            if (inProgBoneMap[boneName].offset !=   ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix)) {
+            glm::mat4 offsetMatrix;
+            ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix, offsetMatrix);
+            if (inProgBoneMap[boneName].offset != offsetMatrix) {
                 printf("Error : %s offset differs across meshes \n", boneName.c_str());
             }
         } 
@@ -428,28 +484,24 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
             setVertexBoneData(&vertices[vertexId], id, weight);
         }
     }
-   /** for (int i = 0; i < vertices.size(); i++) {
+    for (int i = 0; i < vertices.size(); i++) {
         float sum = 0.0f;
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) {
-            if (vertices.at(i)->boneIDs[j] != -1)
-            sum += vertices.at(i)->boneWeights[j];
+            if (vertices[i].boneIDs[j] != -1)
+            sum += vertices[i].boneWeights[j];
         }
         float factor = 1.0f / sum;
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) {
-            if (vertices.at(i)->boneIDs[j] != -1)
-            vertices.at(i)->boneWeights[j] *= factor;
+            if (vertices[i].boneIDs[j] != -1)
+            vertices[i].boneWeights[j] *= factor;
         }
-     }**/
+     }  
 }
  
-glm::mat4 VertexLoader::ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
+void VertexLoader::ConvertMatrixToGLMFormat(const aiMatrix4x4& from, glm::mat4& to)
 {
-    glm::mat4 to;
-    //the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
-    to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
-    to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
-    to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
-    to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+
+ 
     for (int y = 0; y < 4; y++)
         {
             for (int x = 0; x < 4; x++)
@@ -457,7 +509,7 @@ glm::mat4 VertexLoader::ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
                 to[x][y] = from[y][x];
             }
         }
-    return to;
+
 }
 
 

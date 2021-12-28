@@ -9,8 +9,22 @@
 #include "VertexLoader.hpp"
 #include "Particle.hpp"
 #include "PRefreshComponent.hpp"
+#include "Renderer.hpp" 
 
-PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map_) : PGraphicsComponent(pe, size, shader, map_){
+PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size_, Shader* shader, const Material& map_) : GraphicsComponent(pe, shader, map_, DRAW_TRANSPARENT){
+    
+    shader->use();
+    shader->setUniform("size", size_);
+    Renderer::bindShaderUniblock(shader, ViewProj);
+    // need to load model data to vao vbo,
+    type = GRAPHICS;
+    
+    size = size_; 
+    
+    drawCall = [] (Renderer* r, GraphicsComponent* gc) {
+        r->renderParticles(gc);
+    };
+     
     int datasize = numberParticles * 4 * sizeof(float);
     std::vector<int> v = {3,1};
     VertexLoader::loadPoint(VAO, VBO, EBO, numIndices);
@@ -20,8 +34,8 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
 
 void PPointGraphicsComponent::tick() {
 //updates displacement, duration basically
-    PGraphicsComponent::tick();
-    std::vector<float> v;  
+    GraphicsComponent::tick(); 
+    std::vector<float> v;   
     int n = static_cast<ParticleSystem*>(actor)->getNumParticles();
     auto particlesystem = static_cast<ParticleSystem*>(actor);
     Particle* p = particlesystem->getParticles();
@@ -33,7 +47,7 @@ void PPointGraphicsComponent::tick() {
     for (int i = 0; i < n; i++) {
         v[i] = p[i].posVec.x; 
         i++;  
-        v[i] = p[i].posVec.y;
+        v[i] = p[i].posVec.y; 
         i++;
         v[i] = p[i].posVec.z;
         i++;

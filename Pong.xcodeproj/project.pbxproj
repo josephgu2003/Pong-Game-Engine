@@ -59,7 +59,6 @@
 		5D670C9C2684D903000E179C /* MapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9A2684D903000E179C /* MapObject.cpp */; };
 		5D670C9F2684D90C000E179C /* Sky.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D670C9D2684D90C000E179C /* Sky.cpp */; };
 		5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D68FE6C26E8433600E572E5 /* JsonManager.cpp */; };
-		5D6D627326AC8B10004E43CB /* SaveFile.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D6D627226AC8B10004E43CB /* SaveFile.json */; };
 		5D6E82982698A0E3003A1059 /* ScriptOne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E82962698A0E3003A1059 /* ScriptOne.cpp */; };
 		5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7706282654B082002A0BB0 /* AssetManager.cpp */; };
 		5D7EE224276B9F8A0026AB83 /* norms.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EE223276B9F8A0026AB83 /* norms.png */; };
@@ -67,6 +66,11 @@
 		5D7EE228276CE55E0026AB83 /* Well_Albedo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EE227276CE55D0026AB83 /* Well_Albedo.png */; };
 		5D7EE22A276D109C0026AB83 /* LightConstruct.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EE229276D109C0026AB83 /* LightConstruct.fs */; };
 		5D7EE22D276D11C80026AB83 /* SwordWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EE22B276D11C80026AB83 /* SwordWorld.cpp */; };
+		5D7EE22F276E80FE0026AB83 /* ManaMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EE22E276E80FE0026AB83 /* ManaMeter.cpp */; };
+		5D7EE231276E81310026AB83 /* Speech.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EE230276E81310026AB83 /* Speech.cpp */; };
+		5D7EE233276E83320026AB83 /* HealthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EE232276E83320026AB83 /* HealthMeter.cpp */; };
+		5D7EE235276ED7420026AB83 /* Billboard.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EE234276ED7420026AB83 /* Billboard.vs */; };
+		5D7EE237276FE0020026AB83 /* SaveFile.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EE236276FE0020026AB83 /* SaveFile.json */; };
 		5D87837F27653E8A006354AB /* Well_low.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5D87837E27653E8A006354AB /* Well_low.obj */; };
 		5D87838527653FEA006354AB /* Well_Alpha.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D87838027653FEA006354AB /* Well_Alpha.jpg */; };
 		5D87838627653FEA006354AB /* Well_NM.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D87838127653FEA006354AB /* Well_NM.jpg */; };
@@ -83,7 +87,6 @@
 		5D9122C52638BCFA0045937F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D0C4155263794AD005F64D0 /* OpenGL.framework */; };
 		5D91DF75275AAD3300AF8EF4 /* snownorm.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D91DF74275AAD3200AF8EF4 /* snownorm.png */; };
 		5D91DF79275AB4DD00AF8EF4 /* blueflower.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D91DF78275AB4DD00AF8EF4 /* blueflower.png */; };
-		5D91DF7C275AB55700AF8EF4 /* ManaMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D91DF7A275AB55700AF8EF4 /* ManaMeter.cpp */; };
 		5D91DF7E275C2FB800AF8EF4 /* Functions.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D91DF7D275C2FB700AF8EF4 /* Functions.json */; };
 		5D98F65C2688059A0075552B /* MistFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F65A2688059A0075552B /* MistFShader.fs */; };
 		5D98F6BE268890FA0075552B /* fish.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D98F6BD268890FA0075552B /* fish.png */; };
@@ -286,8 +289,6 @@
 		5DCDDAD426A491450031FCC9 /* BloomFShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5DCDDAD226A491440031FCC9 /* BloomFShader.fs */; };
 		5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */; };
 		5DDAE89A2729DC120053DFEA /* Project.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DDAE8992729DC110053DFEA /* Project.png */; };
-		5DDAE8A6272B48080053DFEA /* HealthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAE8A5272B48080053DFEA /* HealthMeter.cpp */; };
-		5DDAE8B2272B5F4D0053DFEA /* Speech.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAE8AC272B5F4D0053DFEA /* Speech.cpp */; };
 		5DDAE8B3272B5F4D0053DFEA /* Ability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAE8AD272B5F4D0053DFEA /* Ability.cpp */; };
 		5DDAE8B4272B5F4D0053DFEA /* Dialogue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAE8AE272B5F4D0053DFEA /* Dialogue.cpp */; };
 		5DDAE8BB272C90960053DFEA /* TerrainVertex.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5DDAE8BA272C90960053DFEA /* TerrainVertex.vs */; };
@@ -305,6 +306,14 @@
 		5DEE580E266292A40080446C /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE580C266292A40080446C /* Component.cpp */; };
 		5DEE58302667EEC20080446C /* FallingLetters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE582E2667EEC20080446C /* FallingLetters.cpp */; };
 		5DF1E6D32674F58D0035F723 /* LoadingScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */; };
+		5DF4EBC82772B9D1006823FB /* Behaviour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4EBC62772B9D1006823FB /* Behaviour.cpp */; };
+		5DF4EBCB27739E0B006823FB /* SoundTextManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4EBC927739E0B006823FB /* SoundTextManager.cpp */; };
+		5DF4EBCE27753C16006823FB /* MultiMeshGraphicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4EBCC27753C15006823FB /* MultiMeshGraphicsComponent.cpp */; };
+		5DF4EBD1277774D2006823FB /* ScriptSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4EBCF277774D1006823FB /* ScriptSystem.cpp */; };
+		5DF4EBD42777A24C006823FB /* ScriptWolfBoyOne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4EBD22777A24C006823FB /* ScriptWolfBoyOne.cpp */; };
+		5DF4EBD62777E424006823FB /* Backup.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4EBD52777E424006823FB /* Backup.json */; };
+		5DF4EBDA27793C11006823FB /* blacksquare.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4EBD927793C11006823FB /* blacksquare.png */; };
+		5DF4EBDC277A7E6E006823FB /* ScarfChar in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4EBDB277A7E6D006823FB /* ScarfChar */; };
 		5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF7A2362640E0FD004F05E2 /* World.cpp */; };
 		5DF82DA52680CBA800F4D177 /* uiLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF82DA32680CBA800F4D177 /* uiLayout.cpp */; };
 		5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DF82DA62680D14800F4D177 /* uiPiece.cpp */; };
@@ -426,7 +435,6 @@
 		5D670C9E2684D90C000E179C /* Sky.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sky.hpp; sourceTree = "<group>"; };
 		5D68FE6C26E8433600E572E5 /* JsonManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JsonManager.cpp; sourceTree = "<group>"; };
 		5D68FE6D26E8433700E572E5 /* JsonManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = JsonManager.hpp; sourceTree = "<group>"; };
-		5D6D627226AC8B10004E43CB /* SaveFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = SaveFile.json; path = Pong/Data/SaveFile.json; sourceTree = SOURCE_ROOT; };
 		5D6E82962698A0E3003A1059 /* ScriptOne.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptOne.cpp; sourceTree = "<group>"; };
 		5D6E82972698A0E3003A1059 /* ScriptOne.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptOne.hpp; sourceTree = "<group>"; };
 		5D7706282654B082002A0BB0 /* AssetManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetManager.cpp; sourceTree = "<group>"; };
@@ -437,6 +445,11 @@
 		5D7EE229276D109C0026AB83 /* LightConstruct.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightConstruct.fs; sourceTree = "<group>"; };
 		5D7EE22B276D11C80026AB83 /* SwordWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SwordWorld.cpp; sourceTree = "<group>"; };
 		5D7EE22C276D11C80026AB83 /* SwordWorld.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SwordWorld.hpp; sourceTree = "<group>"; };
+		5D7EE22E276E80FE0026AB83 /* ManaMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ManaMeter.cpp; sourceTree = "<group>"; };
+		5D7EE230276E81310026AB83 /* Speech.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Speech.cpp; sourceTree = "<group>"; };
+		5D7EE232276E83320026AB83 /* HealthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthMeter.cpp; sourceTree = "<group>"; };
+		5D7EE234276ED7420026AB83 /* Billboard.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vs; sourceTree = "<group>"; };
+		5D7EE236276FE0020026AB83 /* SaveFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = SaveFile.json; path = Pong/MyGame/SaveFile.json; sourceTree = SOURCE_ROOT; };
 		5D84C743267D2E3900604793 /* libirrklang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libirrklang.dylib; path = ../../ponglib/libirrklang.dylib; sourceTree = "<group>"; };
 		5D87837E27653E8A006354AB /* Well_low.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Well_low.obj; sourceTree = "<group>"; };
 		5D87838027653FEA006354AB /* Well_Alpha.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Well_Alpha.jpg; sourceTree = "<group>"; };
@@ -460,7 +473,6 @@
 		5D9122B22638BB9A0045937F /* Pong.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pong.entitlements; sourceTree = "<group>"; };
 		5D91DF74275AAD3200AF8EF4 /* snownorm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snownorm.png; sourceTree = "<group>"; };
 		5D91DF78275AB4DD00AF8EF4 /* blueflower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueflower.png; sourceTree = "<group>"; };
-		5D91DF7A275AB55700AF8EF4 /* ManaMeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ManaMeter.cpp; sourceTree = "<group>"; };
 		5D91DF7B275AB55700AF8EF4 /* ManaMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ManaMeter.hpp; sourceTree = "<group>"; };
 		5D91DF7D275C2FB700AF8EF4 /* Functions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Functions.json; sourceTree = "<group>"; };
 		5D98F65A2688059A0075552B /* MistFShader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MistFShader.fs; sourceTree = "<group>"; };
@@ -697,8 +709,6 @@
 		5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsComponent.cpp; sourceTree = "<group>"; };
 		5DCEA18C26893D4E00A6F99F /* GraphicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GraphicsComponent.hpp; sourceTree = "<group>"; };
 		5DDAE8992729DC110053DFEA /* Project.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Project.png; sourceTree = "<group>"; };
-		5DDAE8A5272B48080053DFEA /* HealthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HealthMeter.cpp; path = "Pong/Data/New Group/HealthMeter.cpp"; sourceTree = SOURCE_ROOT; };
-		5DDAE8AC272B5F4D0053DFEA /* Speech.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Speech.cpp; path = "../New Group/Speech.cpp"; sourceTree = "<group>"; };
 		5DDAE8AD272B5F4D0053DFEA /* Ability.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ability.cpp; sourceTree = "<group>"; };
 		5DDAE8AE272B5F4D0053DFEA /* Dialogue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dialogue.cpp; sourceTree = "<group>"; };
 		5DDAE8AF272B5F4D0053DFEA /* Dialogue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dialogue.hpp; sourceTree = "<group>"; };
@@ -737,6 +747,19 @@
 		5DEE582F2667EEC20080446C /* FallingLetters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FallingLetters.hpp; sourceTree = "<group>"; };
 		5DF1E6D12674F58D0035F723 /* LoadingScreen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScreen.cpp; sourceTree = "<group>"; };
 		5DF1E6D22674F58D0035F723 /* LoadingScreen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LoadingScreen.hpp; sourceTree = "<group>"; };
+		5DF4EBC62772B9D1006823FB /* Behaviour.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Behaviour.cpp; sourceTree = "<group>"; };
+		5DF4EBC72772B9D1006823FB /* Behaviour.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Behaviour.hpp; sourceTree = "<group>"; };
+		5DF4EBC927739E0B006823FB /* SoundTextManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SoundTextManager.cpp; sourceTree = "<group>"; };
+		5DF4EBCA27739E0B006823FB /* SoundTextManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoundTextManager.hpp; sourceTree = "<group>"; };
+		5DF4EBCC27753C15006823FB /* MultiMeshGraphicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiMeshGraphicsComponent.cpp; sourceTree = "<group>"; };
+		5DF4EBCD27753C16006823FB /* MultiMeshGraphicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiMeshGraphicsComponent.hpp; sourceTree = "<group>"; };
+		5DF4EBCF277774D1006823FB /* ScriptSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptSystem.cpp; sourceTree = "<group>"; };
+		5DF4EBD0277774D1006823FB /* ScriptSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptSystem.hpp; sourceTree = "<group>"; };
+		5DF4EBD22777A24C006823FB /* ScriptWolfBoyOne.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptWolfBoyOne.cpp; sourceTree = "<group>"; };
+		5DF4EBD32777A24C006823FB /* ScriptWolfBoyOne.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptWolfBoyOne.hpp; sourceTree = "<group>"; };
+		5DF4EBD52777E424006823FB /* Backup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Backup.json; path = Pong/MyGame/Backup.json; sourceTree = SOURCE_ROOT; };
+		5DF4EBD927793C11006823FB /* blacksquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blacksquare.png; sourceTree = "<group>"; };
+		5DF4EBDB277A7E6D006823FB /* ScarfChar */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ScarfChar; sourceTree = "<group>"; };
 		5DF7A2362640E0FD004F05E2 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		5DF7A2372640E0FD004F05E2 /* World.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
 		5DF82DA32680CBA800F4D177 /* uiLayout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiLayout.cpp; sourceTree = "<group>"; };
@@ -790,7 +813,7 @@
 		5D0C414B2637948B005F64D0 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
-				5DF8BD772683A973006AAC64 /* Data */,
+				5DF8BD772683A973006AAC64 /* MyGame */,
 				5DDAE89D272B3B310053DFEA /* Engine */,
 				5DA7E271267E6D33008845AA /* Shaders */,
 				5D66B4872651EE94006EA749 /* Resources */,
@@ -861,6 +884,7 @@
 				5D350620266E45370038FBC3 /* times.ttf */,
 				5D35061E266DACBF0038FBC3 /* Arial Unicode copy.ttf */,
 				5D25A045265C1B5900A780C6 /* minecraft-enchantment.ttf */,
+				5DF4EBD927793C11006823FB /* blacksquare.png */,
 			);
 			path = GlyphsAndUI;
 			sourceTree = "<group>";
@@ -884,6 +908,8 @@
 			isa = PBXGroup;
 			children = (
 				5D6E82962698A0E3003A1059 /* ScriptOne.cpp */,
+				5DF4EBD22777A24C006823FB /* ScriptWolfBoyOne.cpp */,
+				5DF4EBD32777A24C006823FB /* ScriptWolfBoyOne.hpp */,
 				5DA4400B26AADE2F00281AA6 /* File.json */,
 				5D6E82972698A0E3003A1059 /* ScriptOne.hpp */,
 				5D14649027409EFB0024F2E2 /* ScriptWakeUp.cpp */,
@@ -895,7 +921,8 @@
 		5D33262226790444002F3D49 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				5DE85CD62706956C000D948D /* StatComp */,
+				5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */,
+				5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */,
 				5DE85CD1270527A1000D948D /* AIComp */,
 				5DCEA18B26893D4E00A6F99F /* GraphicsComponent.cpp */,
 				5DCEA18C26893D4E00A6F99F /* GraphicsComponent.hpp */,
@@ -907,6 +934,8 @@
 				5DA9BE7226C1882B00C1BAEC /* AnimComponent.hpp */,
 				5D1464732735A58C0024F2E2 /* MeshComponent.cpp */,
 				5D1464742735A58C0024F2E2 /* MeshComponent.hpp */,
+				5DF4EBCC27753C15006823FB /* MultiMeshGraphicsComponent.cpp */,
+				5DF4EBCD27753C16006823FB /* MultiMeshGraphicsComponent.hpp */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -924,6 +953,10 @@
 				5DF7A2362640E0FD004F05E2 /* World.cpp */,
 				5D87838D27669AC8006354AB /* WorldRenderingManager.cpp */,
 				5D87838E27669AC8006354AB /* WorldRenderingManager.hpp */,
+				5DF4EBC927739E0B006823FB /* SoundTextManager.cpp */,
+				5DF4EBCA27739E0B006823FB /* SoundTextManager.hpp */,
+				5DF4EBCF277774D1006823FB /* ScriptSystem.cpp */,
+				5DF4EBD0277774D1006823FB /* ScriptSystem.hpp */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -984,6 +1017,7 @@
 		5D66B4902651EF0E006EA749 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5DF4EBDB277A7E6D006823FB /* ScarfChar */,
 				5D7EE225276C286D0026AB83 /* Sword */,
 				5D391B7C268E16840092623D /* Dance */,
 				5D87837D27653E71006354AB /* Well */,
@@ -1104,6 +1138,7 @@
 				5D01276D272F7244008F4D36 /* PointPart.vs */,
 				5D37512126A7624000BB8BC9 /* WaterVertexShader.vs */,
 				5D8A7D0B26F0FCAF00BD8BDB /* GenericDiffuse.fs */,
+				5D7EE234276ED7420026AB83 /* Billboard.vs */,
 				5DB91EE62725EE6E003AAAA7 /* GenericUI.fs */,
 				5DB91EAD271DD7AA003AAAA7 /* HealthMeter.fs */,
 				5D8A7D0D26F2853E00BD8BDB /* UI.vs */,
@@ -1284,6 +1319,8 @@
 			isa = PBXGroup;
 			children = (
 				5DA67C282641A482005A7E74 /* Actor.cpp */,
+				5DF4EBC62772B9D1006823FB /* Behaviour.cpp */,
+				5DF4EBC72772B9D1006823FB /* Behaviour.hpp */,
 				5D3E7087264308C10071115A /* Camera.cpp */,
 				5D146479273DC4710024F2E2 /* Prop.cpp */,
 				5D14647A273DC4710024F2E2 /* Prop.hpp */,
@@ -1365,10 +1402,10 @@
 		5DDAE8A0272B43C00053DFEA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				5DDAE8A5272B48080053DFEA /* HealthMeter.cpp */,
 				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
-				5D91DF7A275AB55700AF8EF4 /* ManaMeter.cpp */,
 				5D91DF7B275AB55700AF8EF4 /* ManaMeter.hpp */,
+				5D7EE232276E83320026AB83 /* HealthMeter.cpp */,
+				5D7EE22E276E80FE0026AB83 /* ManaMeter.cpp */,
 				5D87838A276542B4006354AB /* DevPosTracker.cpp */,
 				5D87838B276542B4006354AB /* DevPosTracker.hpp */,
 			);
@@ -1417,9 +1454,9 @@
 				5DDAE8AE272B5F4D0053DFEA /* Dialogue.cpp */,
 				5DDAE8AD272B5F4D0053DFEA /* Ability.cpp */,
 				5DDAE8B0272B5F4D0053DFEA /* Ability.hpp */,
+				5D7EE230276E81310026AB83 /* Speech.cpp */,
 				5DDAE8B1272B5F4D0053DFEA /* Speech.hpp */,
 				5DDAE8AF272B5F4D0053DFEA /* Dialogue.hpp */,
-				5DDAE8AC272B5F4D0053DFEA /* Speech.cpp */,
 			);
 			path = Abilities;
 			sourceTree = "<group>";
@@ -1457,8 +1494,6 @@
 		5DE85CD62706956C000D948D /* StatComp */ = {
 			isa = PBXGroup;
 			children = (
-				5D8A7CF426EABBDF00BD8BDB /* NameComponent.cpp */,
-				5D8A7CF526EABBDF00BD8BDB /* NameComponent.hpp */,
 				5D10D5FF26FBBB7700281E6B /* CharacterComponent.cpp */,
 				5D10D60026FBBB7800281E6B /* CharacterComponent.hpp */,
 				5D8A7CF726EC212400BD8BDB /* LifeComponent.cpp */,
@@ -1525,8 +1560,6 @@
 			children = (
 				5D9E5A042653440E00F39C19 /* Particle.cpp */,
 				5D9E5A052653440E00F39C19 /* Particle.hpp */,
-				5DB91EB727210B0E003AAAA7 /* PGraphicsComponent.cpp */,
-				5DB91EB827210B0E003AAAA7 /* PGraphicsComponent.hpp */,
 				5DB91EC227222EB1003AAAA7 /* PRefreshComponent.cpp */,
 				5DB91EC327222EB1003AAAA7 /* PRefreshComponent.hpp */,
 				5DB91EC827244C5D003AAAA7 /* PSpinComponent.cpp */,
@@ -1534,7 +1567,9 @@
 				5DB91EBD272212FA003AAAA7 /* PQuadGraphicsComponent.cpp */,
 				5DB91EBE272212FA003AAAA7 /* PQuadGraphicsComponent.hpp */,
 				5DB91EBA27221292003AAAA7 /* PPointGraphicsComponent.cpp */,
+				5DB91EB827210B0E003AAAA7 /* PGraphicsComponent.hpp */,
 				5DB91EC52723A10B003AAAA7 /* PPhysicsComponent.cpp */,
+				5DB91EB727210B0E003AAAA7 /* PGraphicsComponent.cpp */,
 				5DB91EC62723A10B003AAAA7 /* PPhysicsComponent.hpp */,
 				5DB91EBB27221292003AAAA7 /* PPointGraphicsComponent.hpp */,
 			);
@@ -1551,20 +1586,22 @@
 			path = System;
 			sourceTree = "<group>";
 		};
-		5DF8BD772683A973006AAC64 /* Data */ = {
+		5DF8BD772683A973006AAC64 /* MyGame */ = {
 			isa = PBXGroup;
 			children = (
+				5DE85CD62706956C000D948D /* StatComp */,
 				5D68FE6D26E8433700E572E5 /* JsonManager.hpp */,
 				5D68FE6C26E8433600E572E5 /* JsonManager.cpp */,
 				5DDAE8B6272B6F330053DFEA /* Factories */,
 				5DEE58242667E8FC0080446C /* System */,
 				5DDAE8A0272B43C00053DFEA /* UI */,
 				5DDAE8A2272B46DE0053DFEA /* aiActions */,
-				5D6D627226AC8B10004E43CB /* SaveFile.json */,
+				5D7EE236276FE0020026AB83 /* SaveFile.json */,
+				5DF4EBD52777E424006823FB /* Backup.json */,
 				5D25EC4D26933F11008BD594 /* Scenes */,
 				5D25EC4C26933ED4008BD594 /* Abilities */,
 			);
-			path = Data;
+			path = MyGame;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1648,13 +1685,13 @@
 				5DA9831A2686A732008252BA /* smoke087.jpg in Resources */,
 				5D37512726A7628200BB8BC9 /* TerrainFragmentShader.fs in Resources */,
 				5DA983492686A732008252BA /* smoke026.jpg in Resources */,
+				5D7EE235276ED7420026AB83 /* Billboard.vs in Resources */,
 				5DA983472686A732008252BA /* smoke079.jpg in Resources */,
 				5DA9834D2686A732008252BA /* smoke063.jpg in Resources */,
 				5DA9837D2686A733008252BA /* smoke091.jpg in Resources */,
 				5DA9832E2686A732008252BA /* smoke053.jpg in Resources */,
 				5DA9832B2686A732008252BA /* smoke044.jpg in Resources */,
 				5DAC32C726AF42CE00E54B4B /* leafclusterNormal.png in Resources */,
-				5D6D627326AC8B10004E43CB /* SaveFile.json in Resources */,
 				5DA7E295267E6D34008845AA /* TextFShader.fs in Resources */,
 				5DA9837A2686A733008252BA /* smoke066.jpg in Resources */,
 				5DA9833F2686A732008252BA /* smoke104.jpg in Resources */,
@@ -1675,6 +1712,7 @@
 				5DA983292686A732008252BA /* smoke015.jpg in Resources */,
 				5DA983502686A732008252BA /* smoke102.jpg in Resources */,
 				5DA983432686A732008252BA /* smoke076.jpg in Resources */,
+				5DF4EBD62777E424006823FB /* Backup.json in Resources */,
 				5D146477273872020024F2E2 /* 8grass.png in Resources */,
 				5DA983512686A732008252BA /* smoke032.jpg in Resources */,
 				5DA983742686A732008252BA /* smoke051.jpg in Resources */,
@@ -1725,6 +1763,7 @@
 				5DA983672686A732008252BA /* smoke038.jpg in Resources */,
 				5D25EC452691154C008BD594 /* ColorPartF.fs in Resources */,
 				5D8A7D0A26F0FAAA00BD8BDB /* 3DParticle.vs in Resources */,
+				5D7EE237276FE0020026AB83 /* SaveFile.json in Resources */,
 				5DB91EE72725EE6E003AAAA7 /* GenericUI.fs in Resources */,
 				5DA983592686A732008252BA /* smoke074.jpg in Resources */,
 				5DA9831F2686A732008252BA /* smoke056.jpg in Resources */,
@@ -1748,6 +1787,7 @@
 				5DA983622686A732008252BA /* smoke059.jpg in Resources */,
 				5D8A7D0C26F0FCAF00BD8BDB /* GenericDiffuse.fs in Resources */,
 				5DAC32C526AF42CE00E54B4B /* leafclustespecular.png in Resources */,
+				5DF4EBDC277A7E6E006823FB /* ScarfChar in Resources */,
 				5D91DF75275AAD3300AF8EF4 /* snownorm.png in Resources */,
 				5DA983782686A733008252BA /* smoke035.jpg in Resources */,
 				5DEABA042659D2CF000C772F /* rosa.png in Resources */,
@@ -1769,6 +1809,7 @@
 				5DA7E29E267E6D34008845AA /* SketchFShader.fs in Resources */,
 				5DA983412686A732008252BA /* smoke054.jpg in Resources */,
 				5DA9836A2686A732008252BA /* smoke040.jpg in Resources */,
+				5DF4EBDA27793C11006823FB /* blacksquare.png in Resources */,
 				5DA983542686A732008252BA /* smoke060.jpg in Resources */,
 				5DA9BE7E26C2B47C00C1BAEC /* dancing_vampire.dae in Resources */,
 				5D332621267819EB002F3D49 /* yirou'sdrawing2 copy.png in Resources */,
@@ -1855,26 +1896,27 @@
 				5DB91EC72723A10C003AAAA7 /* PPhysicsComponent.cpp in Sources */,
 				5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */,
 				5DB91EA1271BA8B0003AAAA7 /* VertexLoader.cpp in Sources */,
-				5D91DF7C275AB55700AF8EF4 /* ManaMeter.cpp in Sources */,
 				5D391B8F268FE01C0092623D /* Script.cpp in Sources */,
 				5DB91EA4271CB0EA003AAAA7 /* aiSingFriend.cpp in Sources */,
 				5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */,
-				5DDAE8A6272B48080053DFEA /* HealthMeter.cpp in Sources */,
 				5D14647E273DEB6D0024F2E2 /* PropFactory.cpp in Sources */,
-				5DDAE8B2272B5F4D0053DFEA /* Speech.cpp in Sources */,
 				5D670C9C2684D903000E179C /* MapObject.cpp in Sources */,
 				5D14649227409EFC0024F2E2 /* ScriptWakeUp.cpp in Sources */,
 				5DCCA0ED2728D9800004C3A1 /* aiDialogueAction.cpp in Sources */,
 				5DB91EBF272212FA003AAAA7 /* PQuadGraphicsComponent.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,
+				5DF4EBCB27739E0B006823FB /* SoundTextManager.cpp in Sources */,
+				5D7EE22F276E80FE0026AB83 /* ManaMeter.cpp in Sources */,
 				5DDAE8C1272D931E0053DFEA /* MyGame.cpp in Sources */,
 				5D10D60526FBBC4600281E6B /* Relationship.cpp in Sources */,
 				5D10D60126FBBB7800281E6B /* CharacterComponent.cpp in Sources */,
 				5DAC1808266994AE0021DC31 /* Game.cpp in Sources */,
 				5DA7E2AD26801683008845AA /* Batch.cpp in Sources */,
+				5DF4EBCE27753C16006823FB /* MultiMeshGraphicsComponent.cpp in Sources */,
 				5D8A7CF926EC212400BD8BDB /* LifeComponent.cpp in Sources */,
 				5DAC1805266993C40021DC31 /* InputHandler.cpp in Sources */,
 				5DB91EAA271D056E003AAAA7 /* Observer.cpp in Sources */,
+				5D7EE231276E81310026AB83 /* Speech.cpp in Sources */,
 				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
 				5D87838C276542B4006354AB /* DevPosTracker.cpp in Sources */,
@@ -1895,6 +1937,7 @@
 				5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */,
 				5D8A7CF626EABBDF00BD8BDB /* NameComponent.cpp in Sources */,
 				5D4BD7C8271BA16800A89C8B /* uiText.cpp in Sources */,
+				5D7EE233276E83320026AB83 /* HealthMeter.cpp in Sources */,
 				5D426582263C8E7B0026C24D /* Shader.cpp in Sources */,
 				5D1464722735A3630024F2E2 /* Vertices.cpp in Sources */,
 				5DB91EC427222EB1003AAAA7 /* PRefreshComponent.cpp in Sources */,
@@ -1905,6 +1948,7 @@
 				5D556DFA274D7E42006CAB4A /* uiFrame.cpp in Sources */,
 				5DE85CD92708E79A000D948D /* AIAction.cpp in Sources */,
 				5DA9759E26857135008252BA /* Light.cpp in Sources */,
+				5DF4EBD1277774D2006823FB /* ScriptSystem.cpp in Sources */,
 				5DA9BDE326B57DF100C1BAEC /* Componentable.cpp in Sources */,
 				5D1464692733143C0024F2E2 /* MapManager.cpp in Sources */,
 				5D14646C27347A160024F2E2 /* ParticleFactory.cpp in Sources */,
@@ -1913,6 +1957,7 @@
 				5DF7A2382640E0FD004F05E2 /* World.cpp in Sources */,
 				5DEE58302667EEC20080446C /* FallingLetters.cpp in Sources */,
 				5DF1E6D32674F58D0035F723 /* LoadingScreen.cpp in Sources */,
+				5DF4EBC82772B9D1006823FB /* Behaviour.cpp in Sources */,
 				5DF8B90826825CF6006AAC64 /* Fish.cpp in Sources */,
 				5D0C414D2637948B005F64D0 /* main.cpp in Sources */,
 				5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */,
@@ -1920,6 +1965,7 @@
 				5DDAE8CA272DE49A0053DFEA /* WorldChunk.cpp in Sources */,
 				5DA9BE6D26C0734E00C1BAEC /* Animation.cpp in Sources */,
 				5D1464952740B6EE0024F2E2 /* ScriptFactory.cpp in Sources */,
+				5DF4EBD42777A24C006823FB /* ScriptWolfBoyOne.cpp in Sources */,
 				5D556DFD275166DE006CAB4A /* GameLevel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

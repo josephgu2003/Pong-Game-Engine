@@ -25,7 +25,7 @@ class Game;
 class InputHandler;
 
 typedef void (*keyCallback) (Game*);
-typedef std::map<int, keyCallback> CallbackSet;
+typedef std::map<int, keyCallback> CallbackMap;
 
 struct KeyEvent {
     int key;
@@ -44,6 +44,10 @@ enum KeyCallbackSet{
     KCALL_MENU
 };
 
+struct CallbackSet {
+    CallbackMap oneTapCallbacks;
+    CallbackMap continuousCallbacks;
+};
 
 class InputHandler : public Subject { //detects input, executes associated action
 private:
@@ -72,7 +76,8 @@ public:
     ~InputHandler();
     void setWindow(GLFWwindow* window);
     void dumpTextToPlayer(); //dont need
-    void setCallbackforKey(int i, keyCallback cbk);
+    void setOneTapCallback(int i, keyCallback cbk);
+    void setContinuousCallback(int i, keyCallback cbk);
     void tick();
     void moveMouse(double mouseX_, double mouseY_);
     void addKeyEventToQ(int key, int action, int mods);

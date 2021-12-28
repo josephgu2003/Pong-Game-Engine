@@ -26,7 +26,7 @@ void uiLayout::renderAll(Renderer *renderer) {
        i->draw(renderer);
     }
 }
-
+ 
 void uiLayout::removeNode(uiPiece* piece) {
     for (int i = 0; i < uiPieces.size(); i++) {
         if (uiPieces.at(i).get() == piece) {

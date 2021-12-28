@@ -1,18 +1,18 @@
 #version 410 core
-    out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+
     in vec2 TexCoords;
 in float duration;
-    uniform sampler2D diffuse;
+    uniform sampler2D alphaMap;
 uniform sampler2D gradient;
 
     void main()
     {
         if (duration < 0.0) discard; 
-        vec4 sampled = texture(diffuse, gl_PointCoord);
-        vec3 colors = sampled.rgb;
+        float alpha = texture(alphaMap, TexCoords).r;
+        vec3 colors = vec3(0.2,0.2,0.2);
        // sampled.w *= 5*log(duration);
-        float intensity = texture(gradient, gl_PointCoord).b;
-        sampled.a *= 0.04*intensity*intensity*intensity;
-        sampled.a *= min(duration,1.0);
-        FragColor = vec4(colors, sampled.a);
+        float intensity = texture(gradient, TexCoords).r;
+
+        FragColor = vec4(colors*alpha*intensity, alpha*intensity);
     }

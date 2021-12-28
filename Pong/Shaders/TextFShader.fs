@@ -9,6 +9,7 @@ in vec2 TexCoords;
 
     uniform sampler2DArray diffuse;
 uniform float brightness;
+uniform float alpha = 1.0;
 
     void main()
     {
@@ -16,7 +17,7 @@ uniform float brightness;
 
         int id = int(floor(arrayTexID)); //lmao glsl
         float red = texture(diffuse, vec3(TexCoords, id)).r;
-        float alpha = red;
+        float a = red;
         vec2 tex_offset = 0.5/ vec2(textureSize(diffuse, int(mipmapLevel)));
         vec3 color = vec3(1.0,1.0,1.0);
         if (red < 0.5) {
@@ -43,7 +44,7 @@ uniform float brightness;
 
             if(texture(diffuse, vec3(TexCoords.x - tex_offset.x*4.0, TexCoords.y - tex_offset.y*4.0, arrayTexID)).r > 0.5) {
                    color = vec3(0,0,0);
-                alpha = 1.0;
+                a = 1.0;
             }
           /**  if(texture(diffuse, vec3(TexCoords.x, TexCoords.y + tex_offset.y*2.0, arrayTexID)).r > 0.5) {
                       color = vec3(0,0,0);
@@ -54,7 +55,7 @@ uniform float brightness;
                 alpha = 1.0;
             }**/
         }
-        FragColor = vec4(color,alpha);
+        FragColor = vec4(color,alpha*a);
         if (brightness > 0.0) {
         BrightColor = brightness * FragColor;
         }

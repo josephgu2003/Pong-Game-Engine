@@ -20,7 +20,6 @@ struct Particle {
     float duration = 0.0;
 };
 
-
 struct Character;
 
 class World;

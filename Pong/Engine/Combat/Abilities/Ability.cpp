@@ -13,11 +13,20 @@
 
 Ability::Ability(){}
 
-Ability::Ability(World* world_, Actor* actor_, float duration_) {
+Ability::Ability(World* world_, Actor* actor_, float duration_, std::weak_ptr<Actor>& target_) {
     world=world_;
     actor=actor_;
     duration = duration_;
     on = true;
+    step = 0;
+    target = target_;
+}
+
+Ability::Ability(World* world_, Actor* actor_, float duration_) {
+    world=world_;
+    actor=actor_;
+    duration = duration_;
+    on = true; 
     step = 0;
     target = std::weak_ptr<Actor>();
 };
@@ -28,6 +37,11 @@ Ability::~Ability() {
 
 void Ability::setTarget(const std::weak_ptr<Actor>& actor_) {
     target = actor_;
+    if (auto a = target.lock()) {
+        if (auto cc = a->getComponent<CombatComponent>()) {
+            cc->affect(shared_from_this());
+        }
+    }
 }
 
 void Ability::dispel() {
@@ -40,4 +54,12 @@ void Ability::dispel() {
 
 int Ability::getStep() {
     return step;
+}
+
+void Ability::notifyTarget() {
+    if (auto a = target.lock()) {
+        if (auto cc = a->getComponent<CombatComponent>()) {
+            cc->affect(shared_from_this());
+        }
+    }
 }

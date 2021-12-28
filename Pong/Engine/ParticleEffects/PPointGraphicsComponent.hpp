@@ -9,9 +9,13 @@
 #define PPointGraphicsComponent_hpp
 
 #include <stdio.h>
-#include "PGraphicsComponent.hpp"
+#include "GraphicsComponent.hpp"
 
-class PPointGraphicsComponent : public PGraphicsComponent {
+class ParticleSystem; 
+
+class PPointGraphicsComponent : public GraphicsComponent {
+    private:
+    float size;
     public:
     PPointGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map);
     ~PPointGraphicsComponent();

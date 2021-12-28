@@ -36,7 +36,7 @@ bool FPSControl::regulateFPS() {
     draws = draws + 1.0;
     if (fpsTimer > 2.0) {
         float fps = draws/2.0;
-        printf("Fps is %f\n", fps);
+     //   printf("Fps is %f\n", fps);
         fpsTimer = 0.0;
         draws = 0.0;
     }

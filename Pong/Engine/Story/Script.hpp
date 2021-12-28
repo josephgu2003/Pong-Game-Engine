@@ -14,28 +14,43 @@
 #include "Positionable.hpp"
 #include "Actor.hpp"
 #include "Watch.hpp"
-class World;
+#include "Speech.hpp"
+
+class World; 
 
 class Script : public Positionable {
 private:
+    bool prerequisitesDone;
+    std::vector<std::string> prerequisiteScenes;
+    std::string sceneName;
     bool checkAllHere();
     std::shared_ptr<Actor> dummy;
     float lastTime;
     float radius;
     std::unordered_map<std::string, std::weak_ptr<Actor>> actors;
+    bool completed;
+    std::weak_ptr<Speech> speechRef;
+    void checkPrerequisites();
 protected:
     Watch stopWatch;
     int step;
     World* world = nullptr;
     Actor* getActorNamed(std::string name);
+    std::weak_ptr<Actor> getActorRefNamed(std::string name);
     void incStep(bool resetTime);
     void waitFor(float duration);
     bool isWaiting();
     void newActor(std::string name, const std::shared_ptr<Actor>& actor);
+    void endScene();
+    void speak(const std::string& speaker, const std::string& spoken, float duration);
+    void makeSpeech(std::string speaker, std::vector<std::string>& lines, std::vector<float>& durations);
+    bool noActiveSpeech(); 
 public:
-    Script(World* world, std::vector<std::string> crew, float radius);
+    Script(World* world, std::vector<std::string> crew, float radius, bool completed, std::string scenenName, std::vector<std::string> prerequisiteScenes_);
     void tick();
-    virtual void act() = 0; 
+    virtual void act() = 0;
+    bool isComplete();
+    const std::string& getName();
 };
 
 #endif /* ScriptEvent_hpp */

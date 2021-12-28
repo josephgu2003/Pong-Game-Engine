@@ -11,19 +11,44 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Particle.hpp"
+#include "Renderer.hpp"
 
-PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size_, Shader* shader, const Material& map) : PGraphicsComponent(pe, size_, shader, map){ 
+PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size_, Shader* shader, const Material& map) : GraphicsComponent(pe, shader, map, DRAW_TRANSPARENT) {
+    
+    shader->use();
+    shader->setUniform("size", size);
+    Renderer::bindShaderUniblock(shader, ViewProj);
+    // need to load model data to vao vbo,
+    type = GRAPHICS;
+    
+    drawCall = [] (Renderer* r, GraphicsComponent* gc) {
+        r->renderParticles(gc);
+    };
+    
     size = size_;
     int datasize = numberParticles * 17 * sizeof(float);
     std::vector<int> v = {4,4,4,4,1};
     VertexLoader::loadModelSimple(modelFile, VAO, VBO, EBO, numIndices);
     makeInstanceBuffer(datasize, 3, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
     drawTarget = GL_TRIANGLES;
-} 
+}
+
 PQuadGraphicsComponent::~PQuadGraphicsComponent() {
      
-}  
-PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size_, Shader* shader, const Material& map) : PGraphicsComponent(pe, size_, shader, map){
+}
+
+PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size_, Shader* shader, const Material& map) : GraphicsComponent(pe, shader, map, DRAW_TRANSPARENT) {
+    
+    shader->use();
+    shader->setUniform("size", size);
+    Renderer::bindShaderUniblock(shader, ViewProj);
+    // need to load model data to vao vbo,
+    type = GRAPHICS;
+    
+    drawCall = [] (Renderer* r, GraphicsComponent* gc) {
+        r->renderParticles(gc);
+    };
+    
     int datasize = numberParticles * 17 * sizeof(float);
     size = size_;
     std::vector<int> v = {4,4,4,4,1};
@@ -33,7 +58,7 @@ PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberPar
 }  
 
 void PQuadGraphicsComponent::tick() {
-    PGraphicsComponent::tick(); 
+    GraphicsComponent::tick();
     std::vector<float> v;
     int n = static_cast<ParticleSystem*>(actor)->getNumParticles();
     Particle* p = static_cast<ParticleSystem*>(actor)->getParticles();
@@ -51,7 +76,7 @@ void PQuadGraphicsComponent::tick() {
         float* mat = glm::value_ptr(modelMatr[0]);
             for (int l = 0; l < 16; l++) {
                 v[counter] = (mat[l]);
-                counter++;
+                counter++; 
             }
         v[counter] = particle.duration;
         counter++;

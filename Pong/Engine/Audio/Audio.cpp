@@ -11,7 +11,7 @@ Audio::Audio() {
     SoundEngine = irrklang::createIrrKlangDevice();
 }
 
-void Audio::playMusic() {
-SoundEngine->play2D("Resources/Audio/Music/New Recording 56.wav", true);
+void Audio::play(const std::string& file, bool looped) {
+    SoundEngine->play2D(file.c_str(), looped);
 }
 

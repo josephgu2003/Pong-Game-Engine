@@ -16,15 +16,16 @@
 #include "DirectionalLight.hpp"
 #include "AbilityManager.hpp" 
 #include <memory>
-#include "Batch.hpp"
-#include "uiText.hpp" 
-#include "Watch.hpp"
+#include "Batch.hpp" 
+#include "uiText.hpp"
 #include <unordered_map>
 #include "MapManager.hpp"
 #include "Prop.hpp"
 #include "Script.hpp"
+#include "Behaviour.hpp"
+#include "SoundTextManager.hpp"
 #include "WorldRenderingManager.hpp"
-
+ 
 typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
 struct Weather {
@@ -44,45 +45,33 @@ class Actor;
 struct Updates {
     bool lightingUpdate;
     bool fogUpdate;
-    bool textUpdate;
     bool skyUpdate;
 };
  
-struct SoundText {
-    std::string text;
-    glm::vec3 pos;
-    float duration;
-    SoundText(const std::string& text_, const glm::vec3& pos_, float duration_) {
-        text = text_;
-        pos = pos_;
-        duration = duration_;
-    }
-};
 
 // map: read from height map, 9 chunks at once, repeat vertices at edges (one vertex is one pixel)
 // 4 x 4 chunks, 
 
 class World {
 private:
+    SoundTextManager soundTextManager;
     WorldRenderingManager worldRenderingManager;
     MapManager mapManager;
     AbilityManager abilityManager;
+    
     Renderer* renderer = NULL;
-    
-    uiText* activeText = NULL;
-    uiFrame* textFrame = NULL;
-    
-    Updates updates = {false,false, false};
+
+    Updates updates = {false,false,false};
     Weather weather;
-    Watch globalTime;
       
     std::weak_ptr<Actor> playerHero;
+    
     std::vector<std::shared_ptr<Actor>> allActorPtrs;
     std::vector<std::shared_ptr<ParticleSystem>> allParticleEffects;
     std::vector<std::shared_ptr<Camera>> allCameraPtrs;
     std::vector<std::shared_ptr<Prop>> allProps;
     std::vector<std::shared_ptr<Script>> allScripts;
-    std::vector<std::shared_ptr<SoundText>> allSoundTexts;
+    std::vector<std::shared_ptr<Behaviour>> allBehaviours;
     
     void updateActiveText();
     void loadChunks(glm::vec3 pos);
@@ -93,7 +82,6 @@ private:
          worldRenderingManager.insertGraphicsComponent(gc);
      }
     }
-    void updateTexts();
     void drawAll();
     void tickAll();
 public:
@@ -106,6 +94,10 @@ public:
     void insert(const std::shared_ptr<T>& placeable) {
         if (typeid(T) == typeid(Prop)) {
             allProps.push_back(dynamic_pointer_cast<Prop>(placeable));
+        }
+        if (typeid(T) == typeid(Behaviour)) {
+            allBehaviours.push_back(dynamic_pointer_cast<Behaviour>(placeable));
+            dynamic_pointer_cast<Behaviour>(placeable)->start();
         } 
         if (typeid(T) == typeid(Actor)) {
             auto actor = dynamic_pointer_cast<Actor>(placeable);
@@ -128,6 +120,13 @@ public:
      
     template <typename T>
     void deleteX(T* t) {
+        if (typeid(T) == typeid(Behaviour)) {
+            for (int i = 0; i < allBehaviours.size(); i++) {
+                if (dynamic_cast<Behaviour*>(t) == allBehaviours.at(i).get()) {
+                    allBehaviours.erase(allBehaviours.begin()+i);
+                }
+            }
+        }
         if (typeid(T) == typeid(Script)) {
             for (int i = 0; i < allScripts.size(); i++) {
                 if (dynamic_cast<Script*>(t) == allScripts.at(i).get()) {
@@ -178,9 +177,7 @@ public:
     void setWeather(DirectionalLight dirLight_, float fogDensity_, float fogGradient_, glm::vec3 fogColor_, std::vector<std::string> skyTextureFiles_);
     Weather getWeather();  
      
-    void tick();
-    
-    void informActorProximity(Actor& actor, float radius);
+    void tick(); 
     
     const ActorList getNearActorsWith(Actor* actor, CompType ct)
     {
@@ -197,7 +194,7 @@ public:
         }
             return al; // make a null component or something
     }
-    
+    void newSoundText(const std::string& text, const glm::vec3& pos, float duration);
     bool getNearestActorWith(Actor* actor, CompType ct, Actor*& nearest)
     {  
         bool hasNear = false;
@@ -216,12 +213,12 @@ public:
 
     std::shared_ptr<Actor> getActorNamed(const std::string& name);
     
-    void newSoundText(const std::string& text, const glm::vec3& pos, float duration);
-    
     float getHeightAt(glm::vec2 xz);
 
     void markPlayerHero(const Actor* ph);
     Actor* getPlayerHero();
+    
+    bool isScriptComplete(const std::string& name);
 };
  
 

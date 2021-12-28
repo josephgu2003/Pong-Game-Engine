@@ -46,11 +46,11 @@ InputHandler::~InputHandler() {
      
 }
 
-void InputHandler::setCallbackforKey(int i, keyCallback cbk) {
-    if (keyCallbacks->find(i) == keyCallbacks->end()) {
-        keyCallbacks->insert(std::pair<int, keyCallback>(i, cbk));
+void InputHandler::setOneTapCallback(int i, keyCallback cbk) {
+    if (keyCallbacks->oneTapCallbacks.find(i) == keyCallbacks->oneTapCallbacks.end()) {
+        keyCallbacks->oneTapCallbacks.insert(std::pair<int, keyCallback>(i, cbk));
     } else { 
-        keyCallbacks->find(i)->second = cbk;
+        keyCallbacks->oneTapCallbacks.find(i)->second = cbk;
     } 
 } 
 
@@ -82,25 +82,10 @@ void InputHandler::tick() {
         }  
     }
      
-    if (auto player = game->getPlayerHero()) {
-    
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            player->posDir(0.09);
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            player->posDir(-0.09);
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            player->posRight(0.09);
-        }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            player->posRight(-0.09); 
-        }
-      
-    }
-    
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, GL_TRUE);
+    for (auto i = keyCallbacks->continuousCallbacks.begin(); i != keyCallbacks->continuousCallbacks.end(); i++) {
+        if (glfwGetKey(window, (*i).first) == GLFW_PRESS) {
+            (*i).second(game);
+        } 
     }
 }
 
@@ -138,8 +123,8 @@ void InputHandler::swapCursorMode() {
 } 
 
 int InputHandler::processInput(const KeyEvent& ke) {
-    auto call = keyCallbacks->find(ke.key);
-    if (ke.action == GLFW_PRESS && call != keyCallbacks->end()) {
+    auto call = keyCallbacks->oneTapCallbacks.find(ke.key);
+    if (ke.action == GLFW_PRESS && call != keyCallbacks->oneTapCallbacks.end()) {
         call->second(game);
         return 0;
     }
@@ -172,3 +157,11 @@ void InputHandler::clear() { // duplicate code, fix when more advanced callback 
     mode = KCALL_DEFAULT;
     keyCallbacks = &(callbackSets[KCALL_DEFAULT]);
 }
+
+void InputHandler::setContinuousCallback(int i, keyCallback cbk) {
+    if (keyCallbacks->continuousCallbacks.find(i) == keyCallbacks->continuousCallbacks.end()) {
+        keyCallbacks->continuousCallbacks.insert(std::pair<int, keyCallback>(i, cbk));
+    } else {
+        keyCallbacks->continuousCallbacks.find(i)->second = cbk;
+    }
+} 

@@ -13,7 +13,7 @@ DialogueMenu::DialogueMenu(glm::vec2 pos, glm::vec2 dimensions, const std::strin
     std::vector<QA> v = d->getQuestionsForTarget();
     for (int i = 0; i < v.size(); i++) {
         questionsOfMenu.push_back(v.at(i).question);
-        insertChild(std::make_shared<uiText>(v.at(i).question, pos.x+dimensions.x*0.1, pos.y+dimensions.y-0.2-0.1*i));
+        insertChild(std::make_shared<uiText>(v.at(i).question, pos.x+dimensions.x*0.1, pos.y+dimensions.y-0.2-0.1*i,DEFAULT_FONTSIZE, DEFAULT_LINESPACE));
     }
 } 
  

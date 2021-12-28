@@ -101,7 +101,7 @@ public:
     void renderInitial();
     void renderFinal();
     void checkForUpdates();
-    void renderParticles(GraphicsObject* r, int instanceCount);
+    void renderParticles(GraphicsObject* r);
     void renderTerrain(GraphicsObject* r);
     void renderFoliage(GraphicsObject* r);
     void renderGeneric(GraphicsObject* go);

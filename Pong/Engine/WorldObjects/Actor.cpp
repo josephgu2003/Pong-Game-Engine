@@ -54,10 +54,10 @@ void Actor::tick() {
     glm::mat4 RotationMatrix = toMat4(MyQuaternion);
     modelMat = modelMat * RotationMatrix; 
     
-    graphics->getShader()->setMat4("modelMat", modelMat);
+    graphics->getShader()->setUniform("modelMat", modelMat);
     
     glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    graphics->getShader()->setMat3("transposeInverseModelMat", transposeInverse);
+    graphics->getShader()->setUniform("transposeInverseModelMat", transposeInverse);
 }
 
 void Actor::posDir(float speed) {

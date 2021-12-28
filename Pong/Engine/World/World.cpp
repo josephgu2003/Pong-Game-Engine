@@ -16,7 +16,6 @@
 #include "Renderer.hpp"
 #include "PGraphicsComponent.hpp" 
 #include "WorldChunk.hpp"
-#include "uiFrame.hpp"
 #include "Script.hpp"
 
 World::World(Renderer* r) {
@@ -26,16 +25,10 @@ World::World(Renderer* r) {
         "Resources/Skybox/Default/top.png", "Resources/Skybox/Default/bottom.png",
         "Resources/Skybox/Default/back.png",
         "Resources/Skybox/Default/front.png"};
-    activeText = new uiText("", -0.5, -0.8);  // lmfao???
-    textFrame = new uiFrame(glm::vec2(-0.7, -0.9), glm::vec2(1.5,0.23), TEX_BLACK_GRADIENT);
-    textFrame->insertChild(std::shared_ptr<uiText>(activeText));
 } 
 
 World::~World() {
     renderer->setWorld(NULL);
-    if (textFrame) {
-        delete textFrame;
-    }
     if (allCameraPtrs.size() > 0) {
         allCameraPtrs.at(0)->setActor(nullptr); 
     }
@@ -55,7 +48,7 @@ void World::updateCleared(int i) {
     updates.lightingUpdate = false; 
     if (i == 1)
     updates.fogUpdate = false;
-    if (i == 3)
+    if (i == 2)
     updates.skyUpdate = false;
 }
  
@@ -74,34 +67,24 @@ Weather World::getWeather() {
     return weather;
 }
 
-void World::updateTexts() {
-    for(int i = 0; i < allSoundTexts.size(); i++) {
-        allSoundTexts.at(i)->duration -= (float) globalTime.getTime();
-        if (allSoundTexts.at(i)->duration <= 0.0) {
-            allSoundTexts.erase(allSoundTexts.begin()+i);
-            i -= 1;
-            updates.textUpdate = true;
-        }
-    }
-    globalTime.resetTime();
-    
-    if (updates.textUpdate) {
-        updateActiveText();
-    }
-
-}
- 
 void World::drawAll() {
     
-       mapManager.drawChunks(renderer);
+    mapManager.drawChunks(renderer);
         
-       worldRenderingManager.drawAll(renderer);
+    worldRenderingManager.drawAll(renderer);
        
-       if (textFrame)
-       textFrame->draw(renderer);
+    soundTextManager.drawAll(renderer);
 }
 
 void World::tickAll() {
+    for (auto i = allBehaviours.begin(); i != allBehaviours.end(); i++) {
+        if ((*i)->isRunning()) {
+        (*i)->tick();
+        } else {
+            deleteX<Behaviour>((*i).get());
+            i--;
+        }
+    }
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
         allCameraPtrs[i]->updateVecs();
@@ -126,26 +109,25 @@ void World::tickAll() {
     for (int i = 0; i < allParticleEffects.size(); i++) {
             allParticleEffects[i]->tick();
     }
+    
     abilityManager.tick();
+    if (auto ph = playerHero.lock()) {
+        soundTextManager.tick(ph->getPos());
+        mapManager.tick(ph->getPos()); 
+    }
+
 }
 
+void World::newSoundText(const std::string& text, const glm::vec3& pos, float duration) {
+    soundTextManager.newSoundText(text, pos, duration);
+}
 void World::tick() {
-    updateTexts();
-    
     tickAll();
     
     drawAll();
 }  
 
-void World::informActorProximity(Actor& actor, float radius) {
-    for (int i = 0; i < allActorPtrs.size(); i++) {
-        if (allActorPtrs.at(i).get() == &actor) continue;
-        if (actor.getDistanceTo(allActorPtrs.at(i).get()) <= radius) {
-            std::shared_ptr<Actor> t = (allActorPtrs.at(i));
-            actor.getComponent<CombatComponent>()->setBigTarget(t);
-        }
-    }
-} 
+
  
  
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
@@ -161,24 +143,6 @@ std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
     return dummy;
 }
 
-void World::newSoundText(const std::string& text, const glm::vec3& pos, float duration) {
-    std::shared_ptr<SoundText> st = std::make_shared<SoundText>(text, pos, duration);
-    allSoundTexts.push_back(std::move(st));
-    updates.textUpdate = true;
-} 
-  
-   
-void World::updateActiveText() {
-    if (allCameraPtrs.size() == 0) return; //spaggetti
-    std::string s = "";
-    for (int i = 0; i < allSoundTexts.size(); i++) {
-        if (glm::length(allSoundTexts.at(i)->pos - allCameraPtrs.at(0)->getPos()) < 30.0)
-         s.append(allSoundTexts.at(i)->text + "\n"); 
-    } 
-    activeText->setText(s);
-    updates.textUpdate = false;
-}
- 
  
 void World::setRenderer(Renderer *renderer_) {
     renderer = renderer_;
@@ -194,7 +158,7 @@ void World::setMap(const std::string& filePath, glm::vec3 scaling) {
 float World::getHeightAt(glm::vec2 xz) {
     return mapManager.getHeightAt(xz); 
 }
-
+  
 void World::markPlayerHero(const Actor* ph) {
     for (auto x : allActorPtrs) { 
         if (x.get() == ph) {
@@ -231,6 +195,15 @@ void World::loadChunks(glm::vec3 pos) {
         setHeightFor(i->get());
     } 
 }
+
+bool World::isScriptComplete(const std::string& name) {
+    for (auto i = allScripts.begin(); i != allScripts.end(); i++) {
+        if ((*i)->getName() == name && (*i)->isComplete()) {
+            return true;
+        }
+    }
+    return false;
+}
  
 
 // next steps:
@@ -252,3 +225,4 @@ void World::loadChunks(glm::vec3 pos) {
 // physics?
 // animation
 // graphics
+

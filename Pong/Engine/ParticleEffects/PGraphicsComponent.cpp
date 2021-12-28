@@ -14,25 +14,25 @@
 PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const Material& map_) : Component(pe), GraphicsObject(DRAW_TRANSPARENT){
     shader = shader_; 
     shader->use();
-    shader->setFloat("size", size); 
+    shader->setUniform("size", size); 
     Renderer::bindShaderUniblock(shader, ViewProj); 
     // need to load model data to vao vbo,
-    map = map_;
+    setSingularMaterial(map_);
     type = GRAPHICS;
-}
+} 
 
 PGraphicsComponent::~PGraphicsComponent() { 
     
 }
 void PGraphicsComponent::draw(Renderer* r) {
-    r->renderParticles(this, static_cast<ParticleSystem*>(actor)->getNumParticles());
+    r->renderParticles(this);
 }  
       
-void PGraphicsComponent::tick() {
+void PGraphicsComponent::tick() { 
     animateTextures();
 }
 
 void PGraphicsComponent::setColor(float r, float g, float b) {
     shader->use();
-    shader->setVec4("color", glm::vec4(r,g,b, 1.0));
+    shader->setUniform("color", glm::vec4(r,g,b, 1.0));
 }

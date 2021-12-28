@@ -12,7 +12,7 @@ AbilityManager::AbilityManager() {
     
 }
 
-void AbilityManager::tick() {
+void AbilityManager::tick() { 
 
     if (abilities.size() > 0) {
         for (int i = 0; i < abilities.size(); i++) {
@@ -35,7 +35,8 @@ void AbilityManager::handleCombatComp(CombatComponent* cc) {
             std::shared_ptr<Ability> a = q.at(j);
             abilities.push_back(std::move(a));
             q.at(j)->call();
+            q.at(j)->notifyTarget();
         } 
         q.clear();
     }
-}
+} 

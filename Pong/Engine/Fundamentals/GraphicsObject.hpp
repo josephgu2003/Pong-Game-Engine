@@ -29,23 +29,43 @@ struct TextureAnimation {
     TextureAnimation(const std::string& name, int maxFrames, float fps);
 };
 
+struct GraphicsUnit {
+    
+};
 enum DrawPass {
   DRAW_OPAQUE,
     DRAW_TRANSPARENT
 };
 
 class GraphicsObject { // benefits: keep VAO VBO EBO in the entity, not in teh renderer, much simpler, finally a way to unify ur rendering stuff
-protected:
+    
+    // multiple meshes: each mesh has its own draw call
+    
+    
+  // draw opaque mesh and transparent mesh -> house
+
+  // worst case , opaque mesh and transparent mesh with vastly different vertex types and shaders : one VAO VBO EBO shader material drawcall each
+  // medium case, different meshes with different calls and materials : one VAO VBO EBO one shader, different materials drawcalls
+  // best case, different calls for different meshes: one drawcall each
+
+  // struct GraphicsUnit {VAO VBO EBO shader material drawcall}
+  // want to share various things amongst them possibly
+    
+private:
+protected: 
     std::vector<TextureAnimation> textureAnimations;
+    Material map;
     DrawPass drawPass;
     Shader* shader = NULL;
     GLuint VAO;
+    GLuint instanceVBO;
     GLuint VBO;
     GLuint EBO;
     GLuint numIndices;  
-    GLuint instanceCount;  
-    Material map;
+    GLuint instanceCount;
     GLenum drawTarget;
+    void setSingularMaterial(const Material& map);
+    Material& getSingularMaterial();
     void makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount);
     void updateInstanceBuffer(const std::vector<float>& v);
     void updateVertexBuffer(VertexMesh* vm);
@@ -59,11 +79,11 @@ protected:
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
     }
 public:
+    GLuint getInstanceCount();
     void animateTextures();
     void setTextureAnimation(std::string frameIndexUniform, int numFrames, float fps);
     DrawPass getDrawPass();
     virtual ~GraphicsObject();
-    GLuint instanceVBO;
     GraphicsObject(DrawPass dp);
     Shader* getShader();
     void setShader(Shader* shader);

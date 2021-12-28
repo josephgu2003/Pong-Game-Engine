@@ -9,13 +9,14 @@
 #define PQuadGraphicsComponent_hpp
 
 #include <stdio.h>
-#include "PGraphicsComponent.hpp"
+#include "GraphicsComponent.hpp"
 
 class ParticleSystem;
  
-class PQuadGraphicsComponent : public PGraphicsComponent {
+class PQuadGraphicsComponent : public GraphicsComponent {
 private:
     float size;
+    
     public:
     PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size, Shader* shader, const Material& map);
     PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size, Shader* shader, const Material& map);

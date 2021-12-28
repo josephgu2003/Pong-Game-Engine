@@ -9,7 +9,11 @@
 #include "World.hpp"
 #include "NameComponent.hpp"
 
-Script::Script(World* world_, std::vector<std::string> crew, float radius_) : Positionable() {
+
+Script::Script(World* world_, std::vector<std::string> crew, float radius_, bool completed_, std::string sceneName_, std::vector<std::string> prerequisiteScenes_) : Positionable() {
+    prerequisitesDone = false;
+    prerequisiteScenes = prerequisiteScenes_;
+    sceneName = sceneName_;
     world = world_;
     radius = radius_;
     dummy = std::make_shared<Actor>();
@@ -20,11 +24,21 @@ Script::Script(World* world_, std::vector<std::string> crew, float radius_) : Po
     step = 0;
     stopWatch.resetTime();
     lastTime = -1.0f;
+    completed = completed_;
 }
+void Script::checkPrerequisites() {
+    prerequisitesDone = true;
+    for (auto i = prerequisiteScenes.begin(); i != prerequisiteScenes.end(); i++) {
+        if (!(world->isScriptComplete((*i)))) prerequisitesDone = false;
+    } 
+} 
 
 void Script::tick() {
-    if (checkAllHere()) {
-        act();
+    if (!prerequisitesDone) {
+        checkPrerequisites();
+    }
+    if (prerequisitesDone && !completed && checkAllHere()) {
+        act(); 
     }
 }
  
@@ -81,3 +95,42 @@ Actor* Script::getActorNamed(std::string name) {
     return nullptr;
 }
  
+
+void Script::endScene() {
+    completed = true;
+}  
+
+bool Script::isComplete() {
+    return completed;
+}
+
+
+void Script::makeSpeech(std::string speaker, std::vector<std::string>& lines, std::vector<float>& durations) {
+  std::shared_ptr<Speech> speech = std::make_shared<Speech>(getActorNamed(speaker), lines, durations);
+  speechRef = speech;
+  world->insert<Behaviour>(speech);
+}
+
+void Script::speak(const std::string& speaker, const std::string& spoken, float duration) {
+  getActorNamed(speaker)->getComponent<NameComponent>()->speak(spoken, duration);
+}
+
+bool Script::noActiveSpeech() {
+    auto ref = speechRef.lock();
+    return (!ref);
+}
+
+const std::string& Script::getName() {
+    return sceneName;
+}
+
+std::weak_ptr<Actor> Script::getActorRefNamed(std::string name) {
+    auto actor = actors.find(name);
+    if (actor != actors.end()) {
+        if (auto x = actor->second.lock()) {
+            if (!x->dummy)
+            return actor->second;
+        }
+    }
+    return std::weak_ptr<Actor>(); 
+}

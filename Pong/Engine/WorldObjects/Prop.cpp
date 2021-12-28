@@ -28,10 +28,10 @@ void Prop::tick() {
     
     GraphicsComponent* graphics = this->getComponent<GraphicsComponent>();
      
-    graphics->getShader()->setMat4("modelMat", modelMat);
+    graphics->getShader()->setUniform("modelMat", modelMat);
     
     glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-    graphics->getShader()->setMat3("transposeInverseModelMat", transposeInverse);
+    graphics->getShader()->setUniform("transposeInverseModelMat", transposeInverse);
 }
 
 void Prop::setWorld(World* world_) {

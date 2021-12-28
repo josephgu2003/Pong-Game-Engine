@@ -10,7 +10,8 @@
 #include <stdio.h>
 #include "World.hpp"
 
-#define CAM_OFFSET glm::vec3(0,1.5,0)
+#define CAM_OFFSET glm::vec3(0,0.3,0)
+
 Camera::Camera() : Positionable() {
 }
 
@@ -30,9 +31,9 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
     dirVec.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
     Positionable::GramSchmidtAndNormalizeOrientations();
     if (!actor) {
-        return; 
+        return;  
     }
-    posVec = actor->getPos()-dirVec*7.0f+CAM_OFFSET+actor->getDir();
+    posVec = actor->getPos()-dirVec*3.0f+CAM_OFFSET+actor->getDir();
     float h = actor->getPos().y;
     if (posVec.y < h) {
         posVec.x += (h-posVec.y)*dirVec.x/dirVec.y;

@@ -16,9 +16,9 @@ MapChunk::MapChunk(const unsigned short* heightMap, Material& mat, int mapWidth,
     shader->init("Shaders/TerrainVertex.vs", "Shaders/TerrainFragmentShader.fs"); 
     Renderer::bindShaderUniblock(shader, DistanceFog); 
     VertexLoader::loadMapChunk(heightMesh, heightMap,mapWidth,mapHeight, indexX_, indexY_, originPos_, scaling_, VAO, VBO, EBO, numIndices);
-    scaling = scaling_;  
+    scaling = scaling_;   
     originPos =  originPos_;
-    map = mat; 
+    setSingularMaterial(mat);
     Renderer::bindShaderUniblock(shader, ViewProj); 
     Renderer::bindShaderUniblock(shader, Lights);
     indexX = indexX_;

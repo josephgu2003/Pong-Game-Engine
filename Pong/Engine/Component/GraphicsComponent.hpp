@@ -17,7 +17,7 @@
   
 class Shader;
 
-struct FrameAndShader { 
+struct FrameAndShader {
     Frame* frame = NULL;
     Shader* shader = NULL;
 };
@@ -28,7 +28,6 @@ class GraphicsComponent;
 
 typedef void (*DrawCall) (Renderer*, GraphicsComponent*);
 
-
 class GraphicsComponent : public Component, public GraphicsObject { // for actors
 protected:
     std::weak_ptr<VertexMesh> mesh;
@@ -36,11 +35,12 @@ protected:
 public:
     GraphicsComponent(Componentable& actor, Shader* shader, const Material& map, DrawPass dp);
     virtual ~GraphicsComponent();
-    void initModel(const std::string& model); 
+    virtual void initModel(const std::string& model); 
     void initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh);
     virtual void tick() override;
     virtual void draw(Renderer* r) override;
     void setDrawCall(DrawCall dc);
+    void setColor(float r, float g, float b);
 }; 
    
 

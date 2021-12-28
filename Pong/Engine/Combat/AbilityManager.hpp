@@ -14,6 +14,8 @@
 #include "Actor.hpp"
 
 class CombatComponent;
+
+// abilities need targets:  
  
 class AbilityManager {
 private:

@@ -19,7 +19,7 @@
 #include "Componentable.hpp"
 #include "Positionable.hpp"
 
-//something that can move and has a model
+//something that can move and has a model 
 
 class World;
 class Ability;
@@ -68,3 +68,4 @@ public:
 };
 
 #endif /* Actor_hpp */
+ 

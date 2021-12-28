@@ -37,13 +37,14 @@ public:
     void init(const char* vertexPath,const char* geoPath, const char* fragmentPath);
     
     //set uniform variables
-    void setBool(const std::string &name, bool value) const;
-    void setInt(const std::string &name, int value) const;
-    void setFloat(const std::string &name, float value) const;
-    void setVec3(const std::string &name, glm::vec3 vector) const;
-    void setVec4(const std::string &name, glm::vec4 vector) const;
-    void setMat4(const std::string &name, glm::mat4& matrix);
-    void setMat3(const std::string &name, glm::mat3& matrix);
+    void setUniform(const std::string &name, bool value) const;
+    void setUniform(const std::string &name, int value) const;
+    void setUniform(const std::string &name, float value) const;
+    void setUniform(const std::string &name, double value) const;
+    void setUniform(const std::string &name, const glm::vec3& vector) const;
+    void setUniform(const std::string &name, const glm::vec4& vector) const;
+    void setUniform(const std::string &name, glm::mat4& matrix);
+    void setUniform(const std::string &name, glm::mat3& matrix);
 };
 
 #endif /* Shader_hpp */

@@ -8,7 +8,7 @@
 #ifndef JsonManager_hpp
 #define JsonManager_hpp
 
-#define SAVE_PATH "MyGame/SaveFile.json"
+#define SAVE_PATH "Resources/GameData/SaveFile.json"
  
 #include <stdio.h>
 #include <string>
@@ -25,7 +25,7 @@ class PropFactory;
 class ParticleFactory;
 class ScriptFactory;
 struct DialogueTree;
-
+ 
 class Relationship;
 
 class Dialogue;
@@ -38,7 +38,8 @@ public:
     static void loadGameLevel(GameLevel* game, AbstractActorFactory* af, PropFactory* propf, ParticleFactory* pf, ScriptFactory* sf);
     static void saveGameLevel(GameLevel* game);
     static bool checkRelationshipLoaded(std::string aname, std::string bname, RelationShipType type, const std::vector<std::shared_ptr<Relationship>>&  loaded);
-}; 
+};
+
 
 
 #endif /* JsonManager_hpp */

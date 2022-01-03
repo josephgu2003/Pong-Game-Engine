@@ -15,7 +15,7 @@
 #include "AbstractActorFactory.hpp"
 #include "PropFactory.hpp"
 #include "ScriptFactory.hpp"
-
+#include "ScriptSystem.hpp"
 
 nlohmann::json JsonManager::dialogues;
 
@@ -42,11 +42,11 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
             std::shared_ptr<Script> script = sf->makeScript(FactoryEnum, &world, completed);
             glm::vec3 pos; 
             loadPos(pos, (*i));
-            
-            script->setPos(pos); 
-            level->getWorld(worldID).insert<Script>(script);
+             
+            script->setPos(pos);
+            level->getWorld(worldID).getComponent<ScriptSystem>()->insertScript(script);
         }  
-        
+         
         if ((*i)["Type"] == "Prop") {
             int FactoryEnum = (*i)["FactoryEnum"];
             std::shared_ptr<Prop> actor = propf->makeProp(FactoryEnum); // lmao still "actor"??

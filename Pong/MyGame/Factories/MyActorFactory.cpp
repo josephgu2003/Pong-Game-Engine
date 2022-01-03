@@ -15,7 +15,7 @@
 #include "NameComponent.hpp"
 #include "LifeComponent.hpp"
 #include "AIComponent.hpp"
-#include "Shader.hpp" 
+#include "Shader.hpp"  
 #include "Renderer.hpp"
 #include "MeshComponent.hpp"
 #include <functional> 
@@ -156,7 +156,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
  
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
-        shader->setUniform("animated", false);
+        shader->setUniform("animated", false); 
         shader->setUniform("size", 0.005); 
         shader->setUniform("brightness", 0.0); 
           

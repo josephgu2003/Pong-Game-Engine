@@ -11,8 +11,7 @@
 #include <stdio.h>
 #include "Ability.hpp"
 #include <memory> 
-#include "Actor.hpp"
-
+#include <vector> 
 class CombatComponent;
 
 // abilities need targets:  

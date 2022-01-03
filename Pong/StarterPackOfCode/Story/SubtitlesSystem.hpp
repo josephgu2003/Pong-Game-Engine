@@ -16,21 +16,21 @@
 #include <vector>
 #include "uiFrame.hpp"
 #include "uiText.hpp"
+#include "WorldSubSystem.hpp"
+
 class Renderer;
 struct SoundText {
     std::string text;
-    glm::vec3 pos;
     float duration;
     float maxDuration;
-    SoundText(const std::string& text_, const glm::vec3& pos_, float duration_) {
+    SoundText(const std::string& text_, float duration_) {
         text = text_;
-        pos = pos_;
         duration = duration_;
         maxDuration = duration_;
     }
-};
-
-class SoundTextManager {
+}; 
+  
+class SubtitlesSystem : public WorldSubSystem {
 private:
     std::weak_ptr<uiText> activeText;
     std::unique_ptr<uiFrame> textFrame;
@@ -38,12 +38,12 @@ private:
     
     bool update;
     Watch globalTime;
-    void updateActiveText(const glm::vec3& pos);
+    void updateActiveText();
 public:
-    SoundTextManager();
-    void newSoundText(const std::string& text, const glm::vec3& pos, float duration);
-    void drawAll(Renderer* r);
-    void tick(const glm::vec3& pos);
+    SubtitlesSystem(World& w);
+    void newSoundText(const std::string& text, float duration);
+    void drawAll(Renderer* r) override;
+    void tick() override;
 };
 
 #endif /* SoundTextManager_hpp */

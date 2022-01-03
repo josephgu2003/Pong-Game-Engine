@@ -56,7 +56,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
         int numParticles = 100;
         particle = std::make_shared<ParticleSystem>(numParticles, 1000.0); 
         AssetManager::loadTexture(TEX_MIST, &map.alphaMap, false);
-        shader->init("Shaders/Billboard.vs", "Shaders/MistFShader.fs");
+        shader->init("Shaders/Billboard.vs", "Shaders/MistFShader.fs"); 
         particle->addComp<PQuadGraphicsComponent>(*particle.get(), numParticles, 60.0, shader, map);
         particle->addComp<PRefreshComponent>(*particle.get(), 20.0, 5, 10.0, glm::vec3(250,2,250), glm::vec3(0, 0, 0), glm::vec3(0.05, 0, 0.02));
         particle->addComp<PPhysicsComponent>(*particle.get(), 0, 1.0); 
@@ -87,7 +87,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             //particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,1,0));
             break; 
         };
-            
+             
         case PE_SNOW: { 
             int numParticles = 2000;
             particle = std::make_shared<ParticleSystem>(numParticles, 2000.0);

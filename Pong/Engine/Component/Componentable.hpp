@@ -9,12 +9,12 @@
 #define Componentable_hpp
 
 #include <stdio.h>
-#include <vector>
+#include <vector> 
 #include "Component.hpp"
 #include <memory>
 
 class Componentable {
-private:
+protected:
     std::vector<std::shared_ptr<Component>> components;
 public:
     Componentable() {
@@ -80,11 +80,11 @@ public:
             return false; // make a null component or something
  
     }
-
+  
     template <typename compType>
-    compType* getComponent()
+    compType* getComponent() 
     {
-        for (int i = 0 ; i < components.size(); i++) {
+        for (int i = 0 ; i < components.size(); i++) { 
             if (dynamic_cast<compType*>(components.at(i).get()) != NULL) {
                 return static_cast<compType*>(components.at(i).get());
             }

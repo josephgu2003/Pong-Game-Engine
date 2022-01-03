@@ -10,9 +10,6 @@
 
 #include <stdio.h>
 #include "World.hpp"
-#include "uiLayout.hpp"
-#include "InputHandler.hpp"
-#include <map>
 
 class Renderer;
 
@@ -20,12 +17,18 @@ class GameLevel {
 private:
     std::vector<std::shared_ptr<World>> worlds;
     std::weak_ptr<World> activeWorld;
+    Renderer* renderer = nullptr;
     std::string nextLevel = "";
+    std::string name;
 public:
-    GameLevel(Renderer* r, int numWorlds);
+    GameLevel(Renderer* r, int numWorlds, std::string name);
+    ~GameLevel();
+    std::string getName();
     std::string tick();
     World* getActiveWorld();
+    int getNumWorlds();
     World& getWorld(int i);
+    void swapWorld(int i);
     void changeLevel(std::string newLevel);
 };
 

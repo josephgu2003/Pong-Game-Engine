@@ -8,7 +8,6 @@
 #include "Particle.hpp"
 #include "World.hpp"
  
-
 ParticleSystem::ParticleSystem(int numParticles_, float duration_) {
     particles = new Particle[numParticles_];
     numParticles = numParticles_;  

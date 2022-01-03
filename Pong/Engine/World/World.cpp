@@ -5,7 +5,7 @@
 //  Created by Joseph Gu on 5/3/21.
 //
 
-#include "World.hpp"
+#include "World.hpp" 
 #include <iostream>
 #include <stdio.h> 
 #include "AssetManager.hpp"
@@ -17,6 +17,8 @@
 #include "PGraphicsComponent.hpp" 
 #include "WorldChunk.hpp"
 #include "Script.hpp"
+ 
+std::vector<addSubSystem> World::worldSubSystemsTemplate;
 
 World::World(Renderer* r) {
     renderer = r;
@@ -25,16 +27,17 @@ World::World(Renderer* r) {
         "Resources/Skybox/Default/top.png", "Resources/Skybox/Default/bottom.png",
         "Resources/Skybox/Default/back.png",
         "Resources/Skybox/Default/front.png"};
+    for (auto i = worldSubSystemsTemplate.begin(); i != worldSubSystemsTemplate.end(); i++) {
+        addComp((*i)(*this));
+    }
 } 
 
 World::~World() {
-    renderer->setWorld(NULL);
     if (allCameraPtrs.size() > 0) {
         allCameraPtrs.at(0)->setActor(nullptr); 
     }
 }  
 
- 
 std::vector<std::string>* World::getSkyTextureFiles() {
     return &weather.skyTextureFiles; 
 }
@@ -72,11 +75,17 @@ void World::drawAll() {
     mapManager.drawChunks(renderer);
         
     worldRenderingManager.drawAll(renderer);
-       
-    soundTextManager.drawAll(renderer);
+    
+    for (auto i = components.begin(); i != components.end(); i++) {
+        static_pointer_cast<WorldSubSystem>((*i))->drawAll(renderer);
+    }
+        
+   // soundTextManager.drawAll(renderer);
 }
 
 void World::tickAll() {
+    Componentable::tick();
+    
     for (auto i = allBehaviours.begin(); i != allBehaviours.end(); i++) {
         if ((*i)->isRunning()) {
         (*i)->tick();
@@ -85,14 +94,15 @@ void World::tickAll() {
             i--;
         }
     }
+    
     for(int i = 0; i < allCameraPtrs.size(); i++) {
         allCameraPtrs[i]->tick();
         allCameraPtrs[i]->updateVecs();
     }
     
-    for(int i = 0; i < allScripts.size(); i++) {
-        allScripts[i]->tick();
-    }
+  //  for(int i = 0; i < allScripts.size(); i++) {
+   //     allScripts[i]->tick();
+  //  }
 
     for(int i = 0; i < allActorPtrs.size(); i++) {
         allActorPtrs[i]->tick();
@@ -112,23 +122,17 @@ void World::tickAll() {
     
     abilityManager.tick();
     if (auto ph = playerHero.lock()) {
-        soundTextManager.tick(ph->getPos());
+     //   soundTextManager.tick(ph->getPos());
         mapManager.tick(ph->getPos()); 
     }
 
 }
 
-void World::newSoundText(const std::string& text, const glm::vec3& pos, float duration) {
-    soundTextManager.newSoundText(text, pos, duration);
-}
 void World::tick() {
     tickAll();
     
     drawAll();
-}  
-
-
- 
+}
  
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
     for (auto i = allActorPtrs.begin(); i != allActorPtrs.end(); i++) {
@@ -182,11 +186,7 @@ void World::loadChunks(glm::vec3 pos) {
         glm::vec2 newPos = glm::vec2(currentPos.x, currentPos.z);
         positionable->setPosY(mapManager.getHeightAt(newPos));
     }; 
-    
-    for(int i = 0; i < allScripts.size(); i++) {
-        setHeightFor(allScripts[i].get());
-    } 
- 
+
     for(int i = 0; i < allActorPtrs.size(); i++) {
         setHeightFor(allActorPtrs[i].get());
     }
@@ -196,15 +196,7 @@ void World::loadChunks(glm::vec3 pos) {
     } 
 }
 
-bool World::isScriptComplete(const std::string& name) {
-    for (auto i = allScripts.begin(); i != allScripts.end(); i++) {
-        if ((*i)->getName() == name && (*i)->isComplete()) {
-            return true;
-        }
-    }
-    return false;
-}
- 
+
 
 // next steps:
 // world objects class hierarchy

@@ -12,10 +12,7 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-#include "Actor.hpp"
 #include "Camera.hpp"
-#include "Dialogue.hpp"
-#include "Sketch.hpp"
 #include <memory>
 #include <map>
 #include <queue>

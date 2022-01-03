@@ -7,12 +7,12 @@
 
 #include "CombatComponent.hpp"
 #include "Actor.hpp"
-#include "World.hpp"
+ 
 CombatComponent::CombatComponent(Actor& actor) : Component(actor) {
     Component::type = COMBAT;
     affecting = std::weak_ptr<Ability>();
 }
- 
+  
 void CombatComponent::tick() {
    // static_cast<Actor*>(actor)->getWorld().informActorProximity(*static_cast<Actor*>(actor), 5);
 } 

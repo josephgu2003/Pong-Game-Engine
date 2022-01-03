@@ -11,6 +11,7 @@
 #include "LifeComponent.hpp"
 #include "PGraphicsComponent.hpp"
 #include <algorithm>
+#include "AnimComponent.hpp" 
 
 std::vector<std::string> myCrewWU = {
     "Floro", "Moonbell" 
@@ -104,6 +105,7 @@ void ScriptWakeUp::act() {
                 snow = pf.makeParticles(PE_SNOW, getActorNamed("Moonbell")->getPos()+glm::vec3(0,2,0));
                 snow->getComponent<GraphicsComponent>()->setColor(0.2, 0.2, 0.2);
                 world->insert<ParticleSystem>(snow);
+            world->insert<ParticleSystem>(pf.makeParticles(PE_MIST, getActorNamed("Moonbell")->getPos()+glm::vec3(0,2,0)));
                 getActorNamed("Floro")->setPos(posVec+glm::vec3(5,0,-5));
                 getActorNamed("Floro")->getComponent<AnimComponent>()->playAnim("Lying", true);
                 introPoem.step = 0;

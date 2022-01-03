@@ -11,7 +11,7 @@
 
 LifeComponent::LifeComponent(Actor& actor) : Component(actor) {
     type = LIFE;
-}
+} 
 
 void LifeComponent::tick() {
     float elapsedT = (float)glfwGetTime();

@@ -16,7 +16,7 @@
 enum ActorEnum {
     ACTOR_HOODY,
     ACTOR_EVIL_HOODY, 
-    ACTOR_BIRD,
+    ACTOR_BIRD, 
     ACTOR_VAMP,
     ACTOR_SCARF_CHAR,
     ACTOR_FISH,

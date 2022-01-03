@@ -5,16 +5,16 @@
 //  Created by Joseph Gu on 12/22/21.
 //
 
-#include "SoundTextManager.hpp"
+#include "SubtitlesSystem.hpp"
  
 
-void SoundTextManager::newSoundText(const std::string& text, const glm::vec3& pos, float duration) {
+void SubtitlesSystem::newSoundText(const std::string& text, float duration) {
     soundText.reset();
-    soundText = std::make_unique<SoundText>(text, pos, duration);
+    soundText = std::make_unique<SoundText>(text, duration);
     update = true;
 }
   
-void SoundTextManager::updateActiveText(const glm::vec3& pos) {
+void SubtitlesSystem::updateActiveText() {
     std::string s = "";
     if (soundText.get()) {
         s = soundText->text;
@@ -25,11 +25,11 @@ void SoundTextManager::updateActiveText(const glm::vec3& pos) {
     update = false;
 } 
 
-void SoundTextManager::drawAll(Renderer* r) {
+void SubtitlesSystem::drawAll(Renderer* r) {
     textFrame->draw(r);
 } 
 
-void SoundTextManager::tick(const glm::vec3& pos) {
+void SubtitlesSystem::tick() {
     if (soundText.get()) {
         soundText->duration -= (float) globalTime.getTime();
          
@@ -55,11 +55,11 @@ void SoundTextManager::tick(const glm::vec3& pos) {
     globalTime.resetTime();
     
     if (update) {
-        updateActiveText(pos);
-    } 
+        updateActiveText();
+    }  
 }
-
-SoundTextManager::SoundTextManager() { 
+ 
+SubtitlesSystem::SubtitlesSystem(World& w) : WorldSubSystem(w) {
     update = false; 
     std::shared_ptr<uiText> text = std::make_shared<uiText>("", -0.5, -0.8, DEFAULT_FONTSIZE, DEFAULT_LINESPACE, 1.0);
     activeText = text;// lmfao??? 

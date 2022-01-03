@@ -33,6 +33,7 @@ public:
     Component(Componentable& compUser_) {
         actor = &compUser_;
     }
+    
     virtual ~Component() {
         
     }

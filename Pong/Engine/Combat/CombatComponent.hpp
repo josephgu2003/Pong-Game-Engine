@@ -11,11 +11,13 @@
 #include <stdio.h>
 #include "Component.hpp"
 #include <memory>
-#include "Actor.hpp"
 #include "Ability.hpp"
+#include <vector>
 
 //for abilities and fighting people, prob do some stuf with buffs, debuffs
 // lvl blah blah
+
+class Actor;
 
 class CombatComponent : public Component {
 private:

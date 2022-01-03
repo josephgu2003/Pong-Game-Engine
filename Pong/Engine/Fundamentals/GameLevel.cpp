@@ -3,16 +3,22 @@
 //  Pong
 //
 //  Created by Joseph Gu on 11/26/21.
-//
+// 
 
 #include "GameLevel.hpp"
 #include "Renderer.hpp"
 
-GameLevel::GameLevel(Renderer* r, int numWorlds) {
+GameLevel::~GameLevel() {
+    renderer->setWorld(nullptr);
+}
+
+GameLevel::GameLevel(Renderer* r, int numWorlds, std::string name_) {
+    name = name_;
     for (int i = 0; i < numWorlds; i++) {
         worlds.push_back(std::make_shared<World>(r));
-    }  
-    activeWorld = worlds.at(0);
+    }
+    renderer = r;
+    swapWorld(0);
     r->setWorld(worlds.at(0).get()); 
 } 
 
@@ -40,3 +46,19 @@ World& GameLevel::getWorld(int i) {
 void GameLevel::changeLevel(std::string newLevel) {
     nextLevel = newLevel;
 }
+
+void GameLevel::swapWorld(int i) {
+    activeWorld = worlds.at(i);
+    renderer->setWorld(worlds.at(i).get());
+}
+
+std::string GameLevel::getName() {
+    return name;
+    
+}
+
+int GameLevel::getNumWorlds() {
+    return worlds.size();
+}
+
+

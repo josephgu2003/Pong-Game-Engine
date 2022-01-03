@@ -18,7 +18,6 @@
 #include "Watch.hpp"
 class Actor;
 
-
 typedef std::map<std::string, BoneData> BoneInfoMap;
 
 class AnimComponent : public Component {
@@ -31,8 +30,8 @@ protected:
     std::vector<Animation> animations;
      
     bool loopCurrent;
-    int starttick;
-    int endtick;
+    int starttick; 
+    int endtick; 
 
     glm::mat4 globalInverse;
     std::vector<AssimpNodeData> boneNodes; 

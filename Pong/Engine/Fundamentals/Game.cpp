@@ -36,7 +36,7 @@ Game::Game() {
     linkObjects();
 
     printf("%s\n", glGetString(GL_VERSION));
-    Shader::loadFunctionDefinitions(); 
+    Shader::loadFunctionDefinitions();
   //  audio.playMusic(); //sus 
 }
 
@@ -62,10 +62,10 @@ void Game::initWindow() {
   
 void Game::initObjects() { 
     ui = std::make_shared<uiLayout>(); 
-    camera = std::make_shared<Camera>();
+    camera = std::make_shared<Camera>(); 
     renderer = new Renderer();
-    
-    activeLevel = std::make_unique<GameLevel>(renderer, 1);
+    saveSystem = std::unique_ptr<SaveSystem>(); 
+    activeLevel = std::make_unique<GameLevel>(renderer, 1, "placeholder");
 }
                     
 void Game::linkObjects() {  
@@ -104,7 +104,7 @@ void Game::tick() {
  
 
 void Game::end() {
-    JsonManager::saveGameLevel(activeLevel.get());
+    saveLevel(activeLevel.get());
     glfwTerminate(); 
 }
 
@@ -159,3 +159,17 @@ Actor* Game::getPlayerHero() {
     }
     return nullptr;
 }
+
+void Game::setSaveSystem(SaveSystem* s) {
+
+    saveSystem.reset(s);
+}
+
+void Game::loadLevelSaveFile(GameLevel* g) {
+    saveSystem->loadGameLevel(g);
+}
+
+void Game::saveLevel(GameLevel* g) {
+    saveSystem->saveGameLevel(g);
+} 
+ 

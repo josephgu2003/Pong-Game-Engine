@@ -8,7 +8,7 @@
 #include "Script.hpp"
 #include "World.hpp"
 #include "NameComponent.hpp"
-
+#include "ScriptSystem.hpp"
 
 Script::Script(World* world_, std::vector<std::string> crew, float radius_, bool completed_, std::string sceneName_, std::vector<std::string> prerequisiteScenes_) : Positionable() {
     prerequisitesDone = false;
@@ -29,8 +29,8 @@ Script::Script(World* world_, std::vector<std::string> crew, float radius_, bool
 void Script::checkPrerequisites() {
     prerequisitesDone = true;
     for (auto i = prerequisiteScenes.begin(); i != prerequisiteScenes.end(); i++) {
-        if (!(world->isScriptComplete((*i)))) prerequisitesDone = false;
-    } 
+        if (!(world->getComponent<ScriptSystem>()->isScriptComplete((*i)))) prerequisitesDone = false;
+    }  
 } 
 
 void Script::tick() {

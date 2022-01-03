@@ -10,6 +10,8 @@
 #include "World.hpp"
 #include "Renderer.hpp"
 #include "JsonManager.hpp"
+#include "SubtitlesSystem.hpp"
+ 
 
 Dialogue::Dialogue(World* world_, Actor* actor_, float duration_, int id) : Ability::Ability(world_, actor_, duration_) {
     JsonManager::loadDialogue(this, id);
@@ -20,7 +22,7 @@ void Dialogue::call() {
     on = true;
     paused = false;
    // world->setActiveText(getCurrentLines().at(counter));
-world->newSoundText(currentTree->lines.at(step), actor->getPos(), 5.0f);
+world->getComponent<SubtitlesSystem>()->newSoundText(currentTree->lines.at(step), 5.0f);
     activeText = currentTree->lines.at(step);
     step++; 
 }
@@ -40,7 +42,7 @@ void Dialogue::tick() {
     }
     if (elapsetime > 3.0 && !paused) {
      //   world->setActiveText(getCurrentLines().at(counter));
-        world->newSoundText(currentTree->lines.at(step), actor->getPos(), 5.0f);
+        world->getComponent<SubtitlesSystem>()->newSoundText(currentTree->lines.at(step), 5.0f);
         activeText = currentTree->lines.at(step);
         step++;
         elapsetime = 0;

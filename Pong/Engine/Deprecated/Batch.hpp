@@ -7,7 +7,7 @@
 
 #ifndef Batch_hpp
 #define Batch_hpp
-
+/**
 #include <stdio.h>
 #include <GL/glew.h>
 #define GLFW_DLL
@@ -15,7 +15,7 @@
 #include <vector>
 #include <map>
 #include "VertexData.hpp"
-#include "VertexLoader.hpp"
+#include "VertexLoader.hpp"**/
 /**
 struct VertexIndexByteStride {
     unsigned int VertexByteStride;

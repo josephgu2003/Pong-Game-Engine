@@ -12,9 +12,20 @@ Phoenix : Original model phoenix bird  by (c)  NORBERTO-3D, available under CC-B
 
 Sunny sky: The Chayed: https://opengameart.org/content/sky-box-sunny-day , © under CC-BY 3.0
 Grass: https://opengameart.org/content/grass-texture-pack-grass-texture-3jpg
-Snow: https://opengameart.org/content/seamless-snow-texture-0
+Snow: https://opengameart.org/content/seamless-snow-texture-0, https://www.goodtextures.com/image/20000/snow-ice-01-normal
+
 Well :https://sketchfab.com/3d-models/well-b90de48341c1467493e87a4236882564
   
+EXTERNAL LIBRARY CREDITS
+OpenGL - Graphics API
+GLFW - graphics
+GLEW - graphics
+Assimp - model loading
+stb_image - image loading
+Irrklang - audio
+Truetype - font loading
+
+
 Navigation:
 Engine - the core engine
 StarterPackOfCode - some code I've written, not essential to engine, like plug-ins 

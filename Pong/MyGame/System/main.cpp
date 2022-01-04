@@ -10,19 +10,17 @@
 #include "MyGame.hpp"
 
 int main() {
-    
     MyGame game;
  
     game.init(); 
-    while(game.running)
+    while(game.running) 
 
     {
         game.tick();
     } 
     
     game.end();
-
-     
+    
     return 0;
     
 }

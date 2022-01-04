@@ -91,7 +91,7 @@ void LifeComponent::incStatValue(float increment, StatType st) {
         stat.value = stat.max; 
     } else if (newValue <= 0.0) {
         stat.value = 0.0; 
-    }
+    } 
     if (st == STAT_LIFE) {
         notifyAll(SUBJ_HP_CHANGED);
     }

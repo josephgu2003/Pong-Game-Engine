@@ -205,12 +205,13 @@ void MyGame::setupLvlBuilder() {
         MyLevelSerializer lvlmake;
         lvlmake.loadLevelWorlds(lvl);
         lvl->getWorld(0).setMap("Resources/Map/landscape.png", glm::vec3(0.4, 0.001, 0.4));
-            
-        std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>();
-        auto player = lvl->getActiveWorld()->getPlayerHero(); 
+        
+        auto player = lvl->getActiveWorld()->getPlayerHero();
         auto playerlife = player->getComponent<LifeComponent>();
+             
+        std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>(-0.85, 0.7);
         playerlife->addObserver(hm);
-        hm->notify(*playerlife, SUBJ_HP_CHANGED);
+        hm->notify(*playerlife, SUBJ_HP_CHANGED); 
           
         auto uf = std::make_shared<uiFrame>(glm::vec2(-0.90,0.65), glm::vec2(0.2,0.3), TEX_BLACK_GRADIENT);
         uf->insertChild(hm);
@@ -224,8 +225,11 @@ void MyGame::setupLvlBuilder() {
         ufmana->insertChild(manaMeter);
         ui->insertNode(ufmana); 
         
-        auto inventory = std::make_shared<Inventory>(glm::vec2(-1.0,-1.0), glm::vec2(2.0,2.0));
+        std::weak_ptr<InventoryComponent> invref;
+        player->getComponentRef(invref);
+        auto inventory = std::make_shared<Inventory>(invref,glm::vec2(-1.0,-1.0), glm::vec2(2.0,2.0));
         g->getInputHandler().addObserver(inventory);
+        player->getComponent<InventoryComponent>()->addObserver(inventory);
         ui->insertNode(inventory);  
            
         auto dpt = std::make_shared<DevPosTracker>(0.5,0.8, 0.5,0.5);

@@ -13,8 +13,8 @@ void LevelSerializer::loadLevelWorlds(GameLevel *g){
    std::ifstream inStream(GAMELVLS_PATH);
    inStream >> saveFile; 
     
-   nlohmann::json lvlSave = saveFile.find(g->getName()).value();
-    float s = lvlSave.size(); 
+   nlohmann::json lvlSave = saveFile.find(g->getName()).value(); 
+
    for (int i = 0; i < lvlSave.size(); i++) { // iterate over objects {worldid : ....}, ...
        nlohmann::json& worlddata = lvlSave[i];
        World* w = &(g->getWorld(worlddata.find("WorldID").value()));

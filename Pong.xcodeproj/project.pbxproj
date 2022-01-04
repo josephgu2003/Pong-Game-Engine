@@ -287,6 +287,9 @@
 		5DBC1BA4277E47690016ED16 /* SaveGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BA2277E47690016ED16 /* SaveGame.cpp */; };
 		5DBC1BA7277F78630016ED16 /* MySaveGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BA5277F78630016ED16 /* MySaveGame.cpp */; };
 		5DBC1BAA277F8E480016ED16 /* MyLevelSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BA8277F8E480016ED16 /* MyLevelSerializer.cpp */; };
+		5DBC1BAE278288520016ED16 /* InventoryComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BAC278288520016ED16 /* InventoryComponent.cpp */; };
+		5DBC1BB1278288C00016ED16 /* GameItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BAF278288C00016ED16 /* GameItem.cpp */; };
+		5DBC1BB4278296C50016ED16 /* InventoryItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BB2278296C50016ED16 /* InventoryItem.cpp */; };
 		5DBF57AD2767E0AB00CB244C /* Watch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBF57AC2767E0AB00CB244C /* Watch.cpp */; };
 		5DCCA0E72728D7340004C3A1 /* Project-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DCCA0E62728D7340004C3A1 /* Project-10.png */; };
 		5DCCA0EA2728D90F0004C3A1 /* DialogueMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCCA0E82728D90F0004C3A1 /* DialogueMenu.cpp */; };
@@ -717,6 +720,12 @@
 		5DBC1BA6277F78630016ED16 /* MySaveGame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MySaveGame.hpp; sourceTree = "<group>"; };
 		5DBC1BA8277F8E480016ED16 /* MyLevelSerializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyLevelSerializer.cpp; sourceTree = "<group>"; };
 		5DBC1BA9277F8E480016ED16 /* MyLevelSerializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MyLevelSerializer.hpp; sourceTree = "<group>"; };
+		5DBC1BAC278288520016ED16 /* InventoryComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InventoryComponent.cpp; sourceTree = "<group>"; };
+		5DBC1BAD278288520016ED16 /* InventoryComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InventoryComponent.hpp; sourceTree = "<group>"; };
+		5DBC1BAF278288C00016ED16 /* GameItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameItem.cpp; sourceTree = "<group>"; };
+		5DBC1BB0278288C00016ED16 /* GameItem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameItem.hpp; sourceTree = "<group>"; };
+		5DBC1BB2278296C50016ED16 /* InventoryItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InventoryItem.cpp; sourceTree = "<group>"; };
+		5DBC1BB3278296C50016ED16 /* InventoryItem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InventoryItem.hpp; sourceTree = "<group>"; };
 		5DBF57AC2767E0AB00CB244C /* Watch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Watch.cpp; sourceTree = "<group>"; };
 		5DCCA0E62728D7340004C3A1 /* Project-10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Project-10.png"; sourceTree = "<group>"; };
 		5DCCA0E82728D90F0004C3A1 /* DialogueMenu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DialogueMenu.cpp; sourceTree = "<group>"; };
@@ -1414,6 +1423,10 @@
 		5DBC1B99277E37200016ED16 /* ItemSystem */ = {
 			isa = PBXGroup;
 			children = (
+				5DBC1BAC278288520016ED16 /* InventoryComponent.cpp */,
+				5DBC1BAD278288520016ED16 /* InventoryComponent.hpp */,
+				5DBC1BAF278288C00016ED16 /* GameItem.cpp */,
+				5DBC1BB0278288C00016ED16 /* GameItem.hpp */,
 			);
 			path = ItemSystem;
 			sourceTree = "<group>";
@@ -1461,14 +1474,16 @@
 		5DDAE8A0272B43C00053DFEA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				5DF4EBE5277CF7AA006823FB /* Inventory.hpp */,
 				5D8A7D1026F3E5C900BD8BDB /* HealthMeter.hpp */,
+				5DF4EBE4277CF7AA006823FB /* Inventory.cpp */,
 				5D91DF7B275AB55700AF8EF4 /* ManaMeter.hpp */,
 				5D7EE232276E83320026AB83 /* HealthMeter.cpp */,
 				5D7EE22E276E80FE0026AB83 /* ManaMeter.cpp */,
 				5D87838A276542B4006354AB /* DevPosTracker.cpp */,
 				5D87838B276542B4006354AB /* DevPosTracker.hpp */,
-				5DF4EBE4277CF7AA006823FB /* Inventory.cpp */,
-				5DF4EBE5277CF7AA006823FB /* Inventory.hpp */,
+				5DBC1BB2278296C50016ED16 /* InventoryItem.cpp */,
+				5DBC1BB3278296C50016ED16 /* InventoryItem.hpp */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1967,6 +1982,7 @@
 				5DB91EA7271D0554003AAAA7 /* Subject.cpp in Sources */,
 				5DE85CEC271354FC000D948D /* Dice.cpp in Sources */,
 				5D556E0027545A95006CAB4A /* FPSControl.cpp in Sources */,
+				5DBC1BB1278288C00016ED16 /* GameItem.cpp in Sources */,
 				5DCEA18D26893D4E00A6F99F /* GraphicsComponent.cpp in Sources */,
 				5D4BD7C0271B13D900A89C8B /* Positionable.cpp in Sources */,
 				5DDAE8B4272B5F4D0053DFEA /* Dialogue.cpp in Sources */,
@@ -1980,8 +1996,10 @@
 				5DF82DA82680D14800F4D177 /* uiPiece.cpp in Sources */,
 				5D14647E273DEB6D0024F2E2 /* PropFactory.cpp in Sources */,
 				5D670C9C2684D903000E179C /* MapObject.cpp in Sources */,
+				5DBC1BB4278296C50016ED16 /* InventoryItem.cpp in Sources */,
 				5D14649227409EFC0024F2E2 /* ScriptWakeUp.cpp in Sources */,
 				5DBC1BA4277E47690016ED16 /* SaveGame.cpp in Sources */,
+				5DBC1BAE278288520016ED16 /* InventoryComponent.cpp in Sources */,
 				5DCCA0ED2728D9800004C3A1 /* aiDialogueAction.cpp in Sources */,
 				5DB91EBF272212FA003AAAA7 /* PQuadGraphicsComponent.cpp in Sources */,
 				5DE8573C2640E3210062DFC2 /* Renderer.cpp in Sources */,

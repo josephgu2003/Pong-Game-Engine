@@ -18,7 +18,7 @@ private:
     PropFactory pf;
     MyActorFactory maf;
     void convertPrimitive(World* g, const std::string& type, int primitiveEnum, const glm::vec3& pos) override;
-
+ 
     inline void convertActor(World* g, int primitiveEnum, const glm::vec3& pos) {
         std::shared_ptr<Actor> a = maf.makeActor(primitiveEnum);
         a->setPos(pos);

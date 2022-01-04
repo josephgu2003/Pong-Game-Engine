@@ -16,7 +16,7 @@
 PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, std::string modelFile, int numberParticles, float size_, Shader* shader, const Material& map) : GraphicsComponent(pe, shader, map, DRAW_TRANSPARENT) {
     
     shader->use();
-    shader->setUniform("size", size);
+    shader->setUniform("size", size_); 
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
     type = GRAPHICS;
@@ -40,7 +40,7 @@ PQuadGraphicsComponent::~PQuadGraphicsComponent() {
 PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberParticles, float size_, Shader* shader, const Material& map) : GraphicsComponent(pe, shader, map, DRAW_TRANSPARENT) {
     
     shader->use();
-    shader->setUniform("size", size);
+    shader->setUniform("size", size_);
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
     type = GRAPHICS;

@@ -14,7 +14,7 @@
  
 class HealthMeter : public uiPiece, public Observer {
 public:
-    HealthMeter();
+    HealthMeter(float xpos, float ypos);
     virtual void notify(const Subject& s, GameEvent ge) override;
 };
 

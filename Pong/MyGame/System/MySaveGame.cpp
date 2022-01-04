@@ -10,6 +10,7 @@
 #include "CharacterComponent.hpp"
 #include "LifeComponent.hpp"
 #include "ScriptSystem.hpp"
+#include "InventoryComponent.hpp"
 
 ScriptFactory SaveScript::sf;
 
@@ -21,6 +22,18 @@ void SaveChar::load(GameLevel* g, const nlohmann::json& i) {
             }
         };
              
+    auto handleInvComp = [] (std::shared_ptr<Actor>& a, const nlohmann::json& i) {
+        if (InventoryComponent* ic = a->getComponent<InventoryComponent>()) {
+            auto itemblock = i.find("Items");
+            if (itemblock != i.end()) {
+                auto items = itemblock.value();
+                for (int i = 0; i < items.size(); i++) {
+                    ic->insertItem(items.at(i));
+                }
+            }
+        }
+    };
+    
             auto handleCharComp = [] (std::shared_ptr<Actor>& a, const nlohmann::json& i) {
                 if (CharacterComponent* charc = a->getComponent<CharacterComponent>()) {
                     std::string id = i["Name"];
@@ -67,8 +80,9 @@ void SaveChar::load(GameLevel* g, const nlohmann::json& i) {
             handleName(actor, i);
             handleCharComp(actor, i);
             handleLifeComp(actor, i);
+            handleInvComp(actor, i);
      
-            actor->setPos(pos);
+            actor->setPos(pos); 
               
             World& world = g->getWorld(worldID);
             actor->setWorld(&world);

@@ -78,6 +78,12 @@ protected:
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
     }
+    template <typename T>
+    inline void setUniform(const std::string& name, const T& t) {
+        shader->use(); 
+        shader->setUniform(name, t);
+    }
+    
 public:
     GLuint getInstanceCount();
     void animateTextures();

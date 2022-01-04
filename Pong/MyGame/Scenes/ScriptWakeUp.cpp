@@ -8,7 +8,7 @@
 #include "ScriptWakeUp.hpp"
 #include "NameComponent.hpp"
 #include "World.hpp"
-#include "LifeComponent.hpp"
+#include "LifeComponent.hpp" 
 #include "PGraphicsComponent.hpp"
 #include <algorithm>
 #include "AnimComponent.hpp" 

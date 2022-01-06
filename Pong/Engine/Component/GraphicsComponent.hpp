@@ -14,19 +14,19 @@
 #include "GraphicsObject.hpp"
 #include "Component.hpp"
 #include "VertexMesh.hpp"
-  
+
+class Componentable;
 class Shader;
+class GraphicsComponent;
+  
+typedef void (*VertexLoadFunc)(unsigned int, unsigned int, unsigned int, unsigned int&);
+typedef void (*DrawCall) (Renderer*, GraphicsComponent*);
+
 
 struct FrameAndShader {
     Frame* frame = NULL;
     Shader* shader = NULL;
 };
-
-class Componentable;
-
-class GraphicsComponent;
-
-typedef void (*DrawCall) (Renderer*, GraphicsComponent*);
 
 class GraphicsComponent : public Component, public GraphicsObject { // for actors
 protected:
@@ -35,8 +35,12 @@ protected:
 public:
     GraphicsComponent(Componentable& actor, Shader* shader, const Material& map, DrawPass dp);
     virtual ~GraphicsComponent();
-    virtual void initModel(const std::string& model); 
+    
+    virtual void initModel(const std::string& model);
     void initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh);
+    
+    void init(VertexLoadFunc vertexLoadFunc);
+    
     virtual void tick() override;
     virtual void draw(Renderer* r) override;
     void setDrawCall(DrawCall dc);

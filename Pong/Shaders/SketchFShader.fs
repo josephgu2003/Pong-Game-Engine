@@ -3,42 +3,9 @@ layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
     in vec2 TexCoords;
 
-struct Light {
-vec3 pos;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-    
-};
-
-struct DirLight {
-vec3 dir;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-};
-
-layout (std140) uniform Lights
-{
-   Light light;
-
-    DirLight dirLight;
-    
-    vec3 viewPos;
-};
-
-layout (std140) uniform StopWatch
-{
-    float time;
-};
-
     uniform sampler2D diffuse;
 
 uniform float alpha;
-
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {

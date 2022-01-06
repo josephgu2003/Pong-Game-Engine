@@ -28,7 +28,7 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
     int datasize = numberParticles * 4 * sizeof(float);
     std::vector<int> v = {3,1};
     VertexLoader::loadPoint(VAO, VBO, EBO, numIndices);
-    makeInstanceBuffer(datasize, 2, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
+    makeInstanceBuffer(datasize, 2, v, static_cast<ParticleSystem*>(actor)->getNumParticles()); // should be 3 not 2 but it is corrected in vertex shader
     drawTarget = GL_POINTS;
 }
 

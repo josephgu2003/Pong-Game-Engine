@@ -89,8 +89,8 @@ void ScriptWolfBoyOne::act() {
         }
         case 8: {if (noActiveSpeech()) step++; break;}
         case 9: {
-            std::vector<std::string> lines = {"You only need know one thing", "You two are a menace, and I am here to hunt."};
-            std::vector<float> duration = {5.0f,5.0f};
+            std::vector<std::string> lines = {"Little flower, I have to kill you, for the sake of the world.", "If you should survive, run.", "Run as far away from that witch as you can.", "The world remembers all too well her power to scheme."};
+            std::vector<float> duration = {5.0f,3.0f,4.0f, 5.0f};
             makeSpeech("Snowclaw", lines, duration);
             getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
             step++;
@@ -99,24 +99,36 @@ void ScriptWolfBoyOne::act() {
         case 10: {
             if(noActiveSpeech() || isWaiting()) {  // first time in is when speech ends, second time is waiting
                 if (!isWaiting()) {
-                getActorNamed("Snowclaw")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Snowclaw"), 100.0f, getActorRefNamed("Floro"));
-                getActorNamed("Snowclaw")->getComponent<AnimComponent>()->playAnim("DrawWeapon", false);
+                    speak("Moonbell", "Ignore him. He is only trying to find an opening to attack.", 3.0f);
                 }
-                waitFor(2.0f);
+                waitFor(3.0f);
             } 
             break;
         }
             
         case 11: {
             if (!isWaiting()) {
+                getActorNamed("Snowclaw")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Snowclaw"), 100.0f, getActorRefNamed("Floro"));
+                getActorNamed("Snowclaw")->getComponent<AnimComponent>()->playAnim("DrawWeapon", false);
+            }
+            waitFor(1.0f);
+            break;
+        };
+        case 12: {
+            speak("Floro", "Ouch!", 1.0f);
+            step++; 
+            break;
+        };
+        case 13: {
+            if (!isWaiting()) {
             std::vector<std::string> lines = {"You would use such a strong Runic attack on a cripple?", "You are as ruthless as me. Floro, I can't help, but the fish charm can.", "Break the attack, and I'll break him."};
             std::vector<float> durations = {5.0f, 3.5f, 4.0f,};
             makeSpeech("Moonbell", lines, durations);
             }
-            waitFor(9.0f);
+            waitFor(9.0f);  
             break;
         }
-        case 12: {
+        case 14: {
             getActorNamed("Moonbell")->getComponent<CombatComponent>()->newAbility<SwordWorld>(world, getActorNamed("Moonbell"), 10.0f);
             step++;
             break;

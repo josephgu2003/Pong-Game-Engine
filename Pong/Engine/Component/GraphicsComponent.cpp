@@ -51,3 +51,7 @@ void GraphicsComponent::setColor(float r, float g, float b) {
     shader->use();
     shader->setUniform("color", glm::vec4(r,g,b,1.0f));  
 }
+
+void GraphicsComponent::init(VertexLoadFunc vertexLoadFunc) {
+    vertexLoadFunc(VAO, VBO, EBO, numIndices);
+}

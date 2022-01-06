@@ -45,7 +45,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             std::shared_ptr<GraphicsComponent> pgc =   std::make_shared<PQuadGraphicsComponent>(*particle.get(),"Resources/Models/Sword/sword.fbx", numParticles, 1.0, shader, map);
             pgc->setTextureAnimation("diffuseFrameCounter", 110, 30.0f);
             particle->addComp(pgc);
-            particle->addComp<PRefreshComponent>(*particle.get(), 8.0, 6, 0.5, glm::vec3(10,10,10), glm::vec3(-0.02, -0.01, -0.02), glm::vec3(0.02, 0.01, 0.02));
+            particle->addComp<PRefreshComponent>(*particle.get(), 8.0, 6, 0.5, glm::vec3(10,10,10), glm::vec3(-0.02, -0.05, -0.02), glm::vec3(0.02, -0.02, 0.02)); 
             particle->addComp<PPhysicsComponent>(*particle.get(), 0, 0.997);
             particle->addComp<PSpinComponent>(*particle.get(), glm::vec3(0,0.5,0));
             break;

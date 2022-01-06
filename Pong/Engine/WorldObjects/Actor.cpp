@@ -34,9 +34,7 @@ Actor::Actor() : Positionable() {
  
 Actor::~Actor() { 
  
-} 
-
-
+}
 
 World& Actor::getWorld() {
     return *world;
@@ -60,7 +58,7 @@ void Actor::tick() {
     graphics->getShader()->setUniform("transposeInverseModelMat", transposeInverse);
 }
 
-void Actor::posDir(float speed) {
+void Actor::posDir(float speed) { 
     if (state != STATE_PARALYZED) {
     posVec += speed * dirVec;
     }
@@ -115,5 +113,5 @@ void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
     if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }
-  
+   
  

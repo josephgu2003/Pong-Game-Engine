@@ -29,6 +29,7 @@
 #include "AnimComponent.hpp"
 #include "MySaveGame.hpp"
 #include "MyLevelSerializer.hpp"
+#include "ChargedSlash.hpp"
 
 #define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
 
@@ -107,8 +108,8 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
         
     ih->setOneTapCallback(GLFW_KEY_X, [](Game* game){
         if (auto ph = game->getPlayerHero()) { 
-            ph->getComponent<AnimComponent>()->playAnim("Attack", false);
-            
+            ph->getComponent<AnimComponent>()->playAnim("Attack", false);  
+            ph->getComponent<CombatComponent>()->newAbility<ChargedSlash>(&ph->getWorld(), ph, 3.0);
         }
         });
         

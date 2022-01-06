@@ -12,6 +12,7 @@
 #include "GraphicsComponent.hpp"
 #include "Shader.hpp"
 #include "Renderer.hpp"
+#include "VertexLoader.hpp"
 
 std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     stbi_set_flip_vertically_on_load(0);
@@ -78,6 +79,28 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             static_pointer_cast<GraphicsComponent>(gc)->setDrawCall(foliageDraw);
             prop->addComp(gc);
             prop->rotate(glm::vec3(glm::radians(-90.0f),0,0));
+            break;
+        }
+            
+        case PROP_SWORD_SLASH: {
+            Material map; 
+            
+            AssetManager::loadTexture("Resources/Particles/mist.png", &map.diffuse, true);
+            
+            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/SketchFShader.fs");
+            shader->use();
+            shader->setUniform("alpha", 1.0f);
+                   
+            Renderer::bindShaderUniblock(shader, ViewProj);
+            
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+                VertexLoader::loadModelSimple("Resources/Models/Sword/swordslash.fbx", vao, vbo, ebo, numIndices);
+            //    std::vector<PosVertex> mesh;
+             //   VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
+            });
+            prop->offsetOrientationVectors(glm::vec3(0,80,0)); 
+            prop->addComp(gc); 
             break;
         }
             

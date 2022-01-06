@@ -8,7 +8,7 @@
 #include "ScriptWakeUp.hpp"
 #include "NameComponent.hpp"
 #include "World.hpp"
-#include "LifeComponent.hpp" 
+#include "LifeComponent.hpp"
 #include "PGraphicsComponent.hpp"
 #include <algorithm>
 #include "AnimComponent.hpp" 
@@ -139,7 +139,7 @@ void ScriptWakeUp::act() {
             break;
         }
         case 6: {
-            std::vector<std::string> lines = {"A hero, a villain, a friend, a nobody.", "As to whom I am to you, you will find out in time."};
+            std::vector<std::string> lines = {"A hero, a villain, a friend, a guardian.", "As to whom I am to you, you will find out in time."};
             std::vector<float> durations = {5.0f,5.0f};
             makeSpeech("Moonbell", lines, durations);
             step++;
@@ -166,7 +166,7 @@ void ScriptWakeUp::act() {
         case 12: {
             if (getActorNamed("Floro")->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0) {
                 getActorNamed("Floro")->setPos(getActorNamed("Moonbell")->getPos()+glm::vec3(1,0,5));
-                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("The cold stings, doesn't it? Stay next to my aura, or you will freeze.", 2.0);
+                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("The cold stings, doesn't it? Stay next to me, or you will freeze.", 2.0);
                 getActorNamed("Floro")->getComponent<LifeComponent>()->incStatValue(50, STAT_LIFE);
                 step++;
             }  
@@ -216,7 +216,7 @@ void ScriptWakeUp::act() {
         }
         case 19: {
             if (!isWaiting()) { 
-                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Stop. Something is wrong.", 2.0);
+                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Stop. Do you hear that?", 2.0);
  
             }
             waitFor(3.0);

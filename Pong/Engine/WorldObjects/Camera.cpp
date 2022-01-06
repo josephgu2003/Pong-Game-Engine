@@ -48,6 +48,8 @@ void Camera::rotate(glm::vec3 angles) {
  
 void Camera::tick() {
     float yaw = eulerAngles.y;
-    if (actor)  actor->orient(yaw);
+    if (actor)
+        actor->orient(yaw);
+      //  actor->turnTowards(<#const glm::vec3 &newDir#>);
 }
  

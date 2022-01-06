@@ -8,15 +8,14 @@
 #include "SubtitlesSystem.hpp"
  
 
-void SubtitlesSystem::newSoundText(const std::string& text, float duration) {
-    soundText.reset();
+void SubtitlesSystem::newSoundText(const std::string& text, float duration) { 
     soundText = std::make_unique<SoundText>(text, duration);
     update = true;
 }
   
 void SubtitlesSystem::updateActiveText() {
     std::string s = "";
-    if (soundText.get()) {
+    if (soundText) {
         s = soundText->text;
     }
     if (auto x = activeText.lock()) {
@@ -30,7 +29,7 @@ void SubtitlesSystem::drawAll(Renderer* r) {
 } 
 
 void SubtitlesSystem::tick() {
-    if (soundText.get()) {
+    if (soundText) {
         soundText->duration -= (float) globalTime.getTime();
          
         float alpha = soundText->duration / soundText->maxDuration; //HAHAHA USELESS
@@ -45,7 +44,7 @@ void SubtitlesSystem::tick() {
             }
             textFrame->getShader()->use();
             textFrame->getShader()->setUniform("alpha", alpha);
-        }
+        } 
         if (soundText->duration <= 0.0f) {
             soundText.reset();
             update = true;  
@@ -67,5 +66,6 @@ SubtitlesSystem::SubtitlesSystem(World& w) : WorldSubSystem(w) {
     textFrame->insertChild(text);
     textFrame->getShader()->use();
     textFrame->getShader()->setUniform("alpha", 0.0f);
+    soundText = std::unique_ptr<SoundText>(); 
 } 
   

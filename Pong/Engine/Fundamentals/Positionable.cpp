@@ -13,11 +13,12 @@ Positionable::Positionable() {
     posVec.x = 0.0f;
     posVec.y = 0.0f;
     posVec.z = 0.0f;
-    dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
-    rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    upVec = glm::cross(dirVec, rightVec);
-    eulerAngles = glm::vec3(0,0,0);
+    eulerAngles = glm::vec3(0,0,0); 
     offsetAngles = glm::vec3(0);
+    orient(eulerAngles.y);
+    
+    modelMat = glm::mat4(1.0f);
+    modelMat = glm::translate(modelMat, posVec);
 }
 
 void Positionable::orient(float yaw_) {
@@ -28,20 +29,27 @@ void Positionable::orient(float yaw_) {
     GramSchmidtAndNormalizeOrientations();
 }
 
-void Positionable::turnTowards(const glm::vec3& newDir_) {
 
-    float dYaw = (180.0f/3.14159)* glm::orientedAngle(glm::normalize(glm::vec2(newDir_.x,newDir_.z)), glm::normalize(glm::vec2(dirVec.x,dirVec.z))); // rotates such that dirVec points
+void Positionable::turnTowards(Positionable* p) {
+    turnTowards(p->getPos()-posVec);
+}
+
+
+void Positionable::turnTowards(const glm::vec3& newDir_) {
+    glm::vec2 vecNew = glm::normalize(glm::vec2(newDir_.x,newDir_.z));
+    glm::vec2 vecOld = glm::normalize(glm::vec2(dirVec.x,dirVec.z));
+    float dYaw = glm::degrees(glm::orientedAngle(vecNew, vecOld)); // rotates such that dirVec points
 
    /** eulerAngles -= glm::vec3(0,dYaw,0);
     if (eulerAngles.x < -45.0f) {
-        eulerAngles.x = -45.0f;
+        eulerAngles.x = -45.0f; 
     } 
 
     dirVec = newDir_;
-    
-    GramSchmidtAndNormalizeOrientations();**/
-    orient(eulerAngles.y-dYaw); 
      
+    GramSchmidtAndNormalizeOrientations();**/
+    
+    orient(eulerAngles.y-dYaw);
 }
 
 void Positionable::setPos(glm::vec3 pos_) {
@@ -96,10 +104,6 @@ float Positionable::getDistanceTo(glm::vec3 p) {
 }
 void Positionable::offsetOrientationVectors(glm::vec3 eulers) {
     offsetAngles = eulers;
-}
-
-void Positionable::turnTowards(Positionable* p) {
-    turnTowards(p->getPos()-posVec);
 }
 
 void Positionable::GramSchmidtAndNormalizeOrientations() { // finds rightVec and normalizes DirVec

@@ -290,6 +290,7 @@
 		5DBC1BAE278288520016ED16 /* InventoryComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BAC278288520016ED16 /* InventoryComponent.cpp */; };
 		5DBC1BB1278288C00016ED16 /* GameItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BAF278288C00016ED16 /* GameItem.cpp */; };
 		5DBC1BB4278296C50016ED16 /* InventoryItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BB2278296C50016ED16 /* InventoryItem.cpp */; };
+		5DBC1BB92785182C0016ED16 /* ChargedSlash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC1BB72785182C0016ED16 /* ChargedSlash.cpp */; };
 		5DBF57AD2767E0AB00CB244C /* Watch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBF57AC2767E0AB00CB244C /* Watch.cpp */; };
 		5DCCA0E72728D7340004C3A1 /* Project-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DCCA0E62728D7340004C3A1 /* Project-10.png */; };
 		5DCCA0EA2728D90F0004C3A1 /* DialogueMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DCCA0E82728D90F0004C3A1 /* DialogueMenu.cpp */; };
@@ -726,6 +727,8 @@
 		5DBC1BB0278288C00016ED16 /* GameItem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameItem.hpp; sourceTree = "<group>"; };
 		5DBC1BB2278296C50016ED16 /* InventoryItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InventoryItem.cpp; sourceTree = "<group>"; };
 		5DBC1BB3278296C50016ED16 /* InventoryItem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InventoryItem.hpp; sourceTree = "<group>"; };
+		5DBC1BB72785182C0016ED16 /* ChargedSlash.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChargedSlash.cpp; sourceTree = "<group>"; };
+		5DBC1BB82785182C0016ED16 /* ChargedSlash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChargedSlash.hpp; sourceTree = "<group>"; };
 		5DBF57AC2767E0AB00CB244C /* Watch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Watch.cpp; sourceTree = "<group>"; };
 		5DCCA0E62728D7340004C3A1 /* Project-10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Project-10.png"; sourceTree = "<group>"; };
 		5DCCA0E82728D90F0004C3A1 /* DialogueMenu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DialogueMenu.cpp; sourceTree = "<group>"; };
@@ -944,6 +947,8 @@
 				5DAB0B4E266FF35900BC1C93 /* Sketch.hpp */,
 				5D7EE22B276D11C80026AB83 /* SwordWorld.cpp */,
 				5D7EE22C276D11C80026AB83 /* SwordWorld.hpp */,
+				5DBC1BB72785182C0016ED16 /* ChargedSlash.cpp */,
+				5DBC1BB82785182C0016ED16 /* ChargedSlash.hpp */,
 			);
 			path = Abilities;
 			sourceTree = "<group>";
@@ -2016,6 +2021,7 @@
 				5DB91EAA271D056E003AAAA7 /* Observer.cpp in Sources */,
 				5D7EE231276E81310026AB83 /* Speech.cpp in Sources */,
 				5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */,
+				5DBC1BB92785182C0016ED16 /* ChargedSlash.cpp in Sources */,
 				5D3E7089264308C10071115A /* Camera.cpp in Sources */,
 				5D87838C276542B4006354AB /* DevPosTracker.cpp in Sources */,
 				5D479DC3264EE5A800067E35 /* Model.cpp in Sources */,

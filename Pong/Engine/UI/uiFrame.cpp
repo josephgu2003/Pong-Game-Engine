@@ -7,6 +7,7 @@
 
 #include "uiFrame.hpp"
 #include "Renderer.hpp"
+#include "VertexLoader.hpp"
 
 uiFrame::uiFrame(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath) : uiPiece(pos, dimensions, "Shaders/UI.vs", "Shaders/GenericUI.fs") {
     AssetManager::loadTexture(filePath.c_str(), &getSingularMaterial().diffuse, true);

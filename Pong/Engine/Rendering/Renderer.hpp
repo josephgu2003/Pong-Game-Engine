@@ -65,7 +65,6 @@ private:
     Shader* skyShader; 
     Shader* blurShader;
     Shader* frameShader;
-    Shader* uiShader;
     
     glm::mat4 viewMat;
     glm::mat4 projMat;

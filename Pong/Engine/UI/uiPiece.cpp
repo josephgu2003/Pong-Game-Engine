@@ -27,3 +27,14 @@ void uiPiece::insertChild(const std::shared_ptr<uiPiece>& uip) {
     children.push_back(std::move(ui));
 }
  
+void uiPiece::initFadeFunction(float timeToStart, float timeToFade, float fadeDuration) {
+    float fadeRateCoefficient = 1.0f / fadeDuration;
+    fadeFunction = [=] (float time_, Shader* s) {
+        float alpha = glm::clamp(fadeRateCoefficient*(time_-timeToStart), 0.0f, 1.0f);
+        float alpha_ = glm::clamp(fadeRateCoefficient*(timeToFade-time_),0.0f,1.0f);
+        float realalpha = std::min(alpha, alpha_);
+        s->use();
+        s->setUniform("alpha", realalpha);
+    };  
+    watch.resetTime();
+}

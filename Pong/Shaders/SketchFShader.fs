@@ -3,8 +3,6 @@ layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
     in vec2 TexCoords;
 
-
-
 struct Light {
 vec3 pos;
 
@@ -13,7 +11,6 @@ vec3 diffuse;
 vec3 specular;
     
 };
-
 
 struct DirLight {
 vec3 dir;

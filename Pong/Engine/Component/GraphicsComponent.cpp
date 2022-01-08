@@ -7,6 +7,7 @@
 
 #include "GraphicsComponent.hpp"
 #include "Renderer.hpp"
+#include "VertexLoader.hpp" 
 #include "Shader.hpp" 
 GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_, DrawPass dp) : Component(actor), GraphicsObject::GraphicsObject(dp) {
     Component::type = GRAPHICS; 

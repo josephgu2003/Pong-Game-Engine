@@ -11,7 +11,6 @@
 #include <GLFW/glfw3.h>
 #include "Game.hpp"
 #include "GameLevel.hpp"
-#include "World.hpp" 
 #include "NameComponent.hpp"
  
 void onetap_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -85,7 +84,7 @@ void InputHandler::tick() {
     for (auto i = keyCallbacks->continuousCallbacks.begin(); i != keyCallbacks->continuousCallbacks.end(); i++) {
         if (glfwGetKey(window, (*i).first) == GLFW_PRESS) {
             (*i).second(game);
-        } 
+        }
     }
 }
 

@@ -10,6 +10,7 @@
 #include "AssetManager.hpp"
 #include "InputHandler.hpp"
 #include "uiText.hpp"
+#include "VertexLoader.hpp" 
 
 uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath) : uiPiece(pos, dimensions, "Shaders/UI.vs", "Shaders/GenericUI.fs") {
     AssetManager::loadTexture(filePath.c_str(), &getSingularMaterial().diffuse, true);

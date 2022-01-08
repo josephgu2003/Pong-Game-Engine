@@ -15,10 +15,11 @@
 #include "NameComponent.hpp"
 #include "LifeComponent.hpp"
 #include "AIComponent.hpp"
-#include "Shader.hpp" 
+#include "Shader.hpp"  
 #include "Renderer.hpp"
 #include "MeshComponent.hpp"
-#include <functional> 
+#include <functional>
+#include "InventoryComponent.hpp"
  
 typedef std::shared_ptr<Component> ActComp;
  
@@ -33,9 +34,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
     switch (i) {
         case ACTOR_HOODY: {
             actor->Componentable::addComp<CharacterComponent>(*(actor.get()));
-                 
             actor->Componentable::addComp<LifeComponent>(*(actor.get()));
-                
             actor->Componentable::addComp<PhysicsComponent>(*(actor.get()), true);
             actor->Componentable::addComp<CombatComponent>(*(actor.get()));
             
@@ -46,6 +45,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
                  
             Renderer::bindShaderUniblock(shader, ViewProj); 
             Renderer::bindShaderUniblock(shader, Lights);
+            
             Material map;
             AssetManager::loadTexture("Resources/Models/textures/lambert1_baseColor.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Models/tmpugfolmqr", &map.normMap, false);
@@ -147,6 +147,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
     
     case ACTOR_SCARF_CHAR : {
         actor->Componentable::addComp<NameComponent>(*(actor.get()));
+        actor->Componentable::addComp<InventoryComponent>(*(actor.get()));
         actor->Componentable::addComp<LifeComponent>(*(actor.get()));
      
         Material map;
@@ -156,11 +157,11 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
  
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
-        shader->setUniform("animated", false);
+        shader->setUniform("animated", false); 
         shader->setUniform("size", 0.005); 
         shader->setUniform("brightness", 0.0); 
           
-        Renderer::bindShaderUniblock(shader,      ViewProj);
+        Renderer::bindShaderUniblock(shader,    ViewProj);
         Renderer::bindShaderUniblock(shader,      Lights);
           
         actor->Componentable::addComp<PhysicsComponent>(*(actor.get()), true);

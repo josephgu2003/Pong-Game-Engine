@@ -8,8 +8,8 @@
 #include "SwordWorld.hpp"
 #include "ParticleFactory.hpp"
 #include "Actor.hpp"
-
-#include "World.hpp" 
+#include "AnimComponent.hpp"
+#include "World.hpp"  
 
 void SwordWorld::call() {
     ParticleFactory pf; 
@@ -17,9 +17,9 @@ void SwordWorld::call() {
     swordsRef = swords; 
     world->insert<ParticleSystem>(swords);  
     if (auto ac = actor->getComponent<AnimComponent>()) {
-        ac->playAnim("DrawWeapon"); 
+        ac->playAnim("DrawWeapon",false);
     } 
-}
+} 
 
 void SwordWorld::tick() {
     duration -= (float)glfwGetTime();

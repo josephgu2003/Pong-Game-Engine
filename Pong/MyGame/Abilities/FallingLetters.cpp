@@ -12,6 +12,7 @@
 #include "World.hpp"
 #include "Actor.hpp"
 #include "LifeComponent.hpp"
+#include "AnimComponent.hpp"
 
 FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_)  {
     

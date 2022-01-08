@@ -14,7 +14,6 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include "stb_image.h"
-#include "World.hpp"
 
 BoneInfoMap VertexLoader::inProgBoneMap;
 int VertexLoader::boneCounter = 0; 

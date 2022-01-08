@@ -8,11 +8,11 @@ uniform sampler2D gradient;
 
     void main()
     {
-        if (duration < 0.0) discard; 
+        if (duration < 0.0) discard;
         float alpha = texture(alphaMap, TexCoords).r;
         vec3 colors = vec3(0.2,0.2,0.2);
        // sampled.w *= 5*log(duration);
         float intensity = texture(gradient, TexCoords).r;
 
-        FragColor = vec4(colors*alpha*intensity, alpha*intensity);
+        FragColor = vec4(colors*alpha*intensity, alpha*intensity*intensity);
     }

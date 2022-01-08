@@ -9,7 +9,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "Actor.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include "json.hpp"
 

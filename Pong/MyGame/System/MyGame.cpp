@@ -23,6 +23,12 @@
 #include "ManaMeter.hpp" 
 #include "DevPosTracker.hpp"
 #include "SwordWorld.hpp"
+#include "SubtitlesSystem.hpp"
+#include "ScriptSystem.hpp"
+#include "Inventory.hpp"
+#include "AnimComponent.hpp"
+#include "MySaveGame.hpp"
+#include "MyLevelSerializer.hpp"
 
 #define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
 
@@ -33,6 +39,9 @@ MyGame::MyGame() : Game() {
  
 
 void MyGame::load() {
+    setSaveSystem(new MySaveGame(ui));
+    World::registerSubSystem<SubtitlesSystem>();
+    World::registerSubSystem<ScriptSystem>(); 
     scriptFactory.setUI(ui);
     setupLvlBuilder();
     loadLevel("mainmenu");
@@ -75,7 +84,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     ih->setOneTapCallback(GLFW_KEY_D, [](Game* game){
             if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playDefault();
     });
-    
+
     ih->setContinuousCallback(GLFW_KEY_W, [](Game* game){
         if (auto x = game->getPlayerHero()) x->posDir(0.09);
     });
@@ -99,6 +108,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     ih->setOneTapCallback(GLFW_KEY_X, [](Game* game){
         if (auto ph = game->getPlayerHero()) { 
             ph->getComponent<AnimComponent>()->playAnim("Attack", false);
+            
         }
         });
         
@@ -120,7 +130,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
             }
         });
 
-
+ 
         
     ih->setOneTapCallback(GLFW_KEY_Y, [](Game* game) {
             if (auto hero = game->getPlayerHero()) {
@@ -170,7 +180,7 @@ void loadMainGameMenuModeCallbacks(InputHandler* ih) {{
 
 GameLevel* makeMainMenu(Game* g) {
     g->getUI()->clear();
-    GameLevel* lvl = new GameLevel(g->getRenderer(), 1);
+    GameLevel* lvl = new GameLevel(g->getRenderer(), 1, "mainmenu");
     auto ut = std::make_shared<uiText>("Press enter to begin", -0.2, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
     auto uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), TEX_BLACK_GRADIENT);
     uf->insertChild(ut);
@@ -186,20 +196,23 @@ GameLevel* makeMainMenu(Game* g) {
 void MyGame::setupLvlBuilder() {
 
     GameLevelCreate makeMain = [&] (Game* g) {
-        GameLevel* lvl = new GameLevel(g->getRenderer(), 2);
+        GameLevel* lvl = new GameLevel(g->getRenderer(), 2, "main");
         auto ui = g->getUI();
         ui->clear();
-         
-        JsonManager::loadGameLevel(lvl, &actorFactory, &propFactory, &particleFactory, &scriptFactory);
-        
+          
+     //   JsonManager::loadGameLevel(lvl, &actorFactory, &propFactory, &particleFactory, &scriptFactory);
+        loadLevelSaveFile(lvl);
+        MyLevelSerializer lvlmake;
+        lvlmake.loadLevelWorlds(lvl);
         lvl->getWorld(0).setMap("Resources/Map/landscape.png", glm::vec3(0.4, 0.001, 0.4));
-            
-        std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>();
-        auto player = lvl->getActiveWorld()->getPlayerHero(); 
+        
+        auto player = lvl->getActiveWorld()->getPlayerHero();
         auto playerlife = player->getComponent<LifeComponent>();
+             
+        std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>(-0.85, 0.7);
         playerlife->addObserver(hm);
-        hm->notify(*playerlife, SUBJ_HP_CHANGED);
-         
+        hm->notify(*playerlife, SUBJ_HP_CHANGED); 
+          
         auto uf = std::make_shared<uiFrame>(glm::vec2(-0.90,0.65), glm::vec2(0.2,0.3), TEX_BLACK_GRADIENT);
         uf->insertChild(hm);
         ui->insertNode(uf);
@@ -210,8 +223,15 @@ void MyGame::setupLvlBuilder() {
           
         auto ufmana = std::make_shared<uiFrame>(glm::vec2(-0.9,0.35), glm::vec2(0.2,0.3), TEX_BLACK_GRADIENT);
         ufmana->insertChild(manaMeter);
-        ui->insertNode(ufmana);
-          
+        ui->insertNode(ufmana); 
+        
+        std::weak_ptr<InventoryComponent> invref;
+        player->getComponentRef(invref);
+        auto inventory = std::make_shared<Inventory>(invref,glm::vec2(-1.0,-1.0), glm::vec2(2.0,2.0));
+        g->getInputHandler().addObserver(inventory);
+        player->getComponent<InventoryComponent>()->addObserver(inventory);
+        ui->insertNode(inventory);  
+           
         auto dpt = std::make_shared<DevPosTracker>(0.5,0.8, 0.5,0.5);
         player->addObserver(dpt);   
         ui->insertNode(dpt);

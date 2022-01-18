@@ -43,8 +43,8 @@ public:
     void setUniform(const std::string &name, double value) const;
     void setUniform(const std::string &name, const glm::vec3& vector) const;
     void setUniform(const std::string &name, const glm::vec4& vector) const;
-    void setUniform(const std::string &name, glm::mat4& matrix);
-    void setUniform(const std::string &name, glm::mat3& matrix);
+    void setUniform(const std::string &name, const glm::mat4& matrix);
+    void setUniform(const std::string &name, const glm::mat3& matrix);
 };
 
 #endif /* Shader_hpp */

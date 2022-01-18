@@ -10,7 +10,7 @@
 #include "VertexLoader.hpp" 
 #include "Shader.hpp" 
 GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_, DrawPass dp) : Component(actor), GraphicsObject::GraphicsObject(dp) {
-    Component::type = GRAPHICS; 
+    updatePriority = 10;
     shader = shader_;
     setSingularMaterial(map_);
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {

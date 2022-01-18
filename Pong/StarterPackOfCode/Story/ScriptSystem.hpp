@@ -17,9 +17,9 @@ private:
     std::vector<std::shared_ptr<Script>> allScripts;
 public:
     using WorldSubSystem::WorldSubSystem;
-    void insertScript(const std::shared_ptr<Script>& script);
+    void insertScript(std::shared_ptr<Script>& script);
     void tick() override;
-    bool isScriptComplete(const std::string& name);
+    bool isScriptComplete(const std::string& name); 
 };
  
 // world owns scripts

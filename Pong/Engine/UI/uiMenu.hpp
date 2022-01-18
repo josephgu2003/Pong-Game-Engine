@@ -18,7 +18,6 @@ protected:
     int selectedChild = 0;
 public:
     uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath);
-    virtual void draw(Renderer* r) override;
     virtual void notify(const Subject& s, GameEvent ge) override;
 };
 #endif /* uiMenu_hpp */

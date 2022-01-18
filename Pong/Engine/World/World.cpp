@@ -30,7 +30,9 @@ World::World(Renderer* r) {
     for (auto i = worldSubSystemsTemplate.begin(); i != worldSubSystemsTemplate.end(); i++) {
         addComp((*i)(*this));
     }
-} 
+    collisionSystem = std::make_shared<CollisionSystem>(); 
+}
+
 
 World::~World() {
     if (allCameraPtrs.size() > 0) {
@@ -94,15 +96,6 @@ void World::tickAll() {
             i--;
         }
     }
-    
-    for(int i = 0; i < allCameraPtrs.size(); i++) {
-        allCameraPtrs[i]->tick();
-        allCameraPtrs[i]->updateVecs();
-    }
-    
-  //  for(int i = 0; i < allScripts.size(); i++) {
-   //     allScripts[i]->tick();
-  //  }
 
     for(int i = 0; i < allActorPtrs.size(); i++) {
         allActorPtrs[i]->tick();
@@ -110,6 +103,13 @@ void World::tickAll() {
         if (cc && cc->QHasAbilities()) {
             abilityManager.handleCombatComp(cc);
         }
+    }  
+    for(int i = 0; i < allCameraPtrs.size(); i++) {
+        allCameraPtrs[i]->tick();
+    }
+ 
+    for(int i = 0; i < allCameraPtrs.size(); i++) {
+        allCameraPtrs[i]->updateVecs();
     }
 
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
@@ -194,6 +194,11 @@ void World::loadChunks(glm::vec3 pos) {
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
         setHeightFor(i->get());
     } 
+}
+
+std::weak_ptr<Camera> World::getCameraRef() {
+    std::weak_ptr<Camera> camref = allCameraPtrs.at(0);
+    return camref;
 }
 
 

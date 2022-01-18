@@ -11,7 +11,7 @@
 #include "SubtitlesSystem.hpp"
 
 NameComponent::NameComponent(Actor& actor) : Component(actor) {
-    Component::type = NAME;
+    updatePriority = 9; 
     name = "";
 }
 

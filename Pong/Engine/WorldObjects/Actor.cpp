@@ -8,24 +8,16 @@
 #include "Actor.hpp"
 #include <stdio.h>
 #include <string>
-#include "AssetManager.hpp"
-#include "PhysicsComponent.hpp"
-#include <glm/gtx/vector_angle.hpp>
-#include <glm/gtc/quaternion.hpp> 
-#include <glm/gtx/quaternion.hpp>
+
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "CombatComponent.hpp"
-#include "AnimComponent.hpp" 
-#include "NameComponent.hpp"
-#include "LifeComponent.hpp"
-#include "Renderer.hpp"
-#include "AIComponent.hpp"
+
+
 #include "Shader.hpp"
  
 
-#define JUMP_SPEED 0.05f
+#define JUMP_SPEED 0.1f
 
 Actor::Actor() : Positionable() {
     state = STATE_IDLE;
@@ -42,31 +34,23 @@ World& Actor::getWorld() {
 
 
 void Actor::tick() {  
-    Componentable::tick();    
-         
-    modelMat = glm::mat4(1.0f); 
-    modelMat = glm::translate(modelMat, posVec); 
-    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
-    glm::quat MyQuaternion = glm::quat(rotations);
+    Componentable::tick();
     
-    glm::mat4 RotationMatrix = toMat4(MyQuaternion);
-    modelMat = modelMat * RotationMatrix; 
+    graphics->getShader()->setUniform("modelMat", getModelMatrix());
     
-    graphics->getShader()->setUniform("modelMat", modelMat);
-    
-    glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(getModelMatrix())));
     graphics->getShader()->setUniform("transposeInverseModelMat", transposeInverse);
 }
 
 void Actor::posDir(float speed) { 
     if (state != STATE_PARALYZED) {
-    posVec += speed * dirVec;
+        Positionable::posDir(speed);
     }
 }
 
 void Actor::posRight(float speed) {
     if (state != STATE_PARALYZED) {
-    posVec += speed * rightVec;
+        Positionable::posRight(speed);
     }
 }
 
@@ -79,10 +63,10 @@ void Actor::jump() {
 }
 
 void Actor::velRight(float speed) {
-    velVec += rightVec*speed;
+    velVec += getRight()*speed;
 }
 void Actor::velDir(float speed) {
-    velVec += dirVec*speed;
+    velVec += getDir()*speed;
 }
 
 glm::vec3 Actor::getVel() {
@@ -111,7 +95,8 @@ State Actor::getState() {
 
 void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
-    if (comp->getType() == GRAPHICS) graphics = static_pointer_cast<GraphicsComponent>(comp);
+    if (dynamic_pointer_cast<GraphicsComponent>(comp)) graphics = static_pointer_cast<GraphicsComponent>(comp);
 }
    
+ 
  

@@ -11,45 +11,52 @@
 #include "World.hpp"
 
 #define CAM_OFFSET glm::vec3(0,0.3,0)
-
+  
 Camera::Camera() : Positionable() {
+    lockOnActor = true;
+    needRotate = false;
 }
 
 Camera::~Camera() { 
     
 }
 
-void Camera::setActor(Actor* actor_) {
+void Camera::lockOntoActor() {
+    lockOnActor  = true;
+}
+void Camera::setActor(Positionable* actor_) {
     actor = actor_;
 }
 
 void Camera::updateVecs() { //updates vecs, keeps correct positioning relative to player char, so this function is meant to be called in 3rd person mode
-    float yaw = eulerAngles.y;
-    float pitch = eulerAngles.x;
-    dirVec.x = std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
-    dirVec.y = std::sin(glm::radians(pitch));
-    dirVec.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
-    Positionable::GramSchmidtAndNormalizeOrientations();
-    if (!actor) {
-        return;  
-    }
-    posVec = actor->getPos()-dirVec*3.0f+CAM_OFFSET+actor->getDir();
+    if (!lockOnActor || !actor) {
+        return; 
+    } 
+    setPos(0.5f*actor->getDir()+actor->getPos()+CAM_OFFSET-3.0f*glm::vec3(actor->getDir().x, getDir().y, actor->getDir().z));
+    orientYawTo(actor->getDir()); // align with actor
+           
     float h = actor->getPos().y;
+    glm::vec3 posVec = getPos();
+    glm::vec3 dirVec = getDir();  
     if (posVec.y < h) {
         posVec.x += (h-posVec.y)*dirVec.x/dirVec.y;
         posVec.z += (h-posVec.y)*dirVec.z/dirVec.y; 
         posVec.y += (h-posVec.y);
     }
-}
+    setPos(posVec);
+} 
   
-void Camera::rotate(glm::vec3 angles) {
-    eulerAngles += angles;
-}
- 
 void Camera::tick() {
-    float yaw = eulerAngles.y;
-    if (actor)
-        actor->orient(yaw);
-      //  actor->turnTowards(<#const glm::vec3 &newDir#>);
+    //rotate then orient actor then set pos relative to actor
+    
+}
+   
+void Camera::unlockFromActor() {
+    lockOnActor = false;
 }
  
+void Camera::unlockFromActor(glm::vec3 pos, glm::vec3 dir) {
+    unlockFromActor();
+    setPos(pos);
+    orientYawTo(dir);
+}

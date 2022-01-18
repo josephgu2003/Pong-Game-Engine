@@ -15,7 +15,7 @@ class uiFrame : public uiPiece {
 protected:
 public:
     uiFrame(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath);
-    virtual void draw(Renderer* r) override;
+
 };
 #endif /* uiFrame_hpp */
  

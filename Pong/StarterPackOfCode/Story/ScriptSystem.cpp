@@ -12,11 +12,11 @@ bool ScriptSystem::isScriptComplete(const std::string& name) {
         if ((*i)->getName() == name && (*i)->isComplete()) {
             return true;
         }
-    }
+    } 
     return false;
 }
-
-void ScriptSystem::insertScript(const std::shared_ptr<Script>& script) {
+ 
+void ScriptSystem::insertScript(std::shared_ptr<Script>& script) {
     allScripts.push_back(script);
 } 
 

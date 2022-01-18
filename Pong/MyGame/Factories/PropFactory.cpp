@@ -28,11 +28,11 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setUniform("size", 0.03f);
+            shader->setUniform("size", 0.03f); 
             shader->setUniform("brightness", 0.0f);
                      
             Renderer::bindShaderUniblock(shader,      ViewProj);
-    
+            Renderer::bindShaderUniblock(shader,      DistanceFog); 
             Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
@@ -51,7 +51,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("brightness", 0.0f);
                    
             Renderer::bindShaderUniblock(shader,      ViewProj);
-    
+            Renderer::bindShaderUniblock(shader,      DistanceFog); 
             Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
@@ -79,28 +79,29 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             static_pointer_cast<GraphicsComponent>(gc)->setDrawCall(foliageDraw);
             prop->addComp(gc);
             prop->rotate(glm::vec3(glm::radians(-90.0f),0,0));
-            break;
+            break; 
         }
-            
+             
         case PROP_SWORD_SLASH: {
-            Material map; 
+            Material map;
             
-            AssetManager::loadTexture("Resources/Particles/mist.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Models/Sword/swordwave.png", &map.diffuse, true);
             
-            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/SketchFShader.fs");
+            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/AlphaMap.fs");
             shader->use();
-            shader->setUniform("alpha", 1.0f);
-                   
+            shader->setUniform("color", glm::vec3(0.0,0.2,1.0));
+            shader->setUniform("brightness", 10.0f); 
             Renderer::bindShaderUniblock(shader, ViewProj);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
-                VertexLoader::loadModelSimple("Resources/Models/Sword/swordslash.fbx", vao, vbo, ebo, numIndices);
-            //    std::vector<PosVertex> mesh;
-             //   VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
+  
+                std::vector<PosVertex> mesh;
+                VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
             });
-            prop->offsetOrientationVectors(glm::vec3(0,80,0)); 
-            prop->addComp(gc); 
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(0,80,15));
+            prop->addComponent<CollisionComponent>(*(prop.get()), *(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.3f,-0.3f),AxisBounds(0.2f,-0.2f));
             break;
         }
             

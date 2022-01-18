@@ -17,7 +17,6 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
     shader->setUniform("size", size_);
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
-    type = GRAPHICS;
     
     size = size_; 
     

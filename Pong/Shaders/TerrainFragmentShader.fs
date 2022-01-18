@@ -70,7 +70,7 @@ void applyDistanceFog(inout vec3 color);
     void main()
 
     {
-        vec3 norm = texture(normMap, TexCoords).rgb;
+        vec3 norm = texture(normMap, 2.0*TexCoords).rgb;
           // transform normal vector to range [-1,1]
         norm = normalize(norm * 2.0 - 1.0);
         
@@ -102,8 +102,7 @@ vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
     viewDir = normalize(viewDir);
     spec = pow(max(dot(viewDir, reflectDir), 0.0), 30);
     
-    vec3 snow = 0.7*texture(diffuse, TexCoords).rgb;
-    snow = vec3(0.8,0.8,0.8);
+    vec3 snow = vec3(0.8,0.8,0.8);
     //snow = mix(snow, texture(diffuse, TexCoordsLarger).rgb, 0.5);
     vec3 snowamb = vec3(0.6,0.8,1.0);
     vec3 ambient = dirLight.ambient * snowamb ;

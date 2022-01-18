@@ -20,7 +20,7 @@ void main()
     fragColor *= 2.0;
     
     //Yirou these next 3 lines can provide fish vfx, my version makes colors flash based on how much red they have, i couldn't figure out anything cooler yet
-    FragColor = vec4(fragColor, alpha);
+    FragColor = vec4(fragColor, alpha*alpha_);
     
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
        if(brightness > 0.0)

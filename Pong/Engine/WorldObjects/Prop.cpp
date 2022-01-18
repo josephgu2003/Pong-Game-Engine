@@ -18,21 +18,14 @@ Prop::Prop() : Componentable(), Positionable() {
  
 void Prop::tick() {
     Componentable::tick();
-    glm::mat4 modelMat = glm::mat4(1.0f);
-    modelMat = glm::translate(modelMat, posVec);
-    glm::vec3 rotations = glm::vec3(eulerAngles.x,glm::radians(90.0f-eulerAngles.y),glm::radians(eulerAngles.z));
-    glm::quat MyQuaternion = glm::quat(rotations); 
-    
-    glm::mat4 RotationMatrix = toMat4(MyQuaternion);
-    modelMat = modelMat * RotationMatrix;
-    
+
     GraphicsComponent* graphics = this->getComponent<GraphicsComponent>();
      
-    graphics->getShader()->setUniform("modelMat", modelMat);
+    graphics->getShader()->setUniform("modelMat", getModelMatrix());
     
-    glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(modelMat)));
+    glm::mat3 transposeInverse = glm::mat3(glm::transpose(glm::inverse(getModelMatrix())));
     graphics->getShader()->setUniform("transposeInverseModelMat", transposeInverse);
-}
+} 
 
 void Prop::setWorld(World* world_) {
     world = world_;

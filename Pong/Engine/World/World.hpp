@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
+#include "Actor.hpp"
 #include "Particle.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
@@ -23,6 +24,8 @@
 #include "Behaviour.hpp"
 #include "WorldRenderingManager.hpp"
 #include "WorldSubSystem.hpp"
+#include "CollisionSystem.hpp"
+#include "NameComponent.hpp"
  
 typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
@@ -37,25 +40,22 @@ struct Weather {
 class Renderer;
 class MapChunk;
 class uiFrame;
-class Actor;
 class World;
 
 struct Updates {
     bool lightingUpdate;
     bool fogUpdate;
-    bool skyUpdate;
+    bool skyUpdate; 
 };
  
-
-// map: read from height map, 9 chunks at once, repeat vertices at edges (one vertex is one pixel)
-// 4 x 4 chunks, 
-typedef std::shared_ptr<WorldSubSystem> (*addSubSystem) (World& w); // do this to avoid storing shared_ptrs of WorldSubSystem - this fancier and less confusing
+typedef std::function<std::shared_ptr<WorldSubSystem>(World& w)> addSubSystem; // do this to avoid storing shared_ptrs of WorldSubSystem - this fancier and less confusing
 class World : public Componentable {
 private:
    // SoundTextManager soundTextManager;
     WorldRenderingManager worldRenderingManager;
     MapManager mapManager;
     AbilityManager abilityManager;
+    std::shared_ptr<CollisionSystem> collisionSystem;
     Updates updates = {false,false,false};
     Weather weather;
      
@@ -71,59 +71,109 @@ private:
     
     static std::vector<addSubSystem> worldSubSystemsTemplate;
 
-    
     void loadChunks(glm::vec3 pos);
     
-    inline void insertGraphicsToManager(const std::shared_ptr<Componentable>& c) {
+    template <typename T>
+    inline void insertGraphicsToManager(const std::shared_ptr<T>& c) {
      std::weak_ptr<GraphicsObject> gc;
-     if (c->getComponentRef<GraphicsObject>(gc)) {
+     if (c->template getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
          worldRenderingManager.insertGraphicsComponent(gc);
      }
     }
     
+    template <typename T>
+    inline void insertCollidable(const std::shared_ptr<T>& c) {
+     std::weak_ptr<CollisionComponent> cc;
+     if (c->template getComponentRef<CollisionComponent>(cc)) {
+         collisionSystem->insertCollidable(cc);
+     }  
+    }
+    
+    inline void insertGraphicsToManager(const std::shared_ptr<Componentable>& c) {
+     std::weak_ptr<GraphicsObject> gc;
+     if (c->getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+         worldRenderingManager.insertGraphicsComponent(gc);
+     }
+    }
+    
+    inline void insertCollidable(const std::shared_ptr<Componentable>& c) {
+     std::weak_ptr<CollisionComponent> cc;
+     if (c->getComponentRef<CollisionComponent>(cc)) {
+         collisionSystem->insertCollidable(cc);
+     }
+    }
+     
     void drawAll();
     void tickAll();
 public:
     bool blur = false;
     
-    
     World(Renderer* r);
     ~World();
     
+    std::weak_ptr<Camera> getCameraRef();
     
     template <typename T>  
     static void registerSubSystem() {
         addSubSystem callbackFunc = [] (World& w) {
             std::shared_ptr<WorldSubSystem> ptr = std::make_shared<T>(w);
             return ptr;
-        };
-        worldSubSystemsTemplate.push_back(callbackFunc);
+        }; 
+        worldSubSystemsTemplate.push_back(callbackFunc); 
     }
 
-    template <typename T> // hahaha templates are cool even if u coulda done Positionable*
-    void insert(const std::shared_ptr<T>& placeable) {
-        if (typeid(T) == typeid(Prop)) {
-            allProps.push_back(dynamic_pointer_cast<Prop>(placeable));
-        }
-        if (typeid(T) == typeid(Behaviour)) {
-            allBehaviours.push_back(dynamic_pointer_cast<Behaviour>(placeable));
-            dynamic_pointer_cast<Behaviour>(placeable)->start();
-        } 
-        if (typeid(T) == typeid(Actor)) {
-            auto actor = dynamic_pointer_cast<Actor>(placeable);
-            allActorPtrs.push_back(actor);
-            actor-> setWorld(this);
-        }
-        if (typeid(T) == typeid(ParticleSystem)) {
-            allParticleEffects.push_back(dynamic_pointer_cast<ParticleSystem>(placeable));
-        }
-        if (typeid(T) == typeid(Camera)) {
-            allCameraPtrs.push_back(dynamic_pointer_cast<Camera>(placeable));
-        }
-        if (auto compable = dynamic_pointer_cast<Componentable>(placeable)) {
-            insertGraphicsToManager(compable);
-        } 
+    void insert(const std::shared_ptr<Prop> prop) { // insert function using overloading
+        allProps.push_back(prop);
+        insertGraphicsToManager<Prop>(prop);
+        insertCollidable<Prop>(prop);
     }
+    void insert(const std::shared_ptr<Behaviour> behaviour) {
+        allBehaviours.push_back(behaviour);
+        behaviour->start();
+    }
+    
+    void insert(const std::shared_ptr<Actor> actor) {
+        allActorPtrs.push_back(actor);
+        actor->setWorld(this);
+        insertGraphicsToManager<Actor>(actor);
+        insertCollidable<Actor>(actor);
+    }
+    void insert(const std::shared_ptr<ParticleSystem> ps) {
+        allParticleEffects.push_back(ps);
+        ps->setWorld(this);
+        insertGraphicsToManager<ParticleSystem>(ps);
+    }
+    void insert(const std::shared_ptr<Camera> cam) {
+        allCameraPtrs.push_back(cam);
+    }
+      
+    template <typename T> // bad code, keep for now
+      void insert(const std::shared_ptr<T>& placeable) { 
+          if (typeid(T) == typeid(Prop)) {
+              allProps.push_back(dynamic_pointer_cast<Prop>(placeable));
+
+          }
+          if (typeid(T) == typeid(Behaviour)) {
+              allBehaviours.push_back(dynamic_pointer_cast<Behaviour>(placeable));
+          }
+          if (typeid(T) == typeid(Actor)) {
+              auto actor = dynamic_pointer_cast<Actor>(placeable);
+              allActorPtrs.push_back(actor);
+              actor-> setWorld(this);
+
+          }
+          if (typeid(T) == typeid(ParticleSystem)) {
+              allParticleEffects.push_back(dynamic_pointer_cast<ParticleSystem>(placeable));
+              dynamic_pointer_cast<ParticleSystem>(placeable)->setWorld(this);
+          }
+          if (typeid(T) == typeid(Camera)) {
+              allCameraPtrs.push_back(dynamic_pointer_cast<Camera>(placeable));
+          }
+          if (auto compable = dynamic_pointer_cast<Componentable>(placeable)) {
+                   insertGraphicsToManager(compable);
+              insertCollidable(compable);
+            }
+      }
      
     template <typename T>
     void deleteX(T* t) {
@@ -179,7 +229,8 @@ public:
      
     void tick(); 
     
-    const ActorList getNearActorsWith(Actor* actor, CompType ct)
+    template <typename T>
+    const ActorList getNearActorsWith(Actor* actor)
     {
         glm::vec3 pos = actor->getPos();
         ActorList al;
@@ -187,20 +238,21 @@ public:
             auto x = allActorPtrs.at(i);
             if (x.get()==actor) continue;
             if (glm::length(pos - x->getPos()) < 10.0) {
-                if (x->hasComponent(ct)) {
+                if (x->hasComponent<T>()) {
                     al.push_back(x);
                 } 
             }
         }
             return al; // make a null component or something
-    }
-    bool getNearestActorWith(Actor* actor, CompType ct, Actor*& nearest)
+    } 
+    template <typename T>
+    bool getNearestActorWith(Actor* actor, Actor*& nearest)
     {  
         bool hasNear = false;
         for (int i = 0 ; i < allActorPtrs.size(); i++) {
             auto x = allActorPtrs.at(i);
             if (x.get() == actor) continue;
-            if (x->hasComponent(ct)) {
+            if (x->hasComponent<T>()) {
                 if (nearest == NULL || actor->getDistanceTo(x.get()) < actor->getDistanceTo(nearest)) {
                     nearest = x.get();
                     hasNear = true;
@@ -216,7 +268,7 @@ public:
 
     void markPlayerHero(const Actor* ph);
     Actor* getPlayerHero();
-    
+  //  std::weak_ptr<Actor>& getPlayerHeroRef();
 };
   
 

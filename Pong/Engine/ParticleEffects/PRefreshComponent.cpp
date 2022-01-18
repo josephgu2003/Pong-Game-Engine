@@ -17,7 +17,7 @@ PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDurati
     particles = pe.getParticles();
     numParticles = pe.getNumParticles();
     dimensions = dimensions_;
-    type = PHYSICS;
+    updatePriority = 1;
     ptcPerInterval = std::ceil(ptcPerSecond * refreshInterval);
     particleMaxDuration = particleMaxDuration_;
     mainDice.setRange(0, 1000);
@@ -39,7 +39,7 @@ void PRefreshComponent::tick() {
     }
     if (myWatch.getTime() > refreshInterval) { // every 0.2 sec do a refresh
         myWatch.resetTime();
-        
+            
         for (int i = 0; i < ptcPerInterval; i++) {
             refreshParticle();
         }
@@ -58,8 +58,9 @@ void PRefreshComponent::refreshParticle() {
         for (int i = 0; i < 3; i++) {
             velocities[firstUnused][i] = (velRangeHigh[i]-velRangeLow[i])*(0.01*(mainDice.roll() % 100)) + velRangeLow[i];
         }
-    }
+    } 
     
+    glm::vec3 teset = static_cast<ParticleSystem*>(actor)->getPos();
     particles[firstUnused].posVec = static_cast<ParticleSystem*>(actor)->getPos() + displacement;
     
     particles[firstUnused].pyrAngles = glm::vec3(0,(mainDice.roll() % 180),0);
@@ -70,6 +71,8 @@ void PRefreshComponent::refreshParticle() {
         firstUnused = 0;
     } else if (particles[firstUnused+1].duration<=0) {
         firstUnused++;
+    } else {
+        
     }
  
 } 
@@ -77,3 +80,13 @@ void PRefreshComponent::refreshParticle() {
 float PRefreshComponent::getParticleLifetime() {
     return particleMaxDuration;
 }
+
+void PRefreshComponent::refreshAll() {
+    ppc = actor->getComponent<PPhysicsComponent>(); 
+    if (ppc) {
+        velocities = ppc->getVelocities();
+    } 
+    for (int it = 0; it < numParticles; it++) {
+        refreshParticle();
+    } 
+} 

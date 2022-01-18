@@ -6,7 +6,7 @@
 //
 
 #include "MySaveGame.hpp"
-#include "NameComponent.hpp"
+#include "NameComponent.hpp" 
 #include "CharacterComponent.hpp"
 #include "LifeComponent.hpp"
 #include "ScriptSystem.hpp"
@@ -17,7 +17,8 @@ ScriptFactory SaveScript::sf;
 void SaveChar::load(GameLevel* g, const nlohmann::json& i) {
         auto handleName = [] (std::shared_ptr<Actor>& a, const nlohmann::json& i) {
             if (NameComponent* nc = a->getComponent<NameComponent>()) {
-                std::string name = i["Name"];
+                std::string name = i.find("Name").value();
+                assert(name != "");
                 a->getComponent<NameComponent>()->init(name);
             }
         };

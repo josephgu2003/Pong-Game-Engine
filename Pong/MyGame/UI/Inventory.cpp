@@ -20,7 +20,7 @@ Inventory::Inventory(std::weak_ptr<InventoryComponent>& invref, glm::vec2 pos, g
     AssetManager::loadTexture("Resources/GlyphsAndUI/inventory.png", &getSingularMaterial().diffuse, true);
     shader->use(); 
     shader->setUniform("alpha", 2.0f);
-    visible = false;
+    setHiddenStatus(true);
     
     if (auto ic = invref.lock()) {
         const std::vector<GameItem>& items = ic->getItems();
@@ -35,8 +35,12 @@ Inventory::Inventory(std::weak_ptr<InventoryComponent>& invref, glm::vec2 pos, g
 void Inventory::notify(const Subject& s, GameEvent ge) {
    if (ge == KEY_PRESSED) {
        if (static_cast<const InputHandler&>(s).getCurrentKeyPress() == GLFW_KEY_I) {
-           visible = !visible;
-           watch.resetTime();
+           if (isHidden())
+           {
+               initFadeFunction(0, 1000, 0.5f);
+               setHiddenStatus(false);
+           }
+           else initFadeFunction(-0.5f, 0.5f, 0.5f); 
        }
    }
     if (ge == ACQUIRE_NEW_ITEM) {
@@ -49,23 +53,3 @@ void Inventory::notify(const Subject& s, GameEvent ge) {
         }
     }
 }
-void Inventory::draw(Renderer* r) {
-
-    if (visible) {
-        float alpha = std::min(1.0f,watch.getTime());
-        setUniformForAll("alpha", alpha);
-        r->renderGeneric(this);
-        for (auto i : children) {
-            (i)->draw(r);
-        }
-    }
-    if (!visible && watch.getTime() < 1.0f) {
-        float alpha = std::min(1.0f,1.0f-watch.getTime());
-        setUniformForAll("alpha", alpha);
-        r->renderGeneric(this);
-        for (auto i : children) {
-            (i)->draw(r);
-        }
-    }
-}
- 

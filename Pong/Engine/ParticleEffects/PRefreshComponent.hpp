@@ -44,8 +44,9 @@ public:
          
     }
     virtual void tick() override;
-    void refreshParticle();
+    void refreshParticle(); 
     float getParticleLifetime();
+    void refreshAll();
 };
 
 

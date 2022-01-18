@@ -45,6 +45,25 @@ uniform sampler2D specular;
     uniform sampler2D normMap;
 uniform float brightness;
 
+
+layout (std140) uniform DistanceFog
+{
+    float fogDensity;
+    float fogGradient;
+    float frustrumNear;
+    float frustrumFar;
+    vec3 fogColor;
+};
+
+
+void applyDistanceFog(inout vec3 color) {
+   float z = 2.0*gl_FragCoord.z-1.0;
+   z = (2.0 * frustrumNear * frustrumFar) / (frustrumFar + frustrumNear - z * (frustrumFar - frustrumNear));
+   float fogFactor = exp(-pow(z*fogDensity,fogGradient));
+   color = mix(fogColor , color,  fogFactor);
+}
+
+
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
@@ -56,6 +75,8 @@ void main()
     vec3 fragColor = vec3(0.0);
     
     fragColor += CalcDirLight(dirLight, norm, viewDir);
+    
+    applyDistanceFog(fragColor);
 
     FragColor = vec4(fragColor, texture(diffuse, TexCoords).a);
     

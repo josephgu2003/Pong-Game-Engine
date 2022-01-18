@@ -18,7 +18,7 @@ PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* s
     Renderer::bindShaderUniblock(shader, ViewProj); 
     // need to load model data to vao vbo,
     setSingularMaterial(map_);
-    type = GRAPHICS;
+    updatePriority = 10;
 } 
 
 PGraphicsComponent::~PGraphicsComponent() { 

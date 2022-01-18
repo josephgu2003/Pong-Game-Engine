@@ -11,10 +11,12 @@
 #include <stdio.h>
 #include "Ability.hpp"
 #include "Prop.hpp"
+#include "Particle.hpp"
 
 class ChargedSlash : public Ability {
 private:
     std::weak_ptr<Prop> slashRef;
+    std::weak_ptr<ParticleSystem> partRef;
 public:
     using Ability::Ability;
     

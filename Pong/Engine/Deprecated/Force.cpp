@@ -9,7 +9,6 @@
 #include "Actor.hpp"
 
 Force::Force() {
-    posVec = glm::vec3(0,0,0);
     dir = glm::vec3(0,1,0); 
     magnitude = 1.0f;
     fType = FORCE_DIRECT;
@@ -17,27 +16,25 @@ Force::Force() {
 }
 
 Force::Force(glm::vec3 pos_, float magnitude_) {
-    posVec = pos_;
-    dir = glm::vec3(-1,0,0);
-    magnitude = magnitude_;
+    init(pos_, magnitude_);
 }
 void Force::init(glm::vec3 pos_, float magnitude_) {
-    posVec = pos_;
+    setPos(pos_);
     dir = glm::vec3(-1,0,0);
     magnitude = magnitude_;
 }
 void Force::affectVelAt(glm::vec3& point, glm::vec3& vel) {
     glm::vec3 force;
-    float distance = glm::length(point - posVec);
+    float distance = glm::length(point - getPos());
     switch (fType){
         case FORCE_DIRECT:
            force = glm::normalize(dir);
             break;
         case FORCE_SUCTION:
-            force = glm::normalize(posVec - point);
+            force = glm::normalize(getPos() - point);
             break;
         case FORCE_VORTEX:
-            force = (shear)*glm::normalize(posVec - point)+(1.0f-shear)* glm::normalize(glm::cross(glm::vec3(0,1,0),glm::normalize(posVec - point)));
+            force = (shear)*glm::normalize(getPos() - point)+(1.0f-shear)* glm::normalize(glm::cross(glm::vec3(0,1,0),glm::normalize(getPos() - point)));
             break; 
                  
     } 
@@ -86,7 +83,7 @@ void Force::setActor(const std::shared_ptr<Actor>& actor_) {
 
 void Force::tick() {
     if (actor.get() != NULL) {
-        posVec = actor->getPos();
+        setPos(actor->getPos());
     }
 }
 
@@ -96,4 +93,5 @@ glm::vec3 Force::getUniStraightForce() {
         return magnitude * dir;
     return glm::vec3(0.0f); 
 }
+ 
  

@@ -16,11 +16,3 @@ uiFrame::uiFrame(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePat
     shader->setUniform("alpha", 1.0f);
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, dimensions, glm::vec3(0));
 }
-
-void uiFrame::draw(Renderer* r) {
-    r->renderGeneric(this);
-    for (auto i : children) {
-        (i)->draw(r);
-    }
-}
- 

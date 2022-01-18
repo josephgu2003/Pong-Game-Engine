@@ -21,7 +21,7 @@
 #define TEX_VORONOI "Resources/Utility/voronoi.png"
 #define TEX_BLANK_NORMALS "Resources/Utility/Screen Shot 2021-07-20 at 9.15.42 AM.png"
 #define TEX_SNOW "Resources/Map/Screen Shot 2021-07-20 at 8.56.47 AM.png"
-#define TEX_BLACK_GRADIENT "Resources/GlyphsAndUI/Project-10.png"
+#define TEX_BLACK_GRADIENT "Resources/GlyphsAndUI/squareborder.png"
 
 #define MOD_PHOENIX "Resources/Models/phoenix/phoenix_bird/materials/phoenix_bird_econ.fbx"
 #define MOD_HOODY "Resources/Models/journey7.obj"

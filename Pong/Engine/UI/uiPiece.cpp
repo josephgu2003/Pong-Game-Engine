@@ -15,26 +15,50 @@ uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_, std::string vs, std
     setShader(new Shader(vs.c_str(), fs.c_str()));
     shader->use();
     shader->setUniform("position", glm::vec3(position_.x, position_.y, 0));
+    hidden = false;
+    usingFadeFunction = false;
 } 
 
 
-void uiPiece::draw(Renderer* r) { 
+void uiPiece::drawUI(Renderer* r) {
     r->renderGeneric(this); 
+}
+
+void uiPiece::draw(Renderer* r) {
+    if (usingFadeFunction) invokeFadeFunction();
+    if (!hidden) {
+        drawUI(r); 
+        for (auto ui = children.begin(); ui != children.end(); ui++) {
+            (*ui)->draw(r);
+        }
+    }
 }
  
 void uiPiece::insertChild(const std::shared_ptr<uiPiece>& uip) {
-    std::shared_ptr<uiPiece> ui = uip;
-    children.push_back(std::move(ui));
+    children.push_back(uip);
 }
  
 void uiPiece::initFadeFunction(float timeToStart, float timeToFade, float fadeDuration) {
     float fadeRateCoefficient = 1.0f / fadeDuration;
-    fadeFunction = [=] (float time_, Shader* s) {
+    fadeFunction = [=] (float time_, uiPiece* s) {
         float alpha = glm::clamp(fadeRateCoefficient*(time_-timeToStart), 0.0f, 1.0f);
         float alpha_ = glm::clamp(fadeRateCoefficient*(timeToFade-time_),0.0f,1.0f);
         float realalpha = std::min(alpha, alpha_);
-        s->use();
-        s->setUniform("alpha", realalpha);
-    };  
+        s->setUniformForAll("alpha", realalpha);
+        return (realalpha == 0.0f);
+    };   
     watch.resetTime();
+    usingFadeFunction = true; 
+}
+
+void uiPiece::setHiddenStatus(bool status) {
+    hidden = status;
+}
+
+void uiPiece::flipHiddenStatus() {
+    hidden = !hidden;
+}
+
+bool uiPiece::isHidden() {
+    return hidden;
 }

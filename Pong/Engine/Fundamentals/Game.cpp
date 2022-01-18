@@ -71,7 +71,6 @@ void Game::initObjects() {
 void Game::linkObjects() {  
     inputHandler.setWindow(window);
     inputHandler.setGame(this);
-    inputHandler.setCamera(camera);
     renderer->setCamera(camera.get());
 }
 
@@ -98,7 +97,7 @@ void Game::tick() {
     ui->renderAll(renderer); 
     renderer->renderFinal();
 
-    glfwPollEvents();
+    glfwPollEvents(); 
     glfwSwapBuffers(window);
 }
  

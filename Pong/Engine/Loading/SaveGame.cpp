@@ -16,10 +16,10 @@ void SaveGame::loadGameLevel(GameLevel *g){
     nlohmann::json lvlSave = saveFile.find(g->getName()).value();
      
     for (auto i = lvlSave.begin(); i != lvlSave.end(); i++) {
-        std::unique_ptr<SaveObject> newObj;
+        std::shared_ptr<SaveObject> newObj;
         newObj.reset(handleObjectOfType((*i)["Type"]));
         newObj->load(g,(*i));
-        saveObjects.push_back(std::move(newObj));
+        saveObjects.push_back((newObj));
     }
 }
 

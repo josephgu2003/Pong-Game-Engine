@@ -28,9 +28,9 @@ public:
     virtual void saveGameLevel(GameLevel* g) {}
 };
 
-class SaveGame : public SaveSystem {
+class SaveGame : public SaveSystem { 
 private:
-    std::vector<std::unique_ptr<SaveObject>> saveObjects;
+    std::vector<std::shared_ptr<SaveObject>> saveObjects;
     virtual SaveObject* handleObjectOfType(std::string type) = 0;
 public:
     void loadGameLevel(GameLevel* g) override;

@@ -9,7 +9,6 @@
 #include "Particle.hpp" 
 
 PPhysicsComponent::PPhysicsComponent(ParticleSystem& pe, float gravity_, float friction_)  : Component(pe){
-    type = ANIM;
     particles = pe.getParticles();
     velocities = new glm::vec3[pe.getNumParticles()];
     numParticles = static_cast<ParticleSystem*>(actor)->getNumParticles();
@@ -18,6 +17,7 @@ PPhysicsComponent::PPhysicsComponent(ParticleSystem& pe, float gravity_, float f
     for (int i = 0; i < numParticles; i++) {
         velocities[i] = glm::vec3(0);
     }
+    updatePriority = 1;
 }
 
 void PPhysicsComponent::tick() {

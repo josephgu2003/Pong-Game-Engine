@@ -33,7 +33,7 @@ void AbilityManager::handleCombatComp(CombatComponent* cc) {
     if (q.size() > 0) {
         for (int j = 0; j < q.size(); j ++) {
             std::shared_ptr<Ability> a = q.at(j);
-            abilities.push_back(std::move(a));
+            abilities.push_back(a);
             q.at(j)->call();
             q.at(j)->notifyTarget();
         } 

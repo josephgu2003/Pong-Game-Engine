@@ -28,20 +28,13 @@
                 "RelationshipType": 1,
                 "SecretNickname1": "Flowy",
                 "SecretNickname2": "Bell"
-            },
-            {
-                "Name1": "Floro",
-                "Name2": "Ted",
-                "RelationshipIntensity": 5.0,
-                "RelationshipType": 2,
-                "SecretNickname1": "",
-                "SecretNickname2": ""
             }
         ],
         "Stamina": [
             83.72227478027344,
             100.0
         ],
+        "Skills:" : {"Swordsmanship" : 1.0},
         "Type": "Player",
         "WorldID": 0
     },
@@ -71,38 +64,6 @@
         ],
         "Type": "Player",
         "WorldID": 1
-    },
-    {
-        "Energy": [
-            0.0,
-            1.0
-        ],
-        "FactoryEnum": 4,
-        "Hunger": [
-            79.44723510742188,
-            100.0
-        ],
-        "Life": [
-            99.91590881347656,
-            100.0
-        ],
-        "Name": "Fred",
-        "PersonalityTraits": [
-            0,
-            1,
-            2
-        ],
-        "Position": [
-            6.500017166137695,
-            42.27630615234375,
-            3.600048065185547
-        ],
-        "Stamina": [
-            82.75313568115234,
-            100.0
-        ],
-        "Type": "Char",
-        "WorldID": 0
     },
     {
         "Energy": [
@@ -151,7 +112,7 @@
         "FactoryEnum": "FloroWakes",
         "Position": [
             10.0,
-            40.0,
+            20.0,
             30.0
         ],
         "Type": "Script",
@@ -162,7 +123,17 @@
         "FactoryEnum": "Snowclaw",
         "Position": [
             71.0,
-            40.0,
+            20.0,
+            -6.0
+        ],
+        "Type": "Script",
+        "WorldID": 0
+    },     {
+        "Completed": false,
+        "FactoryEnum": "Flowers in the Night",
+        "Position": [
+            71.0,
+            20.0,
             -6.0
         ],
         "Type": "Script",

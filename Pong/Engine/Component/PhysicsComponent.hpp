@@ -16,6 +16,7 @@
 class Actor;
 class World;
 
+// handles gravity for now, also stops falling thru the world
 class PhysicsComponent : public Component {
     friend class World;
 protected:

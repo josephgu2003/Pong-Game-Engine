@@ -12,17 +12,18 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-#include "Camera.hpp"
 #include <memory>
 #include <map>
 #include <queue>
 #include "Subject.hpp"
-
+#include <string>
+ 
 class Game; 
 class InputHandler;
 
 typedef void (*keyCallback) (Game*);
 typedef std::map<int, keyCallback> CallbackMap;
+typedef std::function<void(double,double)> MouseEventCallback;
 
 struct KeyEvent {
     int key;
@@ -47,19 +48,20 @@ struct CallbackSet {
 };
 
 class InputHandler : public Subject { //detects input, executes associated action
+    // really should make separate class for mouse events
 private:
     std::queue<KeyEvent> keyEventQ;
     CallbackSet* keyCallbacks = NULL;
     std::map<int, CallbackSet> callbackSets;
-    std::shared_ptr<Camera> activeCamera;
     
     GLFWwindow* window = NULL;
-    
+     
+    std::map<std::string, MouseEventCallback> mouseEventCallbacks;
+    std::string mouseHandlerState;
     double lastMX = 500;
     double lastMY = 400;
     bool firstMouse = true;
     
-    bool mouseMovesCamera;
     std::string readText;
     GLenum currentKey;
     KeyCallbackSet mode;
@@ -71,18 +73,22 @@ public:
     void clear();
     InputHandler();
     ~InputHandler();
+    
     void setWindow(GLFWwindow* window);
-    void dumpTextToPlayer(); //dont need
+    void setHandlerMode(KeyCallbackSet set);
+    void setGame(Game* game); //bad code hahaha
     void setOneTapCallback(int i, keyCallback cbk);
     void setContinuousCallback(int i, keyCallback cbk);
+    void setMouseCallback(std::string state, MouseEventCallback mec);
+    void setMouseHandlerMode(std::string state);
+    
+    void dumpTextToPlayer(); //dont need
     void tick();
-    void moveMouse(double mouseX_, double mouseY_);
+    void mouseMoved(double mouseX_, double mouseY_);
     void addKeyEventToQ(int key, int action, int mods);
-    void setGame(Game* game); //bad code hahaha
-    void setCamera(const std::shared_ptr<Camera>& cam);
     void swapCursorMode();
     GLenum getCurrentKeyPress() const;
-    void setHandlerMode(KeyCallbackSet set);
+
 };
 
 #endif /* InputHandler_hpp */

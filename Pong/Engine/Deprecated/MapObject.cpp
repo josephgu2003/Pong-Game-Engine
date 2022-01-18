@@ -13,7 +13,6 @@
 #include "GraphicsComponent.hpp"
 
 void MapObject::init() {
-    posVec = glm::vec3(0,0,0);
 
   /**  glm::mat4 modelMat = glm::mat4(1.0f);
    // modelMat = glm::rotate(modelMat, glm::radians(90.0f), glm::vec3(1,0,0));
@@ -41,8 +40,7 @@ void MapObject::init() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);**/
 }
 void MapObject::init(glm::vec3 pos_) {
-    posVec = pos_;
-
+    setPos(pos_);
 }
 
  

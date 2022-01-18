@@ -192,7 +192,7 @@ void Renderer::updateUniformStopWatch() {
 
 void Renderer::updateViewProj() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
+    viewMat = glm::lookAt(camera->getPos(),camera->getDir()+camera->getPos(), glm::vec3(0.0,1.0,0.0));
     
     glm::mat4 viewProj = projMat * viewMat;
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
@@ -232,7 +232,7 @@ void Renderer::updateLights() {
     glm::vec4 ambient = glm::vec4(dl.getAmbient(),0);
     glm::vec4 diffuse = glm::vec4(dl.getDiffuse(),0);
     glm::vec4 specular = glm::vec4(dl.getSpecular(),0);
-    glm::vec4 camPos = glm::vec4(camera->posVec,0);
+    glm::vec4 camPos = glm::vec4(camera->getPos(),0);
 
     glBufferSubData(GL_UNIFORM_BUFFER, 4*16,16,glm::value_ptr((shineDir)));
      glBufferSubData(GL_UNIFORM_BUFFER, 5*16, 16, glm::value_ptr((ambient)));
@@ -242,19 +242,32 @@ void Renderer::updateLights() {
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void Renderer::updateCamPos() { 
-    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
+void Renderer::updateCamPos() {
+    auto checkCamDirectlyUpOrDown = [=] () {
+        glm::vec3 checkDir = camera->getDir();
+        checkDir.y = abs(checkDir.y);
+        if (checkDir == glm::vec3(0,1,0)) return true;
+        return false;
+    };
     
+    glm::vec3 camPos = camera->getPos();
+    glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
+    
+   // if (checkCamDirectlyUpOrDown()) {
+   //     viewMat = glm::lookAt(camPos,camera->getDir()+camPos, camera->getUp());
+    //} else {
+        viewMat = glm::lookAt(camPos,camera->getDir()+camPos, glm::vec3(0,1,0));
+    //}
+     
     glm::mat4 viewProj = projMat * viewMat;
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
-     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camera->posVec,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camPos,0)));
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
-
+ 
 void Renderer::loadSkyBoxData() {
     int imageWidth, imageHeight, channels;
     unsigned char* imageData = NULL;
@@ -401,7 +414,9 @@ void Renderer::renderSky() {
     skyShader->use();
      
     glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 1.0);
-    viewMat = glm::lookAt(camera->posVec,camera->dirVec+camera->posVec, glm::vec3(0.0,1.0,0.0));
+    
+    glm::vec3 camPos = camera->getPos(); 
+    viewMat = glm::lookAt(camPos,camera->getDir()+camPos, glm::vec3(0.0,1.0,0.0));
     glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
     camViewMat = projMat * camViewMat;
     glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewProjMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));

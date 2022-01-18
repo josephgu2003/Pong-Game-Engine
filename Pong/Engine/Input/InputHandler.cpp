@@ -20,7 +20,7 @@ void onetap_callback(GLFWwindow* window, int key, int scancode, int action, int 
 
 void mouse_callback(GLFWwindow* window, double mouseX_, double mouseY_) {
     InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
-    handler->moveMouse(mouseX_, mouseY_);
+    handler->mouseMoved(mouseX_, mouseY_);
 }
 
 void InputHandler::dumpTextToPlayer() {
@@ -28,7 +28,7 @@ void InputHandler::dumpTextToPlayer() {
     if (auto x = game->getPlayerHero()) {
         x->getComponent<NameComponent>()->speak(readText, 3.0);
     }
-    readText = ""; 
+    readText = "";   
 }  
 
 InputHandler::InputHandler() {// duplicate code, fix when more advanced callback state support is added
@@ -37,8 +37,8 @@ InputHandler::InputHandler() {// duplicate code, fix when more advanced callback
     callbackSets.insert(std::pair<int,CallbackSet>(KCALL_READTEXT, CallbackSet()));
     mode = KCALL_DEFAULT;
     keyCallbacks = &(callbackSets[KCALL_DEFAULT]);
-    mouseMovesCamera = true;
     readText = "";
+    mouseHandlerState = "";
 }
 
 InputHandler::~InputHandler() {
@@ -90,18 +90,21 @@ void InputHandler::tick() {
 
 
 
-void InputHandler::moveMouse(double mouseX_, double mouseY_) {
+void InputHandler::mouseMoved(double mouseX_, double mouseY_) {
     if (firstMouse) {
         lastMX = mouseX_;
         lastMY = mouseY_;
         firstMouse = false;
     }
-    if (mouseMovesCamera) {
-        double xOffset = mouseX_ - lastMX;
-        double yOffset = lastMY - mouseY_;
-        activeCamera->rotate(glm::vec3(yOffset*0.03, xOffset*0.03, 0));
-    } 
 
+    double xOffset = mouseX_ - lastMX;
+    double yOffset = lastMY - mouseY_;
+    
+    auto callback = mouseEventCallbacks.find(mouseHandlerState);
+    if (callback != mouseEventCallbacks.end()) {
+    callback->second(xOffset, yOffset);
+    }
+ 
     lastMX = mouseX_;
     lastMY = mouseY_;
 }
@@ -110,12 +113,10 @@ void InputHandler::moveMouse(double mouseX_, double mouseY_) {
 void InputHandler::swapCursorMode() {
     switch (glfwGetInputMode(window, GLFW_CURSOR)) {
         case GLFW_CURSOR_DISABLED:
-            mouseMovesCamera = false;
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             break;
             
         case GLFW_CURSOR_NORMAL:
-            mouseMovesCamera = true;
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             break;
     }
@@ -128,11 +129,6 @@ int InputHandler::processInput(const KeyEvent& ke) {
         return 0;
     }
     return 0;
-}
-
-
-void InputHandler::setCamera(const std::shared_ptr<Camera>& cam) {
-    activeCamera = cam;
 }
 
 void InputHandler::setGame(Game* game_) {
@@ -164,3 +160,11 @@ void InputHandler::setContinuousCallback(int i, keyCallback cbk) {
         keyCallbacks->continuousCallbacks.find(i)->second = cbk;
     }
 } 
+
+void InputHandler::setMouseCallback(std::string state, MouseEventCallback mec) {
+    mouseEventCallbacks.insert(std::pair<std::string, MouseEventCallback>(state,mec));
+}
+
+void InputHandler::setMouseHandlerMode(std::string state) {
+    mouseHandlerState = state; 
+}

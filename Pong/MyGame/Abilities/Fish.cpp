@@ -47,35 +47,13 @@ void Fish::tick() {
         
         transform.y = (50.0f*atan(k));
         
-        float l = (float)(sin(duration*30.0f)-sin(duration*30.0f+0.1f))/(1.0f+(sin(duration*30.0f)*sin(duration*30.0f+0.1f)));
+        float l =  (float)(sin(duration*30.0f)-sin(duration*30.0f+0.1f))/(1.0f+(sin(duration*30.0f)*sin(duration*30.0f+0.1f)));
         
         transform.y += (0.8f*atan(k)+0.2f*50*atan(l)+2.0f);
+        transform.y *= 1.8f;
 
-        fish->orient(transform.y+fish->getYaw());
-        fish->posDir(0.08);
-               
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
-                if (i==0) {
-                    if (j ==0) {
-                    
-
-            
-                        for (int j2 = 0 ; j2 < 50; j2++) {
-                //    quad.vertices.at((50*i+j2)).Pos += forwardDir;
-                        }
-                    } 
-                } else {
-//                glm::vec3 lastVertex = quad.vertices.at(50*(i-1)+j).Pos;
-                
-           //     glm::vec3 dir = lastVertex - quad.vertices.at(50*i+j).Pos;
-              //  float length = glm::length(dir);
-  //   float p = 1.0f - 2.0f/49.0f/length;
-             //   quad.vertices.at(50*i+j).Pos += p * dir;
-                }
-            }
-       // quad.pos = quad.vertices.at(0).Pos;
-    }
+        fish->rotate(glm::vec3(0,transform.y,0)); 
+        fish->posRight(-0.08);
     }
     if (duration < 0) {
         on = false;

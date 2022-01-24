@@ -7,7 +7,7 @@
 
 #include "MyActorFactory.hpp"
 #include <stdio.h>
-#include <string> 
+#include <string>  
 #include "AssetManager.hpp"
 #include "PhysicsComponent.hpp"
 #include "CombatComponent.hpp"
@@ -20,7 +20,9 @@
 #include "MeshComponent.hpp"
 #include <functional>
 #include "InventoryComponent.hpp"
+#include "CollisionComponent.hpp" 
 #include "MyGameItems.hpp"
+#include "LightComponent.hpp"
  
 typedef std::shared_ptr<Component> ActComp;
  
@@ -96,7 +98,6 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             shader->setUniform("brightness", 0.5);
             Renderer::bindShaderUniblock(shader, ViewProj);
             Renderer::bindShaderUniblock(shader, DistanceFog);
-             
             Renderer::bindShaderUniblock(shader, Lights);
              
             Material map;
@@ -152,17 +153,17 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
         actor->Componentable::addComponent<NameComponent>(*(actor.get()));
         actor->Componentable::addComponent<InventoryComponent>(*(actor.get()), ItemNames);
         actor->Componentable::addComponent<LifeComponent>(*(actor.get()));
-        actor->Componentable::addComponent<CollisionComponent>(*(actor.get()),*(actor.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.3f,-0.1f),AxisBounds(0.2f,-0.2f));
+        actor->Componentable::addComponent<CollisionComponent>(*(actor.get()),*(actor.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.4f,-0.4f),AxisBounds(0.2f,-0.2f));
         
         Material map;
         AssetManager::loadTexture("Resources/Models/ScarfChar/scarfchar_diffuse.png", &map.diffuse, true);
-         
+          
         AssetManager::loadTexture(TEX_BLANK_NORMALS, &map.normMap, false);
  
         Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
         shader->use();
         shader->setUniform("animated", false); 
-        shader->setUniform("size", 0.005); 
+        shader->setUniform("size", 1.0);
         shader->setUniform("brightness", 0.0); 
           
         Renderer::bindShaderUniblock(shader,    ViewProj);
@@ -170,7 +171,6 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
         Renderer::bindShaderUniblock(shader,      DistanceFog);
           
         actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
-        actor->Componentable::addComponent<CombatComponent>(*(actor.get()));
         
         ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
         static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/ScarfChar/scarfchar.fbx");
@@ -179,6 +179,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
  
         static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Idle");
         actor->addComp(ac);
+        actor->setScale(0.005);
         break;  
             
     } 
@@ -193,7 +194,8 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
  
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setUniform("size", 0.003);
+            shader->setUniform("size", 1.00);
+            actor->setScale(0.003);
             shader->setUniform("brightness", 0.0);
               
             Renderer::bindShaderUniblock(shader,      ViewProj);
@@ -201,7 +203,6 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             Renderer::bindShaderUniblock(shader, DistanceFog); 
               
             actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
-            actor->Componentable::addComponent<CombatComponent>(*(actor.get()));
             
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
@@ -211,13 +212,14 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Passive");
             actor->addComp(ac);
             break;
-             
-        }
+               
+        }   
         case ACTOR_FISH: { // maybe actor would want to know about ability field variables??
-            Material map;
+            actor->addComponent<LightComponent>(*actor.get(), *actor.get(), PointLight(glm::vec3(0.2,0.2,0.2), glm::vec3(3.5,3.5,3.5), glm::vec3(2.0,2.0,2.0), 1.0, 0.2, 0.2, glm::vec3(0)));
+            Material map;   
             stbi_set_flip_vertically_on_load(1); 
             AssetManager::loadTexture(TEX_FISH, &map.diffuse, true); 
-
+ 
             Shader* shader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
             shader->use();
             shader->setUniform("alpha", 1.0);
@@ -230,7 +232,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             std::shared_ptr<VertexMesh> mesh = std::make_shared<VertexMesh>();
             int gridX = 20;
             int gridY = 3;
-            float length = 0.8; 
+            float length = 0.8;  
             static_pointer_cast<GraphicsComponent>(gc)->initGrid(gridX, gridY, length, mesh);
             actor->addComp(gc); 
                 
@@ -259,12 +261,12 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
                             //first column will always move with the actor pos center
                         } else {
                         glm::vec3& lastVertex = v->vertices.at(i+j*gridX).Pos;
-                //            lastVertex += glm::vec3(length*0.5,0,0);
+
                             lastVertex.x = lastVertex.x * cos(deltayaw) - lastVertex.z*sin(deltayaw);
                             lastVertex.z = lastVertex.x * sin(deltayaw) + lastVertex.z*cos(deltayaw);
                             // change of basis
                             lastVertex += glm::vec3(0.08,0,0);
-                      //      lastVertex -= glm::vec3(length*0.5,0,0);
+
                         glm::vec3 dir = v->vertices.at((i-1)+j*gridX).Pos - lastVertex;
                         float lengthDir = glm::length(dir);
                         float p = 1.0f - (length/(gridX-1))/lengthDir;
@@ -277,7 +279,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
 
             static_pointer_cast<MeshComponent>(mc)->setMeshAction(meshAction);
             actor->addComp(mc);
-     //       actor->bakeRotation(glm::vec3(0,90,0));
+
             break; 
         }
         default: {

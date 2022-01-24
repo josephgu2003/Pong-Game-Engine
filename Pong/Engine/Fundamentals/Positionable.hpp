@@ -82,6 +82,8 @@ public:
         return rightVec;
     }
     
+    void setScale(float scale);
+    
     float getYaw();
     void setPos(glm::vec3 pos_); 
     void translatePos(const glm::vec3& translate);

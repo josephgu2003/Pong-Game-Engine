@@ -18,9 +18,9 @@ class Light {
 public:
     Light();
     Light(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
-    glm::vec3 getAmbient();
-    glm::vec3 getDiffuse();
-    glm::vec3 getSpecular();
+    const glm::vec3& getAmbient() const;
+    const glm::vec3& getDiffuse() const;
+    const glm::vec3& getSpecular() const;
 };
 
 #endif /* Light_hpp */

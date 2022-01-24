@@ -31,13 +31,8 @@ void Fish::call() {
 void Fish::tick() {
     actor->getComponent<LifeComponent>()->incStatValue(-0.03, STAT_ENERGY);
     if (step == 0) {
-        if (duration > 16.5) { 
-         //   quad.alpha = (18.0-duration)/1.5;
-        } 
-        else {
-            step++;
-            freeActor();
-        }
+        step++;
+        freeActor();
     }
      
     if (step == 1) {
@@ -55,7 +50,7 @@ void Fish::tick() {
         fish->rotate(glm::vec3(0,transform.y,0)); 
         fish->posRight(-0.08);
     }
-    if (duration < 0) {
+    if (duration < 0.0f) {
         on = false;
     }
     duration -= (float)glfwGetTime();

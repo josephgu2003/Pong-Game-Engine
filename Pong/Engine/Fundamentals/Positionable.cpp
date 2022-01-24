@@ -17,7 +17,7 @@ Positionable::Positionable() {
     modelMatrix = glm::mat4(1.0f);
     bakedRotationMatrix = glm::mat4(1.0f);
     updateModelMatrix = false;
-    usingBakedRotations = false;
+    usingBakedRotations = false; 
 } 
 
 float Positionable::getYaw() {
@@ -167,8 +167,10 @@ float Positionable::getDistanceTo(glm::vec3 p) {
     return d;
 }
 
-
-
+void Positionable::setScale(float scale) {
+    scalingMatrix = glm::mat4(1.0f);
+    scalingMatrix = glm::scale(scalingMatrix,glm::vec3(scale,scale,scale));
+}
 
 
 

@@ -10,17 +10,20 @@
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-#include <string>
+#include <string> 
 #include <unordered_map>
- 
-#define FUNCTION_DEFS "Shaders/Functions.json"
+
+
 // manages a shader
+ 
+inline const std::string INCLUDE_DIRECTIVE = "#include";
+
 class Shader
 {
-private:
-    void fillInFunctions(std::string& shaderCode);
-    static
-    std::unordered_map<std::string, std::string> functions;
+private:  
+
+    void preprocessGLSL(std::string &shaderCode);
+    static std::unordered_map<std::string, std::string> functions;
     void makeShader(GLenum shaderType, const char* src, GLuint& shader);
 public:
     // program ID

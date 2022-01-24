@@ -39,7 +39,7 @@ public:
     static std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName); 
  //   static GLuint getTextureFromFile(std::string path);
     // ^^ what about making them work??
-    
+    static void loadSimpleCube(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModel(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     
@@ -50,8 +50,7 @@ public:
     static void setupVAOAttribs(VertexType vt);
     static void setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout);
     static void load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position);
-    static void loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const unsigned short* heightMap, int imageWidth, int imageHeight, int chunkX, int chunkY, glm::vec2 originPos, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices); 
-    
+    static void loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const unsigned short* heightMap, int imageWidth, int imageHeight, int chunkX, int chunkY, glm::vec2 originPos, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadSimpleVertexGrid(int verticesX, int verticesY, float scale, std::vector<PosVertex>& mesh, unsigned int VAO, unsigned int VBO, unsigned int EBO, unsigned int& numIndices);
     static void incTanBitanForTriangle(TBNVertex& v1, TBNVertex& v2, TBNVertex& v3);
     static void normalizeTanBitan(std::vector<TBNVertex>& vertices);

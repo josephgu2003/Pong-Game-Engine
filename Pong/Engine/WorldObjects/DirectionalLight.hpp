@@ -17,6 +17,7 @@ public:
     DirectionalLight();
     DirectionalLight(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 shineDir);
     void setShineDir(glm::vec3 shineDir_);
-    glm::vec3 getShineDir();
+    glm::vec3 getShineDir() const;
+    DirectionalLight interpolateWith(DirectionalLight& dl, float ratio);
 };
 #endif /* DirectionalLight_hpp */

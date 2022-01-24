@@ -6,10 +6,9 @@
 // 
 
 #include "GameLevel.hpp"
-#include "Renderer.hpp"
 
 GameLevel::~GameLevel() {
-    renderer->setWorld(nullptr);
+
 }
 
 GameLevel::GameLevel(Renderer* r, int numWorlds, std::string name_) {
@@ -17,9 +16,8 @@ GameLevel::GameLevel(Renderer* r, int numWorlds, std::string name_) {
     for (int i = 0; i < numWorlds; i++) {
         worlds.push_back(std::make_shared<World>(r));
     }
-    renderer = r;
     swapWorld(0);
-    r->setWorld(worlds.at(0).get()); 
+
 } 
 
 std::string GameLevel::tick() {  
@@ -49,7 +47,6 @@ void GameLevel::changeLevel(std::string newLevel) {
 
 void GameLevel::swapWorld(int i) {
     activeWorld = worlds.at(i);
-    renderer->setWorld(worlds.at(i).get());
 }
 
 std::string GameLevel::getName() {

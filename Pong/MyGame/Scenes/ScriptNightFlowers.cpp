@@ -7,6 +7,7 @@
 
 #include "ScriptNightFlowers.hpp"
 #include "World.hpp"
+#include "GraphicsComponent.hpp"
 #include "NotificationSystem.hpp"
 
 std::vector<std::string> fitnCrew = {
@@ -21,6 +22,7 @@ ScriptNightFlowers::ScriptNightFlowers(World* world, bool completed) : Script(wo
 
 void ScriptNightFlowers::act() {
     Actor* moonbell = getActorNamed("Moonbell");
+    Actor* floro = getActorNamed("Floro");
     setPos(moonbell->getPos());
     switch (step) {
         case 0: {
@@ -40,6 +42,7 @@ void ScriptNightFlowers::act() {
             speak("Floro", "I think I know you.", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break;
         }
         case 3: {
@@ -47,6 +50,7 @@ void ScriptNightFlowers::act() {
             speak("Moonbell", "The wolf was right. The past is broken and cannot be returned to.", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break;
         }
         case 4: {
@@ -54,6 +58,7 @@ void ScriptNightFlowers::act() {
             speak("Floro", "You can put down your sword and turn around right now. How is life different?", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break;
         };
         case 5: {
@@ -61,6 +66,7 @@ void ScriptNightFlowers::act() {
             speak("Moonbell", "Can I? What if I can't?", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break;
         }
         case 6: {
@@ -68,6 +74,7 @@ void ScriptNightFlowers::act() {
             speak("Moonbell", "You are a nobody. You can have dreams, I can't.", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break; 
         }
         case 7: {
@@ -75,17 +82,38 @@ void ScriptNightFlowers::act() {
             speak("Floro", "If you aren't a nobody, who are you?", 3.0f);
             }
             waitFor(6.0f);
+            moonbell->posDir(0.02);
             break;
         }
         case 8: {
             if (!isWaiting()) {
-            speak("Moonbell", "The truth is, our background is no longer so different", 3.0f);
+            speak("Moonbell", "The truth is, our background is no longer so different.", 3.0f);
             }
-            waitFor(2.0f);
+            waitFor(10.0f);
+            moonbell->posDir(0.02);
             break;
         }
         case 9: {
-            
+            if (!isWaiting()) {
+            floro->getComponent<GraphicsComponent>()->setUniform<float>("brightness", 6.0f);
+            }
+            waitFor(3.0f);
+            moonbell->posDir(0.02);
+            break;
         }
+        case 10: {
+            if (!isWaiting()) {
+            speak("Floro", "I'm glowing?", 2.0f);
+            }
+            waitFor(4.0f);
+            break;
+        } 
+        case 11: {
+            if (!isWaiting()) {
+            speak("Floro", "What do you see? Don't answer, this is you.", 2.0f);
+            }
+            waitFor(4.0f);
+            break;
+        } 
     }
 }

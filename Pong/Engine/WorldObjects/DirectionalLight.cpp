@@ -16,7 +16,10 @@ DirectionalLight::DirectionalLight(glm::vec3 ambient, glm::vec3 diffuse, glm::ve
 void DirectionalLight::setShineDir(glm::vec3 shineDir_) {
     shineDir = shineDir_;
 }
-glm::vec3 DirectionalLight::getShineDir() {
+glm::vec3 DirectionalLight::getShineDir() const {
     return shineDir;
 } 
 
+DirectionalLight DirectionalLight::interpolateWith(DirectionalLight& dl, float ratio) {
+    return DirectionalLight(glm::mix(getAmbient(), dl.getAmbient(), ratio), glm::mix(getDiffuse(), dl.getDiffuse(), ratio), glm::mix(getSpecular(), dl.getSpecular(), ratio), glm::mix(getShineDir(), dl.getShineDir(), ratio));
+}

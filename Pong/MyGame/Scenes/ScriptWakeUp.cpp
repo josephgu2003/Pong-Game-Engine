@@ -15,7 +15,10 @@
 #include "NotificationSystem.hpp"
 #include "FollowPos.hpp"
 #include "InventoryComponent.hpp"
+#include "FogTransition.hpp"
+#include "DirlightTransition.hpp"
 
+ 
 std::vector<std::string> myCrewWU = {
     "Floro", "Moonbell" 
 };
@@ -47,7 +50,7 @@ bool IntroPoem::tick(uiLayout* ui, float time) {
         case 0: {
             firstTime = time;
             uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), "Resources/GlyphsAndUI/blacksquare.png");
-            line1 = std::make_shared<uiText>("Hopeful is the one ", -0.9, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line1 = std::make_shared<uiText>("Hopeful is the one in the snow", -0.9, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
             line2 = std::make_shared<uiText>("An elegy sung for I false hero.", -0.9, -0.1,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
             line3 = std::make_shared<uiText>("Every rising sun sets the evening before", -0.9, -0.2,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
             line4 = std::make_shared<uiText>("The black night, lit with stars no more.", -0.9, -0.3,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
@@ -95,7 +98,7 @@ void ScriptWakeUp::act() {
         }
     }
         
-    if (step > 3 && step < 9) {
+    if (step > 3 && step < 10) {
         getActorNamed("Moonbell")->posDir(0.025);
     }
             
@@ -139,6 +142,9 @@ void ScriptWakeUp::act() {
         case 3: {
             if (!isWaiting()) {
             getActorNamed("Moonbell")->orientYawTo(glm::vec3(74,44,-2)-getActorNamed("Moonbell")->getPos());
+            DirectionalLight            dl2(glm::vec3(0.1,0.09,0.15),glm::vec3(0.1,0.1,0.1),glm::vec3(0.8,0.8,0.8),glm::vec3(-1,-1,0));
+            world->addComponent<FogTransition>(*world,20.0f,0.01, 1.0, glm::vec3(0.2,0.2,0.24));
+            world->addComponent<DirlightTransition>(*world, 60.0f, dl2);
             }
             waitFor(4.0f);
             break;
@@ -158,33 +164,46 @@ void ScriptWakeUp::act() {
             break;
         }
         case 6: {
-            waitFor(26.0f);
+            waitFor(18.0f);
             break;
         }
 
         case 7: {
             if (noActiveSpeech()) {
-                std::vector<std::string> lines = {"You do not trust me yet.", "But at this moment of danger we both need each other."};
-                std::vector<float> durations = {7.0f, 7.0f};
+                std::vector<std::string> lines = {"I found you in the snow.", "You've been asleep for a long time."};
+                std::vector<float> durations = {3.0f, 3.0f};
                 makeSpeech("Moonbell", lines, durations);
                 step++;
             }
             break;
         }
+             
         case 8: {
+            if (noActiveSpeech()) {
+                std::vector<std::string> lines = {"No...", "No... I feel that there is something else."};
+                std::vector<float> durations = {3.0f, 3.0f};
+             //   makeSpeech("Floro", lines, durations);
+                step++; 
+            }
+            break;
+        }
+            
+        case 9: {
             if(getActorNamed("Moonbell")->getDistanceTo(glm::vec3(74,getActorNamed("Moonbell")->getPos().y,-2)) < 0.5) {
                 step++;
             } 
             break; 
         }
-        case 9: {
+        case 10: {
             if (!isWaiting()) {
-                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Trust your instincts.", 2.0);
+                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Even ghosts of the night get no rest.", 2.0);
+                DirectionalLight            dl2(glm::vec3(0.03,0.03,0.04),glm::vec3(0.05,0.05,0.06),glm::vec3(0.4,0.4,0.4),glm::vec3(-1,-1,0));
+                world->addComponent<DirlightTransition>(*world, 10.0f, dl2);
             }
             waitFor(3.0);
             break;
         }
-        case 10: {
+        case 11: {
             world->deleteX<ParticleSystem>(snow.get());
             snow.reset(); 
             endScene();

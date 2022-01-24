@@ -3,46 +3,24 @@
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
+#include "Shaders/Include/TangentSpace.fs"
+
 in vec3 Normals;
 
 in vec2 TexCoords;
 
-in VS_OUT {
-    vec3 fragPos;
-    vec3 TangentLightDir;
-    vec3 TangentViewPos;
-    vec3 TangentFragPos;
-} fs_in;
-
-struct Light {
-vec3 pos;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-    
-};
-
-struct DirLight {
-vec3 dir;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-};
-
 layout (std140) uniform Lights
 {
-   Light light;
+    Light light;
 
     DirLight dirLight;
     
     vec3 viewPos;
 };
 
-    uniform sampler2D diffuse;
+uniform sampler2D diffuse;
 uniform sampler2D specular;
-    uniform sampler2D normMap;
+uniform sampler2D normMap;
 uniform float brightness;
 
 
@@ -55,6 +33,7 @@ layout (std140) uniform DistanceFog
     vec3 fogColor;
 };
 
+in TangentSpaceInfo tanspaceinfo;
 
 void applyDistanceFog(inout vec3 color) {
    float z = 2.0*gl_FragCoord.z-1.0;
@@ -63,18 +42,19 @@ void applyDistanceFog(inout vec3 color) {
    color = mix(fogColor , color,  fogFactor);
 }
 
-
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
-    vec3 viewDir = vec3(fs_in.TangentViewPos-fs_in.TangentFragPos);
+    vec3 viewDir = vec3(tanspaceinfo.TangentViewPos-tanspaceinfo.TangentFragPos);
     float fogFactor = exp(-pow(length(viewDir)*0.03,2));
     vec3 norm = normalize(texture(normMap, TexCoords).rgb * 2.0 - 1.0);
      
     vec3 fragColor = vec3(0.0);
-    
+    vec3 diffuseColor = texture(diffuse, TexCoords).rgb;
+    vec3 specColor = vec3(0,0,0);
     fragColor += CalcDirLight(dirLight, norm, viewDir);
+    fragColor += CalcPointLight(tanspaceinfo.tangentLight, tanspaceinfo.TangentFragPos, norm, viewDir, diffuseColor, diffuseColor, specColor);
     
     applyDistanceFog(fragColor);
 
@@ -89,7 +69,7 @@ void main()
 
 vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
     
-    vec3 dirlightDir = normalize(-fs_in.TangentLightDir);
+    vec3 dirlightDir = normalize(-tanspaceinfo.TangentLightDir);
      
     float diff = 0;
     float spec = 0;

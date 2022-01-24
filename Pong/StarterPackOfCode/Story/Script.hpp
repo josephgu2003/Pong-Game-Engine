@@ -49,6 +49,15 @@ protected:
     bool noActiveSpeech();
     void lockCamToPlayer();
     void focusCamOnActor(glm::vec3 offset, const std::string& actor);
+    
+    template <typename Functor>
+    void doAndWaitFor(Functor functor, float duration) {
+        if (!isWaiting()) {
+            functor();
+        }
+        waitFor(duration);
+    }
+    
 public:
     Script(World* world, std::vector<std::string> crew, float radius, bool completed, std::string scenenName, std::vector<std::string> prerequisiteScenes_);
     void tick();

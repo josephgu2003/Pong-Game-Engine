@@ -24,6 +24,7 @@ Camera::~Camera() {
 void Camera::lockOntoActor() {
     lockOnActor  = true;
 }
+
 void Camera::setActor(Positionable* actor_) {
     actor = actor_;
 }

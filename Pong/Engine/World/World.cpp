@@ -20,13 +20,9 @@
  
 std::vector<addSubSystem> World::worldSubSystemsTemplate;
 
-World::World(Renderer* r) {
-    renderer = r;
-    weather.skyTextureFiles = {"Resources/Skybox/Default/right.png",
-        "Resources/Skybox/Default/left.png",
-        "Resources/Skybox/Default/top.png", "Resources/Skybox/Default/bottom.png",
-        "Resources/Skybox/Default/back.png",
-        "Resources/Skybox/Default/front.png"};
+World::World(Renderer* r) { 
+    distanceFog = WorldFog(r);
+    renderer = r; 
     for (auto i = worldSubSystemsTemplate.begin(); i != worldSubSystemsTemplate.end(); i++) {
         addComp((*i)(*this));
     }
@@ -40,10 +36,6 @@ World::~World() {
     }
 }  
 
-std::vector<std::string>* World::getSkyTextureFiles() {
-    return &weather.skyTextureFiles; 
-}
-
 Updates World::checkforUpdates() {
     return updates;
 }
@@ -56,30 +48,19 @@ void World::updateCleared(int i) {
     if (i == 2)
     updates.skyUpdate = false;
 }
- 
-void World::setWeather(DirectionalLight dirLight_, float fogDensity_, float fogGradient_, glm::vec3 fogColor_, std::vector<std::string> skyTextureFiles_) {
-    weather.dirLight = dirLight_;
-    weather.fogDensity = fogDensity_;
-    weather.fogGradient = fogGradient_;
-    weather.fogColor = fogColor_;
-    weather.skyTextureFiles = skyTextureFiles_; 
-    updates.lightingUpdate = true;
-    updates.fogUpdate = true;
-    updates.skyUpdate = true; 
-}
 
-Weather World::getWeather() {
-    return weather;
+Atmosphere& World::getAtmosphere() {
+    return atmosphere;
 }
-
 void World::drawAll() {
+    atmosphere.draw(renderer);
     
     mapManager.drawChunks(renderer);
         
     worldRenderingManager.drawAll(renderer);
     
     for (auto i = components.begin(); i != components.end(); i++) {
-        static_pointer_cast<WorldSubSystem>((*i))->drawAll(renderer);
+        if (auto wss = dynamic_pointer_cast<WorldSubSystem>((*i))) wss->drawAll(renderer);
     }
         
    // soundTextManager.drawAll(renderer);
@@ -201,7 +182,20 @@ std::weak_ptr<Camera> World::getCameraRef() {
     return camref;
 }
 
+void World::setDirectionalLight(const DirectionalLight& dl_) {
+    if (renderer) {
+        renderer->updateLights(dl_);
+    } 
+    dl = dl_;
+}
 
+const DirectionalLight& World::getDirectionalLight() {
+    return dl;
+}
+
+WorldFog& World::getDistanceFog() {
+    return distanceFog;
+}
 
 // next steps:
 // world objects class hierarchy

@@ -43,17 +43,20 @@ void PPointGraphicsComponent::tick() {
         maxDuration = prc->getParticleLifetime();
     }
     v.resize(n*4);
-    for (int i = 0; i < n; i++) {
-        v[i] = p[i].posVec.x; 
-        i++;  
-        v[i] = p[i].posVec.y; 
-        i++;
-        v[i] = p[i].posVec.z;
-        i++;
-        v[i] = p[i].duration / (maxDuration) ;
+    
+    int counter = 0;
+    for (int i = 0; i < n; i++) { 
+        v[counter] = p[i].posVec.x;
+        counter++;
+        v[counter] = p[i].posVec.y;
+        counter++;
+        v[counter] = p[i].posVec.z;
+        counter++;
+        v[counter] = p[i].duration / (maxDuration);
+        counter++;
     }//may need optimization contigious vs separated memory
     updateInstanceBuffer(v);
-}
+} 
  
 PPointGraphicsComponent::~PPointGraphicsComponent() {
     

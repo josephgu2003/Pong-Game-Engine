@@ -16,17 +16,7 @@ std::vector<Texture> AssetManager::loadedTextures;
 HeightMap AssetManager::heightMap; 
 
 void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb) {
- for (int j = 0; j < loadedTextures.size(); j++) {
-       if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-           texture->id = loadedTextures[j].id;
-           texture->path = loadedTextures[j].path;
-        texture->textureTarget = GL_TEXTURE_2D;
-         texture->dimensions = loadedTextures[j].dimensions;
-           printf("Texture already loaded: %s \n", filePath);
-           return;
-       }
-   }
-    printf("Load new texture: %s \n", filePath);
+    if (loadCachedTexture(filePath, texture)) return;
    int imageWidth = 0;
    int imageHeight = 0;
    int channels = 0;
@@ -78,16 +68,7 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
     
     stbi_set_flip_vertically_on_load(0);
  
-    for (int j = 0; j < loadedTextures.size(); j++) {
-        if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
-            texture->id = loadedTextures[j].id;
-            texture->path = loadedTextures[j].path;
-            texture->textureTarget = GL_TEXTURE_2D_ARRAY;
-            texture->dimensions = loadedTextures[j].dimensions;
-            printf("Texture already loaded: %s \n", filePath);
-            return;
-        }
-    }
+    if (loadCachedTexture(filePath, texture)) return;
     printf("Load new texture: %s \n", filePath);
     std::vector<unsigned char*> imageDatas;
     
@@ -311,168 +292,7 @@ void AssetManager::loadHeightMap(std::string src, unsigned short*& newHeightMap,
     heightMap.width = *mapHeight;
     copyHeightMap();
     printf("Load new heightmap");
-} 
-
-/**
-static std::vector<Mesh> processNode(aiNode* node, const aiScene* scene) {
-    //load each mesh from node
-    std::vector<Mesh> meshes;
-    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::cout << meshes.size() << "\n";
-        meshes.push_back(processMesh(mesh, scene));
-    }
-    for(unsigned int i = 0; i < node->mNumChildren; i++)
-    {
-        processNode(node->mChildren[i], scene);
-    }
-    return meshes;
 }
-
-Mesh processMesh(aiMesh* mesh, const aiScene* scene) {5
-    std::vector<Vertex> vertices;
-    std::vector<GLuint> indices;
-    std::vector<Texture> textures;
-    
-    for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
-        Vertex vertex;
-        
-        glm::vec3 pos_;
-        pos_.x = mesh->mVertices[i].x;
-        pos_.y = mesh->mVertices[i].y;
-        pos_.z = mesh->mVertices[i].z;
-        vertex.Pos = pos_;
-        
-        if (mesh->mTextureCoords[0]) {
-            glm::vec2 texCoords_;
-            texCoords_.x = mesh->mTextureCoords[0][i].x;
-            texCoords_.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = texCoords_;
-        } else {
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-        }
-        
-        vertices.push_back(vertex);
-    }
-    
-    for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
-        aiFace face = mesh->mFaces[i];
-        for (unsigned int j = 0; j < face.mNumIndices; j++) {
-            indices.push_back(face.mIndices[j]);
-        }
-    }
-    
-    if (mesh->mMaterialIndex >= 0) {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
-    Mesh returnedMesh(vertices, indices, textures);
-    return returnedMesh;
-}
-
-std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type_, std::string typeName) {
-    std::vector<Texture> textures;
-    for (unsigned int i = 0; i < material->GetTextureCount(type_); i++) {
-        aiString string;
-        
-        material->GetTexture(type_, i, &string);
-        bool texIsRepeat = false;
-        std::string string_ = (std::string)string.C_Str();
-        std::string fileName = string_.substr(string_.find_last_of("\\")+ 1);
-        std::string filePath = directory+"/"+fileName;
-        
-        for (int j = 0; j < loadedTextures.size(); j++) {
-            if (std::strcmp(loadedTextures[j].path.data(), filePath.c_str()) == 0) {
-                textures.push_back(loadedTextures[j]);
-                std::cout << loadedTextures[j].path.data() << "\n";
-                texIsRepeat = true;
-                break;
-            }
-        }
-        if (!texIsRepeat) {
-            Texture texture;
-            texture.id = getTextureFromFile(filePath);
-            texture.type = typeName;
-            texture.path = filePath;
-            textures.push_back(texture);
-            loadedTextures.push_back(texture);
-        }
-    }
-    return textures;
-}
-
-GLuint getTextureFromFile(std::string texturePath_) {
-    GLuint tex = 0;
-    int imageWidth = 0;
-    int imageHeight = 0;
-    int channels = 0;
-    unsigned char* imageData;
-    std::cout << texturePath_ << "\n";
-    const char* texturePath = texturePath_.c_str();
-    
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
-    
-    imageData = stbi_load(texturePath, &imageWidth, &imageHeight, &channels, 0);
-    if (imageData) {
-        GLenum format;
-               if (channels == 1)
-                   format = GL_RED;
-               else if (channels == 3)
-                   format = GL_RGB;
-               else if (channels == 4)
-                   format = GL_RGBA;
-        glTexImage2D(GL_TEXTURE_2D, 0, format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture data \n" << stbi_failure_reason() << "\n";
-    }
-    stbi_image_free(imageData);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-   // glBindTexture(GL_TEXTURE_2D, 0);
-    return tex;
-}
-**/
-/**
-void AssetManager::loadModel(const char* filePath, Model*& model) {
-    for (int i = 0; i < loadedModels.size(); i++) {
-        std::string s(filePath);
-        if (s == loadedModels.at(i)->getFilepath()) {
-     
-            *model = *(loadedModels.at(i).get());
-            return; 
-        } 
-    }
-    
-   /** std::unique_ptr<Model> archive = std::make_unique<Model>(filePath);
-
-    *model = *(archive.get());
- 
-    loadedModels.push_back(std::move(archive));
-
-    model = new Model(filePath); 
-}
-
-void AssetManager::loadModel(const char* filePath, Model*& model, AnimComponent* anim) {
-// !!! separate model and animation loading maybe, this method makes repeated model loading
-    
-    std::unique_ptr<Model> archive = std::make_unique<Model>(filePath, anim);
-
-    *model = *(archive.get());
-
-    loadedModels.push_back(std::move(archive));
-    model = new Model(filePath, anim);
-}**/
- 
 
 void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y) {
     frame->width = x;
@@ -491,7 +311,7 @@ void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame->ftexture, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
     
-   glGenRenderbuffers(1, &frame->frbo);
+    glGenRenderbuffers(1, &frame->frbo);
     glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,x, y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
@@ -593,7 +413,7 @@ void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, i
     frame->ftexture = *ftexture_;
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *ftexture_, 0);
     
-   glGenRenderbuffers(1, &frame->frbo);
+    glGenRenderbuffers(1, &frame->frbo);
     glBindRenderbuffer(GL_RENDERBUFFER, frame->frbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, x, y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, frame->frbo);
@@ -624,3 +444,42 @@ void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, i
     glBindVertexArray(0);
     
 }
+void AssetManager::loadCubeMapTexture(Texture* texture, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ) {
+    if(loadCachedTexture((posX+negX+posY+negY+posZ+negZ).c_str(), texture)) return;
+    
+    int imageWidth, imageHeight, channels;
+    unsigned char* imageData = NULL;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id);
+
+    std::vector<std::string> skyFiles = {posX, negX, posY, negY, posZ, negZ};
+    for (unsigned int i = 0; i < skyFiles.size(); i++) {
+        imageData = stbi_load(skyFiles.at(i).c_str(), &imageWidth, &imageHeight, &channels, 0);
+        if (imageData) {
+            GLenum format = 4;
+                   if (channels == 1)
+                       format = GL_RED;
+                   else if (channels == 3)
+                       format = GL_RGB;
+                   else if (channels == 4)
+                       format = GL_RGBA;
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_SRGB, imageWidth, imageHeight, 0,format, GL_UNSIGNED_BYTE, imageData  );
+            stbi_image_free(imageData);
+        } else {
+            std::cout << "Failed to load sky box data \n";
+        }
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    
+    texture->dimensions.x = imageWidth;
+    texture->dimensions.y = imageHeight;
+    texture->textureTarget = GL_TEXTURE_CUBE_MAP;
+    
+    loadedTextures.push_back(*texture);
+}
+ 

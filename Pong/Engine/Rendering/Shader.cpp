@@ -11,30 +11,52 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 #include "json.hpp"
+#include <vector>
 
 std::unordered_map<std::string, std::string> Shader::functions;
  
-void Shader::loadFunctionDefinitions() {
-    nlohmann::json jFunctions;
-    std::ifstream i(FUNCTION_DEFS);
-    i >> jFunctions;
-    functions = jFunctions.get<std::unordered_map<std::string, std::string>>();
-}
 
 Shader::Shader () {
     
 }
 
-void Shader::fillInFunctions(std::string &shaderCode) {
-    for (auto funcDefinition = functions.begin(); funcDefinition != functions.end(); funcDefinition++) {
-        std::string symbol = funcDefinition->first;
-        size_t found = shaderCode.find(symbol);
-        while (found != std::string::npos) {
-            std::string inlinedFunctionCode = funcDefinition->second;
-            size_t terminationSymbol = shaderCode.find(";", found);
-            shaderCode.replace(found, 1+terminationSymbol - found, inlinedFunctionCode);
-            found = shaderCode.find(symbol);  
+
+void Shader::preprocessGLSL(std::string &shaderCode) {
+    std::vector<std::string> includedFiles;
+    size_t found = shaderCode.find(INCLUDE_DIRECTIVE);
+    while (found != std::string::npos) {
+        size_t lineEnd = shaderCode.find("\n", found);
+        size_t pathBegin = shaderCode.find("\"", found)+1;
+        size_t pathEnd = shaderCode.find("\"", pathBegin);
+        assert(pathBegin<lineEnd);
+        assert(pathEnd<lineEnd);
+        assert(pathBegin<pathEnd);
+         
+        std::string includePath = shaderCode.substr(pathBegin, pathEnd-pathBegin);
+        if (std::find(includedFiles.begin(), includedFiles.end(), includePath) != includedFiles.end()) {
+            continue;
+        } else {
+            includedFiles.emplace_back(includePath);
         }
+        
+        const char* src = includePath.c_str();
+         
+        std::string includedCode;
+        std::ifstream shaderFile;
+        shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        try {
+            shaderFile.open(src);
+            std::stringstream tempStream;
+            tempStream << shaderFile.rdbuf();
+            shaderFile.close();
+            includedCode = tempStream.str(); 
+        }
+        catch(std::ifstream::failure e) {
+            printf("Shader include code not successfully read : %s \n", src);
+        }
+        
+        shaderCode.replace(found, 1+lineEnd - found, includedCode);
+        found = shaderCode.find(INCLUDE_DIRECTIVE);
     }
 }
        
@@ -54,7 +76,7 @@ void Shader::makeShader(GLenum shaderType, const char* src, GLuint& shader) {
         printf("Shader file not successfully read : %s \n", src);
     }
     
-    fillInFunctions(shaderCode);
+    preprocessGLSL(shaderCode); 
     const char* shaderCode_ = shaderCode.c_str();
     
     int success;
@@ -70,6 +92,7 @@ void Shader::makeShader(GLenum shaderType, const char* src, GLuint& shader) {
         glGetProgramInfoLog(shader, 512, NULL, errorLog);
         printf("Shader not compiled : %s ", src);
         printf("%s \n", errorLog);
+        printf("%s \n", shaderCode.c_str()); 
     }
 }
 Shader::Shader(const char* vertexPath, const char* fragmentPath)

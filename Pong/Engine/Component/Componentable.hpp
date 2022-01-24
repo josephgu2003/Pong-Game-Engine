@@ -76,6 +76,15 @@ public:
  
     }
     
+    void deleteComponent(Component* c) {
+        for (auto i = components.begin(); i != components.end(); i++) {
+            if ((*i).get() == c) {
+                components.erase(i);
+                return;
+            }
+        }
+    }
+    
     
     template <typename compType>
     bool hasComponent()

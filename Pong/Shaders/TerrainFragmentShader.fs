@@ -1,35 +1,17 @@
 #version 410 core
 layout (location = 0) out vec4 FragColor;
 //layout (location = 1) out vec4 BrightColor;
+
+
+#include "Shaders/Include/TangentSpace.fs"
+
+
     in vec2 TexCoords;
 in vec2 TexCoordsLarger;
 in vec3 Normals;
     in vec3 fragPos;
 
-in VS_OUT {
-    vec3 fragPos;
-    vec3 TangentLightDir;
-    vec3 TangentViewPos;
-    vec3 TangentFragPos;
-} fs_in;
-
-    struct Light {
-    vec3 pos;
-  
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    };
-
-struct DirLight {
-vec3 dir;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-    
-};
-
+in TangentSpaceInfo tanspaceinfo; 
 
 layout (std140) uniform Lights
 {
@@ -76,9 +58,14 @@ void applyDistanceFog(inout vec3 color);
         
         vec3 fragColor = vec3(0.0);  
         
-        vec3 viewDir = vec3(fs_in.TangentViewPos-fs_in.TangentFragPos);
-        
-        fragColor += CalcDirLight(dirLight, norm, viewDir);
+        vec3 viewDir = vec3(tanspaceinfo.TangentViewPos-tanspaceinfo.TangentFragPos);
+        vec3 dirLightDir = normalize(-tanspaceinfo.TangentLightDir);
+        vec3 snowamb = vec3(0.6,0.8,1.0);
+        vec3 snow = vec3(0.8,0.8,0.8);
+        vec3 snowspec = vec3(0.0,0.0,0.0);
+        //fragColor += CalcDirLight(dirLight, norm, viewDir);
+        fragColor += CalcDirLight(dirLight, dirLightDir, norm, viewDir, snowamb, snow, snowspec);
+        fragColor += CalcPointLight(tanspaceinfo.tangentLight, tanspaceinfo.TangentFragPos, norm, viewDir, snowamb, snow, snowspec);
         applyDistanceFog(fragColor);
         FragColor = vec4(fragColor, 1);
        /**
@@ -89,9 +76,9 @@ void applyDistanceFog(inout vec3 color);
               BrightColor = vec4(0.0, 0.0, 0.0, 1.0);**/
     }
 
-vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
+/**vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
     
-    vec3 dirlightDir = normalize(-fs_in.TangentLightDir);
+    vec3 dirlightDir = normalize(-tanspaceinfo.TangentLightDir);
     
     float diff = 0;
     float spec = 0;
@@ -112,7 +99,7 @@ vec3 CalcDirLight(DirLight dirLight, vec3 norm, vec3 viewDir) {
     vec3 specular = dirLight.specular * spec*0.0;
 
     return (ambient+diffuse+specular);
-}
+}**/
 
  
 void applyDistanceFog(inout vec3 color) {

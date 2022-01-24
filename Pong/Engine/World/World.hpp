@@ -14,7 +14,6 @@
 #include "Actor.hpp"
 #include "Particle.hpp"
 #include "Camera.hpp"
-#include "DirectionalLight.hpp"
 #include "AbilityManager.hpp" 
 #include <memory>
 #include <unordered_map>
@@ -25,17 +24,11 @@
 #include "WorldRenderingManager.hpp"
 #include "WorldSubSystem.hpp"
 #include "CollisionSystem.hpp"
-#include "NameComponent.hpp"
- 
-typedef std::vector<std::shared_ptr<Actor>> ActorList;
+#include "DirectionalLight.hpp"
+#include "Atmosphere.hpp"
+#include "LightComponent.hpp"
 
-struct Weather {
-    DirectionalLight dirLight;
-    float fogDensity;
-    float fogGradient;
-    glm::vec3 fogColor;
-    std::vector<std::string> skyTextureFiles;
-};
+typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
 class Renderer;
 class MapChunk;
@@ -52,13 +45,15 @@ typedef std::function<std::shared_ptr<WorldSubSystem>(World& w)> addSubSystem; /
 class World : public Componentable {
 private:
    // SoundTextManager soundTextManager;
+    DirectionalLight dl;
     WorldRenderingManager worldRenderingManager;
     MapManager mapManager;
     AbilityManager abilityManager;
     std::shared_ptr<CollisionSystem> collisionSystem;
     Updates updates = {false,false,false};
-    Weather weather;
-     
+    Atmosphere atmosphere; // could make into a generic prop/actor
+    WorldFog distanceFog; // same
+       
     Renderer* renderer = NULL;
  
     std::weak_ptr<Actor> playerHero;
@@ -90,10 +85,14 @@ private:
     }
     
     inline void insertGraphicsToManager(const std::shared_ptr<Componentable>& c) {
-     std::weak_ptr<GraphicsObject> gc;
-     if (c->getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
-         worldRenderingManager.insertGraphicsComponent(gc);
-     }
+        std::weak_ptr<GraphicsObject> gc;
+        if (c->getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+            worldRenderingManager.insertGraphicsComponent(gc);
+        }
+        std::weak_ptr<LightComponent> lc;
+        if (c->getComponentRef<LightComponent>(lc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+            worldRenderingManager.insertLightComponent(lc);
+        }
     }
     
     inline void insertCollidable(const std::shared_ptr<Componentable>& c) {
@@ -112,6 +111,7 @@ public:
     ~World();
     
     std::weak_ptr<Camera> getCameraRef();
+    Atmosphere& getAtmosphere(); // may need to allow programmer to put custom shader into skybox
     
     template <typename T>  
     static void registerSubSystem() {
@@ -218,14 +218,9 @@ public:
 
     void setRenderer(Renderer* renderer); 
     
-    std::vector<std::string>* getSkyTextureFiles();
-    float* getSkyVertices();
     
     Updates checkforUpdates();
     void updateCleared(int i);
-    
-    void setWeather(DirectionalLight dirLight_, float fogDensity_, float fogGradient_, glm::vec3 fogColor_, std::vector<std::string> skyTextureFiles_);
-    Weather getWeather();  
      
     void tick(); 
     
@@ -268,7 +263,12 @@ public:
 
     void markPlayerHero(const Actor* ph);
     Actor* getPlayerHero();
+    
+    void setDirectionalLight(const DirectionalLight& dl);
   //  std::weak_ptr<Actor>& getPlayerHeroRef();
+    WorldFog& getDistanceFog();
+    
+    const DirectionalLight& getDirectionalLight();
 };
   
 

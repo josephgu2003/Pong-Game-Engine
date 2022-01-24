@@ -37,7 +37,6 @@ protected:
 
     float duration;
     
-    virtual void refreshParticle() {}
     Particle* particles = NULL; 
 public:
     void setWorld(World* world);  

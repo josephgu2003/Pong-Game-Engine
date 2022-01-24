@@ -8,6 +8,8 @@ layout (location = 4) in vec3 Bitangent;
 layout (location = 5) in ivec4 boneIDs;
 layout (location = 6) in vec4 boneWeights;
 
+#include "Shaders/Include/TangentSpace.fs"
+
 out vec3 Normals;
  
 out vec2 TexCoords;
@@ -15,14 +17,6 @@ out vec2 TexCoords;
 layout(std140) uniform ViewProj
 {
     mat4 viewProjMat;
-};
-
-struct Light {
-vec3 pos;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
 };
 
 const int MAX_BONES = 100;
@@ -38,30 +32,16 @@ uniform mat4 boneOffsetMatrices[100];
 
 uniform bool animated;
 
-out VS_OUT {
-    vec3 fragPos;
-    vec3 TangentLightDir;
-    vec3 TangentViewPos;
-    vec3 TangentFragPos;
-} vs_out;
-
-struct DirLight {
-vec3 dir;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-};
-
 layout (std140) uniform Lights
 {
-   Light light;
+    Light light;
 
     DirLight dirLight;
     
     vec3 viewPos;
 };
 
+out TangentSpaceInfo tanspaceinfo; 
 
     void main()
     {
@@ -95,14 +75,13 @@ layout (std140) uniform Lights
             transform = mat4(1.0);
         }
          
-        
         gl_Position =  viewProjMat * modelMat_ * vec4(size*Pos.xyz,1.0);
         
         modelMat_ = modelMat_ * transform;
         TexCoords = TexCoords_;
         Normals = Normals_;
         
-        Functions::setupTanSpaceNormals();
+        setupTanSpaceNormals(modelMat_, Tangent, Bitangent, Normals_, tanspaceinfo, dirLight, light, viewPos, aPos);
     }
 
 

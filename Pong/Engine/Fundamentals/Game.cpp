@@ -8,7 +8,7 @@
 #include "Game.hpp"
 #include <iostream>
 #include <cctype>
-#include "stb_image.h"
+#include "stb_image.h" 
 #include "json.hpp"
 #include "AssetManager.hpp"
 #include "JsonManager.hpp"
@@ -36,8 +36,6 @@ Game::Game() {
     linkObjects();
 
     printf("%s\n", glGetString(GL_VERSION));
-    Shader::loadFunctionDefinitions();
-  //  audio.playMusic(); //sus 
 }
 
 void Game::registerGameLevelCreate(std::string levelname, GameLevelCreate glc) {
@@ -66,7 +64,7 @@ void Game::initObjects() {
     renderer = new Renderer();
     saveSystem = std::unique_ptr<SaveSystem>(); 
     activeLevel = std::make_unique<GameLevel>(renderer, 1, "placeholder");
-}
+} 
                     
 void Game::linkObjects() {  
     inputHandler.setWindow(window);

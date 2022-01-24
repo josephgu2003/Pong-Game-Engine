@@ -9,10 +9,10 @@
 #define GhostForm_hpp
 
 #include <stdio.h> 
-#include "Component.hpp" 
-
-class GhostForm : public Component {
-     
+#include "Component.hpp"
+class GhostForm : public Component {  
+      
 };
 
-#endif /* GhostForm_hpp */
+#endif /* GhostForm_hpp */  
+ 

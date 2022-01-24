@@ -13,6 +13,7 @@
 #include "Shader.hpp"
 #include "Renderer.hpp"
 #include "VertexLoader.hpp"
+#include "CollisionComponent.hpp" 
 
 std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     stbi_set_flip_vertically_on_load(0);
@@ -70,8 +71,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("size", 0.9f);
             shader->setUniform("brightness", 0.9f);
                   
-            Renderer::bindShaderUniblock(shader,      ViewProj); 
- 
+            Renderer::bindShaderUniblock(shader,      ViewProj);
             Renderer::bindShaderUniblock(shader,      Lights); 
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
@@ -89,8 +89,8 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             
             Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/AlphaMap.fs");
             shader->use();
-            shader->setUniform("color", glm::vec3(0.0,0.2,1.0));
-            shader->setUniform("brightness", 10.0f); 
+            shader->setUniform("color", glm::vec3(0.5,0.5,1.0));
+            shader->setUniform("brightness", 5.0f);
             Renderer::bindShaderUniblock(shader, ViewProj);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
@@ -99,12 +99,12 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
                 std::vector<PosVertex> mesh;
                 VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
             });
-            prop->addComp(gc);
+            prop->addComp(gc); 
             prop->bakeRotation(glm::vec3(0,80,15));
-            prop->addComponent<CollisionComponent>(*(prop.get()), *(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.3f,-0.3f),AxisBounds(0.2f,-0.2f));
+            prop->addComponent<CollisionComponent>(*(prop.get()), *(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(1.0f,0.0f),AxisBounds(0.2f,-0.2f));
             break;
         }
-            
+             
         default:
             break;
     }

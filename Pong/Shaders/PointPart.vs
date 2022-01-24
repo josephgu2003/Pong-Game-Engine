@@ -21,7 +21,7 @@ layout(std140) uniform ViewProj
     
     void main()
     {
-        gl_Position =  viewProjMat * vec4(vec3(aPos+Displacement), 1.0);
+        gl_Position =  viewProjMat * vec4(Displacement.xyz, 1.0);
       //  vs_out.TextureCoords = TexCoords_;
         gl_PointSize = 1600.0*size / gl_Position.z; // perspective? w coord?
         TexCoords = TexCoords_;

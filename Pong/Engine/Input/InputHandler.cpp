@@ -44,6 +44,13 @@ InputHandler::InputHandler() {// duplicate code, fix when more advanced callback
 InputHandler::~InputHandler() {
      
 }
+void InputHandler::setOnReleaseCallback(int i, keyCallback cbk) {
+    if (keyCallbacks->onReleaseCallbacks.find(i) == keyCallbacks->onReleaseCallbacks.end()) {
+        keyCallbacks->onReleaseCallbacks.insert(std::pair<int, keyCallback>(i, cbk));
+    } else {
+        keyCallbacks->onReleaseCallbacks.find(i)->second = cbk;
+    }
+}
 
 void InputHandler::setOneTapCallback(int i, keyCallback cbk) {
     if (keyCallbacks->oneTapCallbacks.find(i) == keyCallbacks->oneTapCallbacks.end()) {
@@ -67,20 +74,27 @@ void InputHandler::tick() {
     while (!keyEventQ.empty()) {
         KeyEvent& ke = keyEventQ.front();
         keyEventQ.pop();
+        
         if (ke.action == GLFW_PRESS) {
             currentKey = ke.key;
-            notifyAll(KEY_PRESSED); 
-             
+            notifyAll(KEY_PRESSED);
             if (mode == KCALL_READTEXT && ke.key != GLFW_KEY_ENTER) {
-                    const char* key_name = glfwGetKeyName(ke.key, 0);
-                    if (!key_name) continue;
-                    readText.append(key_name);
+                const char* key_name = glfwGetKeyName(ke.key, 0);
+                if (!key_name) continue;
+                readText.append(key_name);
             } else {
                 processInput(ke);
             }
-        }  
+        }
+        
+        if (ke.action == GLFW_RELEASE) {
+         //   notifyAll(KEY_PRESSED); NOTIFY KEY RELEASED
+            auto call = keyCallbacks->onReleaseCallbacks.find(ke.key);
+            if (ke.action == GLFW_RELEASE && call != keyCallbacks->onReleaseCallbacks.end()) {
+                call->second(game);
+            }
+        }
     }
-     
     for (auto i = keyCallbacks->continuousCallbacks.begin(); i != keyCallbacks->continuousCallbacks.end(); i++) {
         if (glfwGetKey(window, (*i).first) == GLFW_PRESS) {
             (*i).second(game);
@@ -151,6 +165,7 @@ void InputHandler::clear() { // duplicate code, fix when more advanced callback 
     callbackSets.insert(std::pair<int,CallbackSet>(KCALL_READTEXT, CallbackSet()));
     mode = KCALL_DEFAULT;
     keyCallbacks = &(callbackSets[KCALL_DEFAULT]);
+    mouseEventCallbacks.clear(); 
 }
 
 void InputHandler::setContinuousCallback(int i, keyCallback cbk) {

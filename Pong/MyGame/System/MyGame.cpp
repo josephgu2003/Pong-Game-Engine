@@ -87,31 +87,50 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     ih->setOneTapCallback(GLFW_KEY_D, [](Game* game){
         if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playAnim("Walk", true);
     });
+    ih->setOnReleaseCallback(GLFW_KEY_W, [](Game* game){
+            if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playDefault();
+    });
+    ih->setOnReleaseCallback(GLFW_KEY_S, [](Game* game){
+        if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playDefault();
+    });
+    ih->setOnReleaseCallback(GLFW_KEY_A, [](Game* game){
+        if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playDefault();
+    });
+    ih->setOnReleaseCallback(GLFW_KEY_D, [](Game* game){
+        if (auto x = game->getPlayerHero()) x->getComponent<AnimComponent>()->playDefault();
+    });
 
     ih->setContinuousCallback(GLFW_KEY_W, [](Game* game){
-        if (auto x = game->getPlayerHero()) x->posDir(0.015);
+        if (auto x = game->getPlayerHero()) x->posDir(0.02);
     });
     ih->setContinuousCallback(GLFW_KEY_S, [](Game* game){
-        if (auto x = game->getPlayerHero()) x->posDir(-0.015);
+        if (auto x = game->getPlayerHero()) x->posDir(-0.02);
     });
     ih->setContinuousCallback(GLFW_KEY_A, [](Game* game){ 
-        if (auto x = game->getPlayerHero()) x->posRight(0.015);
+        if (auto x = game->getPlayerHero()) x->posRight(0.02);
     });
     ih->setContinuousCallback(GLFW_KEY_D, [](Game* game){ 
-        if (auto x = game->getPlayerHero()) x->posRight(-0.015);
+        if (auto x = game->getPlayerHero()) x->posRight(-0.5);   
     }); 
  
     ih->setOneTapCallback(GLFW_KEY_Z, [](Game* game){
             if (auto ph = game->getPlayerHero()) {
                 std::shared_ptr<Ability> fish = std::make_shared<Fish>(&ph->getWorld(), ph, 18.0);
-                ph->getComponent<CombatComponent>()->newAbility(fish);
+                auto comb = ph->getComponent<CombatComponent>();
+                if (comb)
+                comb->newAbility(fish);
             }
         });
-        
+          
     ih->setOneTapCallback(GLFW_KEY_X, [](Game* game){
         if (auto ph = game->getPlayerHero()) { 
-            ph->getComponent<AnimComponent>()->playAnim("Attack", false);  
-            ph->getComponent<CombatComponent>()->newAbility<ChargedSlash>(&ph->getWorld(), ph, 1.5);
+            ph->getComponent<AnimComponent>()->playAnim("Attack", false);
+            auto comb = ph->getComponent<CombatComponent>();
+            if (comb) comb->newAbility<ChargedSlash>(&ph->getWorld(), ph, 1.5);
+            else {
+                ph->addComponent<CombatComponent>(*ph); 
+                ph->getComponent<AnimComponent>()->playAnim("DrawWeapon",false);
+            }
         }
         });
          
@@ -128,7 +147,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
             if (auto ph = game->getPlayerHero()) {
                 std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&ph->getWorld(), ph, 6.0);
                 auto comb = ph->getComponent<CombatComponent>();
-
+                if (comb)
                 comb->newAbility(letters);
             }
         }); 
@@ -137,7 +156,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
             if (auto ph = game->getPlayerHero()) {
                 std::shared_ptr<Ability> letters = std::make_shared<SwordWorld>(&ph->getWorld(), ph, 6.0);
                 auto comb = ph->getComponent<CombatComponent>();
-    
+                if (comb)
                 comb->newAbility(letters);
             }
         });
@@ -193,12 +212,12 @@ void loadMainGameMenuModeCallbacks(InputHandler* ih) {{
 GameLevel* makeMainMenu(Game* g) {
     g->getUI()->clear();
     GameLevel* lvl = new GameLevel(g->getRenderer(), 1, "mainmenu");
-    auto ut = std::make_shared<uiText>("Press enter to begin", -0.2, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
-    auto uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), TEX_BLACK_GRADIENT);
-    uf->insertChild(ut);
+    auto ut = std::make_shared<uiText>("Press enter to begin", -0.3, -0.8,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+    auto uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), "Resources/GlyphsAndUI/flowerhp.png");
+    uf->insertChild(ut); 
     g->getUI()->insertNode(uf);
-    
-    InputHandler& ih = g->getInputHandler();
+     
+    InputHandler& ih = g->getInputHandler(); 
     ih.clear();
     loadMainMenuDefaultCallbacks(&ih);
     ih.setHandlerMode(KCALL_DEFAULT);
@@ -212,7 +231,6 @@ void MyGame::setupLvlBuilder() {
         auto ui = g->getUI();
         ui->clear();
           
-     //   JsonManager::loadGameLevel(lvl, &actorFactory, &propFactory, &particleFactory, &scriptFactory);
         loadLevelSaveFile(lvl);
         MyLevelSerializer lvlmake; 
         lvlmake.loadLevelWorlds(lvl);
@@ -249,21 +267,27 @@ void MyGame::setupLvlBuilder() {
    //     ui->insertNode(dpt);
                                
         DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
-                  
-        std::vector<std::string> sky1 = { 
-            "Resources/Skybox/NightStars/BlueNebular_left.jpg",
-            "Resources/Skybox/NightStars/BlueNebular_right.jpg",
-            "Resources/Skybox/NightStars/BlueNebular_top.jpg",
-            "Resources/Skybox/NightStars/BlueNebular_bottom.jpg", 
-            "Resources/Skybox/NightStars/BlueNebular_front.jpg",
-            "Resources/Skybox/NightStars/BlueNebular_back.jpg"
-        }; 
- 
-        lvl->getWorld(1).setWeather(dl2, 0.02, 2, glm::vec3(0), sky1);
-           
-        DirectionalLight            dl(glm::vec3(0.13,0.13,0.15),glm::vec3(0.15,0.15,0.15),glm::vec3(0.3,0.3,0.35),glm::vec3(-1,-1,0));
-    //    lvl->getWorld(0).setWeather(dl, 0.2, 0.5, glm::vec3(0.03,0.03,0.03), sky1);
-        lvl->getWorld(0).setWeather(dl2, 0.04, 1.0, glm::vec3(0.4,0.33,0.33), sky1);
+        
+        World& wOne = lvl->getWorld(1);
+        World& wZero = lvl->getWorld(0);
+        wOne.setDirectionalLight(dl2);
+        wOne.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3));
+        wOne.getAtmosphere().setSkybox("Resources/Skybox/NightStars/BlueNebular_left.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_right.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_top.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_bottom.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_front.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_back.jpg");
+            
+        wZero.setDirectionalLight(dl2); 
+        wZero.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3));
+        wZero.getAtmosphere().setSkybox("Resources/Skybox/NightStars/BlueNebular_left.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_right.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_top.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_bottom.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_front.jpg",
+                                       "Resources/Skybox/NightStars/BlueNebular_back.jpg");
+        
         InputHandler& ih = g->getInputHandler();
         ih.clear(); 
         loadMainGameDefaultCallbacks(&ih); 

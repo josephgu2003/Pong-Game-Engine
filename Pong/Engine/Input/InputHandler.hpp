@@ -45,6 +45,7 @@ enum KeyCallbackSet{
 struct CallbackSet {
     CallbackMap oneTapCallbacks;
     CallbackMap continuousCallbacks;
+    CallbackMap onReleaseCallbacks;
 };
 
 class InputHandler : public Subject { //detects input, executes associated action
@@ -52,7 +53,7 @@ class InputHandler : public Subject { //detects input, executes associated actio
 private:
     std::queue<KeyEvent> keyEventQ;
     CallbackSet* keyCallbacks = NULL;
-    std::map<int, CallbackSet> callbackSets;
+    std::map<int, CallbackSet> callbackSets; // should honestly put these two together
     
     GLFWwindow* window = NULL;
      
@@ -78,6 +79,7 @@ public:
     void setHandlerMode(KeyCallbackSet set);
     void setGame(Game* game); //bad code hahaha
     void setOneTapCallback(int i, keyCallback cbk);
+    void setOnReleaseCallback(int i, keyCallback cbk);
     void setContinuousCallback(int i, keyCallback cbk);
     void setMouseCallback(std::string state, MouseEventCallback mec);
     void setMouseHandlerMode(std::string state);

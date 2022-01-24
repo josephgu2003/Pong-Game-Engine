@@ -6,7 +6,7 @@ EXTERNAL ART CREDITS
 Fish : https://www.instagram.com/euros__art/
 Grass: https://opengameart.org/content/grass-texture-pack-grass-texture-3jpg
 Snow: https://opengameart.org/content/seamless-snow-texture-0, https://www.goodtextures.com/image/20000/snow-ice-01-normal
-
+Tree: https://sketchfab.com/3d-models/tree-a2a6237a270840e198cc7db1c47f1ef7, by DJMaesen, available under CC Attribution
 Well :https://sketchfab.com/3d-models/well-b90de48341c1467493e87a4236882564
 
 Not in use:

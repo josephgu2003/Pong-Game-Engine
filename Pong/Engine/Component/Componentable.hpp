@@ -28,46 +28,29 @@ public:
     }
     
     template <typename compType, typename... Args>
-    void addComp(Args&& ... arg) {
-        std::shared_ptr<Component> comp_ = std::make_shared<compType>(arg...);  // fowards??
-        addComp(comp_);
+    void addComponent(Args&& ... arg) {
+        addComp(std::make_shared<compType>(arg...));
    } 
-    virtual void addComp(const std::shared_ptr<Component>& comp) {
-        std::shared_ptr<Component> comp_ = comp;
+    virtual void addComp(const std::shared_ptr<Component>& comp_) {
         if (components.size() == 0) { 
-            components.push_back(std::move(comp_));
+            components.push_back((comp_));
             return;
         } 
         for (int i = 0; i < components.size(); i++) {
-            if (components.at(i)->getType() == comp->getType()) {
-                components.erase(components.begin()+i); //!
-                components.insert(components.begin()+i,std::move(comp_));
+            if (i == (components.size()-1)) {
+                components.push_back((comp_));
                 return;
             }
-            else if (i == (components.size()-1)) {
-
-                components.push_back(std::move(comp_));
-                return;
-            }
-            else if (components.at(i)->getType() < comp->getType()) {
+            else if (components.at(i)->getUpdatePriority() < comp_->getUpdatePriority()) {
                 continue;
-            }
-
-            else { 
-                components.insert(components.begin()+i,std::move(comp_));
+            } else {
+                components.insert(components.begin()+i,(comp_));
                 return;
             }
         }
     }
 
-    void deleteComp(CompType type) {
-        for (int i = 0; i < components.size(); i++) {
-            if (components.at(i)->getType() == type) {
-                components.erase(components.begin()+i);
-            }
-        }
-    }
-    
+
     template <typename compType>
     bool getComponentRef(std::weak_ptr<compType>& ref)
     {
@@ -93,6 +76,15 @@ public:
  
     }
     
+    void deleteComponent(Component* c) {
+        for (auto i = components.begin(); i != components.end(); i++) {
+            if ((*i).get() == c) {
+                components.erase(i);
+                return;
+            }
+        }
+    }
+    
     
     template <typename compType>
     bool hasComponent()
@@ -106,14 +98,6 @@ public:
         return false;
     }
     
-    bool hasComponent(CompType ct) {
-        for (int i = 0; i < components.size(); i++) {
-            if (components.at(i)->getType() == ct) {
-                return true;
-            }
-        }
-        return false;
-    }
 };
 
 //option 1 : template, now compentable can reject wrong types

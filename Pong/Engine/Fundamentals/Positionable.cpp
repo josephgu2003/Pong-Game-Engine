@@ -9,63 +9,143 @@
 #include <algorithm>
 #include <glm/gtx/vector_angle.hpp>
 
+
 Positionable::Positionable() {
-    posVec.x = 0.0f;
-    posVec.y = 0.0f;
-    posVec.z = 0.0f;
-    dirVec = glm::vec3(0.0f, 0.0f, -1.0f);
-    rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    upVec = glm::cross(dirVec, rightVec);
-    eulerAngles = glm::vec3(0,0,0);
-    offsetAngles = glm::vec3(0);
+    translationMatrix = glm::mat4(1.0f);
+    rotationMatrix = glm::mat4(1.0f);
+    scalingMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::mat4(1.0f);
+    bakedRotationMatrix = glm::mat4(1.0f);
+    updateModelMatrix = false;
+    usingBakedRotations = false; 
+} 
+
+float Positionable::getYaw() {
+    float yaw = glm::degrees(glm::orientedAngle(getDir(), glm::vec3(0,0,1), glm::vec3(0,1,0)));
+    return yaw; 
 }
 
-void Positionable::orient(float yaw_) {
-    eulerAngles.y = yaw_;
-    float angle = glm::radians(eulerAngles.y+offsetAngles.y);
-    dirVec.x = std::cos(angle);
-    dirVec.z = std::sin(angle);
-    GramSchmidtAndNormalizeOrientations();
+void Positionable::orientYawTo(Positionable* p) {
+    orientYawTo(p->getPos()-getPos());
 }
 
-void Positionable::turnTowards(const glm::vec3& newDir_) {
-
-    float dYaw = (180.0f/3.14159)* glm::orientedAngle(glm::normalize(glm::vec2(newDir_.x,newDir_.z)), glm::normalize(glm::vec2(dirVec.x,dirVec.z))); // rotates such that dirVec points
-
-   /** eulerAngles -= glm::vec3(0,dYaw,0);
-    if (eulerAngles.x < -45.0f) {
-        eulerAngles.x = -45.0f;
-    } 
-
-    dirVec = newDir_;
+void Positionable::lookAt(const glm::vec3& newDir_) {
+    assert(glm::vec3(newDir_.x, abs(newDir_.y), newDir_.z) != glm::vec3(0,1,0));
+    orientYawTo(newDir_);
+   // float pitch = glm::degrees(glm::orientedAngle(glm::normalize(glm::vec2(newDir_.x, newDir_.z)), glm::normalize(glm::vec2(getDir().x, getDir().z))));
+ //   rotate(glm::vec3(0.0f,yaw,0.0f));
     
-    GramSchmidtAndNormalizeOrientations();**/
-    orient(eulerAngles.y-dYaw); 
      
+   /*8 glm::vec3 newDir = glm::normalize(glm::vec3(newDir_.x, newDir_.y, newDir_.z));
+    rotationMatrix[0][2] = newDir.x;
+    rotationMatrix[1][2] = newDir.y; 
+    rotationMatrix[2][2] = newDir.z;
+    
+    glm::vec3 newRight = glm::normalize(glm::cross(glm::normalize(newDir), glm::vec3(0,1,0)));
+    rotationMatrix[0][0] = newRight.x;
+    rotationMatrix[1][0] = newRight.y;
+    rotationMatrix[2][0] = newRight.z;
+    
+    glm::vec3 newUp = glm::normalize(glm::cross(glm::normalize(newDir), newRight));
+    rotationMatrix[0][1] = newUp.x;
+    rotationMatrix[1][1] = newUp.y;
+    rotationMatrix[2][1] = newUp.z;**/
+    updateModelMatrix = true;
+}
+
+void Positionable::rotateEuler(float degrees, DirectionVector axis) {
+    auto makeRotation = [&] (glm::vec3& axis) {
+        glm::quat rotationQuat = glm::angleAxis(glm::radians(degrees), axis);
+        rotationMatrix = rotationQuat * rotationMatrix;
+        updateModelMatrix = true;
+    };
+    switch (axis) {
+        case DIRECTION: {
+            glm::vec3 axis = getDir();
+            makeRotation(axis);
+            break;
+        }
+        case UP: {
+            glm::vec3 axis = getUp();
+            makeRotation(axis);
+            break;
+        }
+        case RIGHTAXIS: {
+            glm::vec3 axis = getRight();
+            makeRotation(axis);
+            break;
+        } 
+        default:
+            break;
+    }
+}
+
+void Positionable::orientYawTo(const glm::vec3& newDir_) {
+    assert(glm::vec3(newDir_.x, abs(newDir_.y), newDir_.z) != glm::vec3(0,1,0));
+    float yaw = glm::degrees(glm::orientedAngle(glm::normalize(glm::vec2(newDir_.x, newDir_.z)), glm::normalize(glm::vec2(getDir().x, getDir().z))));
+    rotate(glm::vec3(0.0f,yaw,0.0f));  
+          
+  /**  glm::vec3 oldDir = getDir();
+    
+    float baseLength = sqrt(1.0f-pow(oldDir.y,2)); // what should base length be
+    float actualLength = sqrt(pow(newDir_.x, 2) + pow(newDir_.z,2)); 
+    float scaleFactor = baseLength/actualLength;
+
+    rotationMatrix = glm::mat4(1.0f);
+    glm::vec3 newDir = glm::normalize(glm::vec3(scaleFactor*newDir_.x, oldDir.y, scaleFactor*newDir_.z));
+    rotationMatrix[0][2] = newDir.x;
+    rotationMatrix[1][2] = newDir.y; 
+    rotationMatrix[2][2] = newDir.z;
+    
+    glm::vec3 newRight = glm::normalize(glm::cross(glm::vec3(0,1,0), newDir));
+    rotationMatrix[0][0] = newRight.x;
+    rotationMatrix[1][0] = newRight.y; 
+    rotationMatrix[2][0] = newRight.z;
+      
+    glm::vec3 newUp = glm::normalize(glm::cross(newDir, newRight));
+    rotationMatrix[0][1] = newUp.x;
+    rotationMatrix[1][1] = newUp.y;
+    rotationMatrix[2][1] = newUp.z;**/
+    updateModelMatrix = true;
+}
+
+void Positionable::bakeRotation(glm::vec3 eulers) {
+    rotateMatrix(bakedRotationMatrix, eulers);
+    usingBakedRotations = true;
 }
 
 void Positionable::setPos(glm::vec3 pos_) {
-    posVec = pos_;
+    translationMatrix[3][0] = pos_.x;
+    translationMatrix[3][1] = pos_.y;
+    translationMatrix[3][2] = pos_.z;
+    updateModelMatrix = true;
     Subject::notifyAll(SUBJ_POS_CHANGED);
 }
 
 void Positionable::translatePos(const glm::vec3& translate) {
-    posVec += translate;
+    translationMatrix = glm::translate(translationMatrix, translate);
     notifyAll(SUBJ_POS_CHANGED);
+    updateModelMatrix = true;
 }
 
 void Positionable::setPosY(float y_) {
-    posVec.y = y_;
+    translationMatrix[3][1] = y_;
     notifyAll(SUBJ_POS_CHANGED);
-}
-void Positionable::posDir(float speed) { 
-    posVec += speed * dirVec;
-    notifyAll(SUBJ_POS_CHANGED);
+    updateModelMatrix = true; 
 }
 
-void Positionable::posRight(float speed) {
-    posVec += speed * rightVec;
+void Positionable::posDir(float speed) {
+    glm::vec3 dir = speed * getDir();
+    translationMatrix = glm::translate(translationMatrix, dir);
     notifyAll(SUBJ_POS_CHANGED);
+    updateModelMatrix = true;
+}
+ 
+void Positionable::posRight(float speed) {
+    glm::vec3 right = speed * getRight();
+    translationMatrix = glm::translate(translationMatrix, right);
+    notifyAll(SUBJ_POS_CHANGED);
+    updateModelMatrix = true;
 }
 
 void Positionable::randomPosAround(glm::vec3 pivot) {
@@ -73,46 +153,27 @@ void Positionable::randomPosAround(glm::vec3 pivot) {
 }
 
 void Positionable::rotate(glm::vec3 eulers) {
-    eulerAngles += eulers;
-    orient(eulerAngles.y);
-} 
-
-float Positionable::getYaw() {
-    return eulerAngles.y;
+    rotateMatrix(rotationMatrix, eulers);
 }
 
-glm::vec3 Positionable::getPos() {
-    return posVec;
-}
   
 float Positionable::getDistanceTo(Positionable* b) {
-    float d = glm::length(posVec - b->getPos());
+    float d = glm::length(getPos() - b->getPos());
     return d;
 }
   
 float Positionable::getDistanceTo(glm::vec3 p) {
-    float d = glm::length(posVec - p); 
+    float d = glm::length(getPos() - p);
     return d;
 }
-void Positionable::offsetOrientationVectors(glm::vec3 eulers) {
-    offsetAngles = eulers;
+
+void Positionable::setScale(float scale) {
+    scalingMatrix = glm::mat4(1.0f);
+    scalingMatrix = glm::scale(scalingMatrix,glm::vec3(scale,scale,scale));
 }
 
-void Positionable::turnTowards(Positionable* p) {
-    turnTowards(p->getPos()-posVec);
-}
 
-void Positionable::GramSchmidtAndNormalizeOrientations() { // finds rightVec and normalizes DirVec
-    dirVec = glm::normalize(dirVec); 
-    rightVec = glm::cross(dirVec,glm::vec3(0,1,0));
-    rightVec = glm::normalize(rightVec);
-    upVec = glm::cross(dirVec,rightVec);
-    upVec = glm::normalize(upVec);
-}
 
-glm::vec3 Positionable::getDir() {
-    return dirVec; 
-}
 /**
 #include <glm/gtx/vector_angle.hpp> 
 #include <glm/gtc/quaternion.hpp>

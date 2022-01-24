@@ -5,6 +5,8 @@
     layout (location = 3) in vec3 Tangent;
     layout (location = 4) in vec3 Bitangent;
     
+#include "Shaders/Include/TangentSpace.fs"
+
     out vec2 TexCoords;
     out vec2 TexCoordsLarger;
     out vec3 Normals;
@@ -16,30 +18,6 @@ layout(std140) uniform ViewProj
 
 };
 
-out VS_OUT {
-    vec3 fragPos;
-    vec3 TangentLightDir;
-    vec3 TangentViewPos;
-    vec3 TangentFragPos;
-} vs_out;
-
-
-struct Light {
-vec3 pos;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-};
-
-
-struct DirLight {
-vec3 dir;
-
-vec3 ambient;
-vec3 diffuse;
-vec3 specular;
-};
 
 layout (std140) uniform Lights
 {
@@ -50,16 +28,17 @@ layout (std140) uniform Lights
     vec3 viewPos;
 };
 
+out TangentSpaceInfo tanspaceinfo; 
 
     void main()
     {
-        gl_Position =  viewProjMat * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+        gl_Position =  viewProjMat * vec4(aPos.xyz, 1.0);
         fragPos = aPos; 
         TexCoords = TexCoords_;
         TexCoordsLarger = vec2(mod(sin(5.0*fragPos.x),1.0),mod(sin(5.0*fragPos.z),1.0));
         Normals = Normals_;
         
-        Functions::setupTanSpaceNormalsNoModelMat();
+        setupTanSpaceNormals(Tangent, Bitangent, Normals_, tanspaceinfo, dirLight, light, viewPos, aPos);
     }
 
 // for terrain

@@ -13,7 +13,7 @@
 
 AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
     globalInverse = glm::mat4(1.0f);
-    Component::type = ANIM;
+    updatePriority = 3;
     timeInAnim = 0; 
     boneMatrices.reserve(100);
           for (int i = 0; i < 100; i++)

@@ -20,7 +20,7 @@
 typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
 AIComponent::AIComponent(Actor& actor) : Component(actor) {
-    type = AI; 
+    updatePriority = 2;
     dice = Dice(0, DICE_MAX);
     entriesInTable = 0;
     actionTable = new aiActionAffinity();
@@ -29,11 +29,11 @@ AIComponent::AIComponent(Actor& actor) : Component(actor) {
 
 void AIComponent::tick() {
     if (!getCharComp->hasCurrentAction()) { // if we have not a current action
-        const ActorList al = static_cast<Actor*>(actor)->getWorld().getNearActorsWith(static_cast<Actor*>(actor), CHAR);
+        const ActorList al = static_cast<Actor*>(actor)->getWorld().getNearActorsWith<CharacterComponent>(static_cast<Actor*>(actor));
         for (auto i = al.begin(); i != al.end(); i++) {
             auto x = (*i).get();
             resetTable(getCharComp->getRelationshipTypeWith(x));
-            calcProbabilities(static_cast<Actor*>(actor), x);
+            calcProbabilities(static_cast<Actor*>(actor), x); 
             calcNextAction(static_cast<Actor*>(actor), x);
             if (getCharComp->hasCurrentAction()) return;
         }
@@ -56,7 +56,7 @@ void AIComponent::calcNextAction(Actor* actor, Actor* target) {
 }
  
 void AIComponent::calcProbabilities(Actor* actor, Actor* target) {
-    if (!actor->hasComponent(CHAR)) { //if actor has no char comp, skip rest
+    if (!actor->hasComponent<CharacterComponent>()) { //if actor has no char comp, skip rest
         return;
     }
     

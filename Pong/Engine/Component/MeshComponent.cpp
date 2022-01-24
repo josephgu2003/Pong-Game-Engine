@@ -9,7 +9,7 @@
 
 MeshComponent::MeshComponent(Componentable& c) : Component(c) {
     mesh = std::shared_ptr<VertexMesh>();
-    type = ANIM;
+    updatePriority = 4;
     meshAction = [] (VertexMesh* vm) {
         
     };

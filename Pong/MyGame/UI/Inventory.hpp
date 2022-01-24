@@ -15,15 +15,10 @@
 #include <set>
 #include "InventoryComponent.hpp"
 #include "InventoryItem.hpp"
-
-constexpr unsigned int MAX_ITEMS = 1;
-
-const static std::string ItemPaths[MAX_ITEMS] = {TEX_FISH};
+#include "MyGameItems.hpp"
 
 class Inventory : public uiPiece, public Observer {
 private:
-    bool visible;
-    Watch watch;
     glm::vec2 nextPos;
     glm::vec2 originalPos;
     float maxRowWidth;
@@ -41,7 +36,6 @@ private:
 public:
     Inventory(std::weak_ptr<InventoryComponent>& invref, glm::vec2 pos, glm::vec2 scaling);
     virtual void notify(const Subject& s, GameEvent ge) override;
-    void draw(Renderer* r) override;
 }; 
 
 #endif /* Inventory_hpp */

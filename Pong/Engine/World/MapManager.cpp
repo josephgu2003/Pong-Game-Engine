@@ -34,8 +34,7 @@ void MapManager::setMap(const std::string& filePath, glm::vec3 scaling) {
     mapDescriptor.verticesWide = pixelsX;
     mapDescriptor.verticesTall = pixelsY;  
     mapDescriptor.scalings = scaling; 
-    AssetManager::loadTexture("Resources/Map/snow01.png", &terrainMat.diffuse, true);
-    AssetManager::loadTexture("Resources/Map/snownorm.png", &terrainMat.normMap, false);
+    AssetManager::loadTexture("Resources/Map/snow.png", &terrainMat.normMap, false);
 }     
       
 
@@ -171,8 +170,8 @@ void MapManager::recenterMapChunks(int newXIndex, int newYIndex) {
     int deltaX = mapChunks.centerChunk.indexX - newXIndex; // example: center point has moved to the right, all indices need to change to smaller values.
     int deltaY = mapChunks.centerChunk.indexY - newYIndex;
     
-    auto isWithinBounds = [] (int i) {
-        if (i > 0 && i < 1+2*MAX_SIDE_CHUNKS) {
+    auto isWithinBounds = [] (int i) { 
+        if (i >= 0 && i < 1+2*MAX_SIDE_CHUNKS) {
             return true;
         } else {
             return false;

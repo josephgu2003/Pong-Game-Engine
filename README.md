@@ -1,7 +1,8 @@
-# Pong
+
 This project is under construction - constantly receiving reworks
 
 EXTERNAL ART CREDITS
+
 
 Fish : https://www.instagram.com/euros__art/
 Grass: https://opengameart.org/content/grass-texture-pack-grass-texture-3jpg
@@ -9,9 +10,11 @@ Snow: https://opengameart.org/content/seamless-snow-texture-0, https://www.goodt
 Tree: https://sketchfab.com/3d-models/tree-a2a6237a270840e198cc7db1c47f1ef7, by DJMaesen, available under CC Attribution
 Well :https://sketchfab.com/3d-models/well-b90de48341c1467493e87a4236882564
 
+
 Not in use:
 
 Journey Model : (Heavily modified) Original model Journey - character clothing concept (c) by David Young, available under CC-BY. https://sketchfab.com/3d-models/journey-character-clothing-concept-147b14b62268478da7e59fa36c949bae
+
 
 Hollow Knight : (rigged animated by me) Original model Hollow Knight Fanart by (c)
 Guilherme Lé, available under CC Attribution
@@ -39,3 +42,4 @@ Engine - the core engine
 StarterPackOfCode - some code I've written, not essential to engine, like plug-ins 
 MyGame - the game I'm building with my engine right now
 Resources & Shaders - contain the assets and shader code, some are essential, other's are specific to my game
+

@@ -9,7 +9,7 @@
 #include "Shader.hpp"
 #include "Renderer.hpp"
 #include <glm/glm.hpp>
-
+#include "Particle.hpp" 
 
 PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* shader_, const Material& map_) : Component(pe), GraphicsObject(DRAW_TRANSPARENT){
     shader = shader_; 
@@ -17,8 +17,8 @@ PGraphicsComponent::PGraphicsComponent(ParticleSystem& pe, float size, Shader* s
     shader->setUniform("size", size); 
     Renderer::bindShaderUniblock(shader, ViewProj); 
     // need to load model data to vao vbo,
-    setSingularMaterial(map_);
-    type = GRAPHICS;
+    setSingularMaterial(map_); 
+    updatePriority = 10;
 } 
 
 PGraphicsComponent::~PGraphicsComponent() { 

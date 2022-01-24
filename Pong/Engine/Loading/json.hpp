@@ -5995,7 +5995,7 @@ class json_sax_dom_parser
     constexpr bool is_errored() const
     {
         return errored;
-    }
+    } 
 
   private:
     /*!

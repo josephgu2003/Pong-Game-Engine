@@ -13,7 +13,7 @@
  
 HealthMeter::HealthMeter(float xpos, float ypos) : uiPiece(glm::vec2(xpos, ypos), glm::vec2(0.13,0.2), "Shaders/UI.vs", "Shaders/HealthMeter.fs") {
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, glm::vec2(0.13,0.2), glm::vec2(0,0));
-    AssetManager::loadTexture("Resources/GlyphsAndUI/Project.png", &getSingularMaterial().diffuse, true);
+    AssetManager::loadTexture("Resources/GlyphsAndUI/healthflower.png", &getSingularMaterial().diffuse, true);
     shader->use();  
     shader->setUniform("ratio", 1.0f); 
 }

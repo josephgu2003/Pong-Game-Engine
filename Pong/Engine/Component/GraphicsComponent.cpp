@@ -10,7 +10,7 @@
 #include "VertexLoader.hpp" 
 #include "Shader.hpp" 
 GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, const Material& map_, DrawPass dp) : Component(actor), GraphicsObject::GraphicsObject(dp) {
-    Component::type = GRAPHICS; 
+    updatePriority = 10;
     shader = shader_;
     setSingularMaterial(map_);
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {
@@ -50,4 +50,8 @@ void GraphicsComponent::setDrawCall(DrawCall dc) {
 void GraphicsComponent::setColor(float r, float g, float b) {
     shader->use();
     shader->setUniform("color", glm::vec4(r,g,b,1.0f));  
+}
+
+void GraphicsComponent::init(VertexLoadFunc vertexLoadFunc) {
+    vertexLoadFunc(VAO, VBO, EBO, numIndices);
 }

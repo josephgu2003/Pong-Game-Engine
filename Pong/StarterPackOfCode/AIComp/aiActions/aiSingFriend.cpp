@@ -34,7 +34,7 @@ void aiSingFriend::tick(Actor *actor) {
         interest -= 1.0f;
     }
     actor->translatePos(0.05f*(target->getPos() - actor->getPos()));
-    actor->turnTowards(target->getPos() - actor->getPos());
+    actor->orientYawTo(target->getPos() - actor->getPos());
 } 
     
 

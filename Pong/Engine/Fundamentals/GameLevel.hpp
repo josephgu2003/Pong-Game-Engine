@@ -16,8 +16,7 @@ class Renderer;
 class GameLevel {
 private:
     std::vector<std::shared_ptr<World>> worlds;
-    std::weak_ptr<World> activeWorld;
-    Renderer* renderer = nullptr;
+    std::weak_ptr<World> activeWorld; 
     std::string nextLevel = "";
     std::string name;
 public:

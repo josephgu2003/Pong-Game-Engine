@@ -17,7 +17,6 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
     shader->setUniform("size", size_);
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
-    type = GRAPHICS;
     
     size = size_; 
     
@@ -28,7 +27,7 @@ PPointGraphicsComponent::PPointGraphicsComponent(ParticleSystem& pe, int numberP
     int datasize = numberParticles * 4 * sizeof(float);
     std::vector<int> v = {3,1};
     VertexLoader::loadPoint(VAO, VBO, EBO, numIndices);
-    makeInstanceBuffer(datasize, 2, v, static_cast<ParticleSystem*>(actor)->getNumParticles());
+    makeInstanceBuffer(datasize, 2, v, static_cast<ParticleSystem*>(actor)->getNumParticles()); // should be 3 not 2 but it is corrected in vertex shader
     drawTarget = GL_POINTS;
 }
 
@@ -44,17 +43,20 @@ void PPointGraphicsComponent::tick() {
         maxDuration = prc->getParticleLifetime();
     }
     v.resize(n*4);
-    for (int i = 0; i < n; i++) {
-        v[i] = p[i].posVec.x; 
-        i++;  
-        v[i] = p[i].posVec.y; 
-        i++;
-        v[i] = p[i].posVec.z;
-        i++;
-        v[i] = p[i].duration / (maxDuration) ;
+    
+    int counter = 0;
+    for (int i = 0; i < n; i++) { 
+        v[counter] = p[i].posVec.x;
+        counter++;
+        v[counter] = p[i].posVec.y;
+        counter++;
+        v[counter] = p[i].posVec.z;
+        counter++;
+        v[counter] = p[i].duration / (maxDuration);
+        counter++;
     }//may need optimization contigious vs separated memory
     updateInstanceBuffer(v);
-}
+} 
  
 PPointGraphicsComponent::~PPointGraphicsComponent() {
     

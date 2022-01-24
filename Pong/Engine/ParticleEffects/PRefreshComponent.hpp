@@ -16,36 +16,42 @@
 
 class ParticleSystem;
 
-class PPhysicsComponent;
-
 struct Particle; 
 
-class PRefreshComponent : public Component {
+class PRefresh : public Component {
 private:
-    Watch myWatch; 
-    Dice mainDice;
-    int ptcPerSecond;
+    Watch myWatch;
     int ptcPerInterval;
     float refreshInterval;
+protected:
+    Dice mainDice;
     int firstUnused;
     float particleMaxDuration;
     Particle* particles = NULL;
     glm::vec3* velocities = NULL;
     int numParticles;
+    bool refreshVel;
+    virtual void refreshParticle() = 0;
+    glm::vec3 particleOrigin;
+public:
+    PRefresh(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond, float refreshInterval);
+    virtual void tick() override;
+    void refreshAll();
+    float getParticleLifetime();
+};
+
+class PRefreshComponent : public PRefresh {
+private:
     glm::vec3 dimensions;
     glm::vec3 velRangeLow;
     glm::vec3 velRangeHigh;
-    bool refreshVel;
-    bool hasPhysics;
-    PPhysicsComponent* ppc = NULL;
+protected:
+    void refreshParticle() override;
 public:
     PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond, float refreshInterval, glm::vec3 dimensions, glm::vec3 velRangeLow, glm::vec3 velRangeHigh);
     ~PRefreshComponent() {
          
     }
-    virtual void tick() override;
-    void refreshParticle();
-    float getParticleLifetime();
 };
 
 

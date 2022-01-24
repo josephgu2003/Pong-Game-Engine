@@ -14,8 +14,8 @@
 #include "WorldChunk.hpp"
 #include <queue>
 
-#define MAX_SIDE_CHUNKS 3
-class Renderer;
+#define MAX_SIDE_CHUNKS 5
+class Renderer; 
 class MapManager {
 private:
     void loadNextUnloadedChunk(const glm::vec3& pos);

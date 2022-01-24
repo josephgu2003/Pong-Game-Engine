@@ -9,7 +9,7 @@
 #include "Actor.hpp"
  
 CombatComponent::CombatComponent(Actor& actor) : Component(actor) {
-    Component::type = COMBAT;
+    updatePriority = 1; 
     affecting = std::weak_ptr<Ability>();
 }
   

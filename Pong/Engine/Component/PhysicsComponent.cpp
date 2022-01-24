@@ -15,7 +15,7 @@
 
 PhysicsComponent::PhysicsComponent(Actor& actor, bool gravityOn_) : Component(actor) {
     gravityOn = gravityOn_;
-    Component::type = PHYSICS;
+    updatePriority = 1;
 }  
 
 void PhysicsComponent::tick() {
@@ -28,13 +28,13 @@ void PhysicsComponent::tick() {
         ourActor->setVel(glm::vec3(0,ourActor->getVel().y,0));
     } 
 } 
-
+ 
 void PhysicsComponent::handleGravity(Actor& ourActor) {
-    float heightMin = ourActor.getWorld().getHeightAt(glm::vec2(ourActor.getPos().x, ourActor.getPos().z)); 
-    switch(ourActor.getState()) {
-        case STATE_PARALYZED:
+    float heightMin = ourActor.getWorld().getHeightAt(glm::vec2(ourActor.getPos().x, ourActor.getPos().z));
+    switch(ourActor.getState()) { 
+        case STATE_PARALYZED:   
             break;
-        case STATE_IDLE:
+        case STATE_IDLE:  
             ourActor.accelerate(glm::vec3(0,-0.2f*glfwGetTime(),0));
             
             if (ourActor.getPos().y <= heightMin) {

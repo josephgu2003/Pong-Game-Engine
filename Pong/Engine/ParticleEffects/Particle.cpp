@@ -22,7 +22,7 @@ ParticleSystem::ParticleSystem(int numParticles_, float duration_) {
 ParticleSystem::~ParticleSystem() {
     delete[] particles;
 }
-  
+   
 void ParticleSystem::tick() {
     Componentable::tick();
     for (int i = 0; i < numParticles; i++) { 
@@ -47,8 +47,5 @@ void ParticleSystem::setWorld(World *world_) {
 Particle* ParticleSystem::getParticles() {
     return particles;
 }
-const glm::vec3& ParticleSystem::getPos() {
-    return posVec;
-}
- 
+
  

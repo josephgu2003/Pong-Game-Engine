@@ -14,7 +14,7 @@ Relationship::Relationship(std::string name1_, std::string name2_, float intensi
     rst = rst_;
     nn1 = nn1_;
     nn2 = nn2_;
-    switch (rst) {
+    switch (rst) { 
         case RS_FRIEND:{
             questionsFor1.push_back(QA("How are you today?", "Great, thanks!"));
             questionsFor1.push_back(QA("How much do you love me?", "Quite alot"));

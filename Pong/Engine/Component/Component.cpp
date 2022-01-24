@@ -7,4 +7,6 @@
 
 #include "Component.hpp"
 
-
+Componentable* Component::getParentObject() {
+    return actor;
+}

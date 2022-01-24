@@ -11,6 +11,11 @@
 #include "CombatComponent.hpp" 
 #include "FallingLetters.hpp"
 #include "SwordWorld.hpp"
+#include "ChargedSlash.hpp"
+#include "NotificationSystem.hpp"
+#include "World.hpp"
+#include "LifeComponent.hpp"
+#include "DirlightTransition.hpp"
 
 std::vector<std::string> myCrew = {
     "Floro", "Moonbell"
@@ -23,102 +28,173 @@ ScriptWolfBoyOne::ScriptWolfBoyOne(World* world, bool completed) : Script(world,
 }
 
 void ScriptWolfBoyOne::act() {
+    Actor* Snowclaw = getActorNamed("Snowclaw");
+    Actor* Floro = getActorNamed("Floro");
+    Actor* Moonbell = getActorNamed("Moonbell");
     switch (step) {
         case 0: {
             if (!isWaiting()) {
+                Moonbell->addComponent<CombatComponent>(*Moonbell);
                 MyActorFactory maf;
                 auto Snowclaw = maf.makeActor(ACTOR_SCARF_CHAR);
                 newActor("Snowclaw", Snowclaw);
-                getActorNamed("Snowclaw")->setPos(glm::vec3(60,44,-16));
+                Actor* sc = getActorNamed("Snowclaw");
+                sc->setPos(glm::vec3(84,20,15));
+                sc->getComponent<LifeComponent>()->init(100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f);
+                sc->addComponent<CombatComponent>(*sc);
+                world->getComponent<NotificationSystem>()->newNotification("The Wolf", 5.0f);
             }
-            waitFor(2.0f);
+            waitFor(2.0f); 
             break;
         }
         case 1: {
-            if (!isWaiting()) speak("Floro", "Why are we stopping? I want to go home.", 4.0f);
-            waitFor(5.0f);
+            doAndWaitFor([&] () {speak("Floro", "The shadows... are growing darker...", 2.0f);}, 5.0f);
             break;
         }
-        case 2: {
-            if (!isWaiting()) speak("Moonbell", "You have no home. Stop, a wolf is hunting our scent.", 5.0f);
-            waitFor(5.0f);
-            break;
-        }
-        case 3: {
-            if (getActorNamed("Moonbell")->getDistanceTo(getActorNamed("Snowclaw")) > 5.0) {
-                getActorNamed("Snowclaw")->turnTowards(getActorNamed("Moonbell"));
-                getActorNamed("Snowclaw")->posDir(0.1);
+        case 2: { 
+            if (Floro->getDistanceTo(Snowclaw) > 7.0) {
+                Snowclaw->orientYawTo(Floro);
+                Snowclaw->posDir(0.1);
             } else {
                 step++;
             }
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             break;
         }
         
+        case 3: {
+            glm::vec3 postobe = getActorNamed("Floro")->getPos()-getActorNamed("Snowclaw")->getDir();
+            if (getActorNamed("Moonbell")->getDistanceTo(postobe) > 2.0) {
+                getActorNamed("Moonbell")->translatePos(0.1f*glm::normalize(postobe-getActorNamed("Moonbell")->getPos()));
+            }
+            waitFor(4.0);
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
+            break;
+        }
         case 4: {
             if (!isWaiting()) {
-                speak("Snowclaw", "The cold has never bothered you, witch, but the inheritor seems to be a bit chilly.", 5.0);
+                speak("Moonbell", "Leave, wolf. Let me have my revenge.", 2.0);
             }
-            waitFor(5.0);
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
+            waitFor(3.0);
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             break;
         }
         case 5: {
             if (!isWaiting()) {
-                speak("Moonbell", "Leave us be. He remembers nothing.", 2.0);
+                speak("Floro", "Who are you talking to? What revenge?", 2.0);
             }
-            waitFor(3.0);
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
-            break;
-        }
-        case 6: {
-            if (!isWaiting()) {
-                speak("Floro", "Who are you?", 2.0);
-            }
-            waitFor(3.0);
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
+            waitFor(2.0);
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             break; 
         }
-        case 7: {
-                std::vector<std::string> lines = {"A lone wolf, who grew up in the cold.", "He allies with no one, but administers justice as he sees fit."};
-                std::vector<float> duration = {5.0f,5.0f};
-                makeSpeech("Moonbell", lines, duration);
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
+        case 6: {
+            std::vector<std::string> lines = {"He is a lone wolf, who grew up in the cold, a hunter of evil.", "You there, you would really believe the King?"};
+            std::vector<float> duration = {2.0f,3.0f};
+            makeSpeech("Moonbell", lines, duration);
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             step++;
-            break;
+            break; 
         }
-        case 8: {if (noActiveSpeech()) step++; break;}
-        case 9: {
-            std::vector<std::string> lines = {"You only need know one thing", "You two are a menace, and I am here to hunt."};
-            std::vector<float> duration = {5.0f,5.0f};
+        case 7: {if (noActiveSpeech()) step++; break;}
+        case 8: {
+            std::vector<std::string> lines = {"I trust no one but my instincts."};
+            std::vector<float> duration = {2.0f,3.0f};
             makeSpeech("Snowclaw", lines, duration);
-            getActorNamed("Moonbell")->turnTowards(getActorNamed("Snowclaw"));
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             step++;
             break;
         }
-        case 10: {
+        case 9: {
             if(noActiveSpeech() || isWaiting()) {  // first time in is when speech ends, second time is waiting
-                if (!isWaiting()) {
-                getActorNamed("Snowclaw")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Snowclaw"), 100.0f, getActorRefNamed("Floro"));
-                getActorNamed("Snowclaw")->getComponent<AnimComponent>()->playAnim("DrawWeapon", false);
-                }
-                waitFor(2.0f);
+                waitFor(3.0f);
             } 
             break;
         }
             
+        case 10: {
+            doAndWaitFor([&] () {getActorNamed("Snowclaw")->getComponent<AnimComponent>()->playAnim("DrawWeapon", 20,40);}, 1.0f);
+            break; 
+        }; 
         case 11: {
             if (!isWaiting()) {
-            std::vector<std::string> lines = {"You would use such a strong Runic attack on a cripple?", "You are as ruthless as me. Floro, I can't help, but the fish charm can.", "Break the attack, and I'll break him."};
-            std::vector<float> durations = {5.0f, 3.5f, 4.0f,};
+            std::vector<std::string> lines = {"You will have to fight him yourself", "Eagles can't fight the battles of rabbits.", "You have a light in your pocket, set it free."};
+            std::vector<float> durations = {2.5f, 3.5f, 3.5f};
             makeSpeech("Moonbell", lines, durations);
-            }
-            waitFor(9.0f);
+            } 
+            waitFor(6.0f); 
+            getActorNamed("Snowclaw")->orientYawTo(getActorNamed("Floro"));
             break;
         }
         case 12: {
-            getActorNamed("Moonbell")->getComponent<CombatComponent>()->newAbility<SwordWorld>(world, getActorNamed("Moonbell"), 10.0f);
+            if (getActorNamed("Snowclaw")->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f && !isWaiting()) {
+                step += 2;
+                break;
+            } 
+            if (!isWaiting()) { 
+            getActorNamed("Snowclaw")->getComponent<CombatComponent>()->newAbility<ChargedSlash>(world, getActorNamed("Snowclaw"), 2.0f);
+            }
+            waitFor(2.0f);
+            getActorNamed("Snowclaw")->orientYawTo(getActorNamed("Floro"));
+            break;
+        } 
+        case 13: {
+            step--;
+            break; 
+        }  
+        case 14: {
+            doAndWaitFor([&] () {
+                DirectionalLight            dl2(glm::vec3(0.1,0.09,0.15),glm::vec3(0.1,0.1,0.1),glm::vec3(0.8,0.8,0.8),glm::vec3(-1,-1,0));
+                world->addComponent<DirlightTransition>(*world, 10.0f, dl2);
+                getActorNamed("Snowclaw")->getComponent<AnimComponent>()->playAnim("Lying", true);
+                speak("Snowclaw", "Don't trust her... you are a puppet...", 5.0f);},5.0f);
+            break;
+        }
+        case 15: {
+            speak("Moonbell", "Enough of your lies. Let's end this.", 2.0f);
+            getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
+            getActorNamed("Moonbell")->getComponent<AnimComponent>()->playAnim("DrawWeapon", 20,40);
             step++;
+            break;
+        }
+        case 16: {
+            world->getComponent<NotificationSystem>()->newNotification("Intervene, or let Snowclaw die.", 4.0f);
+            step++;
+            break;
+        }
+        case 17: {
+            if (getActorNamed("Floro")->getDistanceTo(getActorNamed("Snowclaw")) < 1.5f) {
+                step += 2;
+            }
+            if (getActorNamed("Moonbell")->getDistanceTo(getActorNamed("Snowclaw")) < 2.0f) {
+                step++;
+            }
+            getActorNamed("Moonbell")->posDir(0.01);
+            break;
+        }  
+        case 18: {
+            speak("Moonbell", "Die.", 3.0f);
+            getActorNamed("Moonbell")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Moonbell"), 2.0f);
+            step+=2;
+            break;
+        }
+        case 19: {
+            std::vector<std::string> lines = {"Get out of my way.", "...", "You are so stupid. Let's go."};
+            std::vector<float> durations = {4.0f,8.0f,4.0f};
+            makeSpeech("Moonbell", lines, durations);
+            step+=2;
+            break;
+        }
+        case 20: {
+            speak("Moonbell", "Let's go.", 3.0f);
+            getActorNamed("Moonbell")->getComponent<AnimComponent>()->playDefault();
+            endScene();   
+            break;
+        }
+        case 21: {
+            if (noActiveSpeech()) {
+                getActorNamed("Moonbell")->getComponent<AnimComponent>()->playDefault();
+                endScene();
+            }
             break;
         }
        default: 

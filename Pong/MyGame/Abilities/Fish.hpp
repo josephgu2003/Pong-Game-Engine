@@ -30,8 +30,8 @@ class Fish: public Ability {
 public:
     Fish(World* world_, Actor* actor_, float duration_);
     ~Fish();
-    virtual void call();
-    virtual void tick();
+    void call() override;
+    void tick() override;
 };
 
 #endif /* Fish_hpp */

@@ -8,22 +8,28 @@
 #ifndef Camera_hpp
 #define Camera_hpp
 
-#include "Actor.hpp"
 #include <glm/glm.hpp>
 #include "Positionable.hpp"
 
 class Camera : public Positionable {
-    friend class Renderer;
+    friend class Renderer; 
 protected:
-    Actor* actor = NULL;
+    Positionable* actor = NULL;
+    bool lockOnActor;
+    glm::vec3 newRotation;
+    bool needRotate;
+     
+    //states : lock on actor, transition state free floating
 public:
     Camera();
     ~Camera();
-    void setActor(Actor* actor_);
+    void setActor(Positionable* actor_);
+    void unlockFromActor();
+    void unlockFromActor(glm::vec3 pos, glm::vec3 dir);
+    void lockOntoActor();
     void updateVecs();
     void orientActor();
     void tick();
-    virtual void rotate(glm::vec3 angles) override;
 }; 
-
+ 
 #endif /* Camera_hpp */

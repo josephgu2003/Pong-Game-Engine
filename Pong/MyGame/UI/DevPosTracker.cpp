@@ -10,17 +10,17 @@
 #include "Positionable.hpp"
 
 DevPosTracker::DevPosTracker(float xpos, float ypos, float xscale, float yscale) : uiText("", xpos, ypos,DEFAULT_FONTSIZE, DEFAULT_LINESPACE) {
-    
+     
 }
 
 void DevPosTracker::notify(const Subject& s, GameEvent ge) {
     auto setDisplayedText = [] (glm::vec3 pos) { 
         std::string newText = "";
-        newText.append(std::to_string(int(pos.x)));
+        newText.append(std::to_string(float(pos.x)));
+        newText.append(", "); 
+        newText.append(std::to_string(float(pos.y)));
         newText.append(", ");
-        newText.append(std::to_string(int(pos.y)));
-        newText.append(", ");
-        newText.append(std::to_string(int(pos.z))) ;
+        newText.append(std::to_string(float(pos.z))) ;
         return newText;
     };
     if (ge == SUBJ_POS_CHANGED) {
@@ -28,4 +28,4 @@ void DevPosTracker::notify(const Subject& s, GameEvent ge) {
         glm::vec3 pos = subj.getPos();
         setText(setDisplayedText(pos));
     }
-}  
+}

@@ -12,6 +12,8 @@
 #include "GraphicsComponent.hpp"
 #include "Shader.hpp"
 #include "Renderer.hpp"
+#include "VertexLoader.hpp"
+#include "CollisionComponent.hpp" 
 
 std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     stbi_set_flip_vertically_on_load(0);
@@ -27,11 +29,11 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setUniform("size", 0.03f);
+            shader->setUniform("size", 0.03f); 
             shader->setUniform("brightness", 0.0f);
                      
             Renderer::bindShaderUniblock(shader,      ViewProj);
-    
+            Renderer::bindShaderUniblock(shader,      DistanceFog); 
             Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
@@ -50,7 +52,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("brightness", 0.0f);
                    
             Renderer::bindShaderUniblock(shader,      ViewProj);
-    
+            Renderer::bindShaderUniblock(shader,      DistanceFog); 
             Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
@@ -69,8 +71,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("size", 0.9f);
             shader->setUniform("brightness", 0.9f);
                   
-            Renderer::bindShaderUniblock(shader,      ViewProj); 
- 
+            Renderer::bindShaderUniblock(shader,      ViewProj);
             Renderer::bindShaderUniblock(shader,      Lights); 
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
@@ -78,9 +79,32 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             static_pointer_cast<GraphicsComponent>(gc)->setDrawCall(foliageDraw);
             prop->addComp(gc);
             prop->rotate(glm::vec3(glm::radians(-90.0f),0,0));
+            break; 
+        }
+             
+        case PROP_SWORD_SLASH: {
+            Material map;
+            
+            AssetManager::loadTexture("Resources/Models/Sword/swordwave.png", &map.diffuse, true);
+            
+            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/AlphaMap.fs");
+            shader->use();
+            shader->setUniform("color", glm::vec3(0.5,0.5,1.0));
+            shader->setUniform("brightness", 5.0f);
+            Renderer::bindShaderUniblock(shader, ViewProj);
+            
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+  
+                std::vector<PosVertex> mesh;
+                VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
+            });
+            prop->addComp(gc); 
+            prop->bakeRotation(glm::vec3(0,80,15));
+            prop->addComponent<CollisionComponent>(*(prop.get()), *(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(1.0f,0.0f),AxisBounds(0.2f,-0.2f));
             break;
         }
-            
+             
         default:
             break;
     }

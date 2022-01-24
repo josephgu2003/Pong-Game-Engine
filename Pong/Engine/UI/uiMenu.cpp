@@ -20,12 +20,7 @@ uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath)
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, dimensions, glm::vec3(0));
 }
 
-void uiMenu::draw(Renderer* r) {
-    r->renderGeneric(this); 
-    for (auto i : children) { 
-        (i)->draw(r);
-    }
-}
+
  
 void uiMenu::notify(const Subject& s, GameEvent ge) {
     auto x = static_cast<const InputHandler*>(&s);

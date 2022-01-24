@@ -12,5 +12,6 @@ in vec2 TexCoords;
         float ratio2 = pow(ratio, 1.5);
         FragColor = sampled;
         FragColor.a *= 2.0*ratio2;
-        BrightColor = vec4(FragColor.rgb, 1.0);
+        BrightColor = FragColor;
     }
+ 

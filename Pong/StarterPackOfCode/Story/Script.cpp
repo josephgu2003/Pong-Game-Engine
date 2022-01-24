@@ -10,6 +10,7 @@
 #include "NameComponent.hpp"
 #include "ScriptSystem.hpp"
 
+
 Script::Script(World* world_, std::vector<std::string> crew, float radius_, bool completed_, std::string sceneName_, std::vector<std::string> prerequisiteScenes_) : Positionable() {
     prerequisitesDone = false;
     prerequisiteScenes = prerequisiteScenes_;
@@ -38,14 +39,16 @@ void Script::tick() {
         checkPrerequisites();
     }
     if (prerequisitesDone && !completed && checkAllHere()) {
+        camRef = world->getCameraRef();
         act(); 
-    }
+    } 
 }
  
 bool Script::checkAllHere() { // slow???
     bool allHere = true;
     for (auto i = actors.begin() ; i != actors.end(); i++){
-        auto x = world->getActorNamed(i->first);
+        std::string actorname = i->first; 
+        auto x = world->getActorNamed(actorname);
         if ((x->dummy) || (x->getDistanceTo(this)) > radius) {
             allHere = false;
         } else if (i->second.lock()->dummy){
@@ -134,3 +137,18 @@ std::weak_ptr<Actor> Script::getActorRefNamed(std::string name) {
     }
     return std::weak_ptr<Actor>(); 
 }
+
+void Script::lockCamToPlayer() {
+    if (auto cam = camRef.lock()) {
+        cam->lockOntoActor();
+    }
+}
+
+void Script::focusCamOnActor(glm::vec3 offset, const std::string& actor) {
+    if (auto cam = camRef.lock()) {
+        cam->unlockFromActor(); 
+        cam->setPos(getActorNamed(actor)->getPos()+offset);
+        cam->lookAt(getActorNamed(actor)->getPos()-cam->getPos());
+    }
+}
+ 

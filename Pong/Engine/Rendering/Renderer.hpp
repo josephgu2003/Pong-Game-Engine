@@ -19,9 +19,11 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include "Shader.hpp"
-#include "World.hpp"
 #include <string>
+#include "AssetManager.hpp"
 #include <memory>
+#include "GraphicsObject.hpp"
+
 
 extern GLuint uboViewProj;
 extern GLuint uboLights; 
@@ -45,12 +47,14 @@ const static float screenquad[24] =
 };
 
 class GraphicsObject;
+class PointLight;
+class DirectionalLight;
 
 class Renderer {
 private:
     float scale = 0;
     float fieldOfView, frustrumNear, frustrumFar;
-    GLuint mVBO, mVAO, mEBO, sVBO, sVAO, qVBO, qVAO, qEBO;
+    GLuint mVBO, mVAO, mEBO, qVBO, qVAO, qEBO;
     
     DoubleFrame frame2C;
     Frame frame0;
@@ -62,22 +66,18 @@ private:
     Texture noise;
     Texture voronoi;
 
-    Shader* skyShader; 
     Shader* blurShader;
     Shader* frameShader;
     
     glm::mat4 viewMat;
     glm::mat4 projMat;
-    
+     
     Camera* camera = NULL;
-    World* world = NULL;
     GLFWwindow* window = NULL; 
     float lighting;
     
-    void updateDistanceFog();
     void updateViewProj();
     void updateCamPos();
-    void updateLights();
     void updateUniformStopWatch();
     float timeT;
     void bindTextures(Shader* shader, Material& map);
@@ -87,19 +87,20 @@ private:
         s->use();
         go->bind();
         bindTextures(s, go->getTextureMap());
-    }
+    } 
 public:
+    void updateLights(const DirectionalLight& dl); // could make these more general with template containing struct DirectionalLight or DistanceFog and type erasure
+    void updateLight(const PointLight& pl);
+    void updateDistanceFog(float fogDensity, float fogGradient, glm::vec3 fogColor);
     static void bindShaderUniblock(Shader* shader, Uniblock block);
     void updateAllUniblocks();
-    void renderSky(); 
+    void renderSky(GraphicsObject* r); 
     Renderer();
     ~Renderer();
-    void setWorld(World* world_);
     void setCamera(Camera* camera_);
     void loadSkyBoxData();
     void renderInitial();
     void renderFinal();
-    void checkForUpdates();
     void renderParticles(GraphicsObject* r);
     void renderTerrain(GraphicsObject* r);
     void renderFoliage(GraphicsObject* r);

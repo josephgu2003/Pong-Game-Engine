@@ -80,6 +80,20 @@ private:
     static HeightMap heightMap; 
     static std::vector<Texture> loadedTextures; 
     static std::vector<std::pair<Texture, std::map<char, Character>>> loadedGlyphs;
+    
+    static inline bool loadCachedTexture(const char* filePath, Texture* texture) {
+        for (int j = 0; j < loadedTextures.size(); j++) {
+              if (std::strcmp(loadedTextures[j].path.data(), filePath) == 0) {
+                  texture->id = loadedTextures[j].id;
+                  texture->path = loadedTextures[j].path;
+                  texture->textureTarget = loadedTextures[j].textureTarget;
+                  texture->dimensions = loadedTextures[j].dimensions;
+                  printf("Texture already loaded: %s \n", filePath);
+                  return true;
+              }
+          }
+        return false;
+    }
   //  static std::vector<std::unique_ptr<Model>> loadedModels;
 public:
     static void loadNullTexture(int x, int y, GLuint* texture, GLenum format);
@@ -89,6 +103,7 @@ public:
     static void load3DTexture(const char* filePath, Texture* texture);
 
     static void loadTexture(const char* filePath, Texture* texture, bool srgb);
+    static void loadCubeMapTexture(Texture* texture, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ);
 
    // static void loadModel(const char* filePath, Model*& model);
 

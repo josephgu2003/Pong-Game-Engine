@@ -10,7 +10,7 @@
 #define HUNGER_RATE 0.001
 
 LifeComponent::LifeComponent(Actor& actor) : Component(actor) {
-    type = LIFE;
+    updatePriority = 5; 
 } 
 
 void LifeComponent::tick() {

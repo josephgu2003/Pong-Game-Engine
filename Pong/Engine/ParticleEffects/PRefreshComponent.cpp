@@ -9,37 +9,40 @@
 #include "Particle.hpp"
 #include "PPhysicsComponent.hpp"
 
-PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond_, float refreshInterval_, glm::vec3 dimensions_, glm::vec3 velRangeLow_, glm::vec3 velRangeHigh_) : Component(pe){
-    ptcPerSecond = ptcPerSecond_;
-    refreshInterval = refreshInterval_; 
+PRefresh::PRefresh(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond_, float refreshInterval_) : Component(pe) {
+    refreshInterval = refreshInterval_;
     myWatch.resetTime();
     firstUnused = 0;
     particles = pe.getParticles();
     numParticles = pe.getNumParticles();
-    dimensions = dimensions_;
-    type = PHYSICS;
-    ptcPerInterval = std::ceil(ptcPerSecond * refreshInterval);
+    
+    updatePriority = 1;
+    ptcPerInterval = std::ceil(ptcPerSecond_ * refreshInterval);
     particleMaxDuration = particleMaxDuration_;
     mainDice.setRange(0, 1000);
-    velRangeLow = velRangeLow_;
-    velRangeHigh = velRangeHigh_;
     
     refreshVel = true;
+    particleOrigin = glm::vec3(0);
+}
+
+PRefreshComponent::PRefreshComponent(ParticleSystem& pe, float particleMaxDuration_, int ptcPerSecond_, float refreshInterval_, glm::vec3 dimensions_, glm::vec3 velRangeLow_, glm::vec3 velRangeHigh_) : PRefresh(pe, particleMaxDuration_, ptcPerSecond_, refreshInterval_), velRangeLow(velRangeLow_), velRangeHigh(velRangeHigh_), dimensions(dimensions_) {
+    
     if (glm::length(velRangeLow-velRangeHigh) == 0) {
         refreshVel = false;
     }
-    
-    hasPhysics = false;
 } 
  
-void PRefreshComponent::tick() {
-    ppc = actor->getComponent<PPhysicsComponent>();
+void PRefresh::tick() {
+    particleOrigin = static_cast<ParticleSystem*>(actor)->getPos();
+    PPhysicsComponent* ppc = actor->getComponent<PPhysicsComponent>();
     if (ppc) {
         velocities = ppc->getVelocities();
+    } else {
+        velocities = nullptr; // because we do not own the velocities, okay not to delete
     }
     if (myWatch.getTime() > refreshInterval) { // every 0.2 sec do a refresh
         myWatch.resetTime();
-        
+            
         for (int i = 0; i < ptcPerInterval; i++) {
             refreshParticle();
         }
@@ -51,16 +54,16 @@ void PRefreshComponent::refreshParticle() {
     glm::vec3 displacement;
     
     for (int i = 0; i < 3; i++) {
-        displacement[i] = dimensions[i]*(-0.5f + 0.01*(mainDice.roll() % 100)); 
+        displacement[i] = dimensions[i]*(-0.5f + (mainDice.roll() % 500)/500.0f); 
     }
     
-    if (refreshVel && ppc) {
+    if (refreshVel && velocities) {
         for (int i = 0; i < 3; i++) {
             velocities[firstUnused][i] = (velRangeHigh[i]-velRangeLow[i])*(0.01*(mainDice.roll() % 100)) + velRangeLow[i];
         }
-    }
+    } 
     
-    particles[firstUnused].posVec = static_cast<ParticleSystem*>(actor)->getPos() + displacement;
+    particles[firstUnused].posVec = particleOrigin + displacement;
     
     particles[firstUnused].pyrAngles = glm::vec3(0,(mainDice.roll() % 180),0);
      
@@ -70,10 +73,28 @@ void PRefreshComponent::refreshParticle() {
         firstUnused = 0;
     } else if (particles[firstUnused+1].duration<=0) {
         firstUnused++;
+    } else {
+        
     }
- 
+  
 } 
 
-float PRefreshComponent::getParticleLifetime() {
+float PRefresh::getParticleLifetime() {
     return particleMaxDuration;
 }
+
+void PRefresh::refreshAll() {
+    particleOrigin = static_cast<ParticleSystem*>(actor)->getPos();
+    PPhysicsComponent* ppc = actor->getComponent<PPhysicsComponent>();
+    if (ppc) {
+        velocities = ppc->getVelocities();
+    } else {
+        velocities = nullptr;
+    }
+    for (int it = 0; it < numParticles; it++) {
+        refreshParticle();
+    }
+    
+}  
+ 
+ 

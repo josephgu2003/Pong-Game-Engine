@@ -13,7 +13,7 @@
 #include "aiSingFriend.hpp"
 
 CharacterComponent::CharacterComponent(Actor& actor) : NameComponent(actor) {
-    Component::type = CHAR;
+    updatePriority = 1; 
     nextOpenTrait = 0;
     for (int i = 0; i < MAX_PTRAITS; i++) {
         traits[i] = PT_EMPTY;

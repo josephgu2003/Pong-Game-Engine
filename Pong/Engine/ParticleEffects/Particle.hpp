@@ -37,7 +37,6 @@ protected:
 
     float duration;
     
-    virtual void refreshParticle() {}
     Particle* particles = NULL; 
 public:
     void setWorld(World* world);  
@@ -50,7 +49,6 @@ public:
     int getNumParticles();
     Particle* getParticles();
     Particle& getNthParticle(int n);
-    const glm::vec3& getPos();
 };
 /**
 glm::vec3 force = glm::vec3(0,0,0);

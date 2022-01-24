@@ -12,7 +12,7 @@ PSpinComponent::PSpinComponent(ParticleSystem& pe, glm::vec3 spin_) : Component(
     spin = spin_;
     particles = pe.getParticles();
     numParticles = pe.getNumParticles();
-    type = PARTICLESPIN; 
+    updatePriority = 3;
 }
 void PSpinComponent::tick() {
     for (int i = 0; i < numParticles; i++){

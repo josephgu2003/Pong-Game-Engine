@@ -19,7 +19,6 @@ PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, std::string m
     shader->setUniform("size", size_); 
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
-    type = GRAPHICS;
     
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {
         r->renderParticles(gc);
@@ -43,7 +42,6 @@ PQuadGraphicsComponent::PQuadGraphicsComponent(ParticleSystem& pe, int numberPar
     shader->setUniform("size", size_);
     Renderer::bindShaderUniblock(shader, ViewProj);
     // need to load model data to vao vbo,
-    type = GRAPHICS;
     
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {
         r->renderParticles(gc);

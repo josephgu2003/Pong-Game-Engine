@@ -11,37 +11,29 @@
 #include <stdio.h>
 #include <memory>
 
-enum CompType {
-    AI,
-    CHAR,
-    LIFE,
-    NAME,
-    COMBAT,
-    PARTICLESPIN,
-    ANIM,
-    PHYSICS,
-    GRAPHICS
-};
-
 class Componentable; 
 
 class Component {
 protected:
     Componentable* actor = nullptr;
-    CompType type;
+    int updatePriority;
 public:
     Component(Componentable& compUser_) {
         actor = &compUser_;
+        updatePriority = 0;
     }
     
     virtual ~Component() {
         
     }
-    CompType getType() { 
-        return type; 
+    
+    int getUpdatePriority() {
+        return updatePriority;
     }
 
     virtual void tick() = 0;
+    
+    Componentable* getParentObject();
 };
 
 #endif /* Component_hpp */

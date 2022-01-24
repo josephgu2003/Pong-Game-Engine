@@ -15,6 +15,7 @@
 #include "Actor.hpp"
 #include "Watch.hpp"
 #include "Speech.hpp"
+#include "Camera.hpp"
 
 class World; 
 
@@ -32,6 +33,7 @@ private:
     std::weak_ptr<Speech> speechRef;
     void checkPrerequisites();
 protected:
+    std::weak_ptr<Camera> camRef;
     Watch stopWatch;
     int step;
     World* world = nullptr;
@@ -44,7 +46,18 @@ protected:
     void endScene();
     void speak(const std::string& speaker, const std::string& spoken, float duration);
     void makeSpeech(std::string speaker, std::vector<std::string>& lines, std::vector<float>& durations);
-    bool noActiveSpeech(); 
+    bool noActiveSpeech();
+    void lockCamToPlayer();
+    void focusCamOnActor(glm::vec3 offset, const std::string& actor);
+    
+    template <typename Functor>
+    void doAndWaitFor(Functor functor, float duration) {
+        if (!isWaiting()) {
+            functor();
+        }
+        waitFor(duration);
+    }
+    
 public:
     Script(World* world, std::vector<std::string> crew, float radius, bool completed, std::string scenenName, std::vector<std::string> prerequisiteScenes_);
     void tick();

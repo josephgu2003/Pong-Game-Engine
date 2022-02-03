@@ -46,12 +46,12 @@ void ChargedSlash::call() {
     
 void ChargedSlash::tick() { 
     if (auto slash = slashRef.lock()) {
-        slash->posDir(0.5f);
+        slash->posDir(0.5f); 
     } 
 
     duration -= (float)glfwGetTime();
     if (duration < 0.0) on = false;
-}
+} 
    
 ChargedSlash::~ChargedSlash() {
     if (auto slash = slashRef.lock()) {

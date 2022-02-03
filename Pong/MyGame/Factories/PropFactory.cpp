@@ -101,7 +101,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             });
             prop->addComp(gc); 
             prop->bakeRotation(glm::vec3(0,80,15));
-            prop->addComponent<CollisionComponent>(*(prop.get()), *(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(1.0f,0.0f),AxisBounds(0.2f,-0.2f));
+            prop->addComponent<CollisionComponent>(*(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(1.0f,0.0f),AxisBounds(0.2f,-0.2f));
             break;
         }
              

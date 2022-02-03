@@ -14,7 +14,7 @@ Phoenix : Original model phoenix bird by (c) NORBERTO-3D, available under CC-BY 
 
 Sunny sky: The Chayed: https://opengameart.org/content/sky-box-sunny-day , © under CC-BY 3.0
 
-EXTERNAL LIBRARY CREDITS OpenGL - Graphics API GLFW - graphics GLEW - graphics Assimp - model loading stb_image - image loading Irrklang - audio Truetype - font loading
+EXTERNAL LIBRARY CREDITS OpenGL - Graphics API GLFW - graphics GLEW - graphics Assimp - model loading stb_image - image loading Irrklang - audio Truetype - font loading nlohmann JSON - json serialization glm - math
 
 SOFTWARES USED FOR ART Blender GIMP
 

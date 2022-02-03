@@ -153,7 +153,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
         actor->Componentable::addComponent<NameComponent>(*(actor.get()));
         actor->Componentable::addComponent<InventoryComponent>(*(actor.get()), ItemNames);
         actor->Componentable::addComponent<LifeComponent>(*(actor.get()));
-        actor->Componentable::addComponent<CollisionComponent>(*(actor.get()),*(actor.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.4f,-0.4f),AxisBounds(0.2f,-0.2f));
+        actor->Componentable::addComponent<CollisionComponent>(*(actor.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.4f,-0.4f),AxisBounds(0.2f,-0.2f));
         
         Material map;
         AssetManager::loadTexture("Resources/Models/ScarfChar/scarfchar_diffuse.png", &map.diffuse, true);

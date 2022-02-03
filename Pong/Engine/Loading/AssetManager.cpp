@@ -17,6 +17,8 @@ HeightMap AssetManager::heightMap;
 
 void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb) {
     if (loadCachedTexture(filePath, texture)) return;
+    
+    printf("Load new texture: %s \n", filePath);
    int imageWidth = 0;
    int imageHeight = 0;
    int channels = 0;
@@ -442,11 +444,11 @@ void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, i
     
     VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
     glBindVertexArray(0);
-    
+     
 }
 void AssetManager::loadCubeMapTexture(Texture* texture, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ) {
     if(loadCachedTexture((posX+negX+posY+negY+posZ+negZ).c_str(), texture)) return;
-    
+    printf("Load new texture: %s \n", posX.c_str());
     int imageWidth, imageHeight, channels;
     unsigned char* imageData = NULL;
     glActiveTexture(GL_TEXTURE0);
@@ -479,6 +481,7 @@ void AssetManager::loadCubeMapTexture(Texture* texture, const std::string& posX,
     texture->dimensions.x = imageWidth;
     texture->dimensions.y = imageHeight;
     texture->textureTarget = GL_TEXTURE_CUBE_MAP;
+    texture->path = posX+negX+posY+negY+posZ+negZ;
     
     loadedTextures.push_back(*texture);
 }

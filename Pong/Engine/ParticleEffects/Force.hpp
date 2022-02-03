@@ -33,10 +33,10 @@ protected:
     float gradientK;
     float shear;
     ForceType fType;
-    ForceGradient fGradient;
+    ForceGradient fGradient; 
     std::shared_ptr<Actor> actor;
 public:
-    Force(); 
+    Force();
     Force(glm::vec3 pos_, float magnitude);
     void init(glm::vec3 pos_, float magnitude);
     void tick();

@@ -40,6 +40,7 @@
 		5D39DC4F2790B826003902FD /* GhostForm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D39DC4D2790B825003902FD /* GhostForm.cpp */; };
 		5D3B9BDD278CC1AD008FB859 /* diamondborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D3B9BDC278CC1AD008FB859 /* diamondborder.png */; };
 		5D3E7089264308C10071115A /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D3E7087264308C10071115A /* Camera.cpp */; };
+		5D3E7B6E27A08A9E006804AA /* SurvivalMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D3E7B6C27A08A9E006804AA /* SurvivalMode.cpp */; };
 		5D426582263C8E7B0026C24D /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D426580263C8E7B0026C24D /* Shader.cpp */; };
 		5D46CDCB265D6DC700096EC7 /* radial.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D46CDCA265D6DC700096EC7 /* radial.png */; };
 		5D479DC0264EDC2200067E35 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D479DBE264EDC2200067E35 /* Mesh.cpp */; };
@@ -420,6 +421,8 @@
 		5D3B9BDC278CC1AD008FB859 /* diamondborder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = diamondborder.png; sourceTree = "<group>"; };
 		5D3E7087264308C10071115A /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		5D3E7088264308C10071115A /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
+		5D3E7B6C27A08A9E006804AA /* SurvivalMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurvivalMode.cpp; sourceTree = "<group>"; };
+		5D3E7B6D27A08A9E006804AA /* SurvivalMode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurvivalMode.hpp; sourceTree = "<group>"; };
 		5D426580263C8E7B0026C24D /* Shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		5D426581263C8E7B0026C24D /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
 		5D46CDCA265D6DC700096EC7 /* radial.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radial.png; sourceTree = "<group>"; };
@@ -984,11 +987,9 @@
 		5D25EC4D26933F11008BD594 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				5D6E82962698A0E3003A1059 /* ScriptOne.cpp */,
 				5DF4EBD22777A24C006823FB /* ScriptWolfBoyOne.cpp */,
 				5DF4EBD32777A24C006823FB /* ScriptWolfBoyOne.hpp */,
 				5DA4400B26AADE2F00281AA6 /* File.json */,
-				5D6E82972698A0E3003A1059 /* ScriptOne.hpp */,
 				5D14649027409EFB0024F2E2 /* ScriptWakeUp.cpp */,
 				5D14649127409EFB0024F2E2 /* ScriptWakeUp.hpp */,
 				5D67FAE92794B5E7007AE2EA /* ScriptNightFlowers.cpp */,
@@ -1142,10 +1143,10 @@
 			isa = PBXGroup;
 			children = (
 				5D4BD7C3271B6A9900A89C8B /* GraphicsObject.cpp */,
+				5D4BD7C4271B6A9900A89C8B /* GraphicsObject.hpp */,
 				5DA9BE6926C0417500C1BAEC /* Bone.hpp */,
 				5DA9BE6C26C0734D00C1BAEC /* Animation.hpp */,
 				5DA9BE6B26C0734D00C1BAEC /* Animation.cpp */,
-				5D4BD7C4271B6A9900A89C8B /* GraphicsObject.hpp */,
 				5D479DC1264EE5A800067E35 /* Model.cpp */,
 				5DA9BE6826C0417500C1BAEC /* Bone.cpp */,
 				5D479DC2264EE5A800067E35 /* Model.hpp */,
@@ -1479,7 +1480,9 @@
 		5DBC1BAB277FB9600016ED16 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				5D6E82972698A0E3003A1059 /* ScriptOne.hpp */,
 				5D68FE6C26E8433600E572E5 /* JsonManager.cpp */,
+				5D6E82962698A0E3003A1059 /* ScriptOne.cpp */,
 				5D68FE6D26E8433700E572E5 /* JsonManager.hpp */,
 			);
 			path = Deprecated;
@@ -1741,6 +1744,8 @@
 				5D901D73278DE831003C65EB /* MyGameItems.hpp */,
 				5D39DC4D2790B825003902FD /* GhostForm.cpp */,
 				5D39DC4E2790B825003902FD /* GhostForm.hpp */,
+				5D3E7B6C27A08A9E006804AA /* SurvivalMode.cpp */,
+				5D3E7B6D27A08A9E006804AA /* SurvivalMode.hpp */,
 			);
 			path = MyGame;
 			sourceTree = "<group>";
@@ -2036,6 +2041,7 @@
 				5D6E82982698A0E3003A1059 /* ScriptOne.cpp in Sources */,
 				5DB91EB32720A55C003AAAA7 /* ParticleComp.cpp in Sources */,
 				5DB91EC72723A10C003AAAA7 /* PPhysicsComponent.cpp in Sources */,
+				5D3E7B6E27A08A9E006804AA /* SurvivalMode.cpp in Sources */,
 				5D68FE6E26E8433700E572E5 /* JsonManager.cpp in Sources */,
 				5DB91EA1271BA8B0003AAAA7 /* VertexLoader.cpp in Sources */,
 				5D391B8F268FE01C0092623D /* Script.cpp in Sources */,

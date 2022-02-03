@@ -15,7 +15,8 @@
 #include "AssetManager.hpp"
 #include "VertexMesh.hpp"
 #include "Watch.hpp"
- 
+
+// guide: https://stackoverflow.com/questions/46839586/opengl-object-in-c-raii-class-no-longer-works
 class Shader; 
 
 class Renderer;
@@ -33,7 +34,7 @@ struct GraphicsUnit {
     
 };
 enum DrawPass {
-  DRAW_OPAQUE,
+    DRAW_OPAQUE,
     DRAW_TRANSPARENT
 };
 
@@ -42,16 +43,19 @@ class GraphicsObject { // benefits: keep VAO VBO EBO in the entity, not in teh r
     // multiple meshes: each mesh has its own draw call
     
     
-  // draw opaque mesh and transparent mesh -> house
-
-  // worst case , opaque mesh and transparent mesh with vastly different vertex types and shaders : one VAO VBO EBO shader material drawcall each
-  // medium case, different meshes with different calls and materials : one VAO VBO EBO one shader, different materials drawcalls
-  // best case, different calls for different meshes: one drawcall each
-
-  // struct GraphicsUnit {VAO VBO EBO shader material drawcall}
-  // want to share various things amongst them possibly
+    // draw opaque mesh and transparent mesh -> house
+    
+    // worst case , opaque mesh and transparent mesh with vastly different vertex types and shaders : one VAO VBO EBO shader material drawcall each
+    // medium case, different meshes with different calls and materials : one VAO VBO EBO one shader, different materials drawcalls
+    // best case, different calls for different meshes: one drawcall each
+    
+    // struct GraphicsUnit {VAO VBO EBO shader material drawcall}
+    // want to share various things amongst them possibly
     
 private:
+    GraphicsObject(const GraphicsObject &) = delete;
+    GraphicsObject &operator=(const GraphicsObject &) = delete;
+    bool movedFrom = false;
 protected: 
     std::vector<TextureAnimation> textureAnimations;
     Material map;
@@ -61,7 +65,7 @@ protected:
     GLuint instanceVBO;
     GLuint VBO;
     GLuint EBO;
-    GLuint numIndices;  
+    GLuint numIndices;
     GLuint instanceCount;
     GLenum drawTarget;
     void setSingularMaterial(const Material& map);
@@ -76,10 +80,59 @@ protected:
         for (int i = 0; i < vm->vertices.size(); i++) {
             glBufferSubData(GL_ARRAY_BUFFER, i*stride, sizeof(glm::vec3), (void*) &(vm->vertices.at(i)));
         }
-        glBindBuffer(GL_ARRAY_BUFFER, 0); 
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+public:
+    static int nonHolders;
+    GraphicsObject(GraphicsObject&& other) {
+        textureAnimations = other.textureAnimations;
+        map = other.map;
+        drawPass = other.drawPass;
+        shader = other.shader;
+        VAO = other.VAO;
+        instanceVBO = other.instanceVBO;
+        VBO = other.VBO;
+        EBO = other.EBO;
+        numIndices = other.numIndices;
+        instanceCount = other.instanceCount;
+        drawTarget = other.drawTarget;
+        other.movedFrom = true;
+        movedFrom = false;
+    }
+
+    GraphicsObject &operator=(GraphicsObject&& other) {
+        if (this != &other) {
+            if (!movedFrom) {
+                
+                glDeleteBuffers(1, &VBO);
+                glDeleteBuffers(1, &EBO);
+                glDeleteBuffers(1, &instanceVBO);
+                glDeleteVertexArrays(1, &VAO);
+                if(shader) {
+                    delete shader;
+                }
+            }
+            textureAnimations = other.textureAnimations;
+            map = other.map;
+            drawPass = other.drawPass;
+            shader = other.shader;
+            VAO = other.VAO;
+            instanceVBO = other.instanceVBO;
+            VBO = other.VBO;
+            EBO = other.EBO;
+            numIndices = other.numIndices;
+            instanceCount = other.instanceCount;
+            drawTarget = other.drawTarget;
+            other.movedFrom = true;
+            if (movedFrom) {
+            movedFrom = false;
+                nonHolders--;
+            }
+            nonHolders++;
+        }
+        return *this;
     }
     
-public:
     template <typename T>
     inline void setUniform(const std::string& name, const T& t) {
         shader->use();
@@ -96,14 +149,14 @@ public:
     Material& getTextureMap();
     GLenum getDrawTarget();
     void bind();
-    void unbind(); 
+    void unbind();
     GLuint getNumIndices();
     bool isInstanced();
     virtual void draw(Renderer* r) = 0;     //this is where instanced drawing is cancelled-  world object doesn't know about instanced drawing and stuff
     
-// - instancing data?
-// - If batch with others: share shader, share vao and vbo, vao and vbo become
-// same as others, draw call becomes function pointer?
+    // - instancing data?
+    // - If batch with others: share shader, share vao and vbo, vao and vbo become
+    // same as others, draw call becomes function pointer?
 };
 
 // soon need : mesh for fish, mesh is scripted to wave around, graphics need to update per frame

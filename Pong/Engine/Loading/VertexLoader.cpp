@@ -680,8 +680,8 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
     }
        
     std::vector<TBNVertex> newVertices;
-     newVertices.resize(CHUNK_DIM_PXLS*CHUNK_DIM_PXLS);
-     int counter = 0;
+    newVertices.resize(CHUNK_DIM_PXLS*CHUNK_DIM_PXLS);
+    int counter = 0;
      for (int i = 0; i < (CHUNK_DIM_PXLS+2); i++) {
          for (int j = 0; j < (CHUNK_DIM_PXLS+2); j++) {
              if (i < (CHUNK_DIM_PXLS+1) && j < (CHUNK_DIM_PXLS+1) && i > 0 && j >0) {
@@ -693,7 +693,8 @@ void VertexLoader::loadPoint(unsigned int vao, unsigned int vbo, unsigned int eb
      normalizeTanBitan(newVertices);
     
   std::vector<GLuint> indices;
-  
+     indices.reserve((CHUNK_DIM_PXLS-1)*(CHUNK_DIM_PXLS-1));
+   
   for (int i = 0; i < CHUNK_DIM_PXLS-1; i++) {
       for (int j = 0; j < CHUNK_DIM_PXLS-1; j++) {
           int dim = (CHUNK_DIM_PXLS);

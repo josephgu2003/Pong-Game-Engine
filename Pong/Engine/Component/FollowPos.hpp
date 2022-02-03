@@ -12,7 +12,6 @@
 #include "Component.hpp"
 #include "Positionable.hpp"
 
-
 template <typename T>
 class FollowPos : public Component {
     glm::vec3 offset;

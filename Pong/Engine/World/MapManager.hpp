@@ -15,10 +15,11 @@
 #include <queue>
 
 #define MAX_SIDE_CHUNKS 5
+#define CHUNKS_PER_ROW (1+2*MAX_SIDE_CHUNKS)
 class Renderer; 
 class MapManager {
 private:
-    void loadNextUnloadedChunk(const glm::vec3& pos);
+    void loadChunksAbstraction(const glm::vec3& pos, bool oneAtATime);
     struct ChunkIndices {
         int indexX;
         int indexY;
@@ -32,12 +33,11 @@ private:
         glm::vec3 scalings;
     } mapDescriptor; 
     struct MapChunks {
-        std::shared_ptr<MapChunk> chunks[1+2*MAX_SIDE_CHUNKS][1+2*MAX_SIDE_CHUNKS];
-      //  std::shared_ptr<MapChunk> proxyChunks[1+2*MAX_SIDE_CHUNKS][1+2*MAX_SIDE_CHUNKS];
+        MapChunk chunks[1+2*MAX_SIDE_CHUNKS][1+2*MAX_SIDE_CHUNKS];
         ChunkIndices centerChunk;
     } mapChunks;
     bool loadingUnloadedChunks;
-    Material terrainMat;
+    Material terrainMat; 
     inline float vertexDimensionToRealUnits(int vertexDim, float scalingFactor) {
             float realDim = (vertexDim-1) * scalingFactor; // 5 fingers 4 spaces
             return realDim;
@@ -54,7 +54,28 @@ private:
     }
      
     void recenterMapChunks(int newXIndex, int newYIndex);
-    
+
+    template <typename FunctorI, typename FunctorJ>
+    void recenterMapChunksAbstraction(int deltaI, int deltaJ, FunctorI functorI, FunctorJ functorJ) {
+        
+        auto isWithinBounds = [] (int i, int j) {
+            return (i >= 0 && i < 1+2*MAX_SIDE_CHUNKS) && (j >= 0 && j < 1+2*MAX_SIDE_CHUNKS);
+        };
+        
+        for (int j = 0; j < CHUNKS_PER_ROW; j++) {
+            for (int i = 0; i < CHUNKS_PER_ROW; i++) {
+                int iPos = functorI(i);
+                int jPos = functorJ(j);
+                MapChunk& mc = mapChunks.chunks[iPos][jPos];
+                if (isWithinBounds(iPos + deltaI, jPos + deltaJ) && !mc.dummy) {
+                    mapChunks.chunks[iPos + deltaI][jPos + deltaJ] = std::move(mapChunks.chunks[iPos][jPos]);
+                    mc.dummy = true;
+                }
+            }
+        }
+         
+    }
+
 public:
     MapManager();
     virtual ~MapManager();

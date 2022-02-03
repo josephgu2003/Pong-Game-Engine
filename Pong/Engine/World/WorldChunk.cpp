@@ -8,11 +8,12 @@
 #include "WorldChunk.hpp"
 #include "VertexLoader.hpp"
 #include "Renderer.hpp"
-#include "Shader.hpp"
-#include "AssetManager.hpp"  
+#include "Shader.hpp" 
+#include "AssetManager.hpp"
+
+int MapChunk::counter = 0;
 
 MapChunk::MapChunk(const unsigned short* heightMap, Material& mat, int mapWidth, int mapHeight, int indexX_, int indexY_, glm::vec2 originPos_, glm::vec3 scaling_) : GraphicsObject(DRAW_OPAQUE) {
-    
     shader->init("Shaders/TerrainVertex.vs", "Shaders/TerrainFragmentShader.fs"); 
     Renderer::bindShaderUniblock(shader, DistanceFog); 
     VertexLoader::loadMapChunk(heightMesh, heightMap,mapWidth,mapHeight, indexX_, indexY_, originPos_, scaling_, VAO, VBO, EBO, numIndices);
@@ -23,7 +24,9 @@ MapChunk::MapChunk(const unsigned short* heightMap, Material& mat, int mapWidth,
     Renderer::bindShaderUniblock(shader, Lights);
     indexX = indexX_;
     indexY = indexY_;
-}    
+    dummy = false;
+    counter++;
+}     
         
 void MapChunk::draw(Renderer* r) {  
     r->renderTerrain(this); 
@@ -31,8 +34,8 @@ void MapChunk::draw(Renderer* r) {
     
 float MapChunk::getHeightAt(glm::vec2 xz) {
     xz = xz - originPos; 
-    glm::vec2 pos = xz;
-    xz.x = xz.x / scaling.x;
+    glm::vec2 pos = xz; 
+    xz.x = xz.x / scaling.x; 
     xz.y = xz.y / scaling.z; 
      
     //xz now in local space and in vertex coords : 1 is one vertex space, etc.
@@ -61,8 +64,13 @@ float MapChunk::getHeightAt(glm::vec2 xz) {
 } 
  
 int MapChunk::getIndexX() {
-    return indexX;
+    return indexX; 
 }
 int MapChunk::getIndexY() {
     return indexY;
 }
+
+MapChunk::~MapChunk() {
+    counter--;
+}
+   

@@ -25,11 +25,48 @@ private:
     int indexX;
     int indexY;
 public :
+    bool dummy;
+    MapChunk() : GraphicsObject(DRAW_OPAQUE) {
+        dummy = true;
+    }  
     MapChunk(const unsigned short* heightMap, Material& mat, int mapWidth, int mapHeight, int indexX, int indexY, glm::vec2 originPos_, glm::vec3 scaling);
-    virtual void draw(Renderer* r);
+    
+    MapChunk(const MapChunk& other) = delete;
+    MapChunk &operator=(const MapChunk& other) = delete; 
+    
+    MapChunk(MapChunk&& other) : GraphicsObject(std::move(other)){
+        scaling = other.scaling;
+        originPos = other.originPos;
+        indexX = other.indexX;
+        indexY = other.indexY;
+        for (int i = 0; i < CHUNK_DIM_PXLS; i++) {
+            for (int j = 0; j < CHUNK_DIM_PXLS; j++) {
+                heightMesh[i][j] = other.heightMesh[i][j];
+            }
+        }
+        dummy = other.dummy;
+    }
+    
+    MapChunk &operator=(MapChunk&& other) {
+        scaling = other.scaling;
+        originPos = other.originPos;
+        indexX = other.indexX;
+        indexY = other.indexY;
+        for (int i = 0; i < CHUNK_DIM_PXLS; i++) {
+            for (int j = 0; j < CHUNK_DIM_PXLS; j++) {
+                heightMesh[i][j] = other.heightMesh[i][j];
+            }
+        }
+        dummy = other.dummy; 
+        GraphicsObject::operator=(std::move(other));
+                return *this;
+    } 
+    ~MapChunk(); 
+    void draw(Renderer* r) override;
     float getHeightAt(glm::vec2 xz);
     int getIndexX();
     int getIndexY();
+    static int counter;
 };
   
 

@@ -9,6 +9,7 @@
 #include "World.hpp"
 #include "GraphicsComponent.hpp"
 #include "NotificationSystem.hpp"
+#include "SurvivalMode.hpp"
 
 std::vector<std::string> fitnCrew = {
     "Floro", "Moonbell"
@@ -24,8 +25,9 @@ void ScriptNightFlowers::act() {
     Actor* moonbell = getActorNamed("Moonbell");
     Actor* floro = getActorNamed("Floro");
     setPos(moonbell->getPos());
+    if (step == 0) step = 12; 
     switch (step) {
-        case 0: {
+        case 0: { 
             world->getComponent<NotificationSystem>()->newNotification("Flowers in the Night", 5.0f);
             moonbell->orientYawTo(glm::vec3(200.0f,20.0f,-40.0f));
             moonbell->posDir(0.02);
@@ -111,9 +113,15 @@ void ScriptNightFlowers::act() {
         case 11: {
             if (!isWaiting()) {
             speak("Floro", "What do you see? Don't answer, this is you.", 2.0f);
-            }
+            } 
             waitFor(4.0f);
             break;
-        } 
+        }
+        case 12: {
+            world->addComponent<SurvivalMode>(*world, 100.0f);
+            world->getComponent<NotificationSystem>()->newNotification("The rest is experimental gameplay - survival mode, perhaps more interesting", 10.0f);
+            step++; 
+            break;
+        }
     }
 }

@@ -110,7 +110,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
         if (auto x = game->getPlayerHero()) x->posRight(0.02);
     });
     ih->setContinuousCallback(GLFW_KEY_D, [](Game* game){ 
-        if (auto x = game->getPlayerHero()) x->posRight(-0.5);   
+        if (auto x = game->getPlayerHero()) x->posRight(-0.08);    
     }); 
  
     ih->setOneTapCallback(GLFW_KEY_Z, [](Game* game){
@@ -160,8 +160,6 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
                 comb->newAbility(letters);
             }
         });
-
- 
         
     ih->setOneTapCallback(GLFW_KEY_Y, [](Game* game) {
             if (auto hero = game->getPlayerHero()) {
@@ -212,7 +210,7 @@ void loadMainGameMenuModeCallbacks(InputHandler* ih) {{
 GameLevel* makeMainMenu(Game* g) {
     g->getUI()->clear();
     GameLevel* lvl = new GameLevel(g->getRenderer(), 1, "mainmenu");
-    auto ut = std::make_shared<uiText>("Press enter to begin", -0.3, -0.8,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+    auto ut = std::make_shared<uiText>("Press enter to begin", -0.25, -0.8,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
     auto uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), "Resources/GlyphsAndUI/flowerhp.png");
     uf->insertChild(ut); 
     g->getUI()->insertNode(uf);
@@ -272,21 +270,10 @@ void MyGame::setupLvlBuilder() {
         World& wZero = lvl->getWorld(0);
         wOne.setDirectionalLight(dl2);
         wOne.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3));
-        wOne.getAtmosphere().setSkybox("Resources/Skybox/NightStars/BlueNebular_left.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_right.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_top.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_bottom.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_front.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_back.jpg");
+
             
         wZero.setDirectionalLight(dl2); 
-        wZero.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3));
-        wZero.getAtmosphere().setSkybox("Resources/Skybox/NightStars/BlueNebular_left.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_right.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_top.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_bottom.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_front.jpg",
-                                       "Resources/Skybox/NightStars/BlueNebular_back.jpg");
+        wZero.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3)); 
         
         InputHandler& ih = g->getInputHandler();
         ih.clear(); 

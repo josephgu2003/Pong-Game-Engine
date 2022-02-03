@@ -13,6 +13,7 @@
 #include "Subject.hpp"
 #include "Observer.hpp"
 #include <functional>
+#include "Positionable.hpp"
 
 struct AxisBounds { // relative to Positionable center point
     float min;
@@ -54,7 +55,21 @@ private:
         abs.min = center + rel.min;
     }
 public:
-    CollisionComponent(Componentable& compHolder, Positionable& target, AxisBounds x, AxisBounds y, AxisBounds z);
+    template <typename T>
+    CollisionComponent(T& p, AxisBounds x, AxisBounds y, AxisBounds z) : Component(p), target(p) {
+        updatePriority = 2;
+        lockTarget = false;
+        xAxisRelative = x;
+        yAxisRelative = y;
+        zAxisRelative = z;
+        glm::vec3 pos = p.getPos();
+        makeAbsoluteBounds(xAxisRelative, xAxisAbsolute, pos.x);
+        makeAbsoluteBounds(yAxisRelative, yAxisAbsolute, pos.y);
+        makeAbsoluteBounds(zAxisRelative, zAxisAbsolute, pos.z);
+        onCollide = [] (CollisionComponent* c, CollisionComponent* cc) {
+            
+        };
+    }
     void setOnCollision(CollisionCallback onCollide_);
     void tick() override;
     void onCollision(CollisionComponent* collided);

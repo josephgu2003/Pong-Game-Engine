@@ -17,12 +17,12 @@ void DevPosTracker::notify(const Subject& s, GameEvent ge) {
     auto setDisplayedText = [] (glm::vec3 pos) { 
         std::string newText = "";
         newText.append(std::to_string(float(pos.x)));
-        newText.append(", "); 
+        newText.append(",\n ");
         newText.append(std::to_string(float(pos.y)));
-        newText.append(", ");
+        newText.append(",\n ");
         newText.append(std::to_string(float(pos.z))) ;
         return newText;
-    };
+    }; 
     if (ge == SUBJ_POS_CHANGED) {
        auto subj = static_cast<const Positionable&>(s);
         glm::vec3 pos = subj.getPos();

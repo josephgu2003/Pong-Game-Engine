@@ -31,8 +31,9 @@ void GraphicsComponent::tick() {
  
 void GraphicsComponent::initModel(const std::string& model) {
     // need to load model data to vao vbo, 
-    VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices);
-}
+    VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices, deleteDataOnDestruct);
+    
+} 
 
 void GraphicsComponent::draw(Renderer* r) {
     drawCall(r, this);

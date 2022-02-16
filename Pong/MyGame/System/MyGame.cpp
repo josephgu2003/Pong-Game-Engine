@@ -6,7 +6,7 @@
 //
 
 #include "MyGame.hpp"
-#include "HealthMeter.hpp"
+#include "HealthMeter.hpp" 
 #include "LifeComponent.hpp"
 #include "Subject.hpp"
 #include "JsonManager.hpp"
@@ -66,7 +66,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
             x.setHandlerMode(KCALL_READTEXT);
         });
     
-    ih->setOneTapCallback(GLFW_KEY_K, [](Game* game){
+    ih->setOneTapCallback(GLFW_KEY_ESCAPE, [](Game* game){
         game->loadLevel("mainmenu");
     });  
 
@@ -229,11 +229,11 @@ void MyGame::setupLvlBuilder() {
         auto ui = g->getUI();
         ui->clear();
           
-        loadLevelSaveFile(lvl);
+        loadLevelSaveFile(lvl); 
         MyLevelSerializer lvlmake; 
-        lvlmake.loadLevelWorlds(lvl);
-        lvl->getWorld(0).setMap("Resources/Map/landscape2.png", glm::vec3(0.4, 0.0002, 0.4));
-             
+        lvlmake.loadLevelWorlds(lvl); 
+        lvl->getWorld(0).setMap("Resources/Map/procterrain.png", glm::vec3(0.5, 0.0005, 0.5));
+               
         auto player = lvl->getActiveWorld()->getPlayerHero();
         auto playerlife = player->getComponent<LifeComponent>();
              
@@ -262,7 +262,7 @@ void MyGame::setupLvlBuilder() {
            
         auto dpt = std::make_shared<DevPosTracker>(0.5,0.8, 0.5,0.5);
         player->addObserver(dpt);
-   //     ui->insertNode(dpt);
+        ui->insertNode(dpt);
                                
         DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
         
@@ -270,7 +270,6 @@ void MyGame::setupLvlBuilder() {
         World& wZero = lvl->getWorld(0);
         wOne.setDirectionalLight(dl2);
         wOne.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3));
-
             
         wZero.setDirectionalLight(dl2); 
         wZero.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.4,0.3,0.3)); 

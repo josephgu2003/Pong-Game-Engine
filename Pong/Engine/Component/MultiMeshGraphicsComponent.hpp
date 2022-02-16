@@ -13,7 +13,7 @@
 
 class MultiMeshGraphicsComponent : public GraphicsComponent {
 private:
-     
+    MultiMeshGraphicsComponent* next = nullptr;
 public:
     MultiMeshGraphicsComponent(Componentable& actor, Shader* shader, DrawPass dp);
     virtual ~MultiMeshGraphicsComponent();

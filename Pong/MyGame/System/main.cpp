@@ -10,34 +10,7 @@
 #include "MyGame.hpp"
 
 
-class Test {
-public:
-    long bigData[500];
-    Test() {
-        
-    }
-};
-
 int main() {
-    std::shared_ptr<Test> lotsData[200][200];
-    
-    int counter = 1;
-     
-    while (counter > 0) {
-        for (int i = 0; i < 200; i++) {
-            for(int j = 0; j < 200; j++) {
-                lotsData[i][j] = std::make_shared<Test>();
-            }
-        }
-        counter--;
-    }
-    
-    for (int i = 0; i < 200; i++) {
-        for(int j = 0; j < 200; j++) {
-            lotsData[i][j].reset();
-        }
-    }
-    
     MyGame game;
     
     game.init();

@@ -8,17 +8,18 @@
 #ifndef PropFactory_hpp
 #define PropFactory_hpp
 
-#include <stdio.h>
+#include <stdio.h>  
 #include <memory>
 #include "Prop.hpp"
 
 enum PropEnum {
-    PROP_TREE, 
-    PROP_GRASS,
+    PROP_TREE,  
+    PROP_GRASS, 
     PROP_WELL,
-    PROP_SWORD_SLASH
+    PROP_SWORD_SLASH, 
+    PROP_WATER,
+    PROP_LIGHTRAY
 };
-
 
 class PropFactory {
 public:

@@ -20,14 +20,16 @@
 		5D146477273872020024F2E2 /* 8grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D146476273872010024F2E2 /* 8grass.png */; };
 		5D14647B273DC4720024F2E2 /* Prop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D146479273DC4710024F2E2 /* Prop.cpp */; };
 		5D14647E273DEB6D0024F2E2 /* PropFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D14647C273DEB6C0024F2E2 /* PropFactory.cpp */; };
-		5D14648E273F6B4C0024F2E2 /* flowers.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 5D14648C273F6B490024F2E2 /* flowers.fbx */; };
-		5D14648F273F6B4C0024F2E2 /* flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D14648D273F6B490024F2E2 /* flower.png */; };
 		5D14649227409EFC0024F2E2 /* ScriptWakeUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D14649027409EFB0024F2E2 /* ScriptWakeUp.cpp */; };
 		5D1464952740B6EE0024F2E2 /* ScriptFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D1464932740B6ED0024F2E2 /* ScriptFactory.cpp */; };
 		5D25EC452691154C008BD594 /* ColorPartF.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC432691154C008BD594 /* ColorPartF.fs */; };
 		5D25EC4826922AC9008BD594 /* ColorPartG.gs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC4726922AC8008BD594 /* ColorPartG.gs */; };
 		5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */; };
 		5D2E2D83267BB544007ADBF3 /* CombatComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */; };
+		5D311E9927B4704A007E269A /* grass-patches in Resources */ = {isa = PBXBuildFile; fileRef = 5D311E9827B4704A007E269A /* grass-patches */; };
+		5D311E9B27B8A04D007E269A /* procterrain.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D311E9A27B8A04C007E269A /* procterrain.png */; };
+		5D311E9E27B8A261007E269A /* TheLake.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D311E9C27B8A261007E269A /* TheLake.cpp */; };
+		5D311EA027B8A7EB007E269A /* BillboardNonInstanced.vs in Resources */ = {isa = PBXBuildFile; fileRef = 5D311E9F27B8A7EB007E269A /* BillboardNonInstanced.vs */; };
 		5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5D33261B2676F2A1002F3D49 /* Plan.rtf */; };
 		5D332621267819EB002F3D49 /* yirou'sdrawing2 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D332620267819EB002F3D49 /* yirou'sdrawing2 copy.png */; };
 		5D37511F26A7040F00BB8BC9 /* Screen Shot 2021-07-20 at 9.15.42 AM.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D37511E26A7040F00BB8BC9 /* Screen Shot 2021-07-20 at 9.15.42 AM.png */; };
@@ -311,7 +313,6 @@
 		5DE85CE627126C2B000D948D /* aiDance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CE427126C2B000D948D /* aiDance.cpp */; };
 		5DE85CEC271354FC000D948D /* Dice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CEA271354FC000D948D /* Dice.cpp */; };
 		5DEABA042659D2CF000C772F /* rosa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEABA032659D2CF000C772F /* rosa.png */; };
-		5DEABA062659FC4E000C772F /* rosa copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEABA052659FC4E000C772F /* rosa copy.png */; };
 		5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = 5DEC19B9264B69E20001ABAE /* stb_image.c */; };
 		5DEDAE592672B9990050F441 /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEDAE572672B9990050F441 /* Audio.cpp */; };
 		5DEE580E266292A40080446C /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE580C266292A40080446C /* Component.cpp */; };
@@ -388,8 +389,6 @@
 		5D14647A273DC4710024F2E2 /* Prop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Prop.hpp; sourceTree = "<group>"; };
 		5D14647C273DEB6C0024F2E2 /* PropFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PropFactory.cpp; sourceTree = "<group>"; };
 		5D14647D273DEB6C0024F2E2 /* PropFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PropFactory.hpp; sourceTree = "<group>"; };
-		5D14648C273F6B490024F2E2 /* flowers.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = flowers.fbx; sourceTree = "<group>"; };
-		5D14648D273F6B490024F2E2 /* flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flower.png; sourceTree = "<group>"; };
 		5D14649027409EFB0024F2E2 /* ScriptWakeUp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptWakeUp.cpp; sourceTree = "<group>"; };
 		5D14649127409EFB0024F2E2 /* ScriptWakeUp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptWakeUp.hpp; sourceTree = "<group>"; };
 		5D1464932740B6ED0024F2E2 /* ScriptFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptFactory.cpp; sourceTree = "<group>"; };
@@ -402,6 +401,11 @@
 		5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsComponent.hpp; sourceTree = "<group>"; };
 		5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CombatComponent.cpp; sourceTree = "<group>"; };
 		5D2E2D82267BB544007ADBF3 /* CombatComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CombatComponent.hpp; sourceTree = "<group>"; };
+		5D311E9827B4704A007E269A /* grass-patches */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "grass-patches"; sourceTree = "<group>"; };
+		5D311E9A27B8A04C007E269A /* procterrain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = procterrain.png; path = Pong/Resources/Map/procterrain.png; sourceTree = SOURCE_ROOT; };
+		5D311E9C27B8A261007E269A /* TheLake.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TheLake.cpp; sourceTree = "<group>"; };
+		5D311E9D27B8A261007E269A /* TheLake.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TheLake.hpp; sourceTree = "<group>"; };
+		5D311E9F27B8A7EB007E269A /* BillboardNonInstanced.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BillboardNonInstanced.vs; sourceTree = "<group>"; };
 		5D33261B2676F2A1002F3D49 /* Plan.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Plan.rtf; sourceTree = "<group>"; };
 		5D332620267819EB002F3D49 /* yirou'sdrawing2 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yirou'sdrawing2 copy.png"; sourceTree = "<group>"; };
 		5D35061E266DACBF0038FBC3 /* Arial Unicode copy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Arial Unicode copy.ttf"; sourceTree = "<group>"; };
@@ -785,7 +789,6 @@
 		5DE85CEA271354FC000D948D /* Dice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dice.cpp; sourceTree = "<group>"; };
 		5DE85CEB271354FC000D948D /* Dice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Dice.hpp; sourceTree = "<group>"; };
 		5DEABA032659D2CF000C772F /* rosa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosa.png; sourceTree = "<group>"; };
-		5DEABA052659FC4E000C772F /* rosa copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rosa copy.png"; path = "../../../../../rosa copy.png"; sourceTree = "<group>"; };
 		5DEC19B7264B69B30001ABAE /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		5DEC19B9264B69E20001ABAE /* stb_image.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_image.c; sourceTree = "<group>"; };
 		5DEDAE572672B9990050F441 /* Audio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Audio.cpp; sourceTree = "<group>"; };
@@ -938,15 +941,6 @@
 			path = Story;
 			sourceTree = "<group>";
 		};
-		5D14648B273F6B490024F2E2 /* flowers */ = {
-			isa = PBXGroup;
-			children = (
-				5D14648C273F6B490024F2E2 /* flowers.fbx */,
-				5D14648D273F6B490024F2E2 /* flower.png */,
-			);
-			path = flowers;
-			sourceTree = "<group>";
-		};
 		5D25A043265C1B3D00A780C6 /* GlyphsAndUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -994,6 +988,8 @@
 				5D14649127409EFB0024F2E2 /* ScriptWakeUp.hpp */,
 				5D67FAE92794B5E7007AE2EA /* ScriptNightFlowers.cpp */,
 				5D67FAEA2794B5E7007AE2EA /* ScriptNightFlowers.hpp */,
+				5D311E9C27B8A261007E269A /* TheLake.cpp */,
+				5D311E9D27B8A261007E269A /* TheLake.hpp */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1094,9 +1090,9 @@
 			children = (
 				5D91DF74275AAD3200AF8EF4 /* snownorm.png */,
 				5DB91ED527247678003AAAA7 /* grass.png */,
+				5D311E9A27B8A04C007E269A /* procterrain.png */,
 				5D63AD57274AA9DC0074F165 /* landscape.png */,
 				5D146476273872010024F2E2 /* 8grass.png */,
-				5D14648B273F6B490024F2E2 /* flowers */,
 				5D1464782738722F0024F2E2 /* grass1.fbx */,
 				5D43B67626ADCE3A001F6306 /* tree */,
 				5D66B4882651EEB8006EA749 /* ice.jpeg */,
@@ -1107,6 +1103,7 @@
 		5D66B4902651EF0E006EA749 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5D311E9827B4704A007E269A /* grass-patches */,
 				5DF4EBDB277A7E6D006823FB /* ScarfChar */,
 				5D7EE225276C286D0026AB83 /* Sword */,
 				5D87837D27653E71006354AB /* Well */,
@@ -1207,7 +1204,6 @@
 				5D9E5A102653584F00F39C19 /* aura.png */,
 				5DEABA032659D2CF000C772F /* rosa.png */,
 				5DA9759A26854B60008252BA /* mist.png */,
-				5DEABA052659FC4E000C772F /* rosa copy.png */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -1222,6 +1218,7 @@
 				5D25EC4726922AC8008BD594 /* ColorPartG.gs */,
 				5D8A7D0926F0FAAA00BD8BDB /* 3DParticle.vs */,
 				5DDAE8BA272C90960053DFEA /* TerrainVertex.vs */,
+				5D311E9F27B8A7EB007E269A /* BillboardNonInstanced.vs */,
 				5D98F65A2688059A0075552B /* MistFShader.fs */,
 				5D7EE229276D109C0026AB83 /* LightConstruct.fs */,
 				5D379B202787A86B00393EA9 /* AlphaMap.fs */,
@@ -1854,6 +1851,7 @@
 				5DA9832A2686A732008252BA /* smoke004.jpg in Resources */,
 				5DA983222686A732008252BA /* smoke050.jpg in Resources */,
 				5D87838527653FEA006354AB /* Well_Alpha.jpg in Resources */,
+				5D311E9B27B8A04D007E269A /* procterrain.png in Resources */,
 				5DA983602686A732008252BA /* smoke034.jpg in Resources */,
 				5DA983292686A732008252BA /* smoke015.jpg in Resources */,
 				5DA983502686A732008252BA /* smoke102.jpg in Resources */,
@@ -1875,7 +1873,6 @@
 				5DA983442686A732008252BA /* smoke081.jpg in Resources */,
 				5DB91EAE271DD7AA003AAAA7 /* HealthMeter.fs in Resources */,
 				5DA9759B26854B60008252BA /* mist.png in Resources */,
-				5D14648F273F6B4C0024F2E2 /* flower.png in Resources */,
 				5DA983562686A732008252BA /* smoke029.jpg in Resources */,
 				5DA983332686A732008252BA /* smoke108.jpg in Resources */,
 				5DA983252686A732008252BA /* smoke009.jpg in Resources */,
@@ -1888,13 +1885,11 @@
 				5DB91EDE27259B94003AAAA7 /* flowerhp.png in Resources */,
 				5DA983322686A732008252BA /* smoke096.jpg in Resources */,
 				5DA9836B2686A732008252BA /* smoke077.jpg in Resources */,
-				5DEABA062659FC4E000C772F /* rosa copy.png in Resources */,
 				5DA983652686A732008252BA /* smoke086.jpg in Resources */,
 				5DA7E297267E6D34008845AA /* SkyVertexShader.vs in Resources */,
 				5DCCA0E72728D7340004C3A1 /* squareborder.png in Resources */,
 				5D46CDCB265D6DC700096EC7 /* radial.png in Resources */,
 				5DA983662686A732008252BA /* smoke065.jpg in Resources */,
-				5D14648E273F6B4C0024F2E2 /* flowers.fbx in Resources */,
 				5DF168DB2799E23A009E2BEB /* TangentSpace.fs in Resources */,
 				5DAC32C326AF42CE00E54B4B /* leafclustercoloralpha.png in Resources */,
 				5DA9832D2686A732008252BA /* smoke024.jpg in Resources */,
@@ -1950,6 +1945,7 @@
 				5DA983532686A732008252BA /* smoke052.jpg in Resources */,
 				5DA983802686A733008252BA /* smoke089.jpg in Resources */,
 				5DA983242686A732008252BA /* smoke069.jpg in Resources */,
+				5D311EA027B8A7EB007E269A /* BillboardNonInstanced.vs in Resources */,
 				5DA7E29E267E6D34008845AA /* SketchFShader.fs in Resources */,
 				5DA983412686A732008252BA /* smoke054.jpg in Resources */,
 				5DA9836A2686A732008252BA /* smoke040.jpg in Resources */,
@@ -1971,6 +1967,7 @@
 				5DAC1810266A74470021DC31 /* noise.png in Resources */,
 				5DA983402686A732008252BA /* smoke001.jpg in Resources */,
 				5DA983642686A732008252BA /* smoke016.jpg in Resources */,
+				5D311E9927B4704A007E269A /* grass-patches in Resources */,
 				5DA983722686A732008252BA /* smoke078.jpg in Resources */,
 				5DA7E2A2267E6D34008845AA /* SketchVShader.vs in Resources */,
 				5DA983812686A733008252BA /* smoke073.jpg in Resources */,
@@ -2091,6 +2088,7 @@
 				5DF168EE279DC96D009E2BEB /* LightComponent.cpp in Sources */,
 				5DB91EBC27221292003AAAA7 /* PPointGraphicsComponent.cpp in Sources */,
 				5DEE580E266292A40080446C /* Component.cpp in Sources */,
+				5D311E9E27B8A261007E269A /* TheLake.cpp in Sources */,
 				5D87838F27669AC8006354AB /* WorldRenderingManager.cpp in Sources */,
 				5D14647B273DC4720024F2E2 /* Prop.cpp in Sources */,
 				5DCDDABA269F73BD0031FCC9 /* VertexData.cpp in Sources */,

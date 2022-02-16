@@ -88,7 +88,7 @@ void ScriptWolfBoyOne::act() {
             break; 
         }
         case 6: {
-            std::vector<std::string> lines = {"He is a lone wolf, who grew up in the cold, a hunter of evil.", "You there, you would really believe the King?"};
+            std::vector<std::string> lines = {"There sits a lone wolf, who grew up in the cold, a hunter of evil."};
             std::vector<float> duration = {2.0f,3.0f};
             makeSpeech("Moonbell", lines, duration);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
@@ -97,10 +97,14 @@ void ScriptWolfBoyOne::act() {
         }
         case 7: {if (noActiveSpeech()) step++; break;}
         case 8: {
-            std::vector<std::string> lines = {"I trust no one but my instincts."};
-            std::vector<float> duration = {2.0f,3.0f};
+            std::vector<std::string> lines = {"Beware the dark."};
+            std::vector<float> duration = {2.0f};
             makeSpeech("Snowclaw", lines, duration);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
+            
+            DirectionalLight             dl2(glm::vec3(0.01,0.01,0.01),glm::vec3(0.02,0.02,0.02),glm::vec3(0.0,0.0,0.0),glm::vec3(-1,-1,0));
+            world->addComponent<DirlightTransition>(*world, 4.0f, dl2);
+            
             step++;
             break;
         }
@@ -126,7 +130,12 @@ void ScriptWolfBoyOne::act() {
             break;
         }
         case 12: {
-            if (getActorNamed("Snowclaw")->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f && !isWaiting()) {
+            if(getActorNamed("Floro")->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f && !isWaiting()) {
+                getActorNamed("Moonbell")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Moonbell"), 2.0f);
+                step += 2; 
+                break;
+            }
+            if(getActorNamed("Snowclaw")->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f && !isWaiting()) {
                 step += 2;
                 break;
             } 
@@ -170,7 +179,7 @@ void ScriptWolfBoyOne::act() {
             }
             getActorNamed("Moonbell")->posDir(0.01);
             break;
-        }  
+        }
         case 18: {
             speak("Moonbell", "Die.", 3.0f);
             getActorNamed("Moonbell")->getComponent<CombatComponent>()->newAbility<FallingLetters>(world, getActorNamed("Moonbell"), 2.0f);
@@ -178,7 +187,7 @@ void ScriptWolfBoyOne::act() {
             break;
         }
         case 19: {
-            std::vector<std::string> lines = {"Get out of my way.", "...", "You are so stupid. Let's go."};
+            std::vector<std::string> lines = {"Get out of my way.", "..."};
             std::vector<float> durations = {4.0f,8.0f,4.0f};
             makeSpeech("Moonbell", lines, durations);
             step+=2;
@@ -192,9 +201,27 @@ void ScriptWolfBoyOne::act() {
         }
         case 21: {
             if (noActiveSpeech()) {
-                getActorNamed("Moonbell")->getComponent<AnimComponent>()->playDefault();
-                endScene();
+                std::vector<std::string> lines = {"He's hurt. Who are you? Why so cruel?", "I'm the one who fought him. His outcome is decided by me."};
+                std::vector<float> durations = {4.0f,4.0f};
+                makeSpeech("Floro", lines, durations);
+                step++;
+                break;
             }
+            break;
+        }
+        case 22: {
+            if (noActiveSpeech()) {
+                std::vector<std::string> lines = {"Eagles shouldn't meddle in the affairs of rabbits.", "Let's leave, then."};
+                std::vector<float> durations = {4.0f,4.0f};
+                makeSpeech("Moonbell", lines, durations);
+                getActorNamed("Moonbell")->getComponent<AnimComponent>()->playDefault();
+                step++;
+                break;
+            }
+            break;
+        }
+        case 23: {
+            endScene();
             break;
         }
        default: 

@@ -22,7 +22,7 @@ GraphicsObject::GraphicsObject(DrawPass dp) {
     glGenBuffers(1, &VBO);
     
     glGenBuffers(1, &EBO);
-    
+     
     glGenBuffers(1, &instanceVBO);
     
     drawTarget = GL_TRIANGLES;
@@ -78,7 +78,7 @@ void GraphicsObject::updateInstanceBuffer(const std::vector<float>& vec) {
 
 
 GraphicsObject::~GraphicsObject() {
-    if (!movedFrom) {
+    if (!movedFrom && deleteDataOnDestruct) {
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
         glDeleteBuffers(1, &instanceVBO);
@@ -88,7 +88,7 @@ GraphicsObject::~GraphicsObject() {
         }
     } else {
         nonHolders--;
-    }
+    } 
 }
 
 bool GraphicsObject::isInstanced() {

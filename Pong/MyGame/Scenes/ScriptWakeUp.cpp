@@ -50,11 +50,11 @@ bool IntroPoem::tick(uiLayout* ui, float time) {
         case 0: {
             firstTime = time;
             uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), "Resources/GlyphsAndUI/blacksquare.png");
-            line1 = std::make_shared<uiText>("Hopeful is the one in the snow", -0.9, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
-            line2 = std::make_shared<uiText>("An elegy sung for I false hero.", -0.9, -0.1,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
-            line3 = std::make_shared<uiText>("Every rising sun sets the evening before", -0.9, -0.2,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
-            line4 = std::make_shared<uiText>("The black night, lit with stars no more.", -0.9, -0.3,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
-            line5 = std::make_shared<uiText>("- The Hermit King", -0.9, -0.4, DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line1 = std::make_shared<uiText>("Which way to choose?", -0.9, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line2 = std::make_shared<uiText>("To cut off the flower before it blooms,", -0.9, -0.1,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line3 = std::make_shared<uiText>("Or to leave it forever alone?", -0.9, -0.2,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line4 = std::make_shared<uiText>("Let it bloom then.", -0.9, -0.3,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
+            line5 = std::make_shared<uiText>("That is the first choice of this story.", -0.9, -0.4, DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
             uf->insertChild(line1);
             uf->insertChild(line2);
             uf->insertChild(line3);
@@ -196,7 +196,7 @@ void ScriptWakeUp::act() {
         }
         case 10: {
             if (!isWaiting()) {
-                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Even ghosts of the night get no rest.", 2.0);
+                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Even ghosts of the night get no rest.", 2.0); 
                 DirectionalLight            dl2(glm::vec3(0.03,0.03,0.04),glm::vec3(0.05,0.05,0.06),glm::vec3(0.4,0.4,0.4),glm::vec3(-1,-1,0));
                 world->addComponent<DirlightTransition>(*world, 10.0f, dl2);
             }

@@ -35,22 +35,15 @@ class MapChunk;
 class uiFrame;
 class World;
 
-struct Updates {
-    bool lightingUpdate;
-    bool fogUpdate;
-    bool skyUpdate; 
-};
- 
 typedef std::function<std::shared_ptr<WorldSubSystem>(World& w)> addSubSystem; // do this to avoid storing shared_ptrs of WorldSubSystem - this fancier and less confusing
 class World : public Componentable {
 private:
-   // SoundTextManager soundTextManager;
     DirectionalLight dl;
     WorldRenderingManager worldRenderingManager;
     MapManager mapManager;
     AbilityManager abilityManager;
     std::shared_ptr<CollisionSystem> collisionSystem;
-    Updates updates = {false,false,false};
+
     Atmosphere atmosphere; // could make into a generic prop/actor
     WorldFog distanceFog; // same
        
@@ -218,10 +211,7 @@ public:
 
     void setRenderer(Renderer* renderer); 
     
-    
-    Updates checkforUpdates();
-    void updateCleared(int i);
-     
+
     void tick(); 
     
     template <typename T>
@@ -265,7 +255,7 @@ public:
     Actor* getPlayerHero();
     
     void setDirectionalLight(const DirectionalLight& dl);
-  //  std::weak_ptr<Actor>& getPlayerHeroRef();
+
     WorldFog& getDistanceFog();
     
     const DirectionalLight& getDirectionalLight();

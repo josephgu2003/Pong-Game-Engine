@@ -5,7 +5,7 @@
 //  Created by Joseph Gu on 6/3/21.
 //
  
-#include "Game.hpp"
+#include "Game.hpp" 
 #include <iostream>
 #include <cctype>
 #include "stb_image.h" 
@@ -32,12 +32,12 @@ Game::Game() {
     stbi_set_flip_vertically_on_load(1);
     
     initObjects();
-  
+   
     linkObjects();
-
+ 
     printf("%s\n", glGetString(GL_VERSION));
 }
-
+ 
 void Game::registerGameLevelCreate(std::string levelname, GameLevelCreate glc) {
     auto entry = levelBuilder.find(levelname);
     if (entry != levelBuilder.end()) {

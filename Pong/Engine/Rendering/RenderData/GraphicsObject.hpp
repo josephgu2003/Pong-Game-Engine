@@ -56,22 +56,21 @@ private:
     GraphicsObject(const GraphicsObject &) = delete;
     GraphicsObject &operator=(const GraphicsObject &) = delete;
     bool movedFrom = false;
-protected: 
+protected:
+    bool deleteDataOnDestruct = true;
     std::vector<TextureAnimation> textureAnimations;
     Material map;
     DrawPass drawPass;
     Shader* shader = NULL;
-    GLuint VAO;
+    GLuint VAO; // vertex "type"
     GLuint instanceVBO;
-    GLuint VBO;
-    GLuint EBO;
-    GLuint numIndices;
+    GLuint VBO; // vertex data
+    GLuint EBO; // vertex data
+    GLuint numIndices; // vertex data
     GLuint instanceCount;
     GLenum drawTarget;
     void setSingularMaterial(const Material& map);
     Material& getSingularMaterial();
-    void makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount);
-    void updateInstanceBuffer(const std::vector<float>& v);
     void updateVertexBuffer(VertexMesh* vm);
     template <typename T>
     void updateVertexBuffer(VertexMesh* vm) {
@@ -102,8 +101,7 @@ public:
 
     GraphicsObject &operator=(GraphicsObject&& other) {
         if (this != &other) {
-            if (!movedFrom) {
-                
+            if (!movedFrom && deleteDataOnDestruct) {
                 glDeleteBuffers(1, &VBO);
                 glDeleteBuffers(1, &EBO);
                 glDeleteBuffers(1, &instanceVBO);
@@ -157,6 +155,8 @@ public:
     // - instancing data?
     // - If batch with others: share shader, share vao and vbo, vao and vbo become
     // same as others, draw call becomes function pointer?
+    void makeInstanceBuffer(int dataSize_, int firstAttribLocation, const std::vector<int>& layout, unsigned int instanceCount);
+    void updateInstanceBuffer(const std::vector<float>& v);
 };
 
 // soon need : mesh for fish, mesh is scripted to wave around, graphics need to update per frame

@@ -14,9 +14,8 @@
 #include "Model.hpp"
 #include "Bone.hpp"
 #include <assimp/Importer.hpp>
-#include <map>  
-
-
+#include <map>   
+   
 struct AssimpNodeData
 {
     std::string name;

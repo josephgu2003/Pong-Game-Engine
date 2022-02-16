@@ -14,9 +14,6 @@
 #include "Actor.hpp"
 #include "Renderable.hpp"
 #include "Renderer.hpp"
-#include "PGraphicsComponent.hpp" 
-#include "WorldChunk.hpp"
-#include "Script.hpp"
  
 std::vector<addSubSystem> World::worldSubSystemsTemplate;
 
@@ -36,18 +33,6 @@ World::~World() {
     }
 }  
 
-Updates World::checkforUpdates() {
-    return updates;
-}
-
-void World::updateCleared(int i) {
-    if (i == 0)
-    updates.lightingUpdate = false; 
-    if (i == 1)
-    updates.fogUpdate = false;
-    if (i == 2)
-    updates.skyUpdate = false;
-}
 
 Atmosphere& World::getAtmosphere() {
     return atmosphere;

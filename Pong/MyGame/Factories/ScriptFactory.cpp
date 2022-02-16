@@ -9,6 +9,7 @@
 #include "ScriptWolfBoyOne.hpp"
 #include "ScriptWakeUp.hpp"
 #include "ScriptNightFlowers.hpp"
+#include "TheLake.hpp"   
 
 std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World* world, bool completed) {
     std::shared_ptr<Script> script;
@@ -18,7 +19,9 @@ std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World*
         script = std::make_shared<ScriptWolfBoyOne>(world, completed);
     } else if (scriptname == "Flowers in the Night") {
         script = std::make_shared<ScriptNightFlowers>(world, completed);
-    } else { // !! make a dummy script 
+    } else if (scriptname == "By the Lake") {
+        script = std::make_shared<TheLake>(world, completed);
+    } else { // !! make a dummy script
             script = std::make_shared<ScriptWakeUp>(world, completed, ui);
     }
     return script; 

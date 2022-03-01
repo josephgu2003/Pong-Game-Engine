@@ -58,9 +58,9 @@ public:
         if (updateModelMatrix) recalcModelMatrix();
         return modelMatrix;
     } 
-    
+      
      glm::vec3 getPos() const {
-        glm::vec3 posVec = glm::vec3(translationMatrix[3][0],translationMatrix[3][1],translationMatrix[3][2]);
+        glm::vec3 posVec =  glm::vec3(translationMatrix[3][0],translationMatrix[3][1],translationMatrix[3][2]);
         return posVec; 
     }
      

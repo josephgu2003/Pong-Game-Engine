@@ -26,7 +26,7 @@
 GLuint uboViewProj; 
 GLuint uboLights;
 GLuint uboStopWatch;
-GLuint uboDistanceFog;
+GLuint uboDistanceFog; 
 
 void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     if (block == ViewProj) {
@@ -46,7 +46,17 @@ void Renderer::bindShaderUniblock(Shader* shader, Uniblock block) {
     }
 }
 
-Renderer::Renderer() {
+void Renderer::bindShaderUniblocks(Shader* shader) {
+    std::string uniforms[4] = {"ViewProj", "Lights", "StopWatch", "DistanceFog"};
+    for (int i = 0; i < 4; i++) {
+        GLuint index = glGetUniformBlockIndex(shader->ID, uniforms[i].c_str());
+        if (index != GL_INVALID_INDEX) { 
+            glUniformBlockBinding(shader->ID, index, i);
+        }
+    }
+}
+
+Renderer::Renderer() { 
     fieldOfView = DEFAULT_FOV;
     frustrumNear = DEFAULT_FRUSTRUM_NEAR;
     frustrumFar = DEFAULT_FRUSTRUM_FAR;
@@ -119,10 +129,10 @@ Renderer::~Renderer() {
 
 void Renderer::setCamera(Camera *camera_) {
     camera = camera_;
-    updateViewProj();
-    updateCamPos();
+  //  updateViewProj();
+    if (camera) updateCamPos();
 }
-
+ 
 void Renderer::updateUniformStopWatch() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboStopWatch);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 4, (void*) &timeT);
@@ -131,7 +141,7 @@ void Renderer::updateUniformStopWatch() {
 
 void Renderer::updateViewProj() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    viewMat = glm::lookAt(camera->getPos(),camera->getDir()+camera->getPos(), glm::vec3(0.0,1.0,0.0));
+    viewMat = glm::lookAt(camera->getPos(),camera->getDir()+camera->getPos(), glm::vec3(0.0,1.0,0.0)); 
     
     glm::mat4 viewProj = projMat * viewMat;
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
@@ -210,10 +220,6 @@ void Renderer::updateCamPos() {
      glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camPos,0)));
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
-  
-
-
-
 
 void Renderer::renderInitial() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -227,7 +233,7 @@ void Renderer::renderInitial() {
     updateCamPos(); 
     updateUniformStopWatch();
  
-}
+} 
 
 void Renderer::renderFinal() { 
     glDisable(GL_DEPTH_TEST);
@@ -305,13 +311,9 @@ void Renderer::renderSky(GraphicsObject* sky) {
     Shader* skyShader = sky->getShader();
     
     bindGraphicsObject(sky);
- 
-    
     
     glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 1.0); // more spagghetti sigh
     
-    glm::vec3 camPos = camera->getPos(); 
-    viewMat = glm::lookAt(camPos,camera->getDir()+camPos, glm::vec3(0.0,1.0,0.0));
     glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
     camViewMat = projMat * camViewMat;
     glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewProjMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));
@@ -402,6 +404,16 @@ void Renderer::renderFoliage(GraphicsObject* r) {
     r->unbind();
     glDepthMask(GL_TRUE);
 }
+
+void Renderer::renderAdditiveBlend(GraphicsObject* r) {
+    glDepthMask(GL_FALSE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE); 
+    bindGraphicsObject(r);
+    glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
+    r->unbind();
+    glDepthMask(GL_TRUE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
   
 void Renderer::resizeViewPort() {
     int width, height;
@@ -413,6 +425,6 @@ void Renderer::updateAllUniblocks() {
 
     updateCamPos();
 
-    updateViewProj();
+ //   updateViewProj();
 }
  

@@ -195,12 +195,12 @@ void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePat
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
     
     const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate);
-    
+     
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
         printf("%s", s.c_str());
         return;
-    }
+    } 
     
     if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
         std::vector<TBNBWVertex> vertices;
@@ -257,7 +257,7 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
         vec3.y = vec3src[i].y;
         vec3.z = vec3src[i].z;
     };
-    std::vector<TBNBWVertex> newVertices;
+    std::vector<TBNBWVertex> newVertices; 
     newVertices.reserve(mesh->mNumVertices);
     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices

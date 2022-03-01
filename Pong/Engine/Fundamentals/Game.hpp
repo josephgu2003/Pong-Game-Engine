@@ -40,7 +40,6 @@ private:
     virtual void load() = 0;
 protected:
     std::unique_ptr<SaveSystem> saveSystem;
-    std::shared_ptr<Camera> camera;
     std::shared_ptr<uiLayout> ui;
     Renderer* renderer = NULL;
     InputHandler inputHandler;

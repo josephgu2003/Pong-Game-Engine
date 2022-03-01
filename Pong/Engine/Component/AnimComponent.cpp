@@ -197,3 +197,10 @@ void AnimComponent::playAnim(const std::string& name, int loopbegin, int loopend
     endtick = loopend;
 }
  
+void AnimComponent::playAnimIfNotPlaying(const std::string& name) {
+        if (activeAnim && activeAnim->getName() == name) {
+            return;
+        } else {
+            playAnim(name, true);
+        }
+}

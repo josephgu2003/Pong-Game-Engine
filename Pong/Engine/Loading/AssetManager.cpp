@@ -160,12 +160,12 @@ void AssetManager::load3DTexture(const char* filePath, Texture* texture) {
 int AssetManager::loadGlyphs(const char* filePath, std::map<char, Character>& Characters, Material& map) {
     for (int i = 0; i < loadedGlyphs.size(); i++) {
         if (std::strcmp(loadedGlyphs.at(i).first.path.data(), filePath) == 0) {
-            Characters = loadedGlyphs.at(i).second;
+            Characters = loadedGlyphs.at(i).second; 
             map.diffuse.id = loadedGlyphs.at(i).first.id;
             map.diffuse.textureTarget = GL_TEXTURE_2D_ARRAY;
-           // printf("Font already loaded: %s \n", filePath);
+            printf("Font already loaded: %s \n", filePath);
             return 0;
-        } 
+        }
     }
     printf("Load new texture: %s \n", filePath);
     FT_Library ft;
@@ -251,8 +251,8 @@ void AssetManager::loadNullTexture(int x, int y, GLuint* texture, GLenum format)
     glGenTextures(1, texture);
     glBindTexture(GL_TEXTURE_2D, *texture);
     
-        glTexImage2D(GL_TEXTURE_2D, 0,format, x, y, 0, format, GL_UNSIGNED_BYTE, NULL);
-        glGenerateMipmap(GL_TEXTURE_2D);
+    glTexImage2D(GL_TEXTURE_2D, 0,format, x, y, 0, format, GL_UNSIGNED_BYTE, NULL);
+    glGenerateMipmap(GL_TEXTURE_2D);
      
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -344,8 +344,6 @@ void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int 
     glBindVertexArray(0);
     
 }
-
-
 
 void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
     frame->width = x;

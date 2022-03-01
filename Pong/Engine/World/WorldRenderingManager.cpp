@@ -62,7 +62,7 @@ void WorldRenderingManager::drawAll(Renderer *r) {
                 graphicsCollection.erase(it);
                 it--;
             } 
-        } 
+        }  
     }; 
     drawPass(opaqueObjects);
     drawPass(transparentObjects);

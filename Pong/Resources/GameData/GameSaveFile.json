@@ -108,7 +108,7 @@
         "WorldID": 0
     },
     {
-        "Completed": false,
+        "Completed": true,
         "FactoryEnum": "FloroWakes",
         "Position": [
             10.0,
@@ -129,7 +129,7 @@
         "Type": "Script",
         "WorldID": 0
     },    {
-        "Completed": false,
+        "Completed": true,
         "FactoryEnum": "Flowers in the Night",
         "Position": [
             71.0,

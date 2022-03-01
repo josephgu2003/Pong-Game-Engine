@@ -21,7 +21,7 @@ void SaveChar::load(GameLevel* g, const nlohmann::json& i) {
                 assert(name != "");
                 a->getComponent<NameComponent>()->init(name);
             }
-        };
+        }; 
              
     auto handleInvComp = [] (std::shared_ptr<Actor>& a, const nlohmann::json& i) {
         if (InventoryComponent* ic = a->getComponent<InventoryComponent>()) {

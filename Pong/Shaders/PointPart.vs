@@ -5,10 +5,6 @@ layout (location = 1) in vec2 TexCoords_;
 layout (location = 2) in vec3 Displacement;
 layout (location = 3) in float duration_;
 
-//out VS_OUT {
-   // vec2 TextureCoords;
-//} vs_out;
-
 out vec2 TexCoords;
 out float duration;
 

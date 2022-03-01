@@ -18,6 +18,7 @@
 #include <memory>
 #include "Componentable.hpp"
 #include "Positionable.hpp"
+#include "Camera.hpp"
 
 //something that can move and has a model 
 
@@ -41,6 +42,7 @@ protected:
     glm::mat4 modelMat = glm::mat4(1.0f);  
     State state;
     glm::vec3 velVec;
+    std::weak_ptr<Camera> cam;
 public:
     bool dummy = true;
 
@@ -52,6 +54,9 @@ public:
     virtual void tick();
     void setWorld(World* world_);
     World& getWorld();
+    
+    void setCamera(const std::shared_ptr<Camera> cam);
+    Camera* getCamera();
 
     virtual void posDir(float speed) override;
     virtual void posRight(float speed) override;

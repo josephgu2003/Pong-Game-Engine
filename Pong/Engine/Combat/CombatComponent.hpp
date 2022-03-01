@@ -24,7 +24,7 @@ private:
   //  std::weak_ptr<Actor> biggestTarget;
     std::vector<std::shared_ptr<Ability>> abilityQ;
     std::weak_ptr<Ability> affecting; 
-public:
+public: 
       
     template <typename AbilityType, typename... Args>
     void newAbility(Args&& ... arg) {

@@ -93,6 +93,14 @@ State Actor::getState() {
     return state; 
 }
 
+void Actor::setCamera(const std::shared_ptr<Camera> cam_) {
+    cam = cam_;
+}
+
+Camera* Actor::getCamera() {
+    return cam.lock().get();
+}
+
 void Actor::addComp(const std::shared_ptr<Component>& comp) {
     Componentable::addComp(comp);
     if (dynamic_pointer_cast<GraphicsComponent>(comp)) graphics = static_pointer_cast<GraphicsComponent>(comp);

@@ -139,7 +139,7 @@ public:
     GLuint getInstanceCount();
     void animateTextures();
     void setTextureAnimation(std::string frameIndexUniform, int numFrames, float fps);
-    DrawPass getDrawPass();
+    DrawPass getDrawPass(); 
     virtual ~GraphicsObject();
     GraphicsObject(DrawPass dp);
     Shader* getShader();

@@ -21,117 +21,115 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
     std::shared_ptr<Prop> prop = std::make_shared<Prop>();
     auto foliageDraw = [] (Renderer* r, GraphicsComponent* gc) {
         r->renderFoliage(gc);
-    }; 
+    };
+    auto additiveDraw = [] (Renderer* r, GraphicsComponent* gc) {
+        r->renderAdditiveBlend(gc);
+    };
     switch (pe) {
         case PROP_WELL: {
-            Material map; 
+            Material map;
             AssetManager::loadTexture("Resources/Models/Well/Well_Albedo.png", &map.diffuse, true);
             AssetManager::loadTexture("Resources/Models/Well/Well_NM.jpg", &map.normMap, false);
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setUniform("size", 0.03f); 
+            shader->setUniform("size", 0.03f);
             shader->setUniform("brightness", 0.0f);
-                     
-            Renderer::bindShaderUniblock(shader,      ViewProj);
-            Renderer::bindShaderUniblock(shader,      DistanceFog); 
-            Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_WELL);
             prop->addComp(gc);
             break;
-        } 
+        }
         case PROP_TREE: {
-            Material map;  
-          //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
+            Material map;
             AssetManager::loadTexture("Resources/Map/tree/source/treediffuse.png", &map.diffuse, true);
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
             shader->use();
-            shader->setUniform("size", 1.0f); 
+            shader->setUniform("size", 1.0f);
             shader->setUniform("brightness", 0.0f);
-                   
-            Renderer::bindShaderUniblock(shader,      ViewProj);
-            Renderer::bindShaderUniblock(shader,      DistanceFog); 
-            Renderer::bindShaderUniblock(shader,      Lights);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree2.fbx");
             prop->addComp(gc);
-            break; 
+            break;
+        }
+        case PROP_MOUNT: {
+            Material map;
+            //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Map/tree/source/treediffuse.png", &map.diffuse, true);
+            
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
+            shader->use();
+            shader->setUniform("size", 1.0f);
+            shader->setUniform("brightness", 0.0f);
+            
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            gc->initModel("Resources/Map/tree/source/tree2.fbx");
+            prop->addComp(gc);
+            break;
         }
             
         case PROP_GRASS: {
             Material map;
             AssetManager::loadTexture("Resources/Models/grass-patches/textures/grassAlphaMapped.png", &map.diffuse, true);
-                
+            
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
             shader->use();
             shader->setUniform("size", 0.01);
-            shader->setUniform("brightness", 0.0); 
-                
-                Renderer::bindShaderUniblock(shader,      ViewProj);
-                Renderer::bindShaderUniblock(shader, DistanceFog);
-                Renderer::bindShaderUniblock(shader,      Lights);
-                
-                auto gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            shader->setUniform("brightness", 0.0);
+            
+            auto gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->setDrawCall(foliageDraw);
-                static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Models/grass-patches/source/grasspatches.fbx");
-                prop->addComp(gc);
-                break;
+            gc->initModel("Resources/Models/grass-patches/source/grasspatches.fbx");
+            prop->addComp(gc);
+            break;
         }
-             
+            
         case PROP_SWORD_SLASH: {
             Material map;
             
-            AssetManager::loadTexture("Resources/Models/Sword/swordwave.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Models/Sword/swordwave.png", &map.alphaMap, false);
             
             Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/AlphaMap.fs");
             shader->use();
-            shader->setUniform("color", glm::vec3(0.5,0.5,1.0));
+            shader->setUniform("color", glm::vec3(0.5, 0.5, 1.0));
             shader->setUniform("brightness", 5.0f);
-            Renderer::bindShaderUniblock(shader, ViewProj); 
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
                 std::vector<PosVertex> mesh;
                 VertexLoader::loadSimpleVertexGrid(5, 3, 4.0, mesh, vao, vbo, ebo, numIndices);
             });
-            prop->addComp(gc); 
-            prop->bakeRotation(glm::vec3(0,80,15));
-            prop->addComponent<CollisionComponent>(*(prop.get()), AxisBounds(0.2f,-0.2f),AxisBounds(1.0f,0.0f),AxisBounds(0.2f,-0.2f));
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(0, 80, 15));
+            prop->addComponent<CollisionComponent>(*(prop.get()), AxisBounds(0.2f, -0.2f), AxisBounds(1.0f, 0.0f), AxisBounds(0.2f, -0.2f));
             break;
         }
-             
+            
         case PROP_WATER: {
             Material map;
             AssetManager::loadTexture(TEX_MIST, &map.diffuse, true);
             AssetManager::loadTexture("Resources/Map/snow.png", &map.normMap, false);
-            Shader* shader = new Shader("Shaders/WaterVertexShader.vs",  "Shaders/WaterFragmentShader.fs"); 
-            shader->use();   
-            Renderer::bindShaderUniblock(shader,      ViewProj);
-            Renderer::bindShaderUniblock(shader, StopWatch);
-            Renderer::bindShaderUniblock(shader,      Lights); 
+            Shader* shader = new Shader("Shaders/WaterVertexShader.vs",  "Shaders/WaterFragmentShader.fs");
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
                 std::vector<PosVertex> mesh;
                 VertexLoader::loadSimpleVertexGrid(2, 2, 20.0, mesh, vao, vbo, ebo, numIndices);
-            });  
+            });
             prop->addComp(gc);
-            prop->bakeRotation(glm::vec3(-90,0,0)); 
+            prop->bakeRotation(glm::vec3(-90, 0, 0));
             break;
         }
             
         case PROP_LIGHTRAY: {
-            Material map; 
+            Material map;
             Shader* shader = new Shader("Shaders/BillboardNonInstanced.vs", "Shaders/GenericUI.fs");
             AssetManager::loadTexture(TEX_MIST, &map.diffuse, false);
-            shader->use(); 
+            shader->use();
             shader->setUniform("alpha", 1.0);
-            Renderer::bindShaderUniblock(shader, ViewProj);
-            Renderer::bindShaderUniblock(shader, StopWatch); 
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
@@ -139,10 +137,53 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
                 VertexLoader::load2DQuadData(vao, vbo, ebo, numIndices, glm::vec2(10, 10), glm::vec2(0, 0));
             });
             prop->addComp(gc);
-            break; 
+            break;
         }
+            
+        case PROP_SWORD_EXP: {
+            Material map;
+            
+            AssetManager::loadTexture(TEX_MIST, &map.alphaMap, true);
+            
+            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/SwordExplosion.fs");
+            shader->use();
+            shader->setUniform("color", glm::vec3(0.5,0.5,1.0));
+            shader->setUniform("brightness", 5.0f);
+            
+            auto gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            
+            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+                VertexLoader::loadModelSimple("Resources/Models/Sword/swordexplosion.fbx", vao, vbo, ebo, numIndices);
+            });
+            gc->setDrawCall(additiveDraw);
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(90, 0 , 0));
+            break;
+        }
+            
+        case PROP_AURORA: {
+            Material map;
+            
+            AssetManager::loadTexture(TEX_MIST, &map.alphaMap, true);
+            
+            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/Aurora.fs");
+            shader->use(); 
+            shader->setUniform("color", glm::vec3(0.5,1.2,1.0));
+            shader->setUniform("brightness", 5.0f);
+             
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            
+            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+                VertexLoader::loadModelSimple("Resources/Map/aurora.fbx", vao, vbo, ebo, numIndices);
+            });
+            gc->setDrawCall(additiveDraw);
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(90, 0 , 0));
+            break;
+        }
+
         default:
-            break; 
+            break;
     }
     stbi_set_flip_vertically_on_load(1);
     return prop;

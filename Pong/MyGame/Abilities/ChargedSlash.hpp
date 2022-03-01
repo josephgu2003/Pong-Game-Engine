@@ -17,8 +17,9 @@ class ChargedSlash : public Ability {
 private:
     std::weak_ptr<Prop> slashRef;
     std::weak_ptr<ParticleSystem> partRef;
+
 public:
-    using Ability::Ability;
+    using Ability::Ability; 
     
     ~ChargedSlash();
     void call() override;

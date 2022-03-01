@@ -12,7 +12,7 @@ Force::Force() {
     dir = glm::vec3(0,1,0); 
     magnitude = 1.0f;
     fType = FORCE_DIRECT;
-    fGradient = FORCE_UNIFORM;
+    fGradient = FORCE_UNIFORM;   
 }
 
 Force::Force(glm::vec3 pos_, float magnitude_) {

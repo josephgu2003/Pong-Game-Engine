@@ -13,12 +13,15 @@
 #include "Prop.hpp"
 
 enum PropEnum {
-    PROP_TREE,  
-    PROP_GRASS, 
+    PROP_TREE,   
+    PROP_GRASS,
     PROP_WELL,
     PROP_SWORD_SLASH, 
     PROP_WATER,
-    PROP_LIGHTRAY
+    PROP_LIGHTRAY,
+    PROP_SWORD_EXP,
+    PROP_MOUNT,
+    PROP_AURORA
 };
 
 class PropFactory {

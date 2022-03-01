@@ -923,8 +923,8 @@
             filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "Animation::updateBoneMatrices(boneMatrices, boneNodes, map_, globalInverse, t)"
             landmarkType = "7">
          </BreakpointContent>
@@ -964,70 +964,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F93F02B0-E82A-474E-A07A-536346DC7CFC"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/MyGame/System/MyGame.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "loadMainGameDefaultCallbacks(ih)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E254F0E9-64B9-47C0-91A1-099A17D3F6A5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/MyGame/System/MyGame.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "loadMainGameDefaultCallbacks(ih)"
-            landmarkType = "9">
-            <Locations>
-               <Location
-                  uuid = "E254F0E9-64B9-47C0-91A1-099A17D3F6A5 - 1cb8a6be329008b2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "loadMainGameDefaultCallbacks(InputHandler*)::$_3::operator()(Game*) const"
-                  moduleName = "Pong"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/MyGame/System/MyGame.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "62"
-                  endingLineNumber = "62"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "E254F0E9-64B9-47C0-91A1-099A17D3F6A5 - 1cb8a6be329008b2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "loadMainGameDefaultCallbacks(InputHandler*)::$_3::operator()(Game*) const"
-                  moduleName = "Pong"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/MyGame/System/MyGame.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "62"
-                  endingLineNumber = "62"
-                  offsetFromSymbolStart = "34">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "933DAACB-DEC9-478F-A4D5-F34EBED27B0F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1051,8 +987,8 @@
             filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "Animation::Animation(animation, map_)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1124,22 +1060,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B1C7F287-9B8A-4554-B85B-E8CA617600ED"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/MyGame/System/MyGame.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
-            landmarkName = "loadMainGameDefaultCallbacks(ih)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "22D32578-FBF2-40C5-9BE8-43162EAAB04B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1195,8 +1115,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
             <Locations>
@@ -1273,8 +1193,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
             <Locations>
@@ -1351,8 +1271,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1383,8 +1303,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1495,8 +1415,8 @@
             filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "Animation::Animation(animation, map_)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1511,8 +1431,8 @@
             filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "Animation::Animation(animation, map_)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1527,8 +1447,8 @@
             filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
             landmarkName = "Animation::Animation(animation, map_)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1735,8 +1655,8 @@
             filePath = "Pong/Engine/Fundamentals/Game.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "Game::setSaveSystem(s)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1751,8 +1671,8 @@
             filePath = "Pong/Engine/Fundamentals/Game.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "Game::loadLevelSaveFile(g)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1943,8 +1863,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1975,8 +1895,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1991,8 +1911,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2007,8 +1927,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2023,8 +1943,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2039,8 +1959,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2055,8 +1975,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2071,8 +1991,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2087,8 +2007,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2103,8 +2023,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "IntroPoem::tick(ui, time)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2119,8 +2039,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "IntroPoem::tick(ui, time)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2215,8 +2135,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2231,8 +2151,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2247,8 +2167,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "ChargedSlash::call()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2263,8 +2183,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "ChargedSlash::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2279,8 +2199,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "ChargedSlash::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2295,8 +2215,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "ChargedSlash::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2327,9 +2247,9 @@
             filePath = "Pong/Engine/WorldObjects/Camera.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "Camera::tick()"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "Camera::setState(state_)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2343,8 +2263,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "Renderer::updateCamPos()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2503,8 +2423,8 @@
             filePath = "Pong/Engine/Rendering/Renderer.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "Renderer::updateCamPos()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2519,8 +2439,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "World::getActorNamed(name)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2535,8 +2455,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "World::getActorNamed(name)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2551,8 +2471,8 @@
             filePath = "Pong/Engine/World/World.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "World::tickAll()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2743,8 +2663,8 @@
             filePath = "Pong/Engine/World/World.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "insertCollidable(c)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2935,8 +2855,8 @@
             filePath = "Pong/Engine/World/World.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "insertCollidable(c)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2951,8 +2871,8 @@
             filePath = "Pong/MyGame/Scenes/ScriptWakeUp.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "ScriptWakeUp::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -3040,22 +2960,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "09DE16DA-81DC-445D-B881-E6392EF5096A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "ChargedSlash::call()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "B1752E5E-6ADF-4A87-AE18-9090FDF1CE28"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -3063,8 +2967,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "ChargedSlash::~ChargedSlash()"
             landmarkType = "7">
          </BreakpointContent>
@@ -3079,8 +2983,8 @@
             filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "ChargedSlash::~ChargedSlash()"
             landmarkType = "7">
             <Locations>
@@ -3191,8 +3095,8 @@
             filePath = "Pong/MyGame/Factories/MyActorFactory.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "MyActorFactory::makeActor(i)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3255,8 +3159,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4086,6 +3990,740 @@
             startingLineNumber = "30"
             endingLineNumber = "30"
             landmarkName = "TheLake::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2A54A092-E5BF-4904-9807-F755B8A9E4B7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Abilities/ChargedSlash.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "ChargedSlash::call()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "048143A2-16C2-4693-812B-B4E270B64A36"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "deleteX(t)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "048143A2-16C2-4693-812B-B4E270B64A36 - fc12f7d7573c548a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void World::deleteX&lt;ParticleSystem&gt;(ParticleSystem*)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/World/World.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "185"
+                  endingLineNumber = "185"
+                  offsetFromSymbolStart = "662">
+               </Location>
+               <Location
+                  uuid = "048143A2-16C2-4693-812B-B4E270B64A36 - 6b58091da0cb6894"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void World::deleteX&lt;Actor&gt;(Actor*)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/World/World.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "185"
+                  endingLineNumber = "185"
+                  offsetFromSymbolStart = "662">
+               </Location>
+               <Location
+                  uuid = "048143A2-16C2-4693-812B-B4E270B64A36 - 341b1c4e716915de"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void World::deleteX&lt;Prop&gt;(Prop*)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/World/World.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "185"
+                  endingLineNumber = "185"
+                  offsetFromSymbolStart = "561">
+               </Location>
+               <Location
+                  uuid = "048143A2-16C2-4693-812B-B4E270B64A36 - 905fc6cfbd5f95bc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void World::deleteX&lt;Behaviour&gt;(Behaviour*)"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/World/World.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "185"
+                  endingLineNumber = "185"
+                  offsetFromSymbolStart = "561">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "80B00E46-F3FC-446B-ADAA-679616F6BEFD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/WorldRenderingManager.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "WorldRenderingManager::drawAll(r)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E1BDBD9-2F44-4A2D-AA62-AF5AC640D176"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Factories/PropFactory.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "PropFactory::makeProp(pe)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "04995D31-88E7-49C4-BCB5-5F1EE98A32DA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Factories/MyActorFactory.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "MyActorFactory::makeActor(i)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9036991C-E515-4BA7-A5F4-D3FCB23F4AD5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Factories/MyActorFactory.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "MyActorFactory::makeActor(i)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7918725A-F3F3-49F8-B850-04247C5C23F9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "VertexLoader::loadModelAnimations(anim_, filePath_)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2EFE4EC-2184-4FC0-91BE-DC40AAE5B2BC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Deprecated/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6FD3A6E1-BD24-4D77-B802-6F0E67EF8735"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Deprecated/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C2CBA88-AF27-487F-96B4-FA2E23285735"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Deprecated/ScriptWakeUp.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "ScriptWakeUp::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2FBAAE93-AEE0-439C-8702-2BD3547ED81A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Loading/AssetManager.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "AssetManager::loadGlyphs(filePath, Characters, map)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DF55F056-A5D5-4007-8DD6-4A823488AF86"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Positionable.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "getPos()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C98496EF-F29A-4E48-B53B-4DB59C9AAA0E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Positionable.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "getPos()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B7250B0B-4AC5-4479-AFF7-4DF6B77DDCD0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Rendering/Renderer.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "Renderer::updateViewProj()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0BFE0680-F507-42CA-B0EA-668485DB0350"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Rendering/Renderer.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "Renderer::updateCamPos()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "42A993C0-CD87-4A11-9C6A-9F77A0369A16"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Rendering/Renderer.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "Renderer::renderInitial()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CEBAF3A6-6606-4C44-BC11-21C3F172BBAF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "World::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DBCD380C-D7A2-48F5-B390-242DF5A1F3FF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "Game::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72CBF1A0-7C47-4E65-887C-9AA833E47F8A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "Game::loadLevel(lvl)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FC8BB21B-CF33-4567-8E09-D34C4C493CE6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "Game::init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AA9D30AB-0A98-4CF1-9C7A-D5FF4D58EC29"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "MyGame::load()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2631C21-0FFA-4831-A0D2-71E0A4D6436A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/GameLevel.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "GameLevel::GameLevel(r, numWorlds, name_)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "501A8BE7-00F9-480C-AFF3-38D08A199350"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/GameLevel.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "GameLevel::tick()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "501A8BE7-00F9-480C-AFF3-38D08A199350 - bf913be4c50efb25"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GameLevel::tick()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Fundamentals/GameLevel.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "26">
+               </Location>
+               <Location
+                  uuid = "501A8BE7-00F9-480C-AFF3-38D08A199350 - bf913be4c50efb25"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GameLevel::tick()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Fundamentals/GameLevel.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "891DA460-6EFF-4F5F-8E7D-D6B6AEE09042"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "MyGame::load()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6EAD1291-C6CE-4AD8-9EFF-8B4DAD16E7F2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "MyGame::setupLvlBuilder()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6EAD1291-C6CE-4AD8-9EFF-8B4DAD16E7F2 - a993c6096d1f9951"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyGame::setupLvlBuilder()::$_26::operator()(Game*) const"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/MyGame/System/MyGame.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "285"
+                  endingLineNumber = "285"
+                  offsetFromSymbolStart = "3640">
+               </Location>
+               <Location
+                  uuid = "6EAD1291-C6CE-4AD8-9EFF-8B4DAD16E7F2 - 5970ab72a2bba8b9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyGame::setupLvlBuilder()::$_26::operator()(Game*) const::&apos;lambda&apos;(double, double)::operator()(double, double) const"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/MyGame/System/MyGame.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "286"
+                  endingLineNumber = "286"
+                  offsetFromSymbolStart = "29">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "30C6DFBC-2AD9-4F96-A94E-FD057B1264AC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "MyGame::setupLvlBuilder()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B8A6D845-CC43-4C93-9025-173EFD520BCB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "loadMainMenuDefaultCallbacks(ih)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8EF6179C-F9AE-4181-8C78-B7DEC4AAF162"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "makeMainMenu(g)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BD17DC4F-A9AA-4FA7-80B1-477CC0BABCD2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/System/MyGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "loadMainMenuDefaultCallbacks(ih)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5EC586A5-9D69-4995-BFC9-C62079DE372B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "Game::loadLevel(lvl)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "07F5897E-CD05-4D58-A43B-7E77E14DA1F7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "Game::loadLevel(lvl)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C90220E3-F460-4AD6-9F4D-E5DFCCB446D4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/WorldObjects/Camera.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "Camera::~Camera()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C90220E3-F460-4AD6-9F4D-E5DFCCB446D4 - 5f96ecb03f5eb18f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Camera::~Camera()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/WorldObjects/Camera.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "C90220E3-F460-4AD6-9F4D-E5DFCCB446D4 - 5f96ecb03f5eb18f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Camera::~Camera()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/WorldObjects/Camera.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "21">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F0FA5A64-A213-4003-AE39-D44835DFADC1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "Game::loadLevel(lvl)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "01BAC9E7-0A3A-401E-99BA-1C3A9CADBE97"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/World/World.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "World::~World()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F6DC0FCD-E60A-4621-98E7-C676C7D2E1AC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Fundamentals/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "Game::loadLevel(lvl)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "333988A5-FC67-4804-9D86-83D314C655D7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/MovementController.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "MovementController::makeIdle()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

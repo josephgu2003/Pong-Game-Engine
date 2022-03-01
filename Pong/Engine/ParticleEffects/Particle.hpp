@@ -20,11 +20,8 @@ struct Particle {
     float duration = 0.0;
 };
 
-struct Character;
-
 class World;
 
-class Shader;  
 
 class ParticleSystem : public Positionable, public Componentable {
 protected:
@@ -36,7 +33,7 @@ protected:
     Watch watch;
 
     float duration;
-    
+     
     Particle* particles = NULL; 
 public:
     void setWorld(World* world);  

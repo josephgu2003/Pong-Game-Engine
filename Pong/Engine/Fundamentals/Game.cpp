@@ -59,8 +59,7 @@ void Game::initWindow() {
 }
   
 void Game::initObjects() { 
-    ui = std::make_shared<uiLayout>(); 
-    camera = std::make_shared<Camera>(); 
+    ui = std::make_shared<uiLayout>();
     renderer = new Renderer();
     saveSystem = std::unique_ptr<SaveSystem>(); 
     activeLevel = std::make_unique<GameLevel>(renderer, 1, "placeholder");
@@ -69,14 +68,13 @@ void Game::initObjects() {
 void Game::linkObjects() {  
     inputHandler.setWindow(window);
     inputHandler.setGame(this);
-    renderer->setCamera(camera.get());
 }
 
 Game::~Game() {
      
 }
 
-void Game::tick() {
+void Game::tick() {  
     if (!fpsControl.regulateFPS()) {
         return;
     } 
@@ -118,7 +116,7 @@ void Game::init() {
     load();
 }
     
-void Game::load() {
+void Game::load() {  
     
 }
   
@@ -135,17 +133,13 @@ void Game::loadLevel(std::string lvl) {
     if (lvlCreate != levelBuilder.end()) {
         activeLevel.reset(); // important to let deconst
         activeLevel.reset((lvlCreate->second)(this));
-        if (auto x = activeLevel->getActiveWorld()->getPlayerHero()) {
-            camera->setActor(activeLevel->getActiveWorld()->getPlayerHero());
-        }
-        activeLevel->getActiveWorld()->insert<Camera>(camera);
-    } 
-}
-
+    }
+    
+} 
+ 
 Renderer* Game::getRenderer() {
     return renderer; 
 }
- 
 
 Actor* Game::getPlayerHero() {
     if (auto level = activeLevel.get()) {

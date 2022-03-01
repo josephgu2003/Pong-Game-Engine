@@ -23,20 +23,19 @@ World::World(Renderer* r) {
     for (auto i = worldSubSystemsTemplate.begin(); i != worldSubSystemsTemplate.end(); i++) {
         addComp((*i)(*this));
     }
-    collisionSystem = std::make_shared<CollisionSystem>(); 
+    collisionSystem = std::make_shared<CollisionSystem>();
+    camera = std::make_shared<Camera>();
 }
 
-
 World::~World() {
-    if (allCameraPtrs.size() > 0) {
-        allCameraPtrs.at(0)->setActor(nullptr); 
-    }
+    renderer->setCamera(nullptr);
 }  
-
+ 
 
 Atmosphere& World::getAtmosphere() {
     return atmosphere;
 }
+
 void World::drawAll() {
     atmosphere.draw(renderer);
     
@@ -69,17 +68,17 @@ void World::tickAll() {
         if (cc && cc->QHasAbilities()) {
             abilityManager.handleCombatComp(cc);
         }
-    }  
-    for(int i = 0; i < allCameraPtrs.size(); i++) {
-        allCameraPtrs[i]->tick();
     }
- 
-    for(int i = 0; i < allCameraPtrs.size(); i++) {
-        allCameraPtrs[i]->updateVecs();
-    }
+    
+    camera->tick();
 
     for(auto i = allProps.begin(); i != allProps.end(); i++) {
-        (*i)->tick();
+        if ((*i)->dead) {
+            deleteX<Prop>((*i).get());
+            i--; 
+        } else {
+            (*i)->tick();
+        }
     }
     
     for (int i = 0; i < allParticleEffects.size(); i++) {
@@ -97,7 +96,7 @@ void World::tickAll() {
 void World::tick() {
     tickAll();
     
-    drawAll();
+    drawAll();  
 }
  
 std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
@@ -116,6 +115,7 @@ std::shared_ptr<Actor> World::getActorNamed(const std::string& name) {
  
 void World::setRenderer(Renderer *renderer_) {
     renderer = renderer_;
+    renderer->setCamera(camera.get());
 }
 
 void World::setMap(const std::string& filePath, glm::vec3 scaling) {
@@ -132,7 +132,9 @@ float World::getHeightAt(glm::vec2 xz) {
 void World::markPlayerHero(const Actor* ph) {
     for (auto x : allActorPtrs) { 
         if (x.get() == ph) {
-            playerHero = x; 
+            playerHero = x;
+            camera->setActor(playerHero.lock().get()); 
+            playerHero.lock()->setCamera(camera);
         }
     }  
 }
@@ -163,7 +165,7 @@ void World::loadChunks(glm::vec3 pos) {
 }
 
 std::weak_ptr<Camera> World::getCameraRef() {
-    std::weak_ptr<Camera> camref = allCameraPtrs.at(0);
+    std::weak_ptr<Camera> camref = camera;
     return camref;
 }
 
@@ -180,6 +182,10 @@ const DirectionalLight& World::getDirectionalLight() {
 
 WorldFog& World::getDistanceFog() {
     return distanceFog;
+}
+
+void World::activate() {
+    renderer->setCamera(camera.get());
 }
 
 // next steps:

@@ -25,7 +25,7 @@ void ScriptNightFlowers::act() {
     Actor* moonbell = getActorNamed("Moonbell");
     Actor* floro = getActorNamed("Floro");
     setPos(moonbell->getPos());
-    if (step == 0) step = 12; 
+
     switch (step) {
         case 0: { 
             world->getComponent<NotificationSystem>()->newNotification("Flowers in the Night", 5.0f);
@@ -49,7 +49,7 @@ void ScriptNightFlowers::act() {
         }
         case 3: {
             if (!isWaiting()) {
-            speak("Moonbell", "The wolf was right. The past is broken and cannot be returned to.", 3.0f);
+            speak("Moonbell", "...", 3.0f);
             }
             waitFor(6.0f);
             moonbell->posDir(0.02);
@@ -57,7 +57,7 @@ void ScriptNightFlowers::act() {
         }
         case 4: {
             if (!isWaiting()) {
-            speak("Floro", "You can put down your sword and turn around right now. How is life different?", 3.0f);
+            speak("Floro", "Where did you find me again?", 3.0f);
             }
             waitFor(6.0f);
             moonbell->posDir(0.02);
@@ -65,7 +65,7 @@ void ScriptNightFlowers::act() {
         };
         case 5: {
             if (!isWaiting()) {
-            speak("Moonbell", "Can I? What if I can't?", 3.0f);
+            speak("Moonbell", "I heard a loud noise and when I came, you were unconscious.", 3.0f);
             }
             waitFor(6.0f);
             moonbell->posDir(0.02);
@@ -73,7 +73,7 @@ void ScriptNightFlowers::act() {
         }
         case 6: {
             if (!isWaiting()) {
-            speak("Moonbell", "You are a nobody. You can have dreams, I can't.", 3.0f);
+            speak("Moonbell", "What is your name?", 3.0f);
             }
             waitFor(6.0f);
             moonbell->posDir(0.02);
@@ -81,7 +81,7 @@ void ScriptNightFlowers::act() {
         }
         case 7: {
             if (!isWaiting()) {
-            speak("Floro", "If you aren't a nobody, who are you?", 3.0f);
+            speak("Floro", "I can't remember much, but I know my name. Floro.", 3.0f);
             }
             waitFor(6.0f);
             moonbell->posDir(0.02);
@@ -89,7 +89,7 @@ void ScriptNightFlowers::act() {
         }
         case 8: {
             if (!isWaiting()) {
-            speak("Moonbell", "The truth is, our background is no longer so different.", 3.0f);
+            speak("Moonbell", "Nice to meet you. I'm Moonbell.", 3.0f);
             }
             waitFor(10.0f);
             moonbell->posDir(0.02);
@@ -112,12 +112,18 @@ void ScriptNightFlowers::act() {
         } 
         case 11: {
             if (!isWaiting()) {
-            speak("Floro", "What do you see? Don't answer, this is you.", 2.0f);
+                speak("Moonbell", "Good. You are close then.", 2.0f);
+                floro->getComponent<GraphicsComponent>()->setUniform<float>("brightness", 1.0f);
             } 
             waitFor(4.0f);
             break;
         }
+            
         case 12: {
+            break;
+        }
+            
+        case 100: {
             world->addComponent<SurvivalMode>(*world, 100.0f);
             world->getComponent<NotificationSystem>()->newNotification("The rest is experimental gameplay - survival mode, perhaps more interesting", 10.0f);
             step++; 

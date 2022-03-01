@@ -12,6 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "json.hpp"
 #include <vector>
+#include "Renderer.hpp"
 
 std::unordered_map<std::string, std::string> Shader::functions;
  
@@ -126,6 +127,7 @@ void Shader::init(const char *vertexPath, const char *fragmentPath) {
         glGetProgramInfoLog(ID, 512, NULL, errorLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << errorLog << std::endl;
     }
+    Renderer::bindShaderUniblocks(this);
     
     glDeleteShader(vShader);
     glDeleteShader(fShader);
@@ -153,6 +155,7 @@ void Shader::init(const char* vertexPath,const char* geoPath, const char* fragme
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << errorLog << std::endl;
     }
     
+    Renderer::bindShaderUniblocks(this);
     glDeleteShader(vShader);
     glDeleteShader(fShader);
     glDeleteShader(gShader);

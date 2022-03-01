@@ -57,7 +57,7 @@ void JsonManager::loadGameLevel(GameLevel* level, AbstractActorFactory* af, Prop
             loadPos(pos, (*i));
             
             actor->setPos(pos);
-            actor->setWorld(&level->getWorld(worldID));
+            actor->setWorld(&level->getWorld(worldID)); 
             level->getWorld(worldID).insert<Prop>(actor);
         }
         

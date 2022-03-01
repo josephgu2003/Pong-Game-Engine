@@ -32,7 +32,7 @@ typedef std::vector<std::shared_ptr<Actor>> ActorList;
 
 class Renderer;
 class MapChunk;
-class uiFrame;
+class uiFrame; 
 class World;
 
 typedef std::function<std::shared_ptr<WorldSubSystem>(World& w)> addSubSystem; // do this to avoid storing shared_ptrs of WorldSubSystem - this fancier and less confusing
@@ -43,7 +43,7 @@ private:
     MapManager mapManager;
     AbilityManager abilityManager;
     std::shared_ptr<CollisionSystem> collisionSystem;
-
+    std::shared_ptr<Camera> camera;
     Atmosphere atmosphere; // could make into a generic prop/actor
     WorldFog distanceFog; // same
        
@@ -53,7 +53,6 @@ private:
     
     std::vector<std::shared_ptr<Actor>> allActorPtrs;
     std::vector<std::shared_ptr<ParticleSystem>> allParticleEffects;
-    std::vector<std::shared_ptr<Camera>> allCameraPtrs;
     std::vector<std::shared_ptr<Prop>> allProps;
     std::vector<std::shared_ptr<Behaviour>> allBehaviours;
     
@@ -98,8 +97,6 @@ private:
     void drawAll();
     void tickAll();
 public:
-    bool blur = false;
-    
     World(Renderer* r);
     ~World();
     
@@ -117,6 +114,7 @@ public:
 
     void insert(const std::shared_ptr<Prop> prop) { // insert function using overloading
         allProps.push_back(prop);
+        prop->setWorld(this);
         insertGraphicsToManager<Prop>(prop);
         insertCollidable<Prop>(prop);
     }
@@ -135,9 +133,6 @@ public:
         allParticleEffects.push_back(ps);
         ps->setWorld(this);
         insertGraphicsToManager<ParticleSystem>(ps);
-    }
-    void insert(const std::shared_ptr<Camera> cam) {
-        allCameraPtrs.push_back(cam);
     }
       
     template <typename T> // bad code, keep for now
@@ -159,35 +154,35 @@ public:
               allParticleEffects.push_back(dynamic_pointer_cast<ParticleSystem>(placeable));
               dynamic_pointer_cast<ParticleSystem>(placeable)->setWorld(this);
           }
-          if (typeid(T) == typeid(Camera)) {
-              allCameraPtrs.push_back(dynamic_pointer_cast<Camera>(placeable));
-          }
           if (auto compable = dynamic_pointer_cast<Componentable>(placeable)) {
                    insertGraphicsToManager(compable);
               insertCollidable(compable);
             }
       }
-     
-    template <typename T>
+      
+    template <typename T> 
     void deleteX(T* t) {
         if (typeid(T) == typeid(Behaviour)) {
             for (int i = 0; i < allBehaviours.size(); i++) {
                 if (dynamic_cast<Behaviour*>(t) == allBehaviours.at(i).get()) {
                     allBehaviours.erase(allBehaviours.begin()+i);
+                    return;
                 }
             }
-        }
+        } 
         if (typeid(T) == typeid(Prop)) {
             for (int i = 0; i < allProps.size(); i++) {
                 if (dynamic_cast<Prop*>(t) == allProps.at(i).get()) {
                     allProps.erase(allProps.begin()+i);
-                }
+                    return;
+                } 
             }
         }
         if (typeid(T) == typeid(Actor)) {
             for (int i = 0; i < allActorPtrs.size(); i++) {
                 if (dynamic_cast<Actor*>(t) == allActorPtrs.at(i).get()) {
                     allActorPtrs.erase(allActorPtrs.begin()+i);
+                    return;
                 }
             }
         } 
@@ -195,22 +190,15 @@ public:
             for (int i = 0; i < allParticleEffects.size(); i++) {
                 if (dynamic_cast<ParticleSystem*>(t) == allParticleEffects.at(i).get()) {
                     allParticleEffects.erase(allParticleEffects.begin()+i);
+                    return;
                 }
             }
         }
-        if (typeid(T) == typeid(Camera)) {
-            for (int i = 0; i < allCameraPtrs.size(); i++) {
-                if (dynamic_cast<Camera*>(t) == allCameraPtrs.at(i).get()) {
-                    allCameraPtrs.erase(allCameraPtrs.begin()+i);
-                }
-            } 
-        }
     }
-    
+     
     void setMap(const std::string& filePath, glm::vec3 scaling);
 
-    void setRenderer(Renderer* renderer); 
-    
+    void setRenderer(Renderer* renderer);
 
     void tick(); 
     
@@ -229,7 +217,8 @@ public:
             }
         }
             return al; // make a null component or something
-    } 
+    }
+    
     template <typename T>
     bool getNearestActorWith(Actor* actor, Actor*& nearest)
     {  
@@ -259,6 +248,8 @@ public:
     WorldFog& getDistanceFog();
     
     const DirectionalLight& getDirectionalLight();
+    
+    void activate();
 };
   
 

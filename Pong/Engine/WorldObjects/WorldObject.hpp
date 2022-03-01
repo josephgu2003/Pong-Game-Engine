@@ -10,6 +10,4 @@
 
 #include <stdio.h>
 
-
-
 #endif /* WorldObject_hpp */

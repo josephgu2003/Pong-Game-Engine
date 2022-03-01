@@ -15,6 +15,7 @@ AssimpNodeData::AssimpNodeData(std::string& name_,  const aiMatrix4x4& transform
     VertexLoader::ConvertMatrixToGLMFormat(transform, transformation);
     parentIndex = parentIndex_; 
 }
+
 Animation::Animation() {
      
 }
@@ -54,12 +55,12 @@ const std::string& Animation::getName() {
 float Animation::getDuration() {
     return duration;
 }
-
+ 
 
 Bone* Animation::findBone(const std::string& name) {
     for (int i = 0; i < bones.size(); i++) {
         if (bones.at(i).getBoneName() == name) {
-            return &bones.at(i);
+            return &bones.at(i); 
         }
     }
     return nullptr;

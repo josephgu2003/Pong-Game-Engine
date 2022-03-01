@@ -46,6 +46,7 @@ public:
     virtual void tick() override;
     void setDefaultAnim(const std::string& name);
     void playAnim(const std::string& name, bool looped);
+    void playAnimIfNotPlaying(const std::string& name);
     void playAnim(const std::string& name, int firsttick, int lasttick);
     void addAnimation(aiAnimation* animation, const aiScene* scene);
     void setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap);

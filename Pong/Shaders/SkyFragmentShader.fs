@@ -2,9 +2,6 @@
     out vec4 FragColor;
     in vec3 TexVec;
 
-    uniform samplerCube diffuse;
-    uniform float brightness;
-
 layout (std140) uniform DistanceFog
 {
     float fogDensity;
@@ -16,12 +13,12 @@ layout (std140) uniform DistanceFog
 
     void main()
     {
-        vec4 fragColor = texture(diffuse, TexVec); //brightness
+        vec4 fragColor = vec4(0,0,0,0);
         fragColor.rgb = vec3(0,0,0);
         vec3 pos = TexVec;
-        float gradient = dot(normalize(pos),normalize(vec3(pos.x,0,pos.z)));
-        gradient = acos(gradient) / 1.5;
-        fragColor.rgb = mix(fogColor, fragColor.rgb, gradient);
+        float gradient = dot(normalize(pos),normalize(vec3(pos.x,0,pos.z))); // 1 -> 0
+        gradient = pow(gradient, 3);
+        fragColor.rgb = mix(fragColor.rgb, fogColor, gradient * 0.7 + 0.3);
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

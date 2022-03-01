@@ -22,6 +22,11 @@ protected:
     World* world = NULL;
 public:
     Prop();
+    bool dead = false;
+    
+    void destroy() {
+        dead = true;
+    }
     virtual void tick();
     
     void setWorld(World* world_);

@@ -21,7 +21,7 @@ void CollisionComponent::onCollision(CollisionComponent* collided) {
 }
 
 void CollisionComponent::tick() {
-    if (!lockTarget) {
+    if (!lockTarget) { 
         target.addObserver(shared_from_this());
         lockTarget = true;
     }

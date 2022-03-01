@@ -87,8 +87,9 @@ private:
         s->use();
         go->bind();
         bindTextures(s, go->getTextureMap());
-    } 
+    }  
 public:
+    static void bindShaderUniblocks(Shader* shader);
     void updateLights(const DirectionalLight& dl); // could make these more general with template containing struct DirectionalLight or DistanceFog and type erasure
     void updateLight(const PointLight& pl);
     void updateDistanceFog(float fogDensity, float fogGradient, glm::vec3 fogColor);
@@ -105,9 +106,11 @@ public:
     void renderTerrain(GraphicsObject* r);
     void renderFoliage(GraphicsObject* r);
     void renderGeneric(GraphicsObject* go);
+    void renderAdditiveBlend(GraphicsObject* r); 
 };
 #endif /* Renderer_hpp */
  
+
 // renderable interface
 // - Shader
 // - VAO

@@ -13,6 +13,8 @@
 #include "Actor.hpp"
 #include "LifeComponent.hpp"
 #include "AnimComponent.hpp"
+#include "LifeTime.hpp"
+#include "PropFactory.hpp"
 
 FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_)  {
     
@@ -23,7 +25,6 @@ FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_, st
 }
  
 FallingLetters::~FallingLetters() {
-    world->blur = false;
     world->deleteX<ParticleSystem>(letters.lock().get());
     if (target.lock()) {
         target.lock()->setState(STATE_IDLE); 
@@ -42,11 +43,15 @@ void FallingLetters::call() {
     std::shared_ptr<ParticleSystem> ps = pf.makeParticles(PE_RUNICLETTERS, pos+glm::vec3(0,2,0));
     letters = ps;
     world->insert<ParticleSystem>(ps);
-    world->blur= true;
+
     if (auto anim = actor->getComponent<AnimComponent>()) { 
      //   anim->playAnim("HollowKnight__Armature|Channel");
     }
-
+    PropFactory pf;
+    auto aurora = pf.makeProp(PROP_AURORA);
+    aurora->setPos(actor->getPos() + glm::vec3(0, 100, 100)); 
+    aurora->addComponent<LifeTime<Prop>>(*aurora.get(), 10.0f);
+    world->insert<Prop>(aurora);
 }    
  
 void FallingLetters::tick() {  

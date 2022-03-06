@@ -798,5 +798,5 @@ void VertexLoader::readAssimpTree(const aiNode* node, std::vector<BoneNode>& bon
     }
 
 }
-
+ 
  

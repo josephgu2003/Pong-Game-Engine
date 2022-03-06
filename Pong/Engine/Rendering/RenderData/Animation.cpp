@@ -61,7 +61,6 @@ const std::string& Animation::getName() {
 float Animation::getDuration() {
     return duration;
 }
-  
 
 
 int Animation::getTicksPerSec() {
@@ -83,9 +82,11 @@ void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vec
         
         BoneNode* node = nullptr;
         
+        int indexInMatrices = 0;
         for (int i = 0; i != boneNodes.size(); i++) {
             if (boneNodes.at(i).name == boneName) {
                 node = &boneNodes.at(i);
+                indexInMatrices = i;
                 break;
             }
         }
@@ -101,19 +102,22 @@ void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vec
         
         if (node->parentIndex >= 0) {
         localTransform = boneMatrices[node->parentIndex] * localTransform;
-        boneMatrices[i] = localTransform;
+        boneMatrices[indexInMatrices] = localTransform;
         }
 
     }
-    
+     
     for (int i = 0; i != bones.size(); i++) {
         Bone& bone = bones.at(i);
         std::string boneName = bone.getBoneName(); 
         BoneNode* node = nullptr;
         
+        int indexInMatrices = 0;
+        
         for (int i = 0; i != boneNodes.size(); i++) {
             if (boneNodes.at(i).name == boneName) {
                 node = &boneNodes.at(i);
+                indexInMatrices = i;
                 break;
             }
         }
@@ -122,8 +126,8 @@ void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vec
             throw "Bone not found in master BoneList";
         }
         
-        glm::mat4 offset = node->offset;
-        boneMatrices[i] = globalInverse* boneMatrices[i] * offset;
+        glm::mat4 offset = node->offset; 
+        boneMatrices[indexInMatrices] = globalInverse * boneMatrices[indexInMatrices] * offset;
     }
 
 }

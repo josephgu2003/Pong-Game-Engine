@@ -156,12 +156,12 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             shader->setUniform("brightness", 0.0);
              
             actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
-            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/ScarfChar/yay.fbx");
             
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/ScarfChar/yay.fbx");
             actor->addComp(gc);
              
+            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/ScarfChar/yay.fbx"); 
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Idle");
             actor->addComp(ac); 
          //   actor->setScale(0.005);
@@ -188,13 +188,14 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             shader->setUniform("brightness", 0.0);
             
             actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
-            
-            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx");
+
             
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
             actor->addComp(gc); 
        
+            
+            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx");
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Passive");
             actor->addComp(ac);
             break;

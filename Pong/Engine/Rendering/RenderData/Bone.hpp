@@ -17,6 +17,11 @@
 #include <assimp/scene.h>
 #include "Positionable.hpp"
 
+struct BoneData {
+    int id;
+    glm::mat4 offset;
+};
+
 struct KeyPos {
     glm::vec3 pos;
     float timestamp;

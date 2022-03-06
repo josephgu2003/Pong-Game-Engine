@@ -37,13 +37,12 @@ struct VertexData {
 class VertexLoader {
 private:
     static int indexOffset;
-    static std::map<std::string, BoneList> loadedBoneLists;
-    static std::map<std::string, bool> bonesReferencedByMeshes;
-    
+    static std::map<std::string, BoneInfoMap> loadedBoneDataMaps;
+    static BoneInfoMap inProgBoneMap;
+    static int boneCounter;
     
     static std::map<std::string, VertexData> loadedVertexData;
-    
-    static BoneList activeBoneList;
+
      
     static glm::vec3 calcNormalWithHeights(float cH, float dH, float uH, float rH, float lH);
     static void BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
@@ -64,7 +63,7 @@ public:
     static void loadSimpleCube(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModel(std::string filePath, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices, bool& deleteDataOnDestruct);
     static void loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
-    static void loadModelAnimations(AnimComponent* anim_, std::vector<BoneNode>& boneNodes, std::string filePath_);
+    static void loadModelAnimations(AnimComponent* anim_, std::string filePath_);
     static void loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadTextData(const std::string& s, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
     static void loadTextData(const std::string& s, float fontsize, float linespace, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
@@ -97,15 +96,15 @@ public:
         std::vector<T> vertices;
         std::vector<GLuint> indices;
         
-        if (loadedBoneLists.find(filePath_) != loadedBoneLists.end()) {
-            activeBoneList = loadedBoneLists.find(filePath_)->second;
-        }
-        
         processNode<T>(scene->mRootNode, scene, vertices, indices);
         
         fillVertexData<T>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
         loadedVertexData.emplace(filePath_, VertexData(vao, vbo, ebo, numIndices));
 
+        if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
+            loadedBoneDataMaps.insert(std::pair<std::string, BoneInfoMap>(filePath_, inProgBoneMap));
+        } 
+        
         reset(); //might have other erferences to this
         deleteDataOnDestruct = false;
     }
@@ -152,11 +151,7 @@ public:
         setupVAOAttribs(vType);
         glBindVertexArray(0);
     }
-     
-//    static const aiNode* findRootBone(const aiScene* scene, BoneList& boneList);
-    
-    
-    static void readAssimpTree(const aiNode* node, std::vector<BoneNode>& boneNodes);
+
 }; 
   
 #endif /* VertexLoader_hpp */

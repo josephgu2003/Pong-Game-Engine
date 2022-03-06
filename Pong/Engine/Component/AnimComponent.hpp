@@ -18,7 +18,7 @@
 #include "Watch.hpp"
 
 class Actor;
-
+typedef std::map<std::string, BoneData> BoneInfoMap;
 
 class AnimComponent : public Component {
 protected:
@@ -34,19 +34,22 @@ protected:
     int endtick; 
 
     glm::mat4 globalInverse;
-    std::vector<BoneNode> boneNodes; 
-
+    std::vector<AssimpNodeData> boneNodes;
+    BoneInfoMap BoneDataMap;
     std::vector<glm::mat4> boneMatrices;
+
+    const aiNode* findRootBone(const aiScene* scene, std::map<std::string, BoneData>& map_);
 
 public:
     AnimComponent(Actor& actor, const std::string& filePath);
     void playDefault(); 
     virtual void tick() override;
+    void readAssimpTree(const aiNode* node);
     void setDefaultAnim(const std::string& name);
     void playAnim(const std::string& name, bool looped);
     void playAnimIfNotPlaying(const std::string& name);
     void playAnim(const std::string& name, int firsttick, int lasttick);
     void addAnimation(aiAnimation* animation, const aiScene* scene);
-
+    void setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap);
 };
 #endif /* AnimComponent_hpp */

@@ -5,55 +5,49 @@
 //  Created by Joseph Gu on 8/8/21.
 //
 
+
 #include "Animation.hpp"
 #include <assimp/postprocess.h>
 #include <iostream>
 #include "VertexLoader.hpp"
 
-BoneNode::BoneNode(std::string& name_,  const aiMatrix4x4& transform,  int parentIndex_) {
+AssimpNodeData::AssimpNodeData(std::string& name_,  const aiMatrix4x4& transform,  int parentIndex_) {
     name = name_;
     VertexLoader::ConvertMatrixToGLMFormat(transform, transformation);
     parentIndex = parentIndex_;
 }
-
 Animation::Animation() {
      
 }
-
-Animation::Animation(aiAnimation* animation, std::vector<BoneNode>& boneNodes) {
+Animation::Animation(aiAnimation* animation, std::map<std::string, BoneData>& map_) {
     ticksPerSec = animation->mTicksPerSecond;
-    duration = animation->mDuration; 
+    duration = animation->mDuration;
     name = std::string(animation->mName.C_Str());
     name.erase(0, name.find_first_of("|")+1);
-    makeBones(animation, boneNodes); 
+    makeBones(animation, map_);
 }
     
-void Animation::makeBones(const aiAnimation* animation, std::vector<BoneNode>& boneNodes) {
+
+void Animation::makeBones(const aiAnimation* animation, std::map<std::string, BoneData>& map_) {
+    int size = animation->mNumChannels;
     
-    auto animationUsesBone = [&] (const std::string& name, int& index) {
-        for (int i = 0; i < animation->mNumChannels; i++) {
-            std::string s = animation->mChannels[i]->mNodeName.C_Str();
-            if (s == name) {
-                index = i;
-                return true; 
-            }
-        }  
-        return false;
-    };
-     
-    for (int i = 0; i < boneNodes.size(); i++) {
-        BoneNode& node = boneNodes.at(i);
-        int index = 0; 
-        if (animationUsesBone(node.name, index)) {
-            auto channel = animation->mChannels[index];
-            std::string boneName = channel->mNodeName.C_Str();
-          
-            bones.emplace_back(boneName, channel);
+    for (int i = 0; i < size; i++) {
+        auto channel = animation->mChannels[i];
+        std::string boneName(channel->mNodeName.C_Str());
+         
+        if (map_.find(boneName) == map_.end()) { //if bones in anim channels are not from weighted verices or node heirarchy, add to map
+            BoneData data;
+            data.id = map_.size();
+            map_[boneName] = data;
         }
-    } 
+         
+
+        bones.push_back(Bone(boneName,
+                        channel)); 
+    }
     
 }
- 
+
 const std::string& Animation::getName() {
     return name;
 }
@@ -63,29 +57,31 @@ float Animation::getDuration() {
 }
 
 
+Bone* Animation::findBone(const std::string& name) {
+    for (int i = 0; i < bones.size(); i++) {
+        if (bones.at(i).getBoneName() == name) {
+            return &bones.at(i);
+        }
+    }
+    return nullptr;
+}
+ 
+
+
 int Animation::getTicksPerSec() {
     return ticksPerSec;
 }
  
+
  
-void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vector<BoneNode>& boneNodes, glm::mat4& globalInverse, float t, Positionable* p) {
+void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t) {
     
-    auto findBone = [&] (const std::string name) -> Bone* {
-        for (int i = 0; i < bones.size(); i++) {
-            Bone& bone = bones.at(i);
-            if (bone.getBoneName() == name) {
-                return &bone;
-            }
-        }
-        return nullptr;
-    };
-    
-    int count = 0;
     for (auto i = boneNodes.begin(); i != boneNodes.end(); i++) {
+        
         std::string boneName = (*i).name;
         glm::mat4 localTransform = (*i).transformation;
         Bone* bone = findBone(boneName);
-        
+         
         if (bone) {
             bone->tick(t);
             localTransform = bone->getLocalTransform();
@@ -94,78 +90,28 @@ void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vec
         }
         
         if ((*i).parentIndex >= 0) {
-           localTransform = boneMatrices[(*i).parentIndex] * localTransform;
+           localTransform =  boneMatrices[map_[boneNodes.at((*i).parentIndex).name].id] * localTransform;
         }
 
-        boneMatrices[count] = localTransform;
-        
-        count++;
-        
+        if (map_.find(boneName) != map_.end())
+        {
+            int index = map_[boneName].id;
+   
+            boneMatrices[index] = localTransform;
+             
+        }
+        else {
+            printf("ERROR: node %s not found in bone map \n", boneName.c_str());
+        }
     }
     
-    int count2 = 0;
     for (auto i = boneNodes.begin(); i != boneNodes.end(); i++) {
         std::string boneName = (*i).name;
-
-        glm::mat4 offset = (*i).offset;
-        boneMatrices[count2] = globalInverse*boneMatrices[count2] * offset;
-        count2++;
+        if (map_.find(boneName) != map_.end())
+        {
+            int index = map_[boneName].id;
+            glm::mat4 offset = map_[boneName].offset;
+            boneMatrices[index] = globalInverse*boneMatrices[index] * offset;
+        }
     }
-    return;
-    
-    for (int i = 0; i != bones.size(); i++) {
-        Bone& bone = bones.at(i);
-        std::string boneName = bone.getBoneName();
-        
-        BoneNode* node = nullptr;
-        
-        int indexInMatrices = 0;
-        for (int i = 0; i != boneNodes.size(); i++) {
-            if (boneNodes.at(i).name == boneName) {
-                node = &boneNodes.at(i);
-                indexInMatrices = i;
-                break;
-            }
-        }
-        
-        if (!node) {
-            throw "Bone not found in master BoneList";
-        }
-        
-        glm::mat4 localTransform = node->transformation;
-
-        bone.tick(t);
-        localTransform = bone.getLocalTransform();
-        
-        if (node->parentIndex >= 0) {
-        localTransform = boneMatrices[node->parentIndex] * localTransform;
-        boneMatrices[indexInMatrices] = localTransform;
-        }
-
-    }
-     
-    for (int i = 0; i != bones.size(); i++) {
-        Bone& bone = bones.at(i);
-        std::string boneName = bone.getBoneName(); 
-        BoneNode* node = nullptr;
-        
-        int indexInMatrices = 0;
-        
-        for (int i = 0; i != boneNodes.size(); i++) {
-            if (boneNodes.at(i).name == boneName) {
-                node = &boneNodes.at(i);
-                indexInMatrices = i;
-                break;
-            }
-        }
-        
-        if (!node) {
-            throw "Bone not found in master BoneList";
-        }
-        
-        glm::mat4 offset = node->offset;
-        boneMatrices[indexInMatrices] = globalInverse * boneMatrices[indexInMatrices] * offset;
-    }
-
 }
-  

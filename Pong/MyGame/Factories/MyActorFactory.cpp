@@ -169,7 +169,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             actor->setScale(0.015);
              
             actor->addComponent<MovementController>(*actor.get());
-            break; 
+            break;
              
         }
         case ACTOR_KNIGHT : {

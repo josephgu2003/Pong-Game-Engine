@@ -337,7 +337,6 @@ void VertexLoader::loadMaterialTextures(Material& mat, aiMaterial* material) {
 
 void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                                       const aiScene* scene) {
-    int x = mesh->mNumBones;
      
     auto findBone = [&] (const std::string name, int& index) -> BoneNode* {
         for (int i = 0; i < activeBoneList.size(); i++) {
@@ -351,10 +350,10 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
     };
     
     // iterate over number of bones in this mesh
-    for (int boneIndex = 0; boneIndex < x; ++boneIndex) {
+    for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
         int id = -1; // represents the location in the BoneMap
-        std::string boneName(mesh->mBones[boneIndex]->mName.C_Str());
-        
+        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+         
         BoneNode* boneNode = findBone(boneName, id);
         
         if (boneNode == nullptr)
@@ -365,10 +364,7 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
             ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix, offsetMatrix);
             boneNode->offset = offsetMatrix;
             
-            if (bonesReferencedByMeshes.find(boneName)->second && boneNode->offset != offsetMatrix) {
-                throw "Error : %s offset differs across meshes \n";
-            }
-            bonesReferencedByMeshes.find(boneName)->second = true;
+
         }
         // id of bone from mesh obtained,  or new bone added to map
         assert(id != -1);

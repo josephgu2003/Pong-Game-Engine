@@ -5011,38 +5011,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5D71659E-04EF-4608-BC6E-A0A9DA1BF8D0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "Animation::updateBoneMatrices(boneMatrices, boneNodes, globalInverse, t, p)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F1CBA78B-958D-42E5-B3D8-CE5771C16878"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Rendering/RenderData/Animation.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "C34DC7E8-5D84-4439-8DBC-861E3CF45519"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -5050,8 +5018,8 @@
             filePath = "Pong/Engine/Loading/VertexLoader.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "341"
-            endingLineNumber = "341"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
             landmarkName = "VertexLoader::BoneWeightVertices(vertices, mesh, scene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5166,22 +5134,6 @@
                   offsetFromSymbolStart = "264">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B701FAC2-1344-42FE-B685-AF429895EE3A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Loading/VertexLoader.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
-            landmarkName = "VertexLoader::BoneWeightVertices(vertices, mesh, scene)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5578,8 +5530,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "AnimComponent::addAnimation(animation, scene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5594,8 +5546,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "AnimComponent::addAnimation(animation, scene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5626,8 +5578,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "AnimComponent::setDefaultAnim(name)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5642,8 +5594,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "AnimComponent::AnimComponent(actor, filePath)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5747,22 +5699,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3F77E2C4-ACE0-4D4F-B8F3-A205E0996FB4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Loading/SaveGame.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "SaveGame::loadGameLevel(g)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A43F2B7F-99FD-447C-9614-799D44577B1F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -5773,38 +5709,6 @@
             startingLineNumber = "44"
             endingLineNumber = "44"
             landmarkName = "Animation::makeBones(animation, boneNodes)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "61DB3EE0-AB78-495E-8464-F7CBC4D8210D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Component/AnimComponent.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "AnimComponent::AnimComponent(actor, filePath)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2DB012EC-0DE5-4BF0-89A2-330DB1D0E878"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Component/AnimComponent.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "AnimComponent::AnimComponent(actor, filePath)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -10,7 +10,7 @@
 #include "Actor.hpp"
 #include "VertexLoader.hpp"
 #include <queue>
-
+ 
 AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
     globalInverse = glm::mat4(1.0f);
     updatePriority = 3;
@@ -18,11 +18,9 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Compon
     boneMatrices.reserve(100);
     for (int i = 0; i < 100; i++)
     boneMatrices.push_back(glm::mat4(1.0f));
-    try {
+
     VertexLoader::loadModelAnimations(this, boneNodes, filePath);
-    } catch (...) {
-        int q = 1;
-    }
+
     stopwatch.resetTime();
     loopCurrent = false;
     starttick = 0;

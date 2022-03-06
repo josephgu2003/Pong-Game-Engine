@@ -42,13 +42,13 @@ struct aiNodeHolder {
 class Animation {     
 private:
     std::string name;
-    std::vector<Bone> bones;
+    std::vector<Bone> bones; 
     
     int ticksPerSec;
     float duration;
     void makeBones(const aiAnimation* animation, std::vector<BoneNode>& boneNodes);
 public:
-    std::string rootBone = "";
+
     Animation();
     Animation(aiAnimation* animation, std::vector<BoneNode>& boneNodes);
     const std::string& getName(); 

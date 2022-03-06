@@ -36,7 +36,7 @@ void Animation::makeBones(const aiAnimation* animation, std::vector<BoneNode>& b
             if (s == name) {
                 index = i;
                 return true; 
-            } 
+            }
         }  
         return false;
     };

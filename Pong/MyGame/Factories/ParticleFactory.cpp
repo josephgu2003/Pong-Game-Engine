@@ -14,6 +14,7 @@
 #include "PPhysicsComponent.hpp"
 #include "PSpinComponent.hpp"
 #include "SphereRefresh.hpp"
+#include "Renderer.hpp"
 
 std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSeed PESeed, glm::vec3 posVec_) { 
     std::shared_ptr<ParticleSystem> particle;
@@ -65,13 +66,18 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             
             
         case PE_MIST: {
-            int numParticles = 100;
+            auto foliageDraw = [] (Renderer* r, GraphicsComponent* gc) {
+                r->renderSoftParticles(gc); 
+            };
+              
+            int numParticles = 100; 
             particle = std::make_shared<ParticleSystem>(numParticles, 1000.0);
             shader->init("Shaders/Billboard.vs", "Shaders/MistFShader.fs");
-            AssetManager::loadTexture(TEX_MIST, &map.alphaMap, false);
-            std::shared_ptr<GraphicsComponent> gc =  std::make_shared<PQuadGraphicsComponent>(*particle.get(), numParticles, 25.0, shader, map);
+            AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
+            std::shared_ptr<GraphicsComponent> gc =   std::make_shared<PQuadGraphicsComponent>(*particle.get(), numParticles, 10.0, shader, map);
+            gc->setDrawCall(foliageDraw); // draw without depth testing , and
             particle->addComp(gc);
-            particle->addComponent<PRefreshComponent>(*particle.get(), 20.0, 0.4, 5, glm::vec3(30,2,30), glm::vec3(0, 0, 0), glm::vec3(0.02, 0, 0.02));
+            particle->addComponent<PRefreshComponent>(*particle.get(), 20.0, 5, 5, glm::vec3(20,1,20), glm::vec3(0, 0, 0), glm::vec3(0.02, 0, 0.02));
             particle->addComponent<PPhysicsComponent>(*particle.get(), 0, 1.0);
             break;
         };

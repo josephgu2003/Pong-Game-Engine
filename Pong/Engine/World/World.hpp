@@ -66,6 +66,10 @@ private:
      if (c->template getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
          worldRenderingManager.insertGraphicsComponent(gc);
      }
+        std::weak_ptr<LightComponent> lc;
+        if (c->template getComponentRef<LightComponent>(lc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+            worldRenderingManager.insertLightComponent(lc);
+        } 
     }
     
     template <typename T>

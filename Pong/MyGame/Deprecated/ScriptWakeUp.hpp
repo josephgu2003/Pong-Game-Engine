@@ -16,17 +16,19 @@
 #include "uiLayout.hpp"
 #include "uiFrame.hpp"
 #include "uiText.hpp"
+
 struct IntroPoem {
     int step;
     float firstTime;
     std::shared_ptr<uiFrame> uf;
-    std::shared_ptr<uiText> line1;
+    std::shared_ptr<uiText> line1; 
     std::shared_ptr<uiText> line2;
     std::shared_ptr<uiText> line3;
     std::shared_ptr<uiText> line4;
     std::shared_ptr<uiText> line5;
     bool tick(uiLayout* ui, float time);
 };
+
 class ScriptWakeUp : public Script {
 private:
     struct IntroPoem introPoem;

@@ -7,7 +7,7 @@
 
 #include "ScriptWolfBoyOne.hpp"
 #include "AnimComponent.hpp"
-#include "MyActorFactory.hpp"
+#include "MyActorFactory.hpp" 
 #include "CombatComponent.hpp" 
 #include "FallingLetters.hpp"
 #include "SwordWorld.hpp"
@@ -74,7 +74,7 @@ void ScriptWolfBoyOne::act() {
         }
         case 4: {
             if (!isWaiting()) {
-                speak("Moonbell", "So you are the last hunter? The rest have left.", 2.0);
+                speak("Moonbell", "If your level were any lower you'd be blind...", 3.0);
             }
             waitFor(3.0);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
@@ -82,15 +82,15 @@ void ScriptWolfBoyOne::act() {
         }
         case 5: {
             if (!isWaiting()) {
-                speak("Floro", "Who are you talking to?", 2.0);
+                speak("Snowclaw", "I think you know why I am here. I have heard the news.", 4.0);
             }
             waitFor(2.0);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             break; 
         }
         case 6: {
-            std::vector<std::string> lines = {"You there! Who commands you? Answer me!"};
-            std::vector<float> duration = {2.0f,3.0f};
+            std::vector<std::string> lines = {"The news are wrong. False rumors."};
+            std::vector<float> duration = {4.0f};
             makeSpeech("Moonbell", lines, duration);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             step++;
@@ -98,11 +98,11 @@ void ScriptWolfBoyOne::act() {
         }
         case 7: {if (noActiveSpeech()) step++; break;}
         case 8: {
-            std::vector<std::string> lines = {"I don't know who ordered us here.",
-                "They paid us handsomely.", "But even I know that it's for the greater good.",
-                "The power you hold is not of this world."
+            std::vector<std::string> lines = {"No one commands me.",
+                "I am the wolf who hunts alone.", "But even I know that it's for the greater good.",
+                "I have always doubted you even before." 
             };
-            std::vector<float> duration = {3.0f, 3.0f, 3.0f, 4.0f};
+            std::vector<float> duration = {3.0f, 3.0f, 4.0f, 4.0f};
             makeSpeech("Snowclaw", lines, duration);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             
@@ -125,7 +125,7 @@ void ScriptWolfBoyOne::act() {
         }; 
         case 11: {
             if (!isWaiting()) {
-            std::vector<std::string> lines = {"I'm no monster.", "You, try fighting him yourself.", "Eagles can't fight the battles of rabbits, so it's not proper for me to take this.", "You have a light in your pocket, set it free."};
+            std::vector<std::string> lines = {"I'm no monster.", "You, please fight this bastard for me.", "Eagles can't fight the battles of rabbits, so it's not proper for me to take this.", "You have a light in your pocket, set it free."};
             std::vector<float> durations = {2.5f, 2.5f, 3.5f, 3.5f};
             makeSpeech("Moonbell", lines, durations);
             } 
@@ -165,7 +165,7 @@ void ScriptWolfBoyOne::act() {
             speak("Moonbell", "Do you regret it now? You should've stayed away! Why?", 2.0f);
             getActorNamed("Moonbell")->orientYawTo(getActorNamed("Snowclaw"));
             getActorNamed("Moonbell")->getComponent<AnimComponent>()->playAnim("DrawWeapon", 20,40);
-            step++;
+            step++; 
             break;
         }
         case 16: {

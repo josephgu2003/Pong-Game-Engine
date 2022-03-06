@@ -74,7 +74,7 @@ void SaveChar::load(GameLevel* g, const nlohmann::json& i) {
             int FactoryEnum = i["FactoryEnum"];
             std::shared_ptr<Actor> actor = af.makeActor(FactoryEnum);
             int worldID = i["WorldID"];
-        
+           
             glm::vec3 pos;
             MySaveGame::loadPos(pos, i);
             

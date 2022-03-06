@@ -32,6 +32,8 @@ class GraphicsComponent : public Component, public GraphicsObject { // for actor
 protected:
     std::weak_ptr<VertexMesh> mesh;
     DrawCall drawCall;
+    std::shared_ptr<GraphicsObject> LODmesh;
+    bool useLOD;
 public:
     GraphicsComponent(Componentable& actor, Shader* shader, const Material& map, DrawPass dp);
     virtual ~GraphicsComponent();
@@ -39,12 +41,13 @@ public:
     virtual void initModel(const std::string& model);
     void initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh);
     
-    void init(VertexLoadFunc vertexLoadFunc);
+    void init(VertexLoadFunc vertexLoadFunc); 
     
     virtual void tick() override;
     virtual void draw(Renderer* r) override;
     void setDrawCall(DrawCall dc);
     void setColor(float r, float g, float b);
+    void setLODMesh(const std::shared_ptr<GraphicsObject>&& lodmesh);
 }; 
    
 

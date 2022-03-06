@@ -19,7 +19,7 @@ class Game;
 typedef void (*fireCallback) (Game*);
 
 class uiText : public uiPiece {
-private:
+private: 
     Game* g = nullptr; //spaggetttiiiii
     fireCallback callback;
     float fontsize;

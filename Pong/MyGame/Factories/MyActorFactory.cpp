@@ -23,6 +23,7 @@
 #include "CollisionComponent.hpp" 
 #include "MyGameItems.hpp"
 #include "LightComponent.hpp"
+#include "MovementController.hpp"
 
 typedef std::shared_ptr<Component> ActComp;
 
@@ -144,7 +145,7 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             actor->Componentable::addComponent<CollisionComponent>(*(actor.get()), AxisBounds(0.2f,-0.2f),AxisBounds(0.4f,-0.4f),AxisBounds(0.2f,-0.2f));
             
             Material map;
-        //    AssetManager::loadTexture("Resources/Models/ScarfChar/scarfchar_diffuse.png", &map.diffuse, true);
+        //    AssetManager::loadTexture("Resources/Models/ScarfChar/scarfchar_diffuse.png", &map.diffuse, true); 
             AssetManager::loadTexture("Resources/Models/ScarfChar/girl_diffuse.png", &map.diffuse, true);
             AssetManager::loadTexture(TEX_BLANK_NORMALS, &map.normMap, false);
             
@@ -153,20 +154,22 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             shader->setUniform("animated", false); 
             shader->setUniform("size", 1.0);
             shader->setUniform("brightness", 0.0);
-            
+             
             actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
+            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/ScarfChar/yay.fbx");
             
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/ScarfChar/yay.fbx");
-            actor->addComp(gc);   
-            ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/ScarfChar/yay.fbx");
+            actor->addComp(gc);
              
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Idle");
-            actor->addComp(ac);
+            actor->addComp(ac); 
          //   actor->setScale(0.005);
             actor->bakeRotation(glm::vec3(180, 0, 0));
             actor->setScale(0.015);
-            break;
+             
+            actor->addComponent<MovementController>(*actor.get());
+            break; 
              
         }
         case ACTOR_KNIGHT : {
@@ -186,11 +189,12 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             
             actor->Componentable::addComponent<PhysicsComponent>(*(actor.get()), true);
             
-            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
-            static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
-            actor->addComp(gc);
             ActComp ac = std::make_shared<AnimComponent>(*(actor.get()),  "Resources/Models/Knight/hollowknight.fbx");
             
+            ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel( "Resources/Models/Knight/hollowknight.fbx");
+            actor->addComp(gc); 
+       
             static_pointer_cast<AnimComponent>(ac)->setDefaultAnim("Passive");
             actor->addComp(ac);
             break;

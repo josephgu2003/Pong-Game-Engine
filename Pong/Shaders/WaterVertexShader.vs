@@ -13,8 +13,10 @@ out vec3 Normals;
 layout(std140) uniform ViewProj
 {
     mat4 viewProjMat;
-
+    mat4 viewMath;
+    mat4 projMat;
 };
+
 
     void main()
     {

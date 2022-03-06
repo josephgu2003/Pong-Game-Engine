@@ -9,7 +9,7 @@
 
 #include "Positionable.hpp"
 
-DevPosTracker::DevPosTracker(float xpos, float ypos, float xscale, float yscale) : uiText("", xpos, ypos,DEFAULT_FONTSIZE, DEFAULT_LINESPACE) {
+DevPosTracker::DevPosTracker(float xpos, float ypos, float xscale, float yscale) : uiText("", xpos, ypos, 0.0002f, DEFAULT_LINESPACE) {
      
 }
 

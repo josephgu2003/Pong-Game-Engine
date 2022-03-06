@@ -19,6 +19,7 @@ Camera::Camera() : Positionable() {
     interpolationDuration = 1.0f;
     oldDir = glm::vec3(0.0f);
     oldPos = glm::vec3(0.0f);
+    alignmentToActorDir = glm::angleAxis(0.0f, glm::vec3(0.0f,1.0f,0.0f));
 }
 
 Camera::~Camera() { 
@@ -45,15 +46,15 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
             
         case CAM_FOLLOW_ACTOR_ALIGNED: {
             float h = actor->getPos().y;
-            orientYawTo(actor->getDir());
+            glm::vec3 newDir = alignmentToActorDir * glm::vec4(actor->getDir(),1.0f);
+            orientYawTo(newDir);
             glm::vec3 posVec = (actor->getPos()+CAM_OFFSET - 3.0f * getDir());
-            glm::vec3 dirVec = actor->getDir();
             
             if (posVec.y < h) {
-                posVec.x += (h-posVec.y)*dirVec.x/dirVec.y;
-                posVec.z += (h-posVec.y)*dirVec.z/dirVec.y;
+                posVec.x += (h-posVec.y)*newDir.x/newDir.y;
+                posVec.z += (h-posVec.y)*newDir.z/newDir.y;
                 posVec.y += (h-posVec.y);
-            }
+            } 
             
             if (interpolating) {
                 float ratio = watch.getTime() / interpolationDuration;
@@ -61,11 +62,11 @@ void Camera::updateVecs() { //updates vecs, keeps correct positioning relative t
                     interpolating = false;
                     return;
                 } 
-                orientYawTo(glm::mix(oldDir, actor->getDir(), ratio));
+                orientYawTo(glm::mix(oldDir, newDir, ratio));
                 setPos(glm::mix(oldPos, posVec, ratio));
             } else {
-                orientYawTo(actor->getDir()); // align with actor
-                setPos(posVec);
+                orientYawTo(newDir); // align with actor
+                setPos(posVec); 
             }
             break;
         }
@@ -119,3 +120,9 @@ void Camera::setStateAndInterpolate(CameraState state_, float timeTo) {
     oldDir = getDir();
     oldPos = getPos();
 }
+
+void Camera::setAlignmentToActorDir(glm::vec3 axis, float angleDegrees) {
+    alignmentToActorDir = glm::angleAxis(glm::radians(angleDegrees),
+                                         axis);
+}
+ 

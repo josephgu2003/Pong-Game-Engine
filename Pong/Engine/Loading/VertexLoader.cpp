@@ -15,9 +15,10 @@
 #include <assimp/Importer.hpp>
 #include "stb_image.h" 
 
-BoneInfoMap VertexLoader::inProgBoneMap;
-int VertexLoader::boneCounter = 0; 
-std::map<std::string, BoneInfoMap> VertexLoader::loadedBoneDataMaps;
+BoneList VertexLoader::activeBoneList;
+
+std::map<std::string, BoneList> VertexLoader::loadedBoneLists;
+std::map<std::string, bool> VertexLoader::bonesReferencedByMeshes;
 int VertexLoader::indexOffset = 0;
 std::map<std::string, VertexData> VertexLoader::loadedVertexData;
 
@@ -189,33 +190,39 @@ void VertexLoader::loadModel(std::string filePath_, unsigned int& vao, unsigned 
     loadModelAbstraction<TBNBWVertex>(filePath_, vao, vbo, ebo, numIndices, deleteDataOnDestruct, true);
 }  
 
-void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePath_) {
+void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::vector<BoneNode>& boneNodes, std::string filePath_) {
     
     Assimp::Importer importer;
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
     
-    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate);
+    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace); 
      
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
         printf("%s", s.c_str());
         return;
-    } 
+    }
     
-    if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
+    if (loadedBoneLists.find(filePath_) == loadedBoneLists.end()) {
+        readAssimpTree(scene->mRootNode, boneNodes);
+        
         std::vector<TBNBWVertex> vertices;
         std::vector<GLuint> indices;
         processNode(scene->mRootNode, scene, vertices, indices);
-        loadedBoneDataMaps.insert(std::pair<std::string, BoneInfoMap>(filePath_, inProgBoneMap));
+         
+        boneNodes = activeBoneList;
+         
+        if (activeBoneList.size() != 0) loadedBoneLists.insert(std::pair<std::string, BoneList>(filePath_, activeBoneList));
+    } else {
+        boneNodes = loadedBoneLists.find(filePath_)->second;
     }
-    BoneInfoMap& bim = loadedBoneDataMaps.find(filePath_)->second;
-    anim_->setBoneDataMap(bim);
-    anim_->readAssimpTree(scene->mRootNode);
-    for (int i = 0; i < scene->mNumAnimations; i ++) {
+ 
+    for (int i = 0; i < scene->mNumAnimations; i ++) { 
         anim_->addAnimation(scene->mAnimations[i], scene);
     }
+    
     reset();
-}
+} 
 
 void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices, std::vector<GLuint>& indices) {
     
@@ -259,7 +266,7 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
     };
     std::vector<TBNBWVertex> newVertices; 
     newVertices.reserve(mesh->mNumVertices);
-    
+     
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
         glm::vec3 pos_;
         loadVec3(pos_, mesh->mVertices, i);
@@ -285,7 +292,7 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
         float boneWeights[MAX_BONE_WEIGHTS];
         for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
         {
-            boneIDs[i] = -1;
+            boneIDs[i] = -1; 
             boneWeights[i] = 0.25f;
         }
  
@@ -306,7 +313,9 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<T
         Material m;
         loadMaterialTextures(m, material);
     }
-    BoneWeightVertices(newVertices, mesh, scene);
+    if (activeBoneList.size() != 0) {
+        BoneWeightVertices(newVertices, mesh, scene);
+    }  
     vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
     indexOffset += mesh->mNumVertices;
 }
@@ -329,27 +338,37 @@ void VertexLoader::loadMaterialTextures(Material& mat, aiMaterial* material) {
 void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                                       const aiScene* scene) {
     int x = mesh->mNumBones;
+     
+    auto findBone = [&] (const std::string name, int& index) -> BoneNode* {
+        for (int i = 0; i < activeBoneList.size(); i++) {
+            BoneNode& node = activeBoneList.at(i);
+            if (node.name == name) {
+                index = i;
+                return &node;
+            }
+        }
+        return nullptr;
+    };
     
+    // iterate over number of bones in this mesh
     for (int boneIndex = 0; boneIndex < x; ++boneIndex) {
-        int id = -1;
+        int id = -1; // represents the location in the BoneMap
         std::string boneName(mesh->mBones[boneIndex]->mName.C_Str());
         
-        if (inProgBoneMap.find(boneName) == inProgBoneMap.end())
-        {
-            BoneData data;
-            data.id = boneCounter;
-            ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix, data.offset);
-            inProgBoneMap[boneName] = data;
-            id = inProgBoneMap.size()-1;
-            boneCounter++;
-        }
-        else {
-            id = inProgBoneMap[boneName].id;
+        BoneNode* boneNode = findBone(boneName, id);
+        
+        if (boneNode == nullptr)
+        { 
+            throw "Mesh referenced bone not found in Asssimp Node hierarchy.";
+        } else {
             glm::mat4 offsetMatrix;
             ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix, offsetMatrix);
-            if (inProgBoneMap[boneName].offset != offsetMatrix) {
-                printf("Error : %s offset differs across meshes \n", boneName.c_str());
+            boneNode->offset = offsetMatrix;
+            
+            if (bonesReferencedByMeshes.find(boneName)->second && boneNode->offset != offsetMatrix) {
+                throw "Error : %s offset differs across meshes \n";
             }
+            bonesReferencedByMeshes.find(boneName)->second = true;
         }
         // id of bone from mesh obtained,  or new bone added to map
         assert(id != -1);
@@ -363,13 +382,18 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
             setVertexBoneData(&vertices[vertexId], id, weight);
         }
     }
+    
+    // normalize vertex weights
     for (int i = 0; i < vertices.size(); i++) {
         float sum = 0.0f;
+        
+        // get the sum of the weights
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) {
             if (vertices[i].boneIDs[j] != -1)
                 sum += vertices[i].boneWeights[j];
         }
         float factor = 1.0f / sum;
+        // normalize
         for (int j =0 ; j < MAX_BONE_WEIGHTS; j++) {
             if (vertices[i].boneIDs[j] != -1)
                 vertices[i].boneWeights[j] *= factor;
@@ -400,9 +424,9 @@ void VertexLoader::setVertexBoneData(TBNBWVertex* v, int id, float weight) {
 }
 
 void VertexLoader::reset() {
-    inProgBoneMap.clear();
+    activeBoneList.clear();
     indexOffset = 0;
-    boneCounter = 0; //might have other erferences to this
+    bonesReferencedByMeshes.clear();
 }
 
 void VertexLoader::setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout) { // assumes floats
@@ -717,3 +741,62 @@ void VertexLoader::loadSimpleCube(unsigned int vao, unsigned int vbo, unsigned i
     glBindVertexArray(0);
 }
 
+/**const aiNode* VertexLoader::findRootBone(const aiScene* scene) {
+    std::vector<const aiNode*> nodesNextLvl; // precursors
+    std::vector<const aiNode*> buffer;
+    
+    nodesNextLvl.push_back(scene->mRootNode);
+    
+    while (!nodesNextLvl.empty()){
+        for (int i = 0; i < nodesNextLvl.size(); i++) {
+            const aiNode* node = nodesNextLvl.at(i);
+            
+            if (map_.find(node->mName.C_Str()) != map_.end()) {
+                return node;
+            }
+            
+            if (node->mChildren == NULL) {
+                continue;
+                
+            }
+            
+            for (int j = 0; j < node->mNumChildren; j ++) { //buffer next lvl
+                const      aiNode* precursor =
+                node->mChildren[j];
+                buffer.push_back(precursor);
+            }
+        }
+        nodesNextLvl = buffer;
+        buffer.clear();
+    }
+    return nullptr;
+}
+**/
+void VertexLoader::readAssimpTree(const aiNode* node, std::vector<BoneNode>& boneNodes) {
+    std::queue<const aiNode*> nodes;
+    std::queue<int> parentIndices;
+    
+    nodes.push(node);
+    parentIndices.push(-1);
+    
+    while (!nodes.empty()) {
+        const aiNode* aNode = nodes.front();
+        nodes.pop();
+        int parentIndex = parentIndices.front();
+        parentIndices.pop();
+        
+        std::string bonename = aNode->mName.C_Str();
+        
+        activeBoneList.emplace_back(bonename, aNode->mTransformation, parentIndex);
+        bonesReferencedByMeshes.insert(std::pair<std::string, bool>(bonename, false));
+        int thisIndex = boneNodes.size()-1;
+        
+        for (int i = 0; i < aNode->mNumChildren; i++) {
+            nodes.push(aNode->mChildren[i]);
+            parentIndices.push(thisIndex);
+        }
+    }
+
+}
+
+ 

@@ -15,11 +15,7 @@
 #include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-
-struct BoneData {
-    int id;
-    glm::mat4 offset;
-};
+#include "Positionable.hpp"
 
 struct KeyPos {
     glm::vec3 pos;
@@ -49,7 +45,7 @@ private:
     glm::mat4 localTransform;
     
     glm::mat4 posTransform;
-    glm::mat4 rotationTransform;
+    glm::quat rotationTransform;
     glm::mat4 scalingTransform;
     
     template<typename keytype>
@@ -73,14 +69,14 @@ private:
     inline void interpolateRotation(float t) {
         if (1 == numRotations) {
             auto rotation = glm::normalize(rotations[0].rotation);
-                       rotationTransform = glm::toMat4(rotation);
+                       rotationTransform = rotation;
         }
         int index = getCurrentKeyIndex<KeyRotation>(rotations, t);
         float scaleFactor = getScaleFactor(rotations[index].timestamp, rotations [index+1].timestamp, t);
         glm::quat newRotation = glm::slerp(rotations[index].rotation,
                                       rotations[index+1].rotation, scaleFactor);
          //    newRotation = glm::normalize(newRotation);
-        rotationTransform = glm::toMat4(newRotation);
+        rotationTransform = newRotation;
     }
 
     inline void interpolateScaling(float t) {
@@ -98,13 +94,18 @@ private:
 public:
     float getScaleFactor(float lastT, float nextT, float currentT);
     
-    Bone(const std::string& name, int ID, const aiNodeAnim* channel);
+    Bone(const std::string& name, const aiNodeAnim* channel);
     
     const glm::mat4& getLocalTransform();
     std::string getBoneName() const;
-    int getBoneID();
     
     void tick(float timestamp_);
+    
+    void updatePositionable(Positionable* p) {
+        p->updateScaling(scalingTransform);
+        p->updateRotation(rotationTransform);
+        p->updateTranslation(posTransform); 
+    }
     
 };
 #endif /* Bone_hpp */

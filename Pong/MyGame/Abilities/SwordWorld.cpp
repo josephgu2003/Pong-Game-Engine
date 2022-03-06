@@ -13,14 +13,13 @@
 
 void SwordWorld::call() {
     ParticleFactory pf; 
-    std::shared_ptr<ParticleSystem> swords = pf.makeParticles(PE_MOONBELL_SWORDS, actor->getPos()+glm::vec3(0,0,0));
-    swordsRef = swords; 
-    world->insert<ParticleSystem>(swords);  
+    std::shared_ptr<ParticleSystem> swords = pf.makeParticles(PE_MIST, actor->getPos()+glm::vec3(0, -3.0f, 0));
+    swordsRef = swords;  
+    world->insert<ParticleSystem>(swords);   
     if (auto ac = actor->getComponent<AnimComponent>()) {
         ac->playAnim("DrawWeapon",false);
     } 
-} 
-
+}
 void SwordWorld::tick() {
     duration -= (float)glfwGetTime();
     if (duration < 0.0) on = false; 

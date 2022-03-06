@@ -16,6 +16,7 @@ GraphicsComponent::GraphicsComponent(Componentable& actor, Shader* shader_, cons
     drawCall = [] (Renderer* r, GraphicsComponent* gc) {
         r->renderGeneric(gc);
     };
+    useLOD = false;
 }
 
 GraphicsComponent::~GraphicsComponent() {
@@ -36,7 +37,11 @@ void GraphicsComponent::initModel(const std::string& model) {
 } 
 
 void GraphicsComponent::draw(Renderer* r) {
-    drawCall(r, this);
+    if (useLOD) {
+       // drawCall(r, LODmesh.get());
+    } else {
+        drawCall(r, this);
+    }
 } 
     
 void GraphicsComponent::initGrid(int verticesX, int verticesY, float scale, std::shared_ptr<VertexMesh>& mesh_) {
@@ -55,4 +60,8 @@ void GraphicsComponent::setColor(float r, float g, float b) {
 
 void GraphicsComponent::init(VertexLoadFunc vertexLoadFunc) {
     vertexLoadFunc(VAO, VBO, EBO, numIndices);
+}
+
+void GraphicsComponent::setLODMesh(const std::shared_ptr<GraphicsObject>&& lodmesh) {
+    LODmesh = lodmesh;
 }

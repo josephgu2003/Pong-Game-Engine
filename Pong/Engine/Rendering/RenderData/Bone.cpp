@@ -8,12 +8,11 @@
 #include "Bone.hpp"
 #include <iostream>
 
-Bone::Bone(const std::string& name_, int ID, const aiNodeAnim* channel) {
+Bone::Bone(const std::string& name_, const aiNodeAnim* channel) {
     localTransform = glm::mat4(1.0f);
     posTransform = glm::mat4(1.0f);
     rotationTransform = glm::mat4(1.0f);
-    scalingTransform = glm::mat4(1.0f);
-    id = ID;
+    scalingTransform = glm::mat4(1.0f); 
     name = name_;
     numPos = channel->mNumPositionKeys;
     numRotations = channel->mNumRotationKeys;
@@ -48,14 +47,14 @@ Bone::Bone(const std::string& name_, int ID, const aiNodeAnim* channel) {
 
 const glm::mat4& Bone::getLocalTransform() { return localTransform; }
 std::string Bone::getBoneName() const { return name; }
-int Bone::getBoneID() { return id; }
+
 
  
 void Bone::tick(float timestamp_) {
     interpolatePos(timestamp_);
     interpolateRotation(timestamp_);
     interpolateScaling(timestamp_);
-    localTransform = posTransform * rotationTransform * scalingTransform;
+    localTransform = posTransform * glm::toMat4(rotationTransform) * scalingTransform;
 } 
  
 

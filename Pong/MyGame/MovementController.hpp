@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "Component.hpp"
+#include "Watch.hpp"
 
 class Actor;
 
@@ -21,10 +22,13 @@ enum MovementDirection {
 };
 
 enum MovementMode {
+    MOVEMODE_PARALYZED,
     MOVEMODE_IDLE,
     MOVEMODE_WALK,
     MOVEMODE_RUN
 };
+
+
 
 static const float walkSpeed = 0.03f;
 static const float runSpeed = 0.06f;
@@ -32,10 +36,14 @@ static const float runSpeed = 0.06f;
 class MovementController : public Component {
 private:
     MovementMode moveMode;
-
+    
+    float timeLeftOnParalysis = 0.0f;
+    Watch watch;
 public:
     MovementController(Actor& a);
     void move(MovementDirection dir);
+    void setMovementMode(MovementMode mm);
+    void paralyze(float duration);
     void makeIdle();
     void tick() override;
 };

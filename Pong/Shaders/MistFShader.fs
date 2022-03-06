@@ -15,4 +15,5 @@ uniform sampler2D gradient;
         float intensity = texture(gradient, TexCoords).r;
 
         FragColor = vec4(colors*alpha*intensity, alpha*intensity*intensity);
+        // FragColor = vec4(1,1,1,1);
     }

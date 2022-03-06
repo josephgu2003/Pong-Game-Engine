@@ -36,11 +36,12 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("size", 0.03f);
             shader->setUniform("brightness", 0.0f);
             
-            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            std::shared_ptr<GraphicsComponent> gc =  std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
             static_pointer_cast<GraphicsComponent>(gc)->initModel(MOD_WELL);
             prop->addComp(gc);
             break;
         }
+            
         case PROP_TREE: {
             Material map;
             AssetManager::loadTexture("Resources/Map/tree/source/treediffuse.png", &map.diffuse, true);
@@ -51,10 +52,12 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("brightness", 0.0f);
             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
-            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree2.fbx");
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/tree/source/tree2.fbx"); 
+         //   gc->setDrawCall(foliageDraw); 
             prop->addComp(gc);
             break;
         }
+              
         case PROP_MOUNT: {
             Material map;
             //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
@@ -125,28 +128,50 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
         }
             
         case PROP_LIGHTRAY: {
-            Material map;
-            Shader* shader = new Shader("Shaders/BillboardNonInstanced.vs", "Shaders/GenericUI.fs");
-            AssetManager::loadTexture(TEX_MIST, &map.diffuse, false);
-            shader->use();
-            shader->setUniform("alpha", 1.0);
+            Material map;  
             
-            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
-            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
-                std::vector<PosVertex> mesh;
-                VertexLoader::load2DQuadData(vao, vbo, ebo, numIndices, glm::vec2(10, 10), glm::vec2(0, 0));
-            });
+            AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
+            
+            Shader* shader = new Shader("Shaders/Fresnel.vs",  "Shaders/Moonbeam.fs");
+            shader->use();
+            shader->setUniform("color", glm::vec3(1.0,1.05,1.2));  
+            shader->setUniform("brightness", 3.0f);
+               
+            std::shared_ptr<GraphicsComponent> gc =    std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+             
+            gc->initModel("Resources/Abilities/moonbeam.fbx");
+            gc->setDrawCall(additiveDraw);
             prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(90, 0 , 0));
+            break;
+        }
+            
+        case PROP_IMPRISONMENT: {
+            Material map;
+            
+            AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
+            
+            Shader* shader = new Shader("Shaders/Fresnel.vs",  "Shaders/Imprisonment.fs");
+            shader->use();
+            shader->setUniform("color", glm::vec3(1.0,1.05,1.2));
+            shader->setUniform("brightness", 3.0f); 
+               
+            std::shared_ptr<GraphicsComponent> gc =    std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+             
+            gc->initModel("Resources/Abilities/imprisonment.fbx");
+            gc->setDrawCall(additiveDraw);
+            prop->addComp(gc);  
+            prop->bakeRotation(glm::vec3(-90, 0 , 0)); 
             break;
         }
             
         case PROP_SWORD_EXP: {
             Material map;
             
-            AssetManager::loadTexture(TEX_MIST, &map.alphaMap, true);
-            
+            AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
+             
             Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/SwordExplosion.fs");
-            shader->use();
+            shader->use(); 
             shader->setUniform("color", glm::vec3(0.5,0.5,1.0));
             shader->setUniform("brightness", 5.0f);
             
@@ -162,25 +187,27 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
         }
             
         case PROP_AURORA: {
-            Material map;
+            Material map; 
             
-            AssetManager::loadTexture(TEX_MIST, &map.alphaMap, true);
+            AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
             
-            Shader* shader = new Shader("Shaders/SketchVShader.vs",  "Shaders/Aurora.fs");
+            Shader* shader = new Shader("Shaders/Aurora.vs",  "Shaders/Aurora.fs");
             shader->use(); 
-            shader->setUniform("color", glm::vec3(0.5,1.2,1.0));
-            shader->setUniform("brightness", 5.0f);
-             
-            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            shader->setUniform("color", glm::vec3(0.5,1.2,1.0)); 
+            shader->setUniform("brightness", 3.0f);
+              
+            std::shared_ptr<GraphicsComponent> gc =   std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
-                VertexLoader::loadModelSimple("Resources/Map/aurora.fbx", vao, vbo, ebo, numIndices);
+                VertexLoader::loadModelSimple("Resources/Map/aurora.fbx", vao, vbo, ebo, numIndices); 
             });
             gc->setDrawCall(additiveDraw);
             prop->addComp(gc);
             prop->bakeRotation(glm::vec3(90, 0 , 0));
             break;
         }
+            
+    
 
         default:
             break;

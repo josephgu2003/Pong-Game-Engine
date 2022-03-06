@@ -46,12 +46,18 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
+    vec4 fragDiffuse = texture(diffuse, TexCoords).rgba;
+    
+    if (fragDiffuse.a <= 0.0) {
+        discard;
+    }
+    
     vec3 viewDir = vec3(tanspaceinfo.TangentViewPos-tanspaceinfo.TangentFragPos);
     float fogFactor = exp(-pow(length(viewDir)*0.03,2));
     vec3 norm = normalize(texture(normMap, TexCoords).rgb * 2.0 - 1.0);
      
     vec3 fragColor = vec3(0.0);
-    vec3 diffuseColor = texture(diffuse, TexCoords).rgb;
+    vec3 diffuseColor = fragDiffuse.rgb; 
     vec3 specColor = vec3(0,0,0);
     fragColor += CalcDirLight(dirLight, norm, viewDir);
     fragColor += CalcPointLight(tanspaceinfo.tangentLight, tanspaceinfo.TangentFragPos, norm, viewDir, diffuseColor, diffuseColor, specColor);

@@ -48,13 +48,13 @@ void FallingLetters::call() {
      //   anim->playAnim("HollowKnight__Armature|Channel");
     }
     PropFactory pf;
-    auto aurora = pf.makeProp(PROP_AURORA);
-    aurora->setPos(actor->getPos() + glm::vec3(0, 100, 100)); 
+    auto aurora = pf.makeProp(PROP_IMPRISONMENT);
+    aurora->setPos(actor->getPos()); 
     aurora->addComponent<LifeTime<Prop>>(*aurora.get(), 10.0f);
     world->insert<Prop>(aurora);
 }    
  
-void FallingLetters::tick() {  
+void FallingLetters::tick() {   
     duration -= glfwGetTime();
     if (duration < 0) { 
         on = false;

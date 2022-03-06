@@ -8,7 +8,7 @@ layout (location = 0) out vec4 FragColor;
 
     in vec2 TexCoords;
 in vec2 TexCoordsLarger;
-in vec3 Normals;
+in vec3 Normals; 
     in vec3 fragPos;
 
 in TangentSpaceInfo tanspaceinfo; 

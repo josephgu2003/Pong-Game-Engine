@@ -103,6 +103,10 @@ public:
 
     float getDistanceTo(Positionable* b);
     float getDistanceTo(glm::vec3 p);
+    
+    void updateTranslation(const glm::mat4& trans);
+    void updateRotation(const glm::quat& rot);
+    void updateScaling(const glm::mat4& scale);
 };
 
 #endif /* Positionable_hpp */

@@ -21,6 +21,7 @@ enum CameraState {
 class Camera : public Positionable {
     friend class Renderer; 
 protected:
+    glm::quat alignmentToActorDir;
     Positionable* actor = NULL;
     glm::vec3 newRotation;
     bool needRotate;
@@ -42,6 +43,7 @@ public:
     void setState(CameraState state);
     void setStateAndInterpolate(CameraState state, float timeTo);
     void updateVecs();
+    void setAlignmentToActorDir(glm::vec3 axis, float angleDegrees);
     void tick();
 }; 
  

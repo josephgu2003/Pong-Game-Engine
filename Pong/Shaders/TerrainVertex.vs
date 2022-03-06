@@ -15,7 +15,8 @@
 layout(std140) uniform ViewProj
 {
     mat4 viewProjMat;
-
+    mat4 viewMat;
+    mat4 projMat;
 };
 
 

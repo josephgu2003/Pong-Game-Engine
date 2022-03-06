@@ -4,7 +4,7 @@
 //
 //  Created by Joseph Gu on 12/22/21.
 //
-
+  
 #include "SubtitlesSystem.hpp"
 
 
@@ -12,11 +12,11 @@ void SubtitlesSystem::newSoundText(const std::string& text, float duration) {
     if (auto x = activeText.lock()) {
         x->setText(text);
     }
-    textFrame->initFadeFunction(0.0, duration-0.5f, 0.5f);
-}
-
+    textFrame->initFadeFunction(0.0, duration-0.05f, 0.05f);
+} 
   
-void SubtitlesSystem::drawAll(Renderer* r) {
+  
+void SubtitlesSystem::drawAll(Renderer* r) { 
     textFrame->draw(r);
     
 } 

@@ -21,14 +21,17 @@ uniform float size;
 layout(std140) uniform ViewProj
 {
     mat4 viewProjMat;
+    mat4 viewMat;
+    mat4 projMat;
 };
+
     
     void main()  
     {
         mat4 Displacement = mat4(Displacement0, Displacement1, Displacement2, Displacement3);
-        vec4 newPos = viewProjMat * Displacement * vec4(0,0,0,1.0);
+        vec4 newPos = viewMat * Displacement * vec4(0,0,0,1.0);
         newPos.xy = newPos.xy + size * aPos.xy;
-        gl_Position = newPos;
+        gl_Position = projMat * newPos;
       //  vs_out.TextureCoords = TexCoords_;
         TexCoords = TexCoords_;
         duration = duration_;

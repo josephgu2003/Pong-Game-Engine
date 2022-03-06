@@ -18,7 +18,11 @@ void SaveGame::loadGameLevel(GameLevel *g){
     for (auto i = lvlSave.begin(); i != lvlSave.end(); i++) {
         std::shared_ptr<SaveObject> newObj;
         newObj.reset(handleObjectOfType((*i)["Type"]));
+        try {
         newObj->load(g,(*i));
+        } catch (const std::length_error& e) {
+            int i = 0;
+        } 
         saveObjects.push_back((newObj));
     }
 }

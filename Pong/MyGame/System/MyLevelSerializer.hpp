@@ -27,7 +27,7 @@ private:
     inline void convertProp(World* g, int primitiveEnum, const glm::vec3& pos) {
         std::shared_ptr<Prop> a = pf.makeProp(primitiveEnum);
         a->setPos(pos);
-        g->insert<Prop>(a);
+        g->insert<Prop>(a); 
     }
 
 };

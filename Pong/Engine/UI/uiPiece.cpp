@@ -51,6 +51,16 @@ void uiPiece::initFadeFunction(float timeToStart, float timeToFade, float fadeDu
     usingFadeFunction = true; 
 }
 
+void uiPiece::initFadeFunction(float secPerCycle) {
+    fadeFunction = [=] (float time_, uiPiece* s) {
+        float alpha = (1.0f + sin(2.0f * 3.1415f * time_ / secPerCycle)) / 2.0f;
+        s->setUniformForAll("alpha", alpha);
+        return (alpha == 0.0f);
+    };
+    watch.resetTime();
+    usingFadeFunction = true;
+}
+
 void uiPiece::setHiddenStatus(bool status) {
     hidden = status;
 }
@@ -61,4 +71,18 @@ void uiPiece::flipHiddenStatus() {
 
 bool uiPiece::isHidden() {
     return hidden;
+}
+
+void uiPiece::initPeriodicFadeFunction(float timeToStart, float timeToFade, float fadeDuration, float period) {
+    assert(period + timeToStart > timeToFade); // is starting point + period greater than fading point?
+    float fadeRateCoefficient = 1.0f / fadeDuration;
+    fadeFunction = [=] (float time_, uiPiece* s) {
+        float alpha = glm::clamp(fadeRateCoefficient*(fmod(time_-timeToStart, period)), 0.0f, 1.0f);
+        float alpha_ = glm::clamp(fadeRateCoefficient*(std::floor((time_-timeToStart)/ period) * period + timeToFade-time_),0.0f,1.0f); 
+        float realalpha = std::min(alpha, alpha_);
+        s->setUniformForAll("alpha", realalpha);
+        return false;
+    };
+    watch.resetTime();
+    usingFadeFunction = true;
 }

@@ -95,7 +95,7 @@ Renderer::Renderer() {
     
     glGenBuffers(1, &uboViewProj);
     glBindBuffer(GL_UNIFORM_BUFFER, uboViewProj);
-    glBufferData(GL_UNIFORM_BUFFER, 64, NULL, GL_DYNAMIC_DRAW); // allocate 152 bytes of memory
+    glBufferData(GL_UNIFORM_BUFFER, 192, NULL, GL_DYNAMIC_DRAW); // allocate 152 bytes of memory
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboViewProj);
 
@@ -145,6 +145,8 @@ void Renderer::updateViewProj() {
     
     glm::mat4 viewProj = projMat * viewMat;
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
+    glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(viewMat));
+    glBufferSubData(GL_UNIFORM_BUFFER, 128, 64, glm::value_ptr(projMat));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -174,6 +176,10 @@ void Renderer::updateLight(const PointLight& pl) {
      glBufferSubData(GL_UNIFORM_BUFFER, 16, 16, glm::value_ptr(glm::vec4(pl.getAmbient(),0)));
      glBufferSubData(GL_UNIFORM_BUFFER,  2*16,16, glm::value_ptr(glm::vec4(pl.getDiffuse(),0)));
      glBufferSubData(GL_UNIFORM_BUFFER, 3*16, 16, glm::value_ptr(glm::vec4(pl.getSpecular(),0)));
+    glm::vec4 camPos = glm::vec4(0,0,0,0); 
+    if (camera)
+    glm::vec4(camera->getPos(),0);
+    glBufferSubData(GL_UNIFORM_BUFFER, 8*16+16, 16, glm::value_ptr((camPos)));
     
     float attenuationMath[3] = {pl.constant,pl.linear,pl.quadratic};
     glBufferSubData(GL_UNIFORM_BUFFER, 4*16, 12, &attenuationMath[0]);
@@ -211,13 +217,15 @@ void Renderer::updateCamPos() {
     //} else {
         viewMat = glm::lookAt(camPos,camera->getDir()+camPos, glm::vec3(0,1,0));
     //}
-     
-    glm::mat4 viewProj = projMat * viewMat;
+      
+    glm::mat4 viewProj = projMat * viewMat; 
     glBufferSubData(GL_UNIFORM_BUFFER, 0, 64, glm::value_ptr(viewProj));
+    glBufferSubData(GL_UNIFORM_BUFFER, 64, 64, glm::value_ptr(viewMat));
+    glBufferSubData(GL_UNIFORM_BUFFER, 128, 64, glm::value_ptr(projMat));
     glBindBuffer(GL_UNIFORM_BUFFER,0);
-    
+     
     glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
-     glBufferSubData(GL_UNIFORM_BUFFER, 8*16, 16, glm::value_ptr(glm::vec4(camPos,0)));
+     glBufferSubData(GL_UNIFORM_BUFFER, 8*16 + 16, 16, glm::value_ptr(glm::vec4(camPos,0)));
      glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
@@ -404,7 +412,7 @@ void Renderer::renderFoliage(GraphicsObject* r) {
     r->unbind();
     glDepthMask(GL_TRUE);
 }
-
+ 
 void Renderer::renderAdditiveBlend(GraphicsObject* r) {
     glDepthMask(GL_FALSE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE); 
@@ -415,6 +423,17 @@ void Renderer::renderAdditiveBlend(GraphicsObject* r) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
   
+void Renderer::renderSoftParticles(GraphicsObject* r) {
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDisable(GL_DEPTH_TEST);
+    bindGraphicsObject(r);
+    
+    glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, r->getInstanceCount());
+    r->unbind(); 
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void Renderer::resizeViewPort() {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);

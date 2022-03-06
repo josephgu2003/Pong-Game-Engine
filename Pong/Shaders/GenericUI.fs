@@ -11,6 +11,9 @@ uniform float alpha;
     void main()
     {
         vec4 sampled = texture(diffuse, TexCoords);
+        if(sampled.a == 0.0) {
+            discard;
+        }
 
         FragColor = sampled;
         FragColor.a = alpha * FragColor.a;

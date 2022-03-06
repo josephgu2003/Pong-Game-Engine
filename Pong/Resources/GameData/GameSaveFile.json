@@ -1,142 +1,171 @@
-{"main" : [
-    {
-        "Energy": [
-            73.57107543945313,
-            100.0
-        ],
-        "Items" : [0],
-        "FactoryEnum": 4,
-        "Hunger": [
-            81.0707015991211,
-            100.0
-        ],
-        "Life": [
-            100.0,
-            100.0
-        ],
-        "Name": "Floro",
-        "Position": [
-            12.5164909362793,
-            40.72565841674805,
-            30.8816288113594055
-        ],
-        "Relationships": [
-            {
-                "Name1": "Floro",
-                "Name2": "Moonbell",
-                "RelationshipIntensity": 5.0,
-                "RelationshipType": 1,
-                "SecretNickname1": "Flowy",
-                "SecretNickname2": "Bell"
-            }
-        ],
-        "Stamina": [
-            83.72227478027344,
-            100.0
-        ],
-        "Skills:" : {"Swordsmanship" : 1.0},
-        "Type": "Player",
-        "WorldID": 0
-    },
-    {
-        "Energy": [
-            73.57107543945313,
-            100.0
-        ],
-        "FactoryEnum": 4,
-        "Hunger": [
-            81.0707015991211,
-            100.0
-        ],
-        "Life": [
-            0.0,
-            100.0
-        ],
-        "Name": "Floro",
-        "Position": [
-            57.5164909362793,
-            40.72565841674805,
-            -0.8816288113594055
-        ],
-        "Stamina": [
-            83.72227478027344,
-            100.0
-        ],
-        "Type": "Player",
-        "WorldID": 1
-    },
-    {
-        "Energy": [
-            0.0,
-            1.0
-        ],
-        "FactoryEnum": 4,
-        "Hunger": [
-            79.37125396728516,
-            100.0
-        ],
-        "Life": [
-            82.4940185546875,
-            100.0
-        ],
-        "Name": "Moonbell",
-        "PersonalityTraits": [
-            0,
-            1,
-            2
-        ],
-        "Position": [
-            10.72647857666016,
-            43.79308319091797,
-            30.848993182182312
-        ],
-        "Relationships": [
-            {
-                "Name1": "Floro",
-                "Name2": "Moonbell",
-                "RelationshipIntensity": 5.0,
-                "RelationshipType": 1,
-                "SecretNickname1": "Flowy",
-                "SecretNickname2": "Bell"
-            }
-        ],
-        "Stamina": [
-            82.67715454101563,
-            100.0
-        ],
-        "Type": "Char",
-        "WorldID": 0
-    },
-    {
-        "Completed": true,
-        "FactoryEnum": "FloroWakes",
-        "Position": [
-            10.0,
-            20.0,
-            30.0
-        ],
-        "Type": "Script",
-        "WorldID": 0
-    },
-    {
-        "Completed": false,
-        "FactoryEnum": "Snowclaw",
-        "Position": [
-            71.0,
-            20.0,
-            -6.0
-        ],
-        "Type": "Script",
-        "WorldID": 0
-    },    {
-        "Completed": true,
-        "FactoryEnum": "Flowers in the Night",
-        "Position": [
-            71.0,
-            20.0,
-            -6.0
-        ],
-        "Type": "Script",
-        "WorldID": 0
-    }
-]}
+{
+    "main": [
+        {
+            "Energy": [
+                73.57107543945313,
+                100.0
+            ],
+            "FactoryEnum": 4,
+            "Hunger": [
+                80.38372039794922,
+                100.0
+            ],
+            "Items": [
+                0
+            ],
+            "Life": [
+                100.0,
+                100.0
+            ],
+            "Name": "Floro",
+            "Position": [
+                50.5164909362793,
+                40.72565841674805,
+                -50.881628811359406
+            ],
+            "Relationships": [
+                {
+                    "Name1": "Floro",
+                    "Name2": "Moonbell",
+                    "RelationshipIntensity": 5.0,
+                    "RelationshipType": 1,
+                    "SecretNickname1": "Flowy",
+                    "SecretNickname2": "Bell"
+                }
+            ],
+            "Skills:": {
+                "Swordsmanship": 1.0
+            },
+            "Stamina": [
+                83.03529357910156,
+                100.0
+            ],
+            "Type": "Player",
+            "WorldID": 0
+        },
+        {
+            "Energy": [
+                73.57107543945313,
+                100.0
+            ],
+            "FactoryEnum": 4,
+            "Hunger": [
+                81.0707015991211,
+                100.0
+            ],
+            "Life": [
+                0.0,
+                100.0
+            ],
+            "Name": "Floro",
+            "Position": [
+                57.5164909362793,
+                40.72565841674805,
+                -0.8816288113594055
+            ],
+            "Stamina": [
+                83.72227478027344,
+                100.0
+            ],
+            "Type": "Player",
+            "WorldID": 1
+        },
+        {
+            "Energy": [
+                0.0,
+                1.0
+            ],
+            "FactoryEnum": 4,
+            "Hunger": [
+                78.68333435058594,
+                100.0
+            ],
+            "Life": [
+                82.4940185546875,
+                100.0
+            ],
+            "Name": "Moonbell",
+            "PersonalityTraits": [
+                0,
+                1,
+                2
+            ],
+            "Position": [
+                50.72647857666016,
+                43.79308319091797,
+                -50.848993182182312
+            ],
+            "Relationships": [
+                {
+                    "Name1": "Floro",
+                    "Name2": "Moonbell",
+                    "RelationshipIntensity": 5.0,
+                    "RelationshipType": 1,
+                    "SecretNickname1": "Flowy",
+                    "SecretNickname2": "Bell"
+                }
+            ],
+            "Stamina": [
+                81.9892349243164,
+                100.0
+            ],
+            "Type": "Char",
+            "WorldID": 0
+        },
+        {
+            "Completed": true,
+            "FactoryEnum": "FloroWakes",
+            "Position": [
+                10.0,
+                20.0,
+                30.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": true,
+            "FactoryEnum": "Moonlight",
+            "Position": [
+                10.0,
+                20.0,
+                30.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": false,
+            "FactoryEnum": "Imprisonment",
+            "Position": [
+                50.0,
+                20.0,
+                -50.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": false,
+            "FactoryEnum": "Snowclaw",
+            "Position": [
+                71.0,
+                20.0,
+                -6.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": true,
+            "FactoryEnum": "Flowers in the Night",
+            "Position": [
+                71.0,
+                20.0,
+                -6.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        }
+    ]
+}

@@ -133,6 +133,7 @@ void ScriptWakeUp::act() {
             }
             break;
         }
+            
         case 3: {
             if (getActorNamed("Floro")->getDistanceTo(getActorNamed("Moonbell")) < 4.0f) {
                 world->getComponent<NotificationSystem>()->newNotification("SNOW WANDERINGS", 5.0f);
@@ -140,6 +141,7 @@ void ScriptWakeUp::act() {
             }
             break;
         }
+            
         case 4: {
             if (!isWaiting()) {
                 getActorNamed("Moonbell")->orientYawTo(glm::vec3(74,44,-2)-getActorNamed("Moonbell")->getPos());
@@ -161,15 +163,15 @@ void ScriptWakeUp::act() {
         case 6: {
             if (noActiveSpeech()) {
                 if (!isWaiting()) {
-                speak("Floro", "Where am I? Why am I not home?", 3.0f);
+                speak("Floro", "Where are we?", 3.0f);
                 }
                 waitFor(6.0f);
             }
             break;
         }
         case 7: {
-            std::vector<std::string> lines = {"Trauma. I'm sure you will remember in time.", "Something has happened, and we need to find a place to rest.", "Focus on that much for now."};
-            std::vector<float> durations = {4.0f, 4.0f, 4.0f};
+            std::vector<std::string> lines = {"Huh? Remember, you've agreed to accompany me to the Imperial City?", "Don't tell me you've already forgotten?", "I said I'd forgive your transgressions against me if you did.", "Let's go, there are many miles to go."};
+            std::vector<float> durations = {4.0f, 4.0f, 4.0f, 4.0f};
             makeSpeech("Moonbell", lines, durations);
             
             getActorNamed("Moonbell")->orientYawTo(glm::vec3(74.0,getActorNamed("Moonbell")->getPos().y,-2) - getActorNamed("Moonbell")->getPos());
@@ -179,14 +181,14 @@ void ScriptWakeUp::act() {
         }
             
         case 8: {
-            waitFor(28.0f);
+            waitFor(34.0f);
             break;
         }
             
         case 9: {
             if (noActiveSpeech()) {
-                std::vector<std::string> lines = {"You ruined my house once. With ink. I've hated you ever since.", "But now, I only wish you could vandalise my house every day.", "Our homeland has been burnt to the ground. I failed you all as Guardian.", "But I swear I will find who is responsible."};
-                std::vector<float> durations = {3.0f, 3.0f, 4.0f};
+                std::vector<std::string> lines = {"You ruined my house once. With ink. I've hated you ever since.", "But now, I only wish you could vandalise my house every day.", "Better than having my name vandalised by those liars in the Royal Court.", "As a person living in my Guardianship, you wouldn't be safe until the rumors are quelled either."};
+                std::vector<float> durations = {4.0f, 4.0f, 4.0f, 4.0f};
                    makeSpeech("Moonbell", lines, durations);
                 step++;
                 break;
@@ -203,21 +205,21 @@ void ScriptWakeUp::act() {
         }
         case 11: {
             if (!isWaiting()) {
-                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Even ghosts of the night get no rest.", 2.0);
+                getActorNamed("Moonbell")->getComponent<NameComponent>()->speak("Stop! Stop, can't you sense that someone is following us?", 2.0);
                 DirectionalLight            dl2(glm::vec3(0.03,0.03,0.04),glm::vec3(0.05,0.05,0.06),glm::vec3(0.4,0.4,0.4),glm::vec3(-1,-1,0));
                 world->addComponent<DirlightTransition>(*world, 10.0f, dl2);
             }
-            waitFor(3.0);
+            waitFor(3.0); 
             break;
         }
         case 12: {
             world->deleteX<ParticleSystem>(snow.get());
-            snow.reset();
+            snow.reset(); 
             endScene();
             break;
             
         }
-            
+             
         default:
             break;
     }

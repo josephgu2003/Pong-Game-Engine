@@ -172,7 +172,15 @@ void Positionable::setScale(float scale) {
     scalingMatrix = glm::scale(scalingMatrix,glm::vec3(scale,scale,scale));
 }
 
-
+void Positionable::updateTranslation(const glm::mat4& trans) {
+    translationMatrix = trans * translationMatrix;
+}
+void Positionable::updateRotation(const glm::quat& rot) {
+    rotationMatrix = rot * rotationMatrix;
+}
+void Positionable::updateScaling(const glm::mat4& scale_) {
+    scalingMatrix = scale_ * scalingMatrix;
+}
 
 /**
 #include <glm/gtx/vector_angle.hpp> 

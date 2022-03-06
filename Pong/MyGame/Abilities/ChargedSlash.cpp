@@ -46,9 +46,9 @@ void ChargedSlash::call() {
         auto swordexp = props.makeProp(PROP_SWORD_EXP); 
         swordexp->orientYawTo(slashRef.lock()->getDir());
         swordexp->setPos(dynamic_cast<Positionable*>(target)->getPos() + glm::vec3(0,0.5f,0));
-        swordexp->addComponent<LifeTime<Prop>>(*swordexp.get(), 0.3);
+        swordexp->addComponent<LifeTime<Prop>>(*swordexp.get(), 0.8);
         world->insert<Prop>(swordexp);
-           
+            
         world->deleteX(slashRef.lock().get());
     };  
     slash->getComponent<CollisionComponent>()->setOnCollision(cback);

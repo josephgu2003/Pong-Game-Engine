@@ -21,7 +21,8 @@ enum PropEnum {
     PROP_LIGHTRAY,
     PROP_SWORD_EXP,
     PROP_MOUNT,
-    PROP_AURORA
+    PROP_AURORA,
+    PROP_IMPRISONMENT
 };
 
 class PropFactory {

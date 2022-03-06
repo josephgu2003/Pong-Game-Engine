@@ -51,6 +51,8 @@ protected:
     
 public:
     void initFadeFunction(float timeToStart, float timeToFade, float fadeDuration);
+    void initFadeFunction(float secPerCycle);
+    void initPeriodicFadeFunction(float timeToStart, float timeToFade, float fadeDuration, float period);
     uiPiece(glm::vec2 position, glm::vec2 dimensions, std::string vs, std::string fs);
     void draw(Renderer* r) override final;
     void insertChild(const std::shared_ptr<uiPiece>& uip);

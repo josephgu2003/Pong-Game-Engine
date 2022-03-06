@@ -106,7 +106,8 @@ public:
     void renderTerrain(GraphicsObject* r);
     void renderFoliage(GraphicsObject* r);
     void renderGeneric(GraphicsObject* go);
-    void renderAdditiveBlend(GraphicsObject* r); 
+    void renderAdditiveBlend(GraphicsObject* r);
+    void renderSoftParticles(GraphicsObject* go);
 };
 #endif /* Renderer_hpp */
  

@@ -15,9 +15,6 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Compon
     globalInverse = glm::mat4(1.0f);
     updatePriority = 3;
     timeInAnim = 0;
-    boneMatrices.reserve(100);
-    for (int i = 0; i < 100; i++)
-    boneMatrices.push_back(glm::mat4(1.0f));
 
     VertexLoader::loadModelAnimations(this, filePath);
 
@@ -38,7 +35,8 @@ void AnimComponent::tick() {
                 timeInAnim = timeInAnim-endtick + starttick;
             } 
         }
-        activeAnim->updateBoneMatrices(boneMatrices, boneNodes, BoneDataMap,globalInverse,timeInAnim);
+         
+        activeAnim->updateBoneMatrices(boneMatrices, boneNodes, BoneDataMap,globalInverse,timeInAnim, dynamic_cast<Positionable*>(actor));
         
         if (actor->getComponent<GraphicsComponent>()) {
             Shader* shader = actor->getComponent<GraphicsComponent>()->getShader();
@@ -116,11 +114,13 @@ void AnimComponent::playAnimIfNotPlaying(const std::string& name) {
         playAnim(name, true);
     }
 }
+
 void AnimComponent::setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap_) {
     BoneDataMap = BoneDataMap_;
-
+    boneMatrices.reserve(BoneDataMap.size());
+    for (int i = 0; i < BoneDataMap.size(); i++)
+    boneMatrices.push_back(glm::mat4(1.0f)); 
 }
-
 
 const aiNode* AnimComponent::findRootBone(const aiScene* scene, std::map<std::string, BoneData>& map_) {
     std::vector<const aiNode*> nodesNextLvl; // precursors
@@ -155,16 +155,17 @@ const aiNode* AnimComponent::findRootBone(const aiScene* scene, std::map<std::st
 
 
 void AnimComponent::readAssimpTree(const aiNode* node) {
- std::queue<const aiNode*> nodes;
+ std::queue<const aiNode*> nodes; 
  std::queue<int> parentIndices;
- auto checkBoneNameInMap = [] ( std::map<std::string, BoneData>& map, std::string& boneName) {
+ auto checkBoneNameInMap = [&] ( std::map<std::string, BoneData>& map, std::string& boneName) {
      if (map.find(boneName) == map.end()) { //want bones not weighted in vertices, but don't want non bones
          BoneData data_;
          data_.id = map.size();
          map[boneName] = data_;
+         boneMatrices.push_back(glm::mat4(1.0f));
          printf("Loaded bone %s not relevant to vertex weights from nodes \n", boneName.c_str());
-     }
- };
+     }  
+ }; 
   
  nodes.push(node);
  parentIndices.push(-1);
@@ -177,12 +178,8 @@ void AnimComponent::readAssimpTree(const aiNode* node) {
  
      std::string bonename = aNode->mName.C_Str();
      
-     if (bonename == "knight_RetopoFlow.001_RetopoFlow.003") {
-         
-     }
-
      checkBoneNameInMap(BoneDataMap, bonename);
-     
+      
      boneNodes.emplace_back(bonename, aNode->mTransformation, parentIndex);
       
      int thisIndex = boneNodes.size()-1;

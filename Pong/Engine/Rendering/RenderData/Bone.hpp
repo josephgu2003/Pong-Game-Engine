@@ -16,6 +16,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include "Positionable.hpp"
+#include <glm/gtx/matrix_decompose.hpp>
 
 struct BoneData {
     int id;
@@ -52,6 +53,10 @@ private:
     glm::mat4 posTransform;
     glm::quat rotationTransform;
     glm::mat4 scalingTransform;
+    
+    glm::mat4 prevPosTransform;
+    glm::quat prevRotationTransform;
+    glm::mat4 prevScalingTransform;
     
     template<typename keytype>
     inline int getCurrentKeyIndex(const std::vector<keytype>& keys, float t) {
@@ -95,7 +100,6 @@ private:
     }
      
 
-  //  glm::mat4 invertMatrixToGLMFormat(const aiMatrix4x4& from);
 public:
     float getScaleFactor(float lastT, float nextT, float currentT);
     
@@ -106,11 +110,24 @@ public:
     
     void tick(float timestamp_);
     
-    void updatePositionable(Positionable* p) {
-        p->updateScaling(scalingTransform);
-        p->updateRotation(rotationTransform);
-        p->updateTranslation(posTransform); 
+    void updatePositionable(Positionable* p, const glm::mat4& parentTransform) {
+        glm::vec3 trans; 
+        glm::quat rot;
+        glm::vec3 scale;
+        glm::vec3 skew;
+        glm::vec4 persepctive;
+        
+        glm::decompose(parentTransform, scale, rot, trans, skew, persepctive);
+        
+        p->updateScaling(glm::scale(scalingTransform, scale) * glm::inverse(prevScalingTransform));
+        
+        p->updateRotation(rot * rotationTransform * glm::inverse(prevRotationTransform));
+        p->updateTranslation(glm::translate(posTransform, trans) * glm::inverse(prevPosTransform));
+        
+        prevScalingTransform = glm::scale(scalingTransform, scale);
+        prevRotationTransform = rot * rotationTransform; 
+        prevPosTransform = glm::translate(posTransform, trans);
     }
-    
+     
 };
 #endif /* Bone_hpp */

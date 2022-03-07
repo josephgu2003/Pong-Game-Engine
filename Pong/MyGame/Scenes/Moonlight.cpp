@@ -135,13 +135,13 @@ void Moonlight::act() {
                 
                 makeSpeech("Moonbell", lines, durations);
             }
-            moonbell->jump();
+            moonbell->jump(); 
             waitFor(12.0f);
             break; 
         }
         case 8: {
             if (!isWaiting()) {
-                moonbell->orientYawTo(glm::vec3(50, 0, -50) - moonbell->getPos());
+                moonbell->orientYawTo(glm::vec3(20, 0, -50) - moonbell->getPos());
             }
             waitFor(8.0f);
             break;
@@ -156,7 +156,7 @@ void Moonlight::act() {
         }
         case 10: {
             moonbell->getComponent<MovementController>()->move(MOVEDIR_FORWARDS);
-            if (moonbell->getDistanceTo(glm::vec3(50, moonbell->getPos().y, -50)) < 5.0f) {
+            if (moonbell->getDistanceTo(glm::vec3(20, moonbell->getPos().y, -50)) < 5.0f) {
                 endScene();
                 step++;
             }

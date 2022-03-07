@@ -334,7 +334,8 @@ void VertexLoader::BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh
        for (int boneIndex = 0; boneIndex < x; ++boneIndex) {
            int id = -1;
            std::string boneName(mesh->mBones[boneIndex]->mName.C_Str());
-         
+
+           
            if (inProgBoneMap.find(boneName) == inProgBoneMap.end())
            {
                BoneData data;

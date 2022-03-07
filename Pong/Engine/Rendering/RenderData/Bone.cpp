@@ -12,7 +12,10 @@ Bone::Bone(const std::string& name_, const aiNodeAnim* channel) {
     localTransform = glm::mat4(1.0f);
     posTransform = glm::mat4(1.0f);
     rotationTransform = glm::mat4(1.0f);
-    scalingTransform = glm::mat4(1.0f); 
+    scalingTransform = glm::mat4(1.0f);
+    prevPosTransform = glm::mat4(1.0f);
+    prevRotationTransform = glm::mat4(1.0f);
+    prevScalingTransform = glm::mat4(1.0f);
     name = name_;
     numPos = channel->mNumPositionKeys;
     numRotations = channel->mNumRotationKeys;
@@ -57,8 +60,6 @@ void Bone::tick(float timestamp_) {
     localTransform = posTransform * glm::toMat4(rotationTransform) * scalingTransform;
 } 
  
-
-
 float Bone::getScaleFactor(float lastT, float nextT, float currentT)
    {
        float scaleFactor = 0.0f;

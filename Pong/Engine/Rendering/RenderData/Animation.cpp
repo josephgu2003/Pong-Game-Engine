@@ -35,13 +35,7 @@ void Animation::makeBones(const aiAnimation* animation, std::map<std::string, Bo
         auto channel = animation->mChannels[i];
         std::string boneName(channel->mNodeName.C_Str());
          
-        if (map_.find(boneName) == map_.end()) { //if bones in anim channels are not from weighted verices or node heirarchy, add to map
-            BoneData data;
-            data.id = map_.size();
-            map_[boneName] = data;
-        }
          
-
         bones.push_back(Bone(boneName,
                         channel)); 
     }
@@ -72,25 +66,29 @@ int Animation::getTicksPerSec() {
     return ticksPerSec;
 }
  
-
- 
-void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t) {
+void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t, Positionable* p) {
     
     for (auto i = boneNodes.begin(); i != boneNodes.end(); i++) {
-        
         std::string boneName = (*i).name;
         glm::mat4 localTransform = (*i).transformation;
         Bone* bone = findBone(boneName);
-         
+          
         if (bone) {
             bone->tick(t);
             localTransform = bone->getLocalTransform();
+            /**
+            if (boneName == "spine") {
+                bone->updatePositionable(p, boneMatrices[map_[boneNodes.at((*i).parentIndex).name].id]);
+                localTransform = glm::mat4(1.0f);
+            }**/
+    
         }   else {
             localTransform = glm::mat4(1.0f);
         }
         
+        
         if ((*i).parentIndex >= 0) {
-           localTransform =  boneMatrices[map_[boneNodes.at((*i).parentIndex).name].id] * localTransform;
+           localTransform = boneMatrices[map_[boneNodes.at((*i).parentIndex).name].id] * localTransform;
         }
 
         if (map_.find(boneName) != map_.end())
@@ -100,15 +98,13 @@ void Animation::updateBoneMatrices(std::vector<glm::mat4>& boneMatrices,std::vec
             boneMatrices[index] = localTransform;
              
         }
-        else {
-            printf("ERROR: node %s not found in bone map \n", boneName.c_str());
-        }
+        
     }
     
     for (auto i = boneNodes.begin(); i != boneNodes.end(); i++) {
         std::string boneName = (*i).name;
         if (map_.find(boneName) != map_.end())
-        {
+        { 
             int index = map_[boneName].id;
             glm::mat4 offset = map_[boneName].offset;
             boneMatrices[index] = globalInverse*boneMatrices[index] * offset;

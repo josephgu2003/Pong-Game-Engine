@@ -38,8 +38,9 @@ void Imprisonment::act() {
             if (wallCooldown <= 0.0f) {
                 floro->getComponent<AnimComponent>()->playAnim("Falling", 24, 100);
                 floro->getComponent<MovementController>()->paralyze(3.0f);
+                floro->accelerate(0.05f * (-floro->getDir()+glm::vec3(0, 1.5, 0)));
                 watch.resetTime();
-                wallCooldown = 1.0f;
+                wallCooldown = 1.0f; 
             }
         }
     }
@@ -64,6 +65,7 @@ void Imprisonment::act() {
                 world->insert<Prop>(prop);
                 speak("Moonbell", "*Gasps*", 2.0f);
                 imprisonment = prop;
+                floro->setPos(moonbell->getPos());
             }
                
             waitFor(5.0f);
@@ -97,11 +99,11 @@ void Imprisonment::act() {
             break;
         }
         case 4: {
-          //  moonbell->getComponent<AnimComponent>()->playAnim("Lying", true);
             moonbell->getComponent<AnimComponent>()->playAnim("Falling", 24, 100);
+            moonbell->accelerate(0.1f * (-moonbell->getDir()+glm::vec3(0, 1.5, 0)));
             step++;
             break;
-        }
+        } 
         case 5: {
             waitFor(25.0f);
             break;
@@ -109,8 +111,10 @@ void Imprisonment::act() {
             
         case 6: {
             if (floro->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f) {
-            floro->getComponent<AnimComponent>()->playAnim("Falling", 24, 100);
-            step++;
+                floro->getComponent<AnimComponent>()->playAnim("Falling", 24, 100);
+                floro->getComponent<MovementController>()->paralyze(3.0f); 
+                floro->accelerate(0.1f * (-floro->getDir()+glm::vec3(0, 1.5, 0)));
+                step++;
             }
             break;
         }  

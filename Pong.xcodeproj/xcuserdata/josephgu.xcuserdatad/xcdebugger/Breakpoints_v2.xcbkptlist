@@ -5322,8 +5322,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "AnimComponent::addAnimation(animation, scene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5354,8 +5354,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "AnimComponent::setDefaultAnim(name)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5370,8 +5370,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
             landmarkName = "AnimComponent::AnimComponent(actor, filePath)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5482,8 +5482,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "AnimComponent::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5501,6 +5501,70 @@
             startingLineNumber = "136"
             endingLineNumber = "136"
             landmarkName = "AnimComponent::findRootBone(scene, map_)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C3819EF-2A82-4E2A-AD28-A29521C0C60C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Component/PhysicsComponent.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "PhysicsComponent::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD19FFB6-A6C3-4D71-8C6D-F893EEA047FA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Component/PhysicsComponent.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "PhysicsComponent::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "38B7A718-56BC-411F-907E-C324DAFD235B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Component/PhysicsComponent.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "PhysicsComponent::tick()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "41324EA4-721E-43E2-95AD-E9B13370EB3C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Component/PhysicsComponent.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "PhysicsComponent::tick()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

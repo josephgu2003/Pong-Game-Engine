@@ -17,6 +17,7 @@
 #include <assimp/Importer.hpp>
 #include <map>
 
+class Positionable;
 
 struct AssimpNodeData
 {
@@ -46,7 +47,7 @@ public:
 
     Bone* findBone(const std::string& name);
     int getTicksPerSec();
-    void updateBoneMatrices(std::vector<glm::mat4>& boneMatrices, std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t);
+    void updateBoneMatrices(std::vector<glm::mat4>& boneMatrices, std::vector<AssimpNodeData>& boneNodes, std::map<std::string, BoneData>& map_, glm::mat4& globalInverse, float t,  Positionable* p);
 };
 
  

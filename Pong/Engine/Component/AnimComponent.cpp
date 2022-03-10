@@ -22,18 +22,19 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Compon
     loopCurrent = false;
     starttick = 0;
     endtick = 0;
+    speedMultiplier = 0.0f;
 }
 
 void AnimComponent::tick() {
     if (activeAnim) {
-        timeInAnim += (float)activeAnim->getTicksPerSec()*stopwatch.getTime(); // seems that assimp timestamps are in terms of ticks?
+        timeInAnim += (float)activeAnim->getTicksPerSec()*stopwatch.getTime() * speedMultiplier; // seems that assimp timestamps are in terms of ticks?
         stopwatch.resetTime();
         if ((timeInAnim) > endtick) {
             if (!loopCurrent) {
                 playDefault();
             } else {
                 timeInAnim = timeInAnim-endtick + starttick;
-            } 
+            }  
         }
          
         activeAnim->updateBoneMatrices(boneMatrices, boneNodes, BoneDataMap,globalInverse,timeInAnim, dynamic_cast<Positionable*>(actor));
@@ -68,7 +69,7 @@ void AnimComponent::addAnimation(aiAnimation* animation, const aiScene* scene) {
  
 void AnimComponent::playAnim(const std::string& name, bool looped) {
     timeInAnim = 0;
-    
+    speedMultiplier = 1.0f;
     for (int i = 0; i < animations.size(); i++) {
         if (animations.at(i).getName() == name) {
             activeAnim = &animations.at(i);
@@ -95,6 +96,7 @@ void AnimComponent::setDefaultAnim(const std::string& name) {
 
 void AnimComponent::playDefault() {
     activeAnim = defaultAnim;
+    speedMultiplier = 1.0f;
     timeInAnim = 0;
     starttick = 0;
     endtick = activeAnim->getDuration();
@@ -102,12 +104,14 @@ void AnimComponent::playDefault() {
 }
 
 void AnimComponent::playAnim(const std::string& name, int loopbegin, int loopend) {
+    speedMultiplier = 1.0f;
     playAnim(name, true);
     starttick = loopbegin;
     endtick = loopend;
 }
 
 void AnimComponent::playAnimIfNotPlaying(const std::string& name) {
+    speedMultiplier = 1.0f;
     if (activeAnim && activeAnim->getName() == name) {
         return;
     } else {
@@ -203,3 +207,13 @@ void AnimComponent::readAssimpTree(const aiNode* node) {
  }
     printf("Repeat offsets: %i\n", i);
 }
+
+void AnimComponent::playAnim(const std::string& name, bool looped, float speed) {
+    playAnim(name, looped);
+    speedMultiplier = speed;
+}
+void AnimComponent::playAnim(const std::string& name, int firsttick, int lasttick, float speed) {
+    playAnim(name, firsttick, lasttick);
+    speedMultiplier = speed;
+}
+ 

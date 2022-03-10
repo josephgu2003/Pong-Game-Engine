@@ -10,6 +10,7 @@
 #include "World.hpp"
 #include "LifeTime.hpp"
 #include "MovementController.hpp"
+#include "SurvivalMode.hpp"
 
 std::vector<std::string> lakeCrew = {
     "Floro", "Moonbell"
@@ -83,7 +84,7 @@ void Moonlight::act() {
             
         case 3: {
             if (!isWaiting()) {
-                std::vector<std::string> lines = {"Yes.", "I can't believe your guts,", "trying to fight off two Shorewalkers as a mortal.", "You realize you could hardly help me right?", "But thank you.", "I didn't want you to die because of me,", "so I've returned the favor,", "at a cost."};
+                std::vector<std::string> lines = {"Yes.", "I can't believe your guts,", "trying to help me despite being a layperson.", "You realize that even a hundred of you aren't worth as much as one me?", "But thank you.", "I didn't want you to die because of me,", "so I've returned the favor,", "at a cost."};
                 std::vector<float> durations = {4.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
                 
                 makeSpeech("Moonbell", lines, durations);
@@ -107,13 +108,13 @@ void Moonlight::act() {
         case 5: {
             if (!isWaiting()) {
                 
-                std::vector<std::string> lines = {"Yes.", "I'm only mortal now.", "But you...", "You've inherited my power.", "I suppose I'll just have to stick with you forever :)", "I have given you my umbrella so you wouldn't mind letting me stay under it from time to time, no?", "Besides I can guide you on your journey.", "So what do you say?", "Can we stick together?"};
-                std::vector<float> durations = {3.0f, 2.0f, 2.0f, 2.0f, 3.0f, 5.0f, 2.0f, 2.0f, 2.0f};
+                std::vector<std::string> lines = {"Yes.", "I'm only mortal now.", "But you...", "You've inherited my power.", "I suppose I'll just have to stick with you forever :)", "I have given you my umbrella so you wouldn't mind letting me stay under it from time to time, no?"};
+                std::vector<float> durations = {3.0f, 2.0f, 2.0f, 2.0f, 3.0f, 5.0f};
                  
                 makeSpeech("Moonbell", lines, durations);
             }
             
-            waitFor(25.0f);
+            waitFor(19.0f);
             break;
         }
         case 6: {
@@ -127,12 +128,12 @@ void Moonlight::act() {
             waitFor(18.0f);
             break;
         }
-            
+             
         case 7: {
             if (!isWaiting()) {
                 std::vector<std::string> lines = {"Okay!", "Let's get out of here first."};
                 std::vector<float> durations = {5.0f, 5.0f};
-                
+                world->addComponent<SurvivalMode>(*world, 50.0f);
                 makeSpeech("Moonbell", lines, durations);
             }
             moonbell->jump(); 
@@ -147,14 +148,14 @@ void Moonlight::act() {
             break;
         }
         case 9: {
-            std::vector<std::string> lines = {"The Shorewalkers you fought said there is a town behind the mountain", "I'm sure they've left that town now,", "So we can be safe there.", "I heard there's a festival there too!"};
-            std::vector<float> durations = {5.0f, 3.0f, 3.0f, 5.0f};
+            std::vector<std::string> lines = {"You said your Teacher wanted you to find the incarnation of the moon?", "The night the moon disappeared, a ray of moonlight fell on the town behind that mountain.", "I heard there's a festival there too!"};
+            std::vector<float> durations = {5.0f, 3.0f, 3.0f};
             
             makeSpeech("Moonbell", lines, durations);
             step++;
             break;
         }
-        case 10: {
+        case 10: { 
             moonbell->getComponent<MovementController>()->move(MOVEDIR_FORWARDS);
             if (moonbell->getDistanceTo(glm::vec3(20, moonbell->getPos().y, -50)) < 5.0f) {
                 endScene();
@@ -163,7 +164,11 @@ void Moonlight::act() {
             break;
         } 
               
-        default:
+        default: 
             break;
     } 
 }
+
+// combat and progression is fun
+// life skills are fun
+// being a part of the story ?

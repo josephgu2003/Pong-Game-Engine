@@ -165,8 +165,13 @@ SaveObject* MySaveGame::handleObjectOfType(std::string type) {
         return new SaveObject();
     }
     
-MySaveGame::MySaveGame(std::shared_ptr<uiLayout>& ui) {
+MySaveGame::MySaveGame(std::shared_ptr<uiLayout>& ui, InputHandler* ih) {
         SaveScript::setUI(ui);
-    }
+    SaveScript::setInputHandler(ih);
+}
  
  
+
+void SaveScript::setInputHandler(InputHandler* ih_) {
+    sf.setInputHandler(ih_);
+}

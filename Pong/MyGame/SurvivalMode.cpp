@@ -73,8 +73,12 @@ void Hunter::tick() {
     }
     
     if (!w) return;
-    Actor* ph = w->getPlayerHero();
+    auto target = w->getActorNamed("Moonbell");
     
+    if (target->dummy) return;
+    
+    Actor* ph = target.get();
+     
     if (!ph) return;
     
     if (a->getDistanceTo(ph) > 6.0f) {

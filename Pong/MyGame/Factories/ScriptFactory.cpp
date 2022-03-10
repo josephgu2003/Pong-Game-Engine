@@ -12,6 +12,9 @@
 #include "Moonlight.hpp"
 #include "Imprisonment.hpp"
 
+ScriptFactory::ScriptFactory() {
+    ih = NULL; 
+}
 std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World* world, bool completed) {
     std::shared_ptr<Script> script;
     if (scriptname == "FloroWakes") {
@@ -21,9 +24,9 @@ std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World*
     } else if (scriptname == "Flowers in the Night") {
         script = std::make_shared<ScriptNightFlowers>(world, completed);
     } else if (scriptname == "Moonlight") {
-        script = std::make_shared<Moonlight>(world, completed);
+        script = std::make_shared<Moonlight>(world, completed); 
     } else if (scriptname == "Imprisonment") {
-        script = std::make_shared<Imprisonment>(world, completed);
+        script = std::make_shared<Imprisonment>(world, completed, ui.lock().get(), ih);
     } else { // !! make a dummy script
             script = std::make_shared<ScriptWakeUp>(world, completed, ui);
     }
@@ -32,4 +35,8 @@ std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World*
 
 void ScriptFactory::setUI(const std::shared_ptr<uiLayout> ui_) {
     ui = ui_;
+}
+
+void ScriptFactory::setInputHandler(InputHandler *ih_) {
+    ih = ih_;
 }

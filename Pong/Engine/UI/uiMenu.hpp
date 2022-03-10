@@ -13,12 +13,16 @@
 #include "Observer.hpp"
 
 class uiMenu : public uiPiece, public Observer {
+private:
+    
 protected:
     virtual void handleKeyPress(GLenum k);
     int selectedChild = 0;
+    int chosenOption;
 public:
     uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath);
     virtual void notify(const Subject& s, GameEvent ge) override;
+    int getChosenOption();
 };
 #endif /* uiMenu_hpp */
 

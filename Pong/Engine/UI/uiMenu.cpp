@@ -18,6 +18,7 @@ uiMenu::uiMenu(glm::vec2 pos, glm::vec2 dimensions, const std::string& filePath)
     shader->setUniform("ratio", 0.2f);
     shader->setUniform("alpha", 1.0f); 
     VertexLoader::load2DQuadData(VAO, VBO, EBO, numIndices, dimensions, glm::vec3(0));
+    chosenOption = -1;
 }
 
 
@@ -46,6 +47,7 @@ void uiMenu::handleKeyPress(GLenum k) {
             break;
         }
         case GLFW_KEY_ENTER: {
+            chosenOption = selectedChild;
             std::static_pointer_cast<uiText>(children.at(selectedChild))->fire();
             break;
         }
@@ -63,4 +65,8 @@ void uiMenu::handleKeyPress(GLenum k) {
             break;
         }
     }
+}
+
+int uiMenu::getChosenOption() {
+    return chosenOption;
 }

@@ -23,13 +23,14 @@ void SubtitlesSystem::drawAll(Renderer* r) {
  
 void SubtitlesSystem::tick() {
 }
- 
+  
 SubtitlesSystem::SubtitlesSystem(World& w) : WorldSubSystem(w) {
-    std::shared_ptr<uiText> text = std::make_shared<uiText>("", -0.6, -0.8, DEFAULT_FONTSIZE, DEFAULT_LINESPACE, 1.0); 
+    std::shared_ptr<uiText> text = std::make_shared<uiText>("", -0.6, -0.8, DEFAULT_FONTSIZE * 0.8, DEFAULT_LINESPACE, 1.0);
     activeText = text;// lmfao??? 
-    textFrame = std::make_unique<uiFrame>(glm::vec2(-0.7, -0.9), glm::vec2(1.5,0.23), "Resources/GlyphsAndUI/subtitles.png");
+ //   textFrame = std::make_unique<uiFrame>(glm::vec2(-0.7, -0.9), glm::vec2(1.5,0.23), "Resources/GlyphsAndUI/subtitles.png");
+    textFrame = std::make_unique<uiFrame>(glm::vec2(-1.0, -1.0), glm::vec2(2.0,2.0), TEX_EMPTY);
     textFrame->insertChild(text);
     textFrame->setHiddenStatus(true);
 } 
-   
+    
  

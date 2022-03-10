@@ -31,7 +31,8 @@ protected:
      
     bool loopCurrent;
     int starttick; 
-    int endtick; 
+    int endtick;
+    float speedMultiplier;
 
     glm::mat4 globalInverse;
     std::vector<AssimpNodeData> boneNodes;
@@ -47,8 +48,10 @@ public:
     void readAssimpTree(const aiNode* node);
     void setDefaultAnim(const std::string& name);
     void playAnim(const std::string& name, bool looped);
+    void playAnim(const std::string& name, bool looped, float speed);
     void playAnimIfNotPlaying(const std::string& name);
     void playAnim(const std::string& name, int firsttick, int lasttick);
+    void playAnim(const std::string& name, int firsttick, int lasttick, float speed);
     void addAnimation(aiAnimation* animation, const aiScene* scene);
     void setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap);
 };

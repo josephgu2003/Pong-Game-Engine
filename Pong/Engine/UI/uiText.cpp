@@ -46,11 +46,12 @@ void uiText::hover(bool b) {
     }
 }
   
-void uiText::setFireCallback(fireCallback f, Game* g_) {
+void uiText::setFireCallback(fireCallback f, Game* g_) { // lmao wtf
     callback = f;
     g = g_; 
 }
 
 void uiText::fire() {
-    callback(g);
+    if (callback && g) callback(g);
 }
+ 

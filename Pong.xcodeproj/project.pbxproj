@@ -24,6 +24,7 @@
 		5D1464952740B6EE0024F2E2 /* ScriptFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D1464932740B6ED0024F2E2 /* ScriptFactory.cpp */; };
 		5D25EC452691154C008BD594 /* ColorPartF.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC432691154C008BD594 /* ColorPartF.fs */; };
 		5D25EC4826922AC9008BD594 /* ColorPartG.gs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC4726922AC8008BD594 /* ColorPartG.gs */; };
+		5D2A98DF27D958E0009E3F58 /* ChoiceMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2A98DD27D958E0009E3F58 /* ChoiceMenu.cpp */; };
 		5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */; };
 		5D2E2D83267BB544007ADBF3 /* CombatComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */; };
 		5D311E9927B4704A007E269A /* grass-patches in Resources */ = {isa = PBXBuildFile; fileRef = 5D311E9827B4704A007E269A /* grass-patches */; };
@@ -409,6 +410,8 @@
 		5D25A045265C1B5900A780C6 /* minecraft-enchantment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "minecraft-enchantment.ttf"; sourceTree = "<group>"; };
 		5D25EC432691154C008BD594 /* ColorPartF.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorPartF.fs; sourceTree = "<group>"; };
 		5D25EC4726922AC8008BD594 /* ColorPartG.gs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorPartG.gs; sourceTree = "<group>"; };
+		5D2A98DD27D958E0009E3F58 /* ChoiceMenu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChoiceMenu.cpp; sourceTree = "<group>"; };
+		5D2A98DE27D958E0009E3F58 /* ChoiceMenu.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChoiceMenu.hpp; sourceTree = "<group>"; };
 		5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsComponent.cpp; sourceTree = "<group>"; };
 		5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsComponent.hpp; sourceTree = "<group>"; };
 		5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CombatComponent.cpp; sourceTree = "<group>"; };
@@ -958,6 +961,8 @@
 			isa = PBXGroup;
 			children = (
 				5DF4EBCF277774D1006823FB /* ScriptSystem.cpp */,
+				5D2A98DD27D958E0009E3F58 /* ChoiceMenu.cpp */,
+				5D2A98DE27D958E0009E3F58 /* ChoiceMenu.hpp */,
 				5D10D60326FBBC4600281E6B /* Relationship.cpp */,
 				5DF4EBC927739E0B006823FB /* SubtitlesSystem.cpp */,
 				5D391B8C268FDD1A0092623D /* Script.hpp */,
@@ -2151,6 +2156,7 @@
 				5D670C9F2684D90C000E179C /* Sky.cpp in Sources */,
 				5D6942452798A6990083F37C /* Atmosphere.cpp in Sources */,
 				5D1464752735A58C0024F2E2 /* MeshComponent.cpp in Sources */,
+				5D2A98DF27D958E0009E3F58 /* ChoiceMenu.cpp in Sources */,
 				5DB2C980272F5DB3009E6CA3 /* AbstractActorFactory.cpp in Sources */,
 				5DF168EE279DC96D009E2BEB /* LightComponent.cpp in Sources */,
 				5DB91EBC27221292003AAAA7 /* PPointGraphicsComponent.cpp in Sources */,

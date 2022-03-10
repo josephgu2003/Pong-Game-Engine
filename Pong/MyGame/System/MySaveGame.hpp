@@ -12,6 +12,7 @@
 #include "SaveGame.hpp"
 
 class uiLayout;
+class InputHandler;
 
 class MySaveGame : public SaveGame {
     SaveObject* handleObjectOfType(std::string type) override;
@@ -31,7 +32,7 @@ public:
         pos[2] = pos_.z;
         return pos;
     }
-    MySaveGame(std::shared_ptr<uiLayout>& ui);
+    MySaveGame(std::shared_ptr<uiLayout>& ui, InputHandler* ih);
 };
 
 #include "Actor.hpp"
@@ -62,6 +63,7 @@ class SaveScript : public SaveObject {
     glm::vec3 pos_;
 public:
     static void setUI(std::shared_ptr<uiLayout>& ui);
+    static void setInputHandler(InputHandler* ih);
     void load(GameLevel* g, const nlohmann::json& json) override;
     nlohmann::json save() override;
 };

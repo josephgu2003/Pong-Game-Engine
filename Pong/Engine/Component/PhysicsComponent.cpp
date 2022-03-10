@@ -24,17 +24,28 @@ void PhysicsComponent::tick() {
         ourActor->translatePos(ourActor->getVel());
     
     handleGravity(*ourActor);
-      
- /**   if (ourActor->getVel() != glm::vec3(0.0) && ourActor->getVel().length() > 0.001) {
-        glm::vec3 friction = -0.0001f*glm::normalize(ourActor->getVel());
-        ourActor->accelerate(friction);
+    glm::vec3 velVec = ourActor->getVel();
+    glm::vec2 xzVec = glm::vec2(velVec.x, velVec.z);
+    
+    // apply ground friction
+    if (xzVec != glm::vec2(0.0,0.0) && xzVec.length() > 0.05f) {
+        float heightMin = ourActor->getWorld().getHeightAt(glm::vec2(ourActor->getPos().x, ourActor->getPos().z)); 
+        
+        if (abs(ourActor->getPos().y - heightMin) < 0.1f) {
+        ourActor->setVel(glm::vec3(xzVec.x * 0.9, velVec.y, xzVec.y * 0.9));
+        } else { 
+            ourActor->setVel(glm::vec3(xzVec.x * 0.99, velVec.y, xzVec.y * 0.99));
+        }
+        
     } else {
-        ourActor->setVel(glm::vec3(0.0,0.0,0.0));
-    } **/
-    if (ourActor->getVel() != glm::vec3(0.0,0.0,0.0) && ourActor->getVel().length() > 0.05f) {
-        ourActor->setVel(ourActor->getVel() * 0.97f);
-    } else { 
-        ourActor->setVel(glm::vec3(0.0, 0.0, 0.0));
+        ourActor->setVel(glm::vec3(0.0, velVec.y, 0.0));
+    }
+    
+    glm::vec3 velPostXZFriction = ourActor->getVel();
+    if (abs(velVec.y) > 0.005f) {
+        ourActor->setVel(glm::vec3(velPostXZFriction.x, velVec.y * 0.99, velPostXZFriction.z));
+    } else {
+        ourActor->setVel(glm::vec3(velPostXZFriction.x, 0.0, velPostXZFriction.z));
     }
 }
  
@@ -44,27 +55,32 @@ void PhysicsComponent::handleGravity(Actor& ourActor) {
         case STATE_PARALYZED:   
             break;
         case STATE_IDLE:
-            ourActor.accelerate(glm::vec3(0.0,-0.3f*glfwGetTime(),0.0));
             
             if (ourActor.getPos().y + ourActor.getVel().y < heightMin) {
                 ourActor.setVel(glm::vec3(ourActor.getVel().x,0,ourActor.getVel().z));
                 ourActor.setPosY(heightMin); 
+            } else {
+                ourActor.accelerate(glm::vec3(0.0,-0.3f*glfwGetTime(),0.0));
             }
-            break;
+            break; 
         case STATE_FLYING:
-            ourActor.accelerate(glm::vec3(0,-0.3f*glfwGetTime(),0));
+
             if (ourActor.getPos().y + ourActor.getVel().y < heightMin) {
                 ourActor.setVel(glm::vec3(ourActor.getVel().x,0,ourActor.getVel().z));
                 ourActor.setPosY(heightMin);
+            } else {
+                ourActor.accelerate(glm::vec3(0,-0.3f*glfwGetTime(),0));
             }
             break;
         case STATE_JUMPING:
-            ourActor.accelerate(glm::vec3(0,-0.3f*glfwGetTime(),0));
+
             if (ourActor.getPos().y + ourActor.getVel().y < heightMin) {
                 ourActor.setVel(glm::vec3(ourActor.getVel().x,0,ourActor.getVel().z));
                 ourActor.setPosY(heightMin);
                 ourActor.setState(STATE_IDLE); 
-            } 
+            } else {
+                ourActor.accelerate(glm::vec3(0,-0.3f*glfwGetTime(),0));
+            }
             break;
     }
 }

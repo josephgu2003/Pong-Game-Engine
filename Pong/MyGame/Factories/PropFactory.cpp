@@ -138,12 +138,12 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             shader->setUniform("brightness", 3.0f);
                
             std::shared_ptr<GraphicsComponent> gc =    std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
-             
+              
             gc->initModel("Resources/Abilities/moonbeam.fbx");
             gc->setDrawCall(additiveDraw);
             prop->addComp(gc);
             prop->bakeRotation(glm::vec3(90, 0 , 0));
-            break;
+            break; 
         }
             
         case PROP_IMPRISONMENT: {

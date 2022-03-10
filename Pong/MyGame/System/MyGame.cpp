@@ -39,7 +39,7 @@ MyGame::MyGame() : Game() {
 }
 
 void MyGame::load() {
-    setSaveSystem(new MySaveGame(ui));
+    setSaveSystem(new MySaveGame(ui, &inputHandler));
     World::registerSubSystem<SubtitlesSystem>();
     World::registerSubSystem<ScriptSystem>();
     World::registerSubSystem<NotificationSystem>();
@@ -94,7 +94,7 @@ GameLevel* makeMainMenu(Game* g) {
     for (int i = 0; i < lines.size(); i++) {
         auto ut = std::make_shared<uiText>(lines.at(i), -0.65, -0.1, DEFAULT_FONTSIZE, DEFAULT_LINESPACE * 2.0, 1.0);
         ut->initPeriodicFadeFunction(2.0f + i * 8.0f, 9.0f + i * 8.0f, 0.5f, lines.size() * 9.0f);
-        g->getUI()->insertNode(ut); 
+        g->getUI()->insertNode(ut);
     }
      
     InputHandler& ih = g->getInputHandler();
@@ -149,14 +149,12 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     ih->setOnReleaseCallback(GLFW_KEY_D, [](Game* game){
         if (auto x = game->getPlayerHero()) x->getComponent<MovementController>()->makeIdle();
     });
-    
 
     
 #define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
-#define POEM2 {"Beneath the leafless tree I hold my vigil", "A thousand snowflakes in my new home settle.", "The world is never constant, ever-changing.", "I know there will be an end to waiting."}
-    
+     
     ih->setOneTapCallback(GLFW_KEY_Z, [](Game* game){
-        if (auto ph = game->getPlayerHero()) {
+        if (auto ph = game->getPlayerHero()) { 
             std::shared_ptr<Ability> fish = std::make_shared<Fish>(&ph->getWorld(), ph, 18.0);
             auto comb = ph->getComponent<CombatComponent>();
             if (comb)
@@ -176,15 +174,6 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
         }
     });
     
-    ih->setOneTapCallback(GLFW_KEY_M, [](Game* game){
-        std::vector<std::string> lines = {POEM2};
-        std::vector<float> durations;
-        for (int i = 0; i < 4; i++) {
-            durations.push_back(4.0f);
-        }
-        game->getActiveLevel()->getActiveWorld()->insert<Behaviour>(std::make_shared<Speech>(game->getPlayerHero(), lines, durations));
-        game->getPlayerHero()->getComponent<AnimComponent>()->playAnim("Waiting", 73, 157);
-    });
     ih->setOneTapCallback(GLFW_KEY_G, [](Game* game){
         if (auto ph = game->getPlayerHero()) {
             std::shared_ptr<Ability> letters = std::make_shared<FallingLetters>(&ph->getWorld(), ph, 6.0);

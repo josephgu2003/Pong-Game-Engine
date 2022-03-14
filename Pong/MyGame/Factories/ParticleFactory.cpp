@@ -98,13 +98,14 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
         };
             
         case PE_BODYSPARKS:  {
-            int numParticles = 200;
+            int numParticles = 1000;
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
             shader->init("Shaders/PointPart.vs", "Shaders/ColorPartF.fs");
-            std::shared_ptr<GraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*particle.get(), numParticles, 0.01, shader, map);
-            pgc->setColor(0.5, 0.5, 3.0);
+            std::shared_ptr<GraphicsComponent> pgc = std::make_shared<PPointGraphicsComponent>(*particle.get(), numParticles, 0.005, shader, map);
+            pgc->setColor(5.5, 1.5, 1.0);   
             particle->addComp(pgc);
-            particle->addComponent<PRefreshComponent>(*particle.get(), 3.0, 100, 0.2, glm::vec3(1,1,1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+            particle->addComponent<PRefreshComponent>(*particle.get(), 5.0, 150, 0.2, glm::vec3(0.8,0.5,0.8), glm::vec3(0.0, 0.01, 0.0), glm::vec3(0.0, 0.04, 0.0));
+            particle->addComponent<PPhysicsComponent>(*particle.get(), 0, 0.98);
             break;
         };
             

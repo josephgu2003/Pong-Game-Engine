@@ -30,7 +30,7 @@ Sketch::Sketch(World* world_, Actor* actor_, float duration_, GLuint texture_) :
       //  quad.indices.push_back(0.0f+j+50*i+1);
        // quad.indices.push_back(0.0f+j+50*i+50);
         }
-    }
+    }  
     for (int i = 0; i < 49; i++) {
         for (int j = 0; j < 49; j++) {
       //  quad.indices.push_back(0.0f+j+50*i+1);

@@ -16,6 +16,8 @@
 #include "MovementController.hpp"
 #include "uiFrame.hpp"
 #include "InputHandler.hpp"
+#include "ParticleFactory.hpp"
+#include "SurvivalMode.hpp"
 
 std::vector<std::string> imprisonmentCrew = { 
     "Floro", "Moonbell"
@@ -34,6 +36,7 @@ Imprisonment::Imprisonment(World* world, bool completed, uiLayout* ui_, InputHan
 void Imprisonment::act() {
     Actor* floro = getActorNamed("Floro");
     Actor* moonbell = getActorNamed("Moonbell");
+    
     wallCooldown -= watch.getTime();
     watch.resetTime();
     
@@ -59,6 +62,7 @@ void Imprisonment::act() {
     if (step > 3) {
         floro->getComponent<LifeComponent>()->incStatValue(-0.05, STAT_LIFE);
     }
+    
     if (auto i = imprisonment.lock()) {
         if (getActorNamed("Hue")) {
             if (auto lc = getActorNamed("Hue")->getComponent<LifeComponent>()) {
@@ -72,7 +76,8 @@ void Imprisonment::act() {
     switch (step) {
         case 0: {
             if (!isWaiting()) {
-                MyActorFactory maf;
+             //   world->addComponent<SurvivalMode>(*world, 50.0f);
+                MyActorFactory maf; 
                 
                 auto hue = maf.makeActor(ACTOR_SCARF_CHAR);
                 hue->setPos(moonbell->getPos()+10.0f*moonbell->getDir());
@@ -97,7 +102,7 @@ void Imprisonment::act() {
             waitFor(5.0f);
             break;
         }
-            
+             
         case 1: {
             doAndWaitFor([&] () {speak("Floro", "We are so unlucky... this looks like a Matrix Imprisonment.", 3.0f);}, 5.0f);
             break;
@@ -117,7 +122,7 @@ void Imprisonment::act() {
             
         case 3: {
             if (!isWaiting()) {
-                std::vector<std::string> lines = {"If we stay here too long, the damage inflicted will kill us.", "Oh... *coughs*", "It seems like we are fated to look out for each other. :)", "Don't fear. Do what you do best. *cough*", "Do what you do best... Only then can you take your first steps as Shorewalker.", "I'm sorry to put such a burden on you.", "But my life is in your hands now."};
+                std::vector<std::string> lines = {"If we stay here too long, the damage inflicted will kill us.", "Oh... *coughs*", "It seems like we are fated to look out for each other. :)", "Do what you do best... Only then can you take your first steps as Shorewalker.", "My life is in your hands.", "But I'll understand it if you want to save yourself."};
                 std::vector<float> durations;
                 for (int i = 0; i < lines.size(); i++) {
                     durations.push_back(3.0f);
@@ -146,6 +151,9 @@ void Imprisonment::act() {
             break;
         }
         case 6: {
+            ParticleFactory pf;
+            auto particles = pf.makeParticles(PE_BODYSPARKS, moonbell->getPos());
+            world->insert(particles); 
             auto menu = std::make_shared<uiMenu>(glm::vec2(0.0, -0.2), glm::vec2(0.5, 0.5), TEX_EMPTY);
             menu->insertChild(std::make_shared<uiText>("I've promised...", 0.1, 0.1, DEFAULT_FONTSIZE, DEFAULT_LINESPACE, 1.0));
             menu->insertChild(std::make_shared<uiText>("But I don't...", 0.1, -0.1, DEFAULT_FONTSIZE, DEFAULT_LINESPACE, 1.0));
@@ -165,9 +173,9 @@ void Imprisonment::act() {
             }
             break;
         }
-            
+             
         case 8: {
-            std::vector<std::string> lines = {"I've promised to share this umbrella.", "So I won't let the rain fall on us."};
+            std::vector<std::string> lines = {"How could I leave you behind?", "I've promised to share this umbrella.", "So I won't let the rain fall on us."};
             
             std::vector<float> durations;
             for (int i = 0; i < lines.size(); i++) {
@@ -175,15 +183,16 @@ void Imprisonment::act() {
             }
             makeSpeech("Floro", lines, durations);
             step += 2;
+            floro->getComponent<AnimComponent>()->playAnim("SlowDraw", false);
             if (auto m = choiceMenu.lock()) {
-                ui->removeNode(m.get());
+                ui->removeNode(m.get()); 
             }
             break;
         }
         case 9: {
-            std::vector<std::string> lines = {"But I don't do anything well...", "How can you leave everything to me?"};
+            std::vector<std::string> lines = {"I will never abandon you", "But I don't do anything well...", "Do you really believe in me?"};
             
-            std::vector<float> durations;
+            std::vector<float> durations; 
             for (int i = 0; i < lines.size(); i++) {
                 durations.push_back(4.0f);
             }
@@ -239,3 +248,9 @@ void Imprisonment::act() {
 // I feel that when SurvivalMode is added to tthis scene
 // it feels very immersive because of the empathy the player
 // feels and the level of micromanagement and involvement needed
+
+// the animations and dmg effects of Moonbell add urgency
+
+// player choice seems important too
+ 
+// animations communicate emotions better than having no animations

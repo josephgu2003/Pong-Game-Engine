@@ -381,7 +381,7 @@ void Renderer::bindTextures(Shader* shader, Material& map) {
 void Renderer::renderParticles(GraphicsObject* r) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
-    bindGraphicsObject(r);
+    bindGraphicsObject(r); 
     
     glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, r->getInstanceCount());
     r->unbind();
@@ -392,7 +392,7 @@ void Renderer::renderParticles(GraphicsObject* r) {
 
 void Renderer::renderTerrain(GraphicsObject* r) {
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glCullFace(GL_BACK); 
     bindGraphicsObject(r);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();

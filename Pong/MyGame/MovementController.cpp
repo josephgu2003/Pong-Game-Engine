@@ -86,7 +86,7 @@ void MovementController::makeIdle() {
     if (auto anim = a->getComponent<AnimComponent>()) {
         anim->playDefault();
     }
-}
+} 
 
 void MovementController::tick() {
     if (timeLeftOnParalysis <= 0.0f && moveMode == MOVEMODE_PARALYZED) {

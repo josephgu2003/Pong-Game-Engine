@@ -15,7 +15,7 @@
 SurvivalMode::SurvivalMode(World& w, float radius) : Component(w) {
     dice.setRange(0, 500);
     numberHostiles = 1;
-    spawnRadius = radius;
+    spawnRadius = radius; 
 }
 
 bool SurvivalMode::checkHuntersFree() {
@@ -29,9 +29,14 @@ bool SurvivalMode::checkHuntersFree() {
 }
 
 void SurvivalMode::tick() {
+    World* w =  static_cast<World*>(actor);
+    Actor* ph = w->getPlayerHero();
     if (watch.getTime() > 30.0f && checkHuntersFree()) {
-        World* w =  static_cast<World*>(actor);
-        Actor* ph = w->getPlayerHero();
+        if (ph->getComponent<LifeComponent>()->getStat(STAT_LIFE).value <= 0.0f) {
+            healthDivisor -= 0.5f;
+        }
+        ph->getComponent<LifeComponent>()->incStatValue(50.0f, STAT_LIFE);
+        healthDivisor += 0.5f;
         glm::vec3 pos = ph->getPos();
         w->getComponent<NotificationSystem>()->newNotification("New enemies are near...", 4.0f);
         for (int i = 0; i < numberHostiles; i++) {
@@ -39,7 +44,7 @@ void SurvivalMode::tick() {
             newHostile->setPos(randomPos(pos));
             newHostile->addComponent<Hunter>(*newHostile.get());
             newHostile->addComponent<CombatComponent>(*newHostile.get());
-            newHostile->getComponent<LifeComponent>()->init(100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f);
+            newHostile->getComponent<LifeComponent>()->init(100.0f / healthDivisor, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f, 100.0f);
             
             std::weak_ptr<Actor> aRef = newHostile;
             sentHunters.push(aRef);

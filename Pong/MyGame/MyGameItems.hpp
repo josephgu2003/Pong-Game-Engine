@@ -8,7 +8,7 @@
 #ifndef MyGameItems_hpp
 #define MyGameItems_hpp
 
-#include <stdio.h>
+#include <stdio.h> 
 
 constexpr unsigned int MAX_ITEMS = 1;
 

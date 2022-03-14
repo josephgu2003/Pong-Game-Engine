@@ -10,7 +10,6 @@
 #include "World.hpp"
 #include "LifeTime.hpp"
 #include "MovementController.hpp"
-#include "SurvivalMode.hpp"
 
 std::vector<std::string> lakeCrew = {
     "Floro", "Moonbell"
@@ -84,7 +83,7 @@ void Moonlight::act() {
             
         case 3: {
             if (!isWaiting()) {
-                std::vector<std::string> lines = {"Yes.", "I can't believe your guts,", "trying to help me despite being a layperson.", "You realize that even a hundred of you aren't worth as much as one me?", "But thank you.", "I didn't want you to die because of me,", "so I've returned the favor,", "at a cost."};
+                std::vector<std::string> lines = {"Yes.", "I can't believe your guts,", "trying to help despite being a layperson.", "You realize that even a hundred of you aren't worth as much as one me?", "But thank you.", "I didn't want you to die because of me,", "so I've returned the favor,", "at a cost."};
                 std::vector<float> durations = {4.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
                 
                 makeSpeech("Moonbell", lines, durations);
@@ -108,32 +107,31 @@ void Moonlight::act() {
         case 5: {
             if (!isWaiting()) {
                 
-                std::vector<std::string> lines = {"Yes.", "I'm only mortal now.", "But you...", "You've inherited my power.", "I suppose I'll just have to stick with you forever :)", "I have given you my umbrella so you wouldn't mind letting me stay under it from time to time, no?"};
-                std::vector<float> durations = {3.0f, 2.0f, 2.0f, 2.0f, 3.0f, 5.0f};
+                std::vector<std::string> lines = {"I'm only mortal now.", "But you...", "You've inherited my power.", "I suppose I'll just have to stick with you forever :)", "I have given you my umbrella so you wouldn't mind letting me stay under it from time to time, no?"};
+                std::vector<float> durations = {2.0f, 2.0f, 2.0f, 3.0f, 5.0f};
                  
                 makeSpeech("Moonbell", lines, durations);
             }
             
-            waitFor(19.0f);
+            waitFor(16.0f);
             break;
         }
         case 6: {
             if (!isWaiting()) {
-                std::vector<std::string> lines = {"I'm a Shorewalker now...?", "I helped you and you saved my life.", "If your powers are in me now, I can't leave you behind defenseless.", "So let's travel together until the world calms down!"};
-                std::vector<float> durations = {5.0f, 3.0f, 3.0f, 5.0f};
+                std::vector<std::string> lines = {"I'm a Shorewalker now...?"};
+                std::vector<float> durations = {5.0f};
                 
                 makeSpeech("Floro", lines, durations);
             } 
              
-            waitFor(18.0f);
+            waitFor(10.0f);
             break;
         }
              
         case 7: {
             if (!isWaiting()) {
-                std::vector<std::string> lines = {"Okay!", "Let's get out of here first."};
+                std::vector<std::string> lines = {"I'll take that as a yes!", "First, let's get out of here."};
                 std::vector<float> durations = {5.0f, 5.0f};
-                world->addComponent<SurvivalMode>(*world, 50.0f);
                 makeSpeech("Moonbell", lines, durations);
             }
             moonbell->jump(); 
@@ -144,13 +142,14 @@ void Moonlight::act() {
             if (!isWaiting()) {
                 moonbell->orientYawTo(glm::vec3(20, 0, -50) - moonbell->getPos());
             }
+            moonbell->getComponent<MovementController>()->move(MOVEDIR_FORWARDS); 
             waitFor(8.0f);
             break;
         }
         case 9: {
             std::vector<std::string> lines = {"You said your Teacher wanted you to find the incarnation of the moon?", "The night the moon disappeared, a ray of moonlight fell on the town behind that mountain.", "I heard there's a festival there too!"};
             std::vector<float> durations = {5.0f, 3.0f, 3.0f};
-            
+            moonbell->getComponent<MovementController>()->move(MOVEDIR_FORWARDS);
             makeSpeech("Moonbell", lines, durations);
             step++;
             break;

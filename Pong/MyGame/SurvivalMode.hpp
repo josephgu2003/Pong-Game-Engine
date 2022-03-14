@@ -28,6 +28,8 @@ private:
     
     bool checkHuntersFree();
     
+    float healthDivisor = 1.0f;
+    
     glm::vec3 randomPos(const glm::vec3& origin);
 public:
     SurvivalMode(World& w, float radius);

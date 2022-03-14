@@ -210,7 +210,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     
     auto shiftCall = [] (Game* g) {
         g->getInputHandler().swapCursorMode();
-    };
+    }; 
     ih->setOneTapCallback(GLFW_KEY_LEFT_SHIFT, shiftCall);
 }
 

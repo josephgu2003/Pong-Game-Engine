@@ -79,7 +79,7 @@ void AnimComponent::playAnim(const std::string& name, bool looped) {
             //globalInverse = activeAnim->getGlobalInv();
             return;
         }
-    }
+    } 
     printf("Animation %s not found \n", name.c_str());
 }  
 

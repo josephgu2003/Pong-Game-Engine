@@ -25,6 +25,14 @@
 		5D25EC452691154C008BD594 /* ColorPartF.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC432691154C008BD594 /* ColorPartF.fs */; };
 		5D25EC4826922AC9008BD594 /* ColorPartG.gs in Resources */ = {isa = PBXBuildFile; fileRef = 5D25EC4726922AC8008BD594 /* ColorPartG.gs */; };
 		5D2A98DF27D958E0009E3F58 /* ChoiceMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2A98DD27D958E0009E3F58 /* ChoiceMenu.cpp */; };
+		5D2A98E227E0254B009E3F58 /* DiffuseAndMist.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E127E0254B009E3F58 /* DiffuseAndMist.fs */; };
+		5D2A98E927E0F402009E3F58 /* Tree_Roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E327E0F401009E3F58 /* Tree_Roughness.png */; };
+		5D2A98EA27E0F402009E3F58 /* Tree_Diffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E427E0F401009E3F58 /* Tree_Diffuse.png */; };
+		5D2A98EB27E0F402009E3F58 /* tree.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E527E0F401009E3F58 /* tree.fbx */; };
+		5D2A98EC27E0F402009E3F58 /* Tree_Normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E627E0F401009E3F58 /* Tree_Normal.png */; };
+		5D2A98ED27E0F402009E3F58 /* Tree_Alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E727E0F401009E3F58 /* Tree_Alpha.png */; };
+		5D2A98EE27E0F402009E3F58 /* Tree_Specular.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98E827E0F401009E3F58 /* Tree_Specular.png */; };
+		5D2A98F027E0F487009E3F58 /* ActorFragmentShaderAlpha.fs in Resources */ = {isa = PBXBuildFile; fileRef = 5D2A98EF27E0F487009E3F58 /* ActorFragmentShaderAlpha.fs */; };
 		5D2E2D7D267A5521007ADBF3 /* PhysicsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */; };
 		5D2E2D83267BB544007ADBF3 /* CombatComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */; };
 		5D311E9927B4704A007E269A /* grass-patches in Resources */ = {isa = PBXBuildFile; fileRef = 5D311E9827B4704A007E269A /* grass-patches */; };
@@ -412,6 +420,14 @@
 		5D25EC4726922AC8008BD594 /* ColorPartG.gs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorPartG.gs; sourceTree = "<group>"; };
 		5D2A98DD27D958E0009E3F58 /* ChoiceMenu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChoiceMenu.cpp; sourceTree = "<group>"; };
 		5D2A98DE27D958E0009E3F58 /* ChoiceMenu.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChoiceMenu.hpp; sourceTree = "<group>"; };
+		5D2A98E127E0254B009E3F58 /* DiffuseAndMist.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DiffuseAndMist.fs; sourceTree = "<group>"; };
+		5D2A98E327E0F401009E3F58 /* Tree_Roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree_Roughness.png; sourceTree = "<group>"; };
+		5D2A98E427E0F401009E3F58 /* Tree_Diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree_Diffuse.png; sourceTree = "<group>"; };
+		5D2A98E527E0F401009E3F58 /* tree.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = tree.fbx; sourceTree = "<group>"; };
+		5D2A98E627E0F401009E3F58 /* Tree_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree_Normal.png; sourceTree = "<group>"; };
+		5D2A98E727E0F401009E3F58 /* Tree_Alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree_Alpha.png; sourceTree = "<group>"; };
+		5D2A98E827E0F401009E3F58 /* Tree_Specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree_Specular.png; sourceTree = "<group>"; };
+		5D2A98EF27E0F487009E3F58 /* ActorFragmentShaderAlpha.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ActorFragmentShaderAlpha.fs; sourceTree = "<group>"; };
 		5D2E2D7B267A5520007ADBF3 /* PhysicsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsComponent.cpp; sourceTree = "<group>"; };
 		5D2E2D7C267A5521007ADBF3 /* PhysicsComponent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsComponent.hpp; sourceTree = "<group>"; };
 		5D2E2D81267BB544007ADBF3 /* CombatComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CombatComponent.cpp; sourceTree = "<group>"; };
@@ -1024,6 +1040,20 @@
 			path = Scenes;
 			sourceTree = "<group>";
 		};
+		5D2A98E027E024EC009E3F58 /* PineTree */ = {
+			isa = PBXGroup;
+			children = (
+				5D2A98E727E0F401009E3F58 /* Tree_Alpha.png */,
+				5D2A98E427E0F401009E3F58 /* Tree_Diffuse.png */,
+				5D2A98E627E0F401009E3F58 /* Tree_Normal.png */,
+				5D2A98E327E0F401009E3F58 /* Tree_Roughness.png */,
+				5D2A98E827E0F401009E3F58 /* Tree_Specular.png */,
+				5D2A98E527E0F401009E3F58 /* tree.fbx */,
+				5DDD491827CF2A8F00EDEC57 /* tre.png */,
+			);
+			path = PineTree;
+			sourceTree = "<group>";
+		};
 		5D33262226790444002F3D49 /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -1123,7 +1153,7 @@
 		5D66B48F2651EF01006EA749 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				5DDD491827CF2A8F00EDEC57 /* tre.png */,
+				5D2A98E027E024EC009E3F58 /* PineTree */,
 				5D8498B627C2D4F8007E74DD /* aurora.fbx */,
 				5D91DF74275AAD3200AF8EF4 /* snownorm.png */,
 				5DB91ED527247678003AAAA7 /* grass.png */,
@@ -1249,6 +1279,7 @@
 		5DA7E271267E6D33008845AA /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				5D2A98EF27E0F487009E3F58 /* ActorFragmentShaderAlpha.fs */,
 				5DF168D92799E1E3009E2BEB /* Include */,
 				5DA7E274267E6D33008845AA /* ActorVertexShader.vs */,
 				5DA7E287267E6D33008845AA /* ActorFragmentShader.fs */,
@@ -1263,6 +1294,7 @@
 				5D8498B127BD8D4C007E74DD /* SwordExplosion.fs */,
 				5D8B552527D297D300773119 /* Imprisonment.fs */,
 				5D37512026A7624000BB8BC9 /* WaterFragmentShader.fs */,
+				5D2A98E127E0254B009E3F58 /* DiffuseAndMist.fs */,
 				5D01276D272F7244008F4D36 /* PointPart.vs */,
 				5DDD492027D1BDF700EDEC57 /* MoonBeam.fs */,
 				5D37512126A7624000BB8BC9 /* WaterVertexShader.vs */,
@@ -1875,6 +1907,7 @@
 				5DB91ED627247678003AAAA7 /* grass.png in Resources */,
 				5DA9835D2686A732008252BA /* smoke039.jpg in Resources */,
 				5D8498B227BD8D4C007E74DD /* SwordExplosion.fs in Resources */,
+				5D2A98ED27E0F402009E3F58 /* Tree_Alpha.png in Resources */,
 				5DA9834E2686A732008252BA /* smoke095.jpg in Resources */,
 				5DA983272686A732008252BA /* smoke014.jpg in Resources */,
 				5DA983212686A732008252BA /* smoke099.jpg in Resources */,
@@ -1887,12 +1920,15 @@
 				5D37511F26A7040F00BB8BC9 /* Screen Shot 2021-07-20 at 9.15.42 AM.png in Resources */,
 				5DA983612686A732008252BA /* smoke011.jpg in Resources */,
 				5DA9BE6226BF363200C1BAEC /* fly.fbx in Resources */,
+				5D2A98EB27E0F402009E3F58 /* tree.fbx in Resources */,
 				5DA983372686A732008252BA /* smoke010.jpg in Resources */,
 				5DA9831A2686A732008252BA /* smoke087.jpg in Resources */,
 				5DF168DD279A486E009E2BEB /* Lighting.fs in Resources */,
 				5D37512726A7628200BB8BC9 /* TerrainFragmentShader.fs in Resources */,
 				5DA983492686A732008252BA /* smoke026.jpg in Resources */,
+				5D2A98EE27E0F402009E3F58 /* Tree_Specular.png in Resources */,
 				5D7EE235276ED7420026AB83 /* Billboard.vs in Resources */,
+				5D2A98EC27E0F402009E3F58 /* Tree_Normal.png in Resources */,
 				5DA983472686A732008252BA /* smoke079.jpg in Resources */,
 				5DA9834D2686A732008252BA /* smoke063.jpg in Resources */,
 				5DA9837D2686A733008252BA /* smoke091.jpg in Resources */,
@@ -1933,6 +1969,7 @@
 				5DA983762686A732008252BA /* smoke097.jpg in Resources */,
 				5DA9831E2686A732008252BA /* smoke031.jpg in Resources */,
 				5DA9834A2686A732008252BA /* smoke030.jpg in Resources */,
+				5D2A98F027E0F487009E3F58 /* ActorFragmentShaderAlpha.fs in Resources */,
 				5D33261C2676F2A1002F3D49 /* Plan.rtf in Resources */,
 				5DA983442686A732008252BA /* smoke081.jpg in Resources */,
 				5DB91EAE271DD7AA003AAAA7 /* HealthMeter.fs in Resources */,
@@ -1989,6 +2026,7 @@
 				5D63AD58274AA9DC0074F165 /* landscape.png in Resources */,
 				5DA9835C2686A732008252BA /* smoke020.jpg in Resources */,
 				5DA983622686A732008252BA /* smoke059.jpg in Resources */,
+				5D2A98EA27E0F402009E3F58 /* Tree_Diffuse.png in Resources */,
 				5D8A7D0C26F0FCAF00BD8BDB /* GenericDiffuse.fs in Resources */,
 				5DDD492127D1BDF700EDEC57 /* MoonBeam.fs in Resources */,
 				5DAC32C526AF42CE00E54B4B /* leafclustespecular.png in Resources */,
@@ -2059,9 +2097,11 @@
 				5DAC32C426AF42CE00E54B4B /* barkspecular.png in Resources */,
 				5D87838827653FEA006354AB /* Well_Roughtness.jpg in Resources */,
 				5DA9835A2686A732008252BA /* smoke041.jpg in Resources */,
+				5D2A98E927E0F402009E3F58 /* Tree_Roughness.png in Resources */,
 				5DA9836F2686A732008252BA /* smoke062.jpg in Resources */,
 				5DA7E29F267E6D34008845AA /* ActorFragmentShader.fs in Resources */,
 				5DF4EBE8277D1021006823FB /* inventory.png in Resources */,
+				5D2A98E227E0254B009E3F58 /* DiffuseAndMist.fs in Resources */,
 				5DAC32C826AF42CE00E54B4B /* barkColor.png in Resources */,
 				5DA983692686A732008252BA /* smoke000.jpg in Resources */,
 				5DAB0B6126702D7A00BC1C93 /* BLANK_ICON3.png in Resources */,

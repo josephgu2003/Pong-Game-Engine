@@ -11,7 +11,7 @@ Sketch::Sketch(World* world_, Actor* actor_, float duration_, GLuint texture_) :
     //quad.pos = actor->getPos() + 3.0f*actor->dirVec + glm::vec3(0,3.0,0);
     for (int i = 0; i < 50; i++) {
         for (int j = 0; j < 50; j++) {
-            Vertex vertex;
+            Vertex vertex; 
             vertex.Pos = glm::vec3( (float)(3.0*(-0.5f+i/49.0f)),(float)(3.0*(-0.5f+j/49.0f)),
                                          (0.0f));
 //            vertex.Pos += quad.pos;

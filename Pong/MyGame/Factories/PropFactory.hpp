@@ -12,7 +12,7 @@
 #include <memory>
 #include "Prop.hpp"
 
-enum PropEnum {
+enum PropEnum { 
     PROP_TREE,   
     PROP_GRASS,
     PROP_WELL,
@@ -22,7 +22,8 @@ enum PropEnum {
     PROP_SWORD_EXP,
     PROP_MOUNT,
     PROP_AURORA,
-    PROP_IMPRISONMENT
+    PROP_IMPRISONMENT,
+    PROP_PINE
 };
 
 class PropFactory {

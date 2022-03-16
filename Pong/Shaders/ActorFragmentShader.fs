@@ -12,7 +12,7 @@ in vec2 TexCoords;
 layout (std140) uniform Lights
 {
     Light light;
-
+ 
     DirLight dirLight;
     
     vec3 viewPos;

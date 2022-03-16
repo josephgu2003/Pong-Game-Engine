@@ -261,8 +261,6 @@ void MyGame::setupLvlBuilder() {
       //  ui->insertNode(dpt);
         
         DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
-        
-        DirectionalLight            night(glm::vec3(0.02,0.02,0.03),glm::vec3(0.1,0.1,0.12),glm::vec3(0.6,0.6,0.8),glm::vec3(-1,-1,0)); 
           
         World& wOne = lvl->getWorld(1);
         World& wZero = lvl->getWorld(0);

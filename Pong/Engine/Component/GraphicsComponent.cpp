@@ -33,13 +33,14 @@ void GraphicsComponent::tick() {
 void GraphicsComponent::initModel(const std::string& model) {
     // need to load model data to vao vbo, 
     VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices, deleteDataOnDestruct);
-    
 } 
 
 void GraphicsComponent::draw(Renderer* r) {
     if (useLOD) {
-       // drawCall(r, LODmesh.get());
-    } else {
+       // if (auto lod = LODmesh.get()) {
+       //     drawCall(r, lod);
+      //  }
+    } else { 
         drawCall(r, this);
     }
 } 

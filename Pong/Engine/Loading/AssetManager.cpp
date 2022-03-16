@@ -32,6 +32,8 @@ void AssetManager::loadTexture(const char* filePath, Texture* texture, bool srgb
        GLenum format = GL_RGBA;
               if (channels == 1)
                   format = GL_RED;
+              else if (channels == 2)
+                  format = GL_RG;
               else if (channels == 3)
                   format = GL_RGB;
               else if (channels == 4)

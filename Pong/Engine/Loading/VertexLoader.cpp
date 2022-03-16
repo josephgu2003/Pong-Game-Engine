@@ -653,6 +653,37 @@ void VertexLoader::loadSimpleVertexGrid(int verticesX, int verticesY, float scal
     fillVertexData<SimpleVertex>(VAO, VBO, EBO, numIndices, GL_DYNAMIC_DRAW, GL_DYNAMIC_DRAW, vertices, indices);
 }
 
+void VertexLoader::loadSimpleVertexGrid(int verticesX, int verticesY, float scale, glm::vec2 offset, unsigned int VAO, unsigned int VBO, unsigned int EBO, unsigned int& numIndices) {
+    std::vector<SimpleVertex> vertices;
+    vertices.resize(verticesX * verticesY);
+    
+    int c = 0;
+    for (int i = 0; i < verticesY; i++) {
+        for (int j = 0; j < verticesX; j++) {
+            SimpleVertex v;
+            v.Pos = glm::vec3(scale*(-0.5f+j/float(verticesX-1)) + offset.x, scale*(-0.5f+i/float(verticesY - 1)) + offset.y, 0.0f);
+            v.TexCoords = glm::vec2(j/float(verticesX-1), i/float(verticesY-1));
+            v.arraytexID = 0;
+            vertices[c] = v; // FIX DUMBASS
+            c++;
+        }
+    }
+    
+    std::vector<GLuint> indices;
+    
+    for (int i = 0; i < verticesY-1; i++) {
+        for (int j = 0; j < verticesX-1; j++) {
+            indices.push_back(0.0f+j+verticesX*i+verticesX);
+            indices.push_back(0.0f+j+verticesX*i+1);
+            indices.push_back(0.0f+j+verticesX*i);
+            indices.push_back(0.0f+j+verticesX*i+1);
+            indices.push_back(0.0f+j+verticesX*i+verticesX);
+            indices.push_back(0.0f+j+verticesX*i+verticesX+1);
+        }
+    }
+    
+    fillVertexData<SimpleVertex>(VAO, VBO, EBO, numIndices, GL_DYNAMIC_DRAW, GL_DYNAMIC_DRAW, vertices, indices);
+}
 
 static const float skyVertices[] = {
     -1.0f,  1.0f, -1.0f,

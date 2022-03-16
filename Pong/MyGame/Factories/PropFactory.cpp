@@ -132,7 +132,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             
             AssetManager::loadTexture("Resources/Particles/mist2.png", &map.alphaMap, false);
             
-            Shader* shader = new Shader("Shaders/Fresnel.vs",  "Shaders/Moonbeam.fs");
+            Shader* shader = new Shader("Shaders/Fresnel.vs", "Shaders/Moonbeam.fs");
             shader->use();
             shader->setUniform("color", glm::vec3(1.0,1.05,1.2));  
             shader->setUniform("brightness", 3.0f);
@@ -206,9 +206,38 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             prop->bakeRotation(glm::vec3(90, 0 , 0));
             break;
         }
-            
-    
+             
+        case PROP_PINE: { 
+            Material map; 
+           /** AssetManager::loadTexture("Resources/Map/PineTree/tre.png", &map.diffuse, true);
 
+            Shader* shader = new Shader("Shaders/BillboardNonInstanced.vs",  "Shaders/DiffuseAndMist.fs");
+             
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
+            gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
+                std::vector<PosVertex> mesh;
+                VertexLoader::loadSimpleVertexGrid(2, 6, 6.0, glm::vec2(0, 3), vao, vbo, ebo, numIndices);
+            });
+            prop->addComp(gc);
+            gc->setUniform("alpha", 1.0f);**/   
+             
+            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Alpha.png", &map.alphaMap, false); 
+            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Diffuse.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Normal.png", &map.normMap, false); 
+    
+         
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShaderAlpha.fs");
+            shader->use();
+            shader->setUniform("size", 1.0f);
+            shader->setUniform("brightness", 0.0f);
+            
+            std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/PineTree/tree.fbx");
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(-90.0f, 0, 0));
+            break;
+        }
+ 
         default:
             break;
     }

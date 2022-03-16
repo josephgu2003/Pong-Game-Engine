@@ -13,7 +13,7 @@
  
  bool loadingChunks = false;**/
 
-MapManager::MapManager() {
+MapManager::MapManager() { 
     loadingUnloadedChunks = false;
 }
 
@@ -26,7 +26,7 @@ void MapManager::setMap(const std::string& filePath, glm::vec3 scaling) {
     assert(fmod(mapDescriptor.subdivisionsX, 1) == 0);
     assert(fmod(mapDescriptor.subdivisionsY, 1) == 0);
     mapDescriptor.verticesWide = pixelsX;
-    mapDescriptor.verticesTall = pixelsY;
+    mapDescriptor.verticesTall = pixelsY; 
     mapDescriptor.scalings = scaling;
     AssetManager::loadTexture("Resources/Map/snow.png", &terrainMat.normMap, false);
 }     

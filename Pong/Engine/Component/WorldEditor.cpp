@@ -30,7 +30,7 @@ void WorldEditor::notify(const Subject &subject, GameEvent ge) {
         if (key == GLFW_KEY_L) {
             auto a = static_cast<Actor*>(actor);
             PropFactory pf;
-            auto tree = pf.makeProp(PROP_LIGHTRAY); 
+            auto tree = pf.makeProp(PROP_PINE);  
             tree->setPos(a->getPos());
             a->getWorld().insert(tree);
         }

@@ -209,35 +209,53 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
              
         case PROP_PINE: { 
             Material map; 
-           /** AssetManager::loadTexture("Resources/Map/PineTree/tre.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Map/PineTree/tre.png", &map.diffuse, true);
 
             Shader* shader = new Shader("Shaders/BillboardNonInstanced.vs",  "Shaders/DiffuseAndMist.fs");
              
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_TRANSPARENT);
             gc->init([] (unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices) {
                 std::vector<PosVertex> mesh;
-                VertexLoader::loadSimpleVertexGrid(2, 6, 6.0, glm::vec2(0, 3), vao, vbo, ebo, numIndices);
+                VertexLoader::loadSimpleVertexGrid(2, 10, 6.0, glm::vec2(0, 2.6), vao, vbo, ebo, numIndices);
             });
             prop->addComp(gc);
-            gc->setUniform("alpha", 1.0f);**/   
+            gc->setUniform("alpha", 1.0f);
              
-            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Alpha.png", &map.alphaMap, false); 
+         /**   AssetManager::loadTexture("Resources/Map/PineTree/Tree_Alpha.png", &map.alphaMap, false);
             AssetManager::loadTexture("Resources/Map/PineTree/Tree_Diffuse.png", &map.diffuse, true);
-            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Normal.png", &map.normMap, false); 
-    
-         
+            AssetManager::loadTexture("Resources/Map/PineTree/Tree_Normal.png", &map.normMap, false);
+          
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShaderAlpha.fs");
             shader->use();
-            shader->setUniform("size", 1.0f);
+            shader->setUniform("size", 1.5f);
             shader->setUniform("brightness", 0.0f);
-            
+             
             std::shared_ptr<GraphicsComponent> gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
-            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/PineTree/tree.fbx");
-            prop->addComp(gc);
-            prop->bakeRotation(glm::vec3(-90.0f, 0, 0));
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/PineTree/talltree.fbx");
+            prop->addComp(gc); 
+            prop->bakeRotation(glm::vec3(-90.0f, 0, 0));**/
             break;
         }
- 
+             
+        case PROP_MT: {
+            Material map; 
+
+            AssetManager::loadTexture("Resources/great-mountain/textures/mountain_diffuse.jpg", &map.diffuse, true);
+            AssetManager::loadTexture(TEX_BLANK_NORMALS, &map.normMap, false);
+         
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
+            shader->use();
+            shader->setUniform("size", 0.1f);
+            shader->setUniform("brightness", 0.0f);
+             
+            std::shared_ptr<GraphicsComponent> gc =  std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/great-mountain/source/great_mountain.obj");
+            prop->addComp(gc);
+          //  prop->bakeRotation(glm::vec3(-90.0f, 0, 0));
+            break;
+
+        }
+
         default:
             break;
     }

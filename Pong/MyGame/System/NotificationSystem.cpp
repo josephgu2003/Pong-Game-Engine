@@ -11,10 +11,7 @@
 #include "InventoryComponent.hpp"
 
 void NotificationSystem::newNotification(const std::string& text, float duration) {
-    if (auto x = notificationText.lock()) {
-        x->setText(text);
-    }
-    notificationFrame->initFadeFunction(0.0, duration-0.75f, 0.75f);
+    notificationQueue.push(NotificationBlurb(text, duration));
 }
   
 void NotificationSystem::drawAll(Renderer* r) {
@@ -30,6 +27,16 @@ void NotificationSystem::tick() {
                 foundInventory = true;
             }
         }
+    }
+    
+    if (!notificationQueue.empty() && notificationFrame->isHidden()) {
+        auto blurb = notificationQueue.front();
+        notificationQueue.pop(); 
+        
+        if (auto x = notificationText.lock()) {
+            x->setText(blurb.message);
+        }
+        notificationFrame->initFadeFunction(0.0, blurb.duration - 0.75f, 0.75f);
     }
 }
  

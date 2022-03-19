@@ -13,7 +13,7 @@
 
 #define RENDER_DISTANCE 200.0
 
-#include <glm/glm.hpp>
+#include <glm/glm.hpp> 
 #include <GL/glew.h>
 #define GLFW_DLL
 #include <GLFW/glfw3.h>

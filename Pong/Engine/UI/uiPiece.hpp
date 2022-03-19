@@ -27,8 +27,9 @@ private:
     bool usingFadeFunction;
     inline void invokeFadeFunction() {
         hidden = fadeFunction(watch.getTime(), this);
-        if (hidden) usingFadeFunction = false;
     } 
+    bool deleteThis;
+    void initFadeFunctionAbstraction(float timeToStart, float timeToFade, float fadeDuration, bool fadeThisOnly);
     
 protected:
     std::vector<std::shared_ptr<uiPiece>> children;
@@ -51,8 +52,10 @@ protected:
     
 public:
     void initFadeFunction(float timeToStart, float timeToFade, float fadeDuration);
+    void initFadeFunctionThisOnly(float timeToStart, float timeToFade, float fadeDuration);
     void initFadeFunction(float secPerCycle);
     void initPeriodicFadeFunction(float timeToStart, float timeToFade, float fadeDuration, float period);
+    
     uiPiece(glm::vec2 position, glm::vec2 dimensions, std::string vs, std::string fs);
     void draw(Renderer* r) override final;
     void insertChild(const std::shared_ptr<uiPiece>& uip);
@@ -64,6 +67,7 @@ public:
     void setHiddenStatus(bool status);
     void flipHiddenStatus();
     bool isHidden();
+    bool shouldDeleteThis();
 };
 
 #endif /* uiPiece_hpp */

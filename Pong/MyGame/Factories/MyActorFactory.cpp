@@ -202,19 +202,19 @@ std::shared_ptr<Actor> MyActorFactory::makeActor(int i) {
             
         }
         case ACTOR_FISH: { // maybe actor would want to know about ability field variables??
-            actor->addComponent<LightComponent>(*actor.get(), *actor.get(), PointLight(glm::vec3(0.2,0.2,0.2), glm::vec3(3.5,3.5,3.5), glm::vec3(2.0,2.0,2.0), 1.0, 0.2, 0.2, glm::vec3(0)));
+           actor->addComponent<LightComponent>(*actor.get(), *actor.get(), PointLight(glm::vec3(0.2,0.2,0.2), glm::vec3(3.5,3.5,3.5), glm::vec3(2.0,2.0,2.0), 1.0, 0.2, 0.05, glm::vec3(0)));
             Material map;
-            stbi_set_flip_vertically_on_load(1);
+            stbi_set_flip_vertically_on_load(1); 
             AssetManager::loadTexture(TEX_FISH, &map.diffuse, true);
             
             Shader* shader = new Shader("Shaders/SketchVShader.vs", "Shaders/SketchFShader.fs");
             shader->use();
-            shader->setUniform("alpha", 1.0);
+            shader->setUniform("alpha", 1.0);  
             
             ActComp gc = std::make_shared<GraphicsComponent>(*(actor.get()), shader, map, DRAW_OPAQUE);
             std::shared_ptr<VertexMesh> mesh = std::make_shared<VertexMesh>();
             int gridX = 20;
-            int gridY = 3;
+            int gridY = 3; 
             float length = 0.8;
             static_pointer_cast<GraphicsComponent>(gc)->initGrid(gridX, gridY, length, mesh);
             actor->addComp(gc);

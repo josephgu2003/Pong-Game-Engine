@@ -27,7 +27,6 @@ private:
     uiLayout* ui = nullptr;
     InputHandler* ih = nullptr;
     std::vector<std::shared_ptr<uiText>> dreamSequence;
-    
     std::weak_ptr<uiMenu> choiceMenu;
 public:
     Imprisonment(World* world, bool completed, uiLayout* ui, InputHandler* ih);

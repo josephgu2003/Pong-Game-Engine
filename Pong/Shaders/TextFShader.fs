@@ -56,7 +56,6 @@ uniform float alpha = 1.0;
             }**/
         }
         FragColor = vec4(color,alpha*a);
-        FragColor = vec4(1.0,1.0,1.0,1.0);
         if (brightness > 0.0) {
         BrightColor = brightness * FragColor;
         }

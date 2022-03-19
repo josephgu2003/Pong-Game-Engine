@@ -11,12 +11,13 @@
 #include "ScriptNightFlowers.hpp"
 #include "Moonlight.hpp"
 #include "Imprisonment.hpp"
+#include "InTheWilderness.hpp"
 
 ScriptFactory::ScriptFactory() {
     ih = NULL; 
 }
 std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World* world, bool completed) {
-    std::shared_ptr<Script> script;
+    std::shared_ptr<Script> script; 
     if (scriptname == "FloroWakes") {
             script = std::make_shared<ScriptWakeUp>(world, completed, ui);
     } else if (scriptname == "Snowclaw"){
@@ -27,6 +28,8 @@ std::shared_ptr<Script> ScriptFactory::makeScript(std::string scriptname, World*
         script = std::make_shared<Moonlight>(world, completed); 
     } else if (scriptname == "Imprisonment") {
         script = std::make_shared<Imprisonment>(world, completed, ui.lock().get(), ih);
+    } else if (scriptname == "In the Wilderness") {
+        script = std::make_shared<InTheWilderness>(world, completed, ih,  ui.lock().get());
     } else { // !! make a dummy script
             script = std::make_shared<ScriptWakeUp>(world, completed, ui);
     }

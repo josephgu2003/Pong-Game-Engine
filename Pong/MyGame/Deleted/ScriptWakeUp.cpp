@@ -19,7 +19,7 @@
 #include "DirlightTransition.hpp"
 
 std::vector<std::string> myCrewWU = {
-    "Floro", "Moonbell"
+    "Floro", "Moonbell"  
 };
 
 std::vector<std::string> prereqsWU = {};

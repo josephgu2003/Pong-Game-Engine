@@ -137,7 +137,7 @@ public:
         allParticleEffects.push_back(ps);
         ps->setWorld(this);
         insertGraphicsToManager<ParticleSystem>(ps);
-    }
+    } 
       
     template <typename T> // bad code, keep for now
       void insert(const std::shared_ptr<T>& placeable) { 
@@ -239,10 +239,46 @@ public:
         }
         return hasNear;
     }
+    
+    template <typename T>
+    Componentable* getNearestObjectWith(Positionable* caller, float& distance)
+    {
+        Componentable* nearest = nullptr;
+        glm::vec3 nearestPos = glm::vec3(0.0);
+        for (auto actor : allActorPtrs) {
+            if (actor.get() == caller) continue;
+            if (actor->hasComponent<T>()) {
+                if (nearest == nullptr || caller->getDistanceTo(actor.get()) < caller->getDistanceTo(nearestPos)) {
+                    nearest = actor.get();
+                    nearestPos = actor->getPos();
+                }
+            }
+        }
+        for (auto actor : allProps) {
+            if (actor.get() == caller) continue;
+            if (actor->hasComponent<T>()) {
+                if (nearest == nullptr || caller->getDistanceTo(actor.get()) < caller->getDistanceTo(nearestPos)) {
+                    nearest = actor.get();
+                    nearestPos = actor->getPos();
+                }
+            }
+        }
+        for (auto actor : allParticleEffects) {
+            if (actor.get() == caller) continue;
+            if (actor->hasComponent<T>()) {
+                if (nearest == nullptr || caller->getDistanceTo(actor.get()) < caller->getDistanceTo(nearestPos)) {
+                    nearest = actor.get();
+                    nearestPos = actor->getPos();
+                }
+            }
+        }
+        distance = caller->getDistanceTo(nearestPos); 
+        return nearest;
+    }
 
     std::shared_ptr<Actor> getActorNamed(const std::string& name);
     
-    float getHeightAt(glm::vec2 xz);
+    float getHeightAt(const glm::vec2& xz);
 
     void markPlayerHero(const Actor* ph);
     Actor* getPlayerHero();

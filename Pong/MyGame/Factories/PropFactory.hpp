@@ -23,7 +23,8 @@ enum PropEnum {
     PROP_MOUNT,
     PROP_AURORA,
     PROP_IMPRISONMENT,
-    PROP_PINE
+    PROP_PINE,
+    PROP_MT
 };
 
 class PropFactory {

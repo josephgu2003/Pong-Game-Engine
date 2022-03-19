@@ -21,7 +21,7 @@ FogTransition::FogTransition(World& world, float timeTillDone_, float fogDensity
     fogColor0 = df.fogColor;
 }
  
-void FogTransition::tick() { 
+void FogTransition::tick() {  
     float ratio = watch.getTime() / timeTillDone;
     if (ratio <= 1.0f) {
         WorldFog& df = static_cast<World*>(actor)->getDistanceFog();

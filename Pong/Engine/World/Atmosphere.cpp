@@ -13,11 +13,23 @@
 Atmosphere::Atmosphere() : GraphicsObject(DRAW_OPAQUE) {
     VertexLoader::loadSimpleCube(VAO, VBO, EBO, numIndices);
     shader = new Shader("Shaders/SkyVertexShader.vs", "Shaders/SkyFragmentShader.fs");
-    Renderer::bindShaderUniblock(shader, DistanceFog); 
+    Renderer::bindShaderUniblock(shader, DistanceFog);
+    skyColor = glm::vec3(0.6, 0.6, 1.0);
+    shader->use();
+    shader->setUniform("skyColor", skyColor);
 } 
 
 void Atmosphere::draw(Renderer *r) {
         r->renderSky(this);
+}
+
+glm::vec3 Atmosphere::getSkyColor() {
+    return skyColor;
+} 
+void Atmosphere::setSkyColor(const glm::vec3& skyColor_) {
+    skyColor = skyColor_;
+    shader->use();
+    shader->setUniform("skyColor", skyColor);
 }
  
 void Atmosphere::setSkybox(const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ) {

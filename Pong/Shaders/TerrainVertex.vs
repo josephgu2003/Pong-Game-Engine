@@ -36,7 +36,7 @@ out TangentSpaceInfo tanspaceinfo;
         gl_Position =  viewProjMat * vec4(aPos.xyz, 1.0);
         fragPos = aPos; 
         TexCoords = TexCoords_;
-        TexCoordsLarger = vec2(mod(sin(5.0*fragPos.x),1.0),mod(sin(5.0*fragPos.z),1.0));
+        TexCoordsLarger = vec2(mod(sin(2.0*fragPos.x),1.0),mod(sin(2.0*fragPos.z),1.0));
         Normals = Normals_;
         
         setupTanSpaceNormals(Tangent, Bitangent, Normals_, tanspaceinfo, dirLight, light, viewPos, aPos);

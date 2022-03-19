@@ -28,15 +28,12 @@ enum MovementMode {
     MOVEMODE_RUN
 };
 
-
-
 static const float walkSpeed = 0.03f;
 static const float runSpeed = 0.06f;
 
 class MovementController : public Component {
 private:
     MovementMode moveMode;
-    
     float timeLeftOnParalysis = 0.0f;
     Watch watch;
 public:

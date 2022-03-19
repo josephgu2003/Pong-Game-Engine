@@ -44,7 +44,7 @@ void Animation::makeBones(const aiAnimation* animation, std::map<std::string, Bo
 
 const std::string& Animation::getName() {
     return name;
-}
+} 
 
 float Animation::getDuration() {
     return duration;

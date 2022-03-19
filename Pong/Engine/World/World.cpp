@@ -124,8 +124,8 @@ void World::setMap(const std::string& filePath, glm::vec3 scaling) {
         loadChunks(x->getPos()); 
     }
 } 
- 
-float World::getHeightAt(glm::vec2 xz) {
+  
+float World::getHeightAt(const glm::vec2& xz) {
     return mapManager.getHeightAt(xz); 
 }
   

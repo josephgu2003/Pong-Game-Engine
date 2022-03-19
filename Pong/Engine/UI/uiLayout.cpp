@@ -54,3 +54,12 @@ void uiLayout::clear() {
     activePiece.reset();
     uiPieces.clear(); 
 }
+
+void uiLayout::removeDeadUI() {
+    for (int i = 0; i < uiPieces.size(); i++) {
+        if (uiPieces.at(i)->shouldDeleteThis()) {
+            uiPieces.erase(uiPieces.begin()+i);
+            return;
+        }
+    }
+}

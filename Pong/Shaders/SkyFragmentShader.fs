@@ -9,16 +9,19 @@ layout (std140) uniform DistanceFog
     float frustrumNear;
     float frustrumFar;
     vec3 fogColor;
-}; 
+};
+
+uniform vec3 skyColor;
 
     void main()
     {
         vec4 fragColor = vec4(0,0,0,0);
-        fragColor.rgb = vec3(0,0,0);
-        vec3 pos = TexVec;
-        float gradient = dot(normalize(pos),normalize(vec3(pos.x,0,pos.z))); // 1 -> 0
-        gradient = pow(gradient, 3);
-        fragColor.rgb = mix(fragColor.rgb, fogColor, gradient * 0.7 + 0.3);
+        fragColor.rgb = skyColor;
+        vec3 pos = normalize(TexVec);
+        float gradient = max(2.0 * atan(pos.y, length(vec2(pos.x, pos.z))) / 3.1415, 0.0); // 0 -> 1
+       // gradient = 1.0 / (1.0 + exp(-70.0 * gradient + 68.0));
+        gradient = smoothstep(0.02, 0.18, gradient);
+        fragColor.rgb = mix(fogColor, fragColor.rgb, gradient);
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

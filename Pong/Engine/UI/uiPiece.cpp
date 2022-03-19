@@ -17,15 +17,16 @@ uiPiece::uiPiece(glm::vec2 position_, glm::vec2 dimensions_, std::string vs, std
     shader->setUniform("position", glm::vec3(position_.x, position_.y, 0));
     hidden = false;
     usingFadeFunction = false;
-} 
+    deleteThis = false;
+}  
 
 
 void uiPiece::drawUI(Renderer* r) {
     r->renderGeneric(this); 
 }
-
+ 
 void uiPiece::draw(Renderer* r) {
-    if (usingFadeFunction) invokeFadeFunction();
+    if (usingFadeFunction) invokeFadeFunction(); 
     if (!hidden) {
         drawUI(r); 
         for (auto ui = children.begin(); ui != children.end(); ui++) {
@@ -38,18 +39,6 @@ void uiPiece::insertChild(const std::shared_ptr<uiPiece>& uip) {
     children.push_back(uip);
 }
  
-void uiPiece::initFadeFunction(float timeToStart, float timeToFade, float fadeDuration) {
-    float fadeRateCoefficient = 1.0f / fadeDuration;
-    fadeFunction = [=] (float time_, uiPiece* s) {
-        float alpha = glm::clamp(fadeRateCoefficient*(time_-timeToStart), 0.0f, 1.0f);
-        float alpha_ = glm::clamp(fadeRateCoefficient*(timeToFade-time_),0.0f,1.0f);
-        float realalpha = std::min(alpha, alpha_);
-        s->setUniformForAll("alpha", realalpha);
-        return (realalpha == 0.0f);
-    };   
-    watch.resetTime();
-    usingFadeFunction = true; 
-}
 
 void uiPiece::initFadeFunction(float secPerCycle) {
     fadeFunction = [=] (float time_, uiPiece* s) {
@@ -78,11 +67,43 @@ void uiPiece::initPeriodicFadeFunction(float timeToStart, float timeToFade, floa
     float fadeRateCoefficient = 1.0f / fadeDuration;
     fadeFunction = [=] (float time_, uiPiece* s) {
         float alpha = glm::clamp(fadeRateCoefficient*(fmod(time_-timeToStart, period)), 0.0f, 1.0f);
-        float alpha_ = glm::clamp(fadeRateCoefficient*(std::floor((time_-timeToStart)/ period) * period + timeToFade-time_),0.0f,1.0f); 
+        float alpha_ = glm::clamp(fadeRateCoefficient*(std::floor((time_ - timeToStart)/ period) * period + timeToFade - time_),0.0f,1.0f);
         float realalpha = std::min(alpha, alpha_);
         s->setUniformForAll("alpha", realalpha);
-        return false;
+        return (realalpha == 0.0f);
     };
     watch.resetTime();
     usingFadeFunction = true;
+}
+
+void uiPiece::initFadeFunction(float timeToStart, float timeToFade, float fadeDuration) {
+    initFadeFunctionAbstraction(timeToStart, timeToFade, fadeDuration, false);
+}
+
+void uiPiece::initFadeFunctionThisOnly(float timeToStart, float timeToFade, float fadeDuration) {
+    initFadeFunctionAbstraction(timeToStart, timeToFade, fadeDuration, true);
+}
+
+void uiPiece::initFadeFunctionAbstraction(float timeToStart, float timeToFade, float fadeDuration, bool fadeThisOnly) {
+    float fadeRateCoefficient = 1.0f / fadeDuration;
+    fadeFunction = [=] (float time_, uiPiece* s) {
+        // transparency during ramping phase
+        float alpha = glm::clamp(fadeRateCoefficient*(time_-timeToStart), 0.0f, 1.0f);
+        
+        // transprency during declining phase
+        float alpha_ = glm::clamp(fadeRateCoefficient*(timeToFade-time_), 0.0f,1.0f);
+        float realalpha = std::min(alpha, alpha_);
+        if (fadeThisOnly) {
+            s->setUniform("alpha", realalpha);
+        } else {
+            s->setUniformForAll("alpha", realalpha);
+        }  
+        return (realalpha == 0.0f);
+    };
+    watch.resetTime();
+    usingFadeFunction = true; 
+}
+
+bool uiPiece::shouldDeleteThis() {
+    return deleteThis;
 }

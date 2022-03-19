@@ -136,6 +136,17 @@
         },
         {
             "Completed": false,
+            "FactoryEnum": "In the Wilderness",
+            "Position": [
+                10.0,
+                20.0,
+                30.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": false,
             "FactoryEnum": "Imprisonment",
             "Position": [
                 20.0,

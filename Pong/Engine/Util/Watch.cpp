@@ -24,3 +24,26 @@ float Watch::getTime() {
 void Watch::resetTime() {
     t0 = std::chrono::steady_clock::now();
 } 
+
+CountdownTimer::CountdownTimer() : Watch() {
+    active = false;
+    duration = 0.0f;
+}
+
+void CountdownTimer::windGentle(float duration_) {
+    if (!active) {
+        duration = duration_;
+        resetTime();
+        active = true;
+    }
+}
+
+// will deactivate if returns true
+bool CountdownTimer::checkDone() {
+    if (active && getTime() >= duration) {
+        active = false;
+        return true;
+    } else {
+        return false;
+    }
+}

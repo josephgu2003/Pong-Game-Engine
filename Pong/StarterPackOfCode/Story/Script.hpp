@@ -60,8 +60,8 @@ protected:
     
 public:
     Script(World* world, std::vector<std::string> crew, float radius, bool completed, std::string scenenName, std::vector<std::string> prerequisiteScenes_);
-    void tick();
-    virtual void act() = 0;
+    virtual void tick();
+    virtual void act() = 0; 
     bool isComplete();
     const std::string& getName();
 };

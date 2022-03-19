@@ -77,7 +77,8 @@ Game::~Game() {
 void Game::tick() {  
     if (!fpsControl.regulateFPS()) {
         return;
-    } 
+    }
+  //  ui->removeDeadUI();
     inputHandler.tick();
 
     if(glfwWindowShouldClose(window)) {
@@ -92,7 +93,7 @@ void Game::tick() {
     }
     ui->renderAll(renderer); 
     renderer->renderFinal();
-
+    
     glfwPollEvents(); 
     glfwSwapBuffers(window);
 }

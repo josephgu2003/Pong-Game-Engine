@@ -7,7 +7,7 @@
             ],
             "FactoryEnum": 4,
             "Hunger": [
-                80.38372039794922,
+                80.1300048828125,
                 100.0
             ],
             "Items": [
@@ -37,7 +37,7 @@
                 "Swordsmanship": 1.0
             },
             "Stamina": [
-                83.03529357910156,
+                82.78157806396484,
                 100.0
             ],
             "Type": "Player",
@@ -77,7 +77,7 @@
             ],
             "FactoryEnum": 4,
             "Hunger": [
-                78.68333435058594,
+                78.42913818359375,
                 100.0
             ],
             "Life": [
@@ -93,7 +93,7 @@
             "Position": [
                 12.72647857666016,
                 43.79308319091797,
-                33.848993182182312
+                33.84899318218231
             ],
             "Relationships": [
                 {
@@ -106,7 +106,7 @@
                 }
             ],
             "Stamina": [
-                81.9892349243164,
+                81.73503875732422,
                 100.0
             ],
             "Type": "Char",
@@ -126,6 +126,17 @@
         {
             "Completed": true,
             "FactoryEnum": "Moonlight",
+            "Position": [
+                10.0,
+                20.0,
+                30.0
+            ],
+            "Type": "Script",
+            "WorldID": 0
+        },
+        {
+            "Completed": false,
+            "FactoryEnum": "In the Wilderness",
             "Position": [
                 10.0,
                 20.0,

@@ -32,6 +32,7 @@
 #include "ChargedSlash.hpp"
 #include "MovementController.hpp"
 #include "NotificationSystem.hpp"
+#include "Painter.hpp"
 #include "WorldEditor.hpp"
 
 MyGame::MyGame() : Game() {
@@ -220,18 +221,21 @@ void MyGame::setupLvlBuilder() {
     GameLevelCreate makeMain = [&] (Game* g) {
         GameLevel* lvl = new GameLevel(g->getRenderer(), 2, "main");
         auto ui = g->getUI();
-        ui->clear();
+        ui->clear(); 
          
         loadLevelSaveFile(lvl); 
         MyLevelSerializer lvlmake;
         lvlmake.loadLevelWorlds(lvl);
-        lvl->getWorld(0).setMap("Resources/Map/procterrain.png", glm::vec3(0.5, 0.0005, 0.5));
-        
+        lvl->getWorld(0).setMap("Resources/Map/terrain3_16.png", glm::vec3(0.5, 0.0008, 0.5));
+         
         Actor* player = lvl->getActiveWorld()->getPlayerHero();
+        auto painter = std::make_shared<Painter>(*player, *player);
+        player->addComp(painter);
         auto playerlife = player->getComponent<LifeComponent>();
         auto we = std::make_shared<WorldEditor>(*player, ui.get());
         player->addComp(we);
         g->getInputHandler().addObserver(we);
+        g->getInputHandler().addObserver(painter); 
         
         std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>(-0.85, 0.7);
         playerlife->addObserver(hm);
@@ -260,16 +264,17 @@ void MyGame::setupLvlBuilder() {
        // player->addObserver(dpt);
       //  ui->insertNode(dpt);
         
-        DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
+      //  DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
           
+        DirectionalLight             dl2(glm::vec3(0.0,0.0,0.0),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
         World& wOne = lvl->getWorld(1);
         World& wZero = lvl->getWorld(0);
-        wOne.setDirectionalLight(dl2);  
+        wOne.setDirectionalLight(dl2);
         wOne.getDistanceFog().setDistanceFog(0.03, 1, glm::vec3(0.2,0.3,0.3));
           
         wZero.setDirectionalLight(dl2);
-        wZero.getDistanceFog().setDistanceFog(0.02, 1, glm::vec3(0.7,0.65,0.8));
-        
+        wZero.getDistanceFog().setDistanceFog(0.01, 2, glm::vec3(0.7,0.65,0.8));
+         
         InputHandler& ih = g->getInputHandler();
         ih.clear();
         loadMainGameDefaultCallbacks(&ih);

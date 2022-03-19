@@ -12,6 +12,7 @@
 #include "Component.hpp"
 #include "Observer.hpp"
 #include "uiText.hpp"
+#include "json.hpp"
 
 class Actor;
 class uiLayout;
@@ -19,6 +20,8 @@ class uiLayout;
 class WorldEditor : public Component, public Observer {
     std::weak_ptr<uiText> terminal;
     std::string terminalInput;
+    nlohmann::json json;
+    bool jsonLoaded;
 public:
     WorldEditor(Actor& a, uiLayout* ui);
     void tick() override;

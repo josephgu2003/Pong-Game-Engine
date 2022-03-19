@@ -181,7 +181,7 @@ void Renderer::updateLight(const PointLight& pl) {
     glm::vec4(camera->getPos(),0);
     glBufferSubData(GL_UNIFORM_BUFFER, 8*16+16, 16, glm::value_ptr((camPos)));
     
-    float attenuationMath[3] = {pl.constant,pl.linear,pl.quadratic};
+    float attenuationMath[3] = {pl.constant, pl.linear, pl.quadratic};
     glBufferSubData(GL_UNIFORM_BUFFER, 4*16, 12, &attenuationMath[0]);
 }
 void Renderer::updateLights(const DirectionalLight& dl) {
@@ -392,14 +392,14 @@ void Renderer::renderParticles(GraphicsObject* r) {
 
 void Renderer::renderTerrain(GraphicsObject* r) {
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK); 
+    glCullFace(GL_BACK);
     bindGraphicsObject(r);
     glDrawElements(GL_TRIANGLES, r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     r->unbind();
     glDisable(GL_CULL_FACE);
 }
 
-void Renderer::renderGeneric(GraphicsObject* go) {
+void Renderer::renderGeneric(GraphicsObject* go) { 
     bindGraphicsObject(go);
     glDrawElements(GL_TRIANGLES, go->getNumIndices(), GL_UNSIGNED_INT, (void*) 0);
     go->unbind();

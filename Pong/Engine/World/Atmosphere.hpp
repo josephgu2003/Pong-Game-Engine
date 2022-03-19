@@ -12,10 +12,13 @@
 #include "GraphicsObject.hpp"
 
 class Atmosphere : public GraphicsObject {
+    glm::vec3 skyColor;
 public:
     Atmosphere();
     void draw(Renderer *r) override;
     void setSkybox(const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ);
+    glm::vec3 getSkyColor();
+    void setSkyColor(const glm::vec3& skyColor_);
 };
 
 class Renderer;

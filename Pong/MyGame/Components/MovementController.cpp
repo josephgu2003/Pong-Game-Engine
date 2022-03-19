@@ -47,8 +47,8 @@ void MovementController::move(MovementDirection dir) {
                     a->orientYawTo(-a->getRight());
                 }
             } 
-            walkInDirection(walkSpeed);
-            break;
+            walkInDirection(7.0 * walkSpeed);
+            break; 
         }
         case MOVEDIR_LEFT: {
             if (moveMode == MOVEMODE_IDLE) {

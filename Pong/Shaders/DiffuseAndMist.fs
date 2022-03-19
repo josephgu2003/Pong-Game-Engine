@@ -21,7 +21,7 @@ void applyDistanceFog(inout vec3 color);
     {
         vec4 color = texture(diffuse, TexCoords);
         
-        if (color.a <= 0.0f) {
+        if (color.a <= 0.4f) {
                 discard;
         }
         

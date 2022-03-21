@@ -87,7 +87,7 @@ std::shared_ptr<ParticleSystem> ParticleFactory::makeParticles(ParticleEffectSee
             particle = std::make_shared<ParticleSystem>(numParticles, 100.0);
             shader->init("Shaders/3DParticle.vs", "Shaders/GenericDiffuse.fs");
             shader->use();
-            shader->setUniform("brightness", 5.0f);
+            shader->setUniform("brightness", 15.0f); 
             AssetManager::loadTexture("Resources/Particles/symbol0.png", &map.diffuse, true);
             std::shared_ptr<GraphicsComponent> pgc =  std::make_shared<PQuadGraphicsComponent>(*particle.get(), numParticles, 0.1, shader, map);
             particle->addComp(pgc);

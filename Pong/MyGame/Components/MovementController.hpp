@@ -28,7 +28,7 @@ enum MovementMode {
     MOVEMODE_RUN
 };
 
-static const float walkSpeed = 0.03f;
+static const float walkSpeed = 0.04f;
 static const float runSpeed = 0.06f;
 
 class MovementController : public Component {

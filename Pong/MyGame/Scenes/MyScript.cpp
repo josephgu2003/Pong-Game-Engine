@@ -38,7 +38,9 @@ void MyScript::openChoiceMenu(const std::string& line1, const std::string& line2
 int MyScript::getMenuChoiceAndClose() {
     if (auto menu = choiceMenu.lock()) { 
         int option = menu->getChosenOption();
-        ui->removeNode(menu.get()); 
+        if (option != -1) {
+            ui->removeNode(menu.get());
+        } 
         return option;
     } else {
         return -1;

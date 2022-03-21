@@ -36,6 +36,10 @@ public:
     
     // will deactivate if returns true
     bool checkDone();
+    
+    void cancelCountdown();
+    
+    bool isCountingDown();
 };
 
 

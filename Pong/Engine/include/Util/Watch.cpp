@@ -47,3 +47,11 @@ bool CountdownTimer::checkDone() {
         return false;
     }
 }
+
+void CountdownTimer::cancelCountdown() {
+    active = false;
+}
+
+bool CountdownTimer::isCountingDown() {
+    return active;
+}

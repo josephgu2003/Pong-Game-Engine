@@ -36,6 +36,7 @@ private:
     MyActorFactory maf;
     std::shared_ptr<ParticleSystem> snow;
     std::weak_ptr<uiLayout> ui;
+    Watch stopWatch; 
 public:
     ScriptWakeUp(World* world, bool completed, std::weak_ptr<uiLayout> ui_);
     virtual void act() override;

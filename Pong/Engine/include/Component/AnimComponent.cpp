@@ -14,8 +14,9 @@
 AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Component(actor) {
     globalInverse = glm::mat4(1.0f);
     updatePriority = 3;
-    timeInAnim = 0;
-
+    currentTickOfAnim = 0;
+    timeInAnim = 0.0f;
+    
     VertexLoader::loadModelAnimations(this, filePath);
 
     stopwatch.resetTime();
@@ -27,17 +28,19 @@ AnimComponent::AnimComponent(Actor& actor, const std::string& filePath) : Compon
 
 void AnimComponent::tick() {
     if (activeAnim) {
-        timeInAnim += (float)activeAnim->getTicksPerSec()*stopwatch.getTime() * speedMultiplier; // seems that assimp timestamps are in terms of ticks?
+        currentTickOfAnim += (float)activeAnim->getTicksPerSec()*stopwatch.getTime() * speedMultiplier; // seems that assimp timestamps are in terms of ticks?
+        timeInAnim += stopwatch.getTime();
+        
         stopwatch.resetTime();
-        if ((timeInAnim) > endtick) {
+        if ((currentTickOfAnim) > endtick) {
             if (!loopCurrent) {
                 playDefault();
             } else {
-                timeInAnim = timeInAnim-endtick + starttick;
+                currentTickOfAnim = currentTickOfAnim-endtick + starttick;
             }  
         }
          
-        activeAnim->updateBoneMatrices(boneMatrices, boneNodes, BoneDataMap,globalInverse,timeInAnim, dynamic_cast<Positionable*>(actor));
+        activeAnim->updateBoneMatrices(boneMatrices, boneNodes, BoneDataMap,globalInverse,currentTickOfAnim, dynamic_cast<Positionable*>(actor));
         
         if (actor->getComponent<GraphicsComponent>()) {
             Shader* shader = actor->getComponent<GraphicsComponent>()->getShader();
@@ -68,15 +71,16 @@ void AnimComponent::addAnimation(aiAnimation* animation, const aiScene* scene) {
 
  
 void AnimComponent::playAnim(const std::string& name, bool looped) {
-    timeInAnim = 0;
-    speedMultiplier = 1.0f;
     for (int i = 0; i < animations.size(); i++) {
         if (animations.at(i).getName() == name) {
+            currentTickOfAnim = 0;
+            speedMultiplier = 1.0f;
             activeAnim = &animations.at(i);
             loopCurrent = looped;
             starttick = 0; 
             endtick = activeAnim->getDuration();
             //globalInverse = activeAnim->getGlobalInv();
+            timeInAnim = 0.0f;
             return;
         }
     } 
@@ -97,10 +101,11 @@ void AnimComponent::setDefaultAnim(const std::string& name) {
 void AnimComponent::playDefault() {
     activeAnim = defaultAnim;
     speedMultiplier = 1.0f;
-    timeInAnim = 0;
+    currentTickOfAnim = 0;
     starttick = 0;
     endtick = activeAnim->getDuration();
     globalInverse = glm::mat4(1.0f);
+    timeInAnim = 0.0f;
 }
 
 void AnimComponent::playAnim(const std::string& name, int loopbegin, int loopend) {
@@ -217,3 +222,14 @@ void AnimComponent::playAnim(const std::string& name, int firsttick, int lasttic
     speedMultiplier = speed;
 }
  
+std::string AnimComponent::getCurrentAnimation() {
+    if (activeAnim) {
+        return activeAnim->getName();
+    } else {
+        return "";
+    }
+}
+
+float AnimComponent::getTimePlayedOfCurrentAnim() {
+    return timeInAnim;
+}

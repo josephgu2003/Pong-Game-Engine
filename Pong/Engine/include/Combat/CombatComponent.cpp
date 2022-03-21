@@ -20,7 +20,7 @@ void CombatComponent::clearAffecting() {
     affecting.reset();
 } 
 void CombatComponent::newAbility(const std::shared_ptr<Ability>& ab) {
-    abilityQ.push_back(std::move(ab));
+    abilityQ.push_back(ab);
 }
 void CombatComponent::affect(const std::shared_ptr<Ability>& ab) {
     affecting = ab;

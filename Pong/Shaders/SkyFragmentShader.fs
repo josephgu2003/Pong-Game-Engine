@@ -22,6 +22,13 @@ uniform vec3 skyColor;
        // gradient = 1.0 / (1.0 + exp(-70.0 * gradient + 68.0));
         gradient = smoothstep(0.02, 0.18, gradient);
         fragColor.rgb = mix(fogColor, fragColor.rgb, gradient);
+        
+        vec3 moon = normalize(vec3(1,0.5,1));
+        float moonfac = dot(pos, moon); // higher if close
+        
+        moonfac = smoothstep(0.9985, 0.999, moonfac);
+        
+        fragColor.rgb += moonfac * vec3(1.0, 1.0, 1.0);
         fragColor.a = 1.0;
         FragColor = fragColor;
     }

@@ -37,11 +37,7 @@ Ability::~Ability() {
 
 void Ability::setTarget(const std::weak_ptr<Actor>& actor_) {
     target = actor_;
-    if (auto a = target.lock()) {
-        if (auto cc = a->getComponent<CombatComponent>()) {
-            cc->affect(shared_from_this());
-        }
-    }
+    notifyTarget();
 }
 
 void Ability::dispel() {

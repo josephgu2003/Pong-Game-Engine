@@ -34,6 +34,7 @@
 #include "NotificationSystem.hpp"
 #include "Painter.hpp"
 #include "WorldEditor.hpp"
+#include "Firestarter.hpp"
 
 MyGame::MyGame() : Game() {
     
@@ -235,7 +236,10 @@ void MyGame::setupLvlBuilder() {
         auto we = std::make_shared<WorldEditor>(*player, ui.get());
         player->addComp(we);
         g->getInputHandler().addObserver(we);
-        g->getInputHandler().addObserver(painter); 
+        g->getInputHandler().addObserver(painter);
+        auto firestarter = std::make_shared<FireStarter>(*player, *player);
+        player->addComp(firestarter); 
+        g->getInputHandler().addObserver(firestarter);
         
         std::shared_ptr<HealthMeter> hm = std::make_shared<HealthMeter>(-0.85, 0.7);
         playerlife->addObserver(hm);

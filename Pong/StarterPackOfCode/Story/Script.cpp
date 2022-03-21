@@ -23,8 +23,7 @@ Script::Script(World* world_, std::vector<std::string> crew, float radius_, bool
         actors.insert(std::pair<std::string, std::shared_ptr<Actor>>(crew.at(i), ref));
     }
     step = 0;
-    stopWatch.resetTime();
-    lastTime = -1.0f;
+    waitTimer.resetTime();
     completed = completed_;
 }
 void Script::checkPrerequisites() {
@@ -59,18 +58,15 @@ bool Script::checkAllHere() { // slow???
 }
 
 void Script::incStep(bool resetTime) {
-    step++;
-    if (resetTime) stopWatch.resetTime();
-}
+    incStep(1, resetTime);
+} 
   
 void Script::waitFor(float duration) {
-    if (lastTime < 0.0f) {
-        lastTime = stopWatch.getTime();
-    }
-    if ((stopWatch.getTime() - lastTime) > duration) {
+    waitTimer.windGentle(duration);
+    
+    if (waitTimer.checkDone()) {
         step++;
-        lastTime = -1.0f;
-    } 
+    }
 }
 
 void Script::newActor(std::string name, const std::shared_ptr<Actor>& actor) {
@@ -81,12 +77,15 @@ void Script::newActor(std::string name, const std::shared_ptr<Actor>& actor) {
 }
 
 bool Script::isWaiting() {
-    if (lastTime < 0.0f) {
-        return false;
-    }
-    return true;
+    return waitTimer.isCountingDown();
 }
 
+void Script::incStep(int steps, bool cancelWait) {
+    step += steps;
+    if (cancelWait) {
+        waitTimer.cancelCountdown();
+    }
+}
 Actor* Script::getActorNamed(std::string name) {
     auto actor = actors.find(name);
     if (actor != actors.end()) {

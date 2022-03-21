@@ -218,7 +218,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
                 std::vector<PosVertex> mesh;
                 VertexLoader::loadSimpleVertexGrid(2, 10, 6.0, glm::vec2(0, 2.6), vao, vbo, ebo, numIndices);
             });
-            prop->addComp(gc);
+            prop->addComp(gc); 
             gc->setUniform("alpha", 1.0f);
              
          /**   AssetManager::loadTexture("Resources/Map/PineTree/Tree_Alpha.png", &map.alphaMap, false);
@@ -254,6 +254,23 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
           //  prop->bakeRotation(glm::vec3(-90.0f, 0, 0));
             break;
 
+        }
+            
+        case PROP_SNOW_FLOWER_BLUE: {
+            Material map;
+            AssetManager::loadTexture("Resources/Map/BlueSnowFlower/Flower_basecolor.png", &map.diffuse, true);
+            AssetManager::loadTexture("Resources/Map/BlueSnowFlower/Flower_normal.png", &map.normMap, false);
+            
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs", "Shaders/ActorFragmentShader.fs");
+            shader->use(); 
+            shader->setUniform("size", 1.0);
+            shader->setUniform("brightness", 0.0);
+            
+            auto gc = std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            gc->initModel("Resources/Map/BlueSnowFlower/flower_blue.fbx");
+            prop->addComp(gc);
+            prop->bakeRotation(glm::vec3(-90, 0, 0));
+            break;
         }
 
         default:

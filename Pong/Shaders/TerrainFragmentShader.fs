@@ -68,12 +68,12 @@ void applyDistanceFog(inout vec3 color);
         float sparkle = 1.0 - 0.5 * texture(voronoi, vec2(50.0, 50.0) * TexCoords).r - 0.5 * texture(voronoi, vec2(50.0, 50.0) * TexCoordsLarger).r;
         sparkle = smoothstep(0.35, 0.45, sparkle);
         
-        vec3 snowspec = sparkle * 3.4 * vec3(1.0,1.0,1.0);
+        vec3 snowspec = sparkle * 1.5 * vec3(1.0,1.0,1.0);
  
         fragColor += CalcDirLight(dirLight, dirLightDir, norm, viewDir, snowamb, snow, snowspec);
         fragColor += CalcPointLight(tanspaceinfo.tangentLight, tanspaceinfo.TangentFragPos, norm, viewDir, snowamb, snow, snowspec);
         
-        fragColor.rgb += sparkle * 3.0 * dirLight.diffuse;
+        fragColor.rgb += sparkle * 1.5 * dirLight.diffuse;
          
         applyDistanceFog(fragColor);
         

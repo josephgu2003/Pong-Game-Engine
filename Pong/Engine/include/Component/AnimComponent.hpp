@@ -24,7 +24,9 @@ class AnimComponent : public Component {
 protected:
     Watch stopwatch;
     
+    float currentTickOfAnim;
     float timeInAnim;
+    
     Animation* activeAnim = NULL;
     Animation* defaultAnim = NULL;
     std::vector<Animation> animations; 
@@ -54,5 +56,7 @@ public:
     void playAnim(const std::string& name, int firsttick, int lasttick, float speed);
     void addAnimation(aiAnimation* animation, const aiScene* scene);
     void setBoneDataMap(const std::map<std::string, BoneData>& BoneDataMap);
+    float getTimePlayedOfCurrentAnim();
+    std::string getCurrentAnimation();
 };
 #endif /* AnimComponent_hpp */

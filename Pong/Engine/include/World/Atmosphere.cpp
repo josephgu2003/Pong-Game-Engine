@@ -29,7 +29,7 @@ glm::vec3 Atmosphere::getSkyColor() {
 void Atmosphere::setSkyColor(const glm::vec3& skyColor_) {
     skyColor = skyColor_;
     shader->use();
-    shader->setUniform("skyColor", skyColor);
+    shader->setUniform("skyColor", skyColor); 
 }
  
 void Atmosphere::setSkybox(const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ) {

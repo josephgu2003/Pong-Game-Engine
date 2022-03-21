@@ -26,15 +26,15 @@ private:
     std::string sceneName;
     bool checkAllHere();
     std::shared_ptr<Actor> dummy;
-    float lastTime;
+
     float radius;
     std::unordered_map<std::string, std::weak_ptr<Actor>> actors;
     bool completed;
     std::weak_ptr<Speech> speechRef;
     void checkPrerequisites();
+    CountdownTimer waitTimer;
 protected:
     std::weak_ptr<Camera> camRef;
-    Watch stopWatch;
     int step;
     World* world = nullptr;
     Actor* getActorNamed(std::string name);
@@ -58,6 +58,7 @@ protected:
         waitFor(duration);
     }
     
+    void incStep(int steps, bool cancelWait);
 public:
     Script(World* world, std::vector<std::string> crew, float radius, bool completed, std::string scenenName, std::vector<std::string> prerequisiteScenes_);
     virtual void tick();

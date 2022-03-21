@@ -34,7 +34,7 @@ void Painter::tick() {
     }
      
     if (paintInProgress) {
-        if (paintTime.getTime() > 20.0f && targetedSubject) {
+        if (paintTime.getTime() > 30.0f && targetedSubject) {
             recentPainting = targetedSubject->getComponent<PaintingSubject>()->getName();
             actorRef.getWorld().getComponent<NotificationSystem>()->newNotification("Your comprehension of " + recentPainting + " has increased", 3.0f);
             paintInProgress = false; 
@@ -46,7 +46,7 @@ void Painter::tick() {
 void Painter::notify(const Subject &subject, GameEvent ge) {
     if (ge == KEY_PRESSED && targetedSubject != nullptr) {
         if (static_cast<const InputHandler&>(subject).getCurrentKeyPress() == GLFW_KEY_T) {
-            actorRef.getComponent<AnimComponent>()->playAnim("Painting", 40, 75);
+            actorRef.getComponent<AnimComponent>()->playAnim("Painting", 41, 75);
             paintTime.resetTime();
             paintInProgress = true; 
         }

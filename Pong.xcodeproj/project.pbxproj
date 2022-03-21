@@ -338,6 +338,9 @@
 		5DE85CEC271354FC000D948D /* Dice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DE85CEA271354FC000D948D /* Dice.cpp */; };
 		5DEABA042659D2CF000C772F /* rosa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEABA032659D2CF000C772F /* rosa.png */; };
 		5DEB1A1B27E575BF001E630D /* SkyColorTransition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB1A1927E575BF001E630D /* SkyColorTransition.cpp */; };
+		5DEB1A2227E66700001E630D /* Flower_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEB1A2027E66700001E630D /* Flower_normal.png */; };
+		5DEB1A2327E66700001E630D /* Flower_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEB1A2127E66700001E630D /* Flower_basecolor.png */; };
+		5DEB1A2627E7F4C6001E630D /* Firestarter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB1A2427E7F4C6001E630D /* Firestarter.cpp */; };
 		5DEC19BA264B69E20001ABAE /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = 5DEC19B9264B69E20001ABAE /* stb_image.c */; };
 		5DEDAE592672B9990050F441 /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEDAE572672B9990050F441 /* Audio.cpp */; };
 		5DEE580E266292A40080446C /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE580C266292A40080446C /* Component.cpp */; };
@@ -850,6 +853,11 @@
 		5DEABA032659D2CF000C772F /* rosa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosa.png; sourceTree = "<group>"; };
 		5DEB1A1927E575BF001E630D /* SkyColorTransition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkyColorTransition.cpp; sourceTree = "<group>"; };
 		5DEB1A1A27E575BF001E630D /* SkyColorTransition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SkyColorTransition.hpp; sourceTree = "<group>"; };
+		5DEB1A1D27E623B5001E630D /* flower_blue.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = flower_blue.fbx; sourceTree = "<group>"; };
+		5DEB1A2027E66700001E630D /* Flower_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flower_normal.png; sourceTree = "<group>"; };
+		5DEB1A2127E66700001E630D /* Flower_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flower_basecolor.png; sourceTree = "<group>"; };
+		5DEB1A2427E7F4C6001E630D /* Firestarter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Firestarter.cpp; sourceTree = "<group>"; };
+		5DEB1A2527E7F4C6001E630D /* Firestarter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Firestarter.hpp; sourceTree = "<group>"; };
 		5DEC19B7264B69B30001ABAE /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		5DEC19B9264B69E20001ABAE /* stb_image.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_image.c; sourceTree = "<group>"; };
 		5DEDAE572672B9990050F441 /* Audio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Audio.cpp; sourceTree = "<group>"; };
@@ -1076,6 +1084,8 @@
 				5D2A98FC27E40A20009E3F58 /* PaintingSubject.hpp */,
 				5D2A98FE27E410D0009E3F58 /* Painter.cpp */,
 				5D2A98FF27E410D0009E3F58 /* Painter.hpp */,
+				5DEB1A2427E7F4C6001E630D /* Firestarter.cpp */,
+				5DEB1A2527E7F4C6001E630D /* Firestarter.hpp */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1181,6 +1191,7 @@
 		5D66B48F2651EF01006EA749 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				5DEB1A1C27E623A4001E630D /* BlueSnowFlower */,
 				5D2A98E027E024EC009E3F58 /* PineTree */,
 				5D8498B627C2D4F8007E74DD /* aurora.fbx */,
 				5D91DF74275AAD3200AF8EF4 /* snownorm.png */,
@@ -1604,18 +1615,8 @@
 		5DDAE89D272B3B310053DFEA /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				5D68FE6826E80E8600E572E5 /* Combat */,
-				5DB91ECE2724587B003AAAA7 /* Fundamentals */,
-				5DEDAE5D2672BC960050F441 /* ParticleEffects */,
-				5DE85CF02714869C000D948D /* Input */,
-				5D33262226790444002F3D49 /* Component */,
-				5D68FE6726E80E3D00E572E5 /* Rendering */,
-				5DE85CED27148643000D948D /* Loading */,
-				5DB91EB0271EF602003AAAA7 /* UI */,
-				5DB91EAF271EF5B9003AAAA7 /* WorldObjects */,
-				5DE85CEF27148696000D948D /* Audio */,
-				5DE85CEE27148657000D948D /* Util */,
-				5D33262626791EB2002F3D49 /* World */,
+				5DEB1A2827E90AEE001E630D /* include */,
+				5DEB1A2727E90AE2001E630D /* src */,
 				5DDAE8A1272B465A0053DFEA /* Deprecated */,
 			);
 			path = Engine;
@@ -1782,6 +1783,42 @@
 				5DAC1804266993C40021DC31 /* InputHandler.hpp */,
 			);
 			path = Input;
+			sourceTree = "<group>";
+		};
+		5DEB1A1C27E623A4001E630D /* BlueSnowFlower */ = {
+			isa = PBXGroup;
+			children = (
+				5DEB1A2127E66700001E630D /* Flower_basecolor.png */,
+				5DEB1A2027E66700001E630D /* Flower_normal.png */,
+				5DEB1A1D27E623B5001E630D /* flower_blue.fbx */,
+			);
+			path = BlueSnowFlower;
+			sourceTree = "<group>";
+		};
+		5DEB1A2727E90AE2001E630D /* src */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		5DEB1A2827E90AEE001E630D /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5DB91ECE2724587B003AAAA7 /* Fundamentals */,
+				5DEDAE5D2672BC960050F441 /* ParticleEffects */,
+				5DE85CF02714869C000D948D /* Input */,
+				5D33262226790444002F3D49 /* Component */,
+				5D68FE6726E80E3D00E572E5 /* Rendering */,
+				5DE85CED27148643000D948D /* Loading */,
+				5DB91EB0271EF602003AAAA7 /* UI */,
+				5DB91EAF271EF5B9003AAAA7 /* WorldObjects */,
+				5DE85CEF27148696000D948D /* Audio */,
+				5DE85CEE27148657000D948D /* Util */,
+				5D33262626791EB2002F3D49 /* World */,
+				5D68FE6826E80E8600E572E5 /* Combat */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		5DEDAE47267262FE0050F441 /* Flag */ = {
@@ -2004,6 +2041,8 @@
 				5DA983562686A732008252BA /* smoke029.jpg in Resources */,
 				5DA983332686A732008252BA /* smoke108.jpg in Resources */,
 				5DA983252686A732008252BA /* smoke009.jpg in Resources */,
+				5DEB1A2327E66700001E630D /* Flower_basecolor.png in Resources */,
+				5DEB1A2227E66700001E630D /* Flower_normal.png in Resources */,
 				5DA7E26E267E5702008845AA /* New Recording 41.wav in Resources */,
 				5DA7E294267E6D34008845AA /* SkyFragmentShader.fs in Resources */,
 				5DBC1BA1277E44710016ED16 /* GameSaveFile.json in Resources */,
@@ -2163,6 +2202,7 @@
 				5DF168E8279C9E92009E2BEB /* DirlightTransition.cpp in Sources */,
 				5DF82DA52680CBA800F4D177 /* uiLayout.cpp in Sources */,
 				5D77062A2654B082002A0BB0 /* AssetManager.cpp in Sources */,
+				5DEB1A2627E7F4C6001E630D /* Firestarter.cpp in Sources */,
 				5D2A98FD27E40A20009E3F58 /* PaintingSubject.cpp in Sources */,
 				5DB2C97D272E3837009E6CA3 /* MyActorFactory.cpp in Sources */,
 				5DF168EB279DC153009E2BEB /* PointLight.cpp in Sources */,

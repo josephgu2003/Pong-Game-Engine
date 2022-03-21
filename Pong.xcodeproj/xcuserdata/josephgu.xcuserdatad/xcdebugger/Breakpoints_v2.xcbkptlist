@@ -1280,22 +1280,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B0AC6329-E7D9-4316-8CF7-1B75B6471B0D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pong/Engine/Combat/Abilities/Ability.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "Ability::setTarget(actor_)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D45353C5-61DE-46FC-B580-3F55E6E85BD4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1367,8 +1351,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "Script::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1383,8 +1367,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "Script::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1447,8 +1431,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "Script::checkAllHere()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1463,8 +1447,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "Script::checkAllHere()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1479,8 +1463,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "Script::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1751,8 +1735,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1783,8 +1767,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1799,8 +1783,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1815,8 +1799,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1831,8 +1815,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1847,8 +1831,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1863,8 +1847,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2023,8 +2007,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2039,8 +2023,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2295,8 +2279,8 @@
             filePath = "Pong/StarterPackOfCode/Story/Script.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "Script::checkAllHere()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4225,8 +4209,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4305,8 +4289,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "MyGame::load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4321,8 +4305,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
             <Locations>
@@ -4369,8 +4353,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4385,8 +4369,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "loadMainMenuDefaultCallbacks(ih)"
             landmarkType = "9">
          </BreakpointContent>
@@ -4401,8 +4385,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "makeMainMenu(g)"
             landmarkType = "9">
          </BreakpointContent>
@@ -4417,8 +4401,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "loadMainMenuDefaultCallbacks(ih)"
             landmarkType = "9">
          </BreakpointContent>
@@ -5290,8 +5274,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "AnimComponent::addAnimation(animation, scene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5322,8 +5306,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "AnimComponent::setDefaultAnim(name)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5338,8 +5322,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "AnimComponent::AnimComponent(actor, filePath)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5354,8 +5338,8 @@
             filePath = "Pong/MyGame/System/MyGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "MyGame::setupLvlBuilder()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5450,8 +5434,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "AnimComponent::tick()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5466,8 +5450,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
             landmarkName = "AnimComponent::findRootBone(scene, map_)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5498,8 +5482,8 @@
             filePath = "Pong/Engine/Component/AnimComponent.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "AnimComponent::playAnim(name, looped)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5594,8 +5578,8 @@
             filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "InTheWilderness::act()"
             landmarkType = "7">
          </BreakpointContent>
@@ -5658,8 +5642,442 @@
             filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "InTheWilderness::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4AF19682-613A-4139-87F8-C687952BB021"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "InTheWilderness::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/Component/Componentable.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "getComponent()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 7cdeb314d42a6dbd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AnimComponent* Componentable::getComponent&lt;AnimComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - b500d8a3edd417b5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NameComponent* Componentable::getComponent&lt;NameComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 2b743749f82e965b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CharacterComponent* Componentable::getComponent&lt;CharacterComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 8d68e2570e6599ed"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GraphicsComponent* Componentable::getComponent&lt;GraphicsComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 99a1b130d6ec7559"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SubtitlesSystem* Componentable::getComponent&lt;SubtitlesSystem&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 9d637b662e124ab7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LifeComponent* Componentable::getComponent&lt;LifeComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - e4cb79261b789f33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NotificationSystem* Componentable::getComponent&lt;NotificationSystem&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - b658c1feff3f76c7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CombatComponent* Componentable::getComponent&lt;CombatComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 543ec9d5637ba823"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ScriptSystem* Componentable::getComponent&lt;ScriptSystem&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 7405a2c683784075"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MovementController* Componentable::getComponent&lt;MovementController&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 5e40aeef1f363d99"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InventoryComponent* Componentable::getComponent&lt;InventoryComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 7583a345d37f3bc5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PaintingSubject* Componentable::getComponent&lt;PaintingSubject&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 2f79cb185d33a455"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CollisionComponent* Componentable::getComponent&lt;CollisionComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - f45b88e997194d4b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Painter* Componentable::getComponent&lt;Painter&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 21798c182e545f29"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PRefreshComponent* Componentable::getComponent&lt;PRefreshComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "1300F5EA-D4D8-4DC2-828D-CD5944580680 - 78533fdb3c777db1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PPhysicsComponent* Componentable::getComponent&lt;PPhysicsComponent&gt;()"
+                  moduleName = "Pong"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/josephgu/Documents/Code/Pong/Pong/Engine/Component/Componentable.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "192">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9703EE52-9F5A-431C-B174-B55DBA7C676B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "InTheWilderness::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "89EE2D4F-EDF3-4378-8BC8-3D2F2A8B508F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "InTheWilderness::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6F0E93A3-49AA-4630-B57E-A7971A86E9FC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
+            landmarkName = "InTheWilderness::act()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93CC7334-1F3D-4D97-9C45-F63463F5D378"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/MyScript.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "MyScript::getMenuChoiceAndClose()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6A42F66C-41AA-4D3C-BB7C-1611183B31CD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/MyScript.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "MyScript::getMenuChoiceAndClose()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B70B510D-5817-4E7B-95AD-8524DAAA380B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/MyScript.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "MyScript::getMenuChoiceAndClose()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B8542E45-F23A-4ACE-8856-917FD0D71C3A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/MyScript.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "MyScript::getMenuChoiceAndClose()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7679EFE7-7031-47AD-B263-3A8D332C641F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/UI/uiMenu.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "uiMenu::handleKeyPress(k)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A46AE29F-CBE1-41B9-8C87-D085B639846B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/Engine/UI/uiMenu.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "uiMenu::getChosenOption()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "253413B6-2799-4C35-874A-BE6EC7CEA5D9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pong/MyGame/Scenes/InTheWilderness.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "InTheWilderness::act()"
             landmarkType = "7">
          </BreakpointContent>

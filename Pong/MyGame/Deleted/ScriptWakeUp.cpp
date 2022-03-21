@@ -47,6 +47,7 @@ bool IntroPoem::tick(uiLayout* ui, float time) {
     
     switch (step) {
         case 0: {
+
             firstTime = time;
             uf = std::make_shared<uiFrame>(glm::vec2(-1,-1), glm::vec2(2,2), "Resources/GlyphsAndUI/blacksquare.png");
             line1 = std::make_shared<uiText>("Wake up, the moon is shining.", -0.9, 0,DEFAULT_FONTSIZE, DEFAULT_LINESPACE);
@@ -103,6 +104,7 @@ void ScriptWakeUp::act() {
     
     switch (step) {
         case 0: {
+            stopWatch.resetTime(); 
             snow = pf.makeParticles(PE_SNOW, getActorNamed("Moonbell")->getPos()+glm::vec3(0,2,0));
             snow->getComponent<GraphicsComponent>()->setColor(0.2, 0.2, 0.2);
             snow->addComponent<FollowPos<ParticleSystem>>(*(snow.get()), *(getActorNamed("Floro")), glm::vec3(0,2,0));

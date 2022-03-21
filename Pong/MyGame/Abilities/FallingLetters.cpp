@@ -15,6 +15,7 @@
 #include "AnimComponent.hpp"
 #include "LifeTime.hpp"
 #include "PropFactory.hpp"
+#include "MovementController.hpp"
 
 FallingLetters::FallingLetters(World* world_, Actor* actor_, float duration_) : Ability(world_, actor_, duration_)  {
     
@@ -37,21 +38,26 @@ FallingLetters::~FallingLetters() {
 void FallingLetters::call() {
     glm::vec3 pos = glm::vec3(actor->getPos());
     if (auto t = target.lock()) {
-        t->setState(STATE_PARALYZED);
-        pos = t->getPos();  
+        if (auto mc = t->getComponent<MovementController>()) {
+            mc->paralyze(duration);
+        }
+        if (auto ac = t->getComponent<AnimComponent>()) {
+            ac->playAnim("Straining", 12, 49);
+        }
+        pos = t->getPos();   
     }
+    if (auto ac = actor->getComponent<AnimComponent>()) {
+        ac->playAnim("SlowDraw", false);
+    } 
     std::shared_ptr<ParticleSystem> ps = pf.makeParticles(PE_RUNICLETTERS, pos+glm::vec3(0,2,0));
     letters = ps;
     world->insert<ParticleSystem>(ps);
 
-    if (auto anim = actor->getComponent<AnimComponent>()) { 
-     //   anim->playAnim("HollowKnight__Armature|Channel");
-    }
-    PropFactory pf;
+  /**  PropFactory pf;
     auto aurora = pf.makeProp(PROP_IMPRISONMENT);
     aurora->setPos(actor->getPos()); 
     aurora->addComponent<LifeTime<Prop>>(*aurora.get(), 10.0f);
-    world->insert<Prop>(aurora);
+    world->insert<Prop>(aurora);**/
 }    
  
 void FallingLetters::tick() {   

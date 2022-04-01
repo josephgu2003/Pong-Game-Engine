@@ -342,7 +342,7 @@ void AssetManager::generateFramebuffer(Frame* frame, GLenum internalFormat, int 
 
     glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
+    VertexLoader::setupVAOAttribs<SimpleVertex>();
     glBindVertexArray(0);
     
 }
@@ -401,7 +401,7 @@ void AssetManager::generateFramebuffer2Color(DoubleFrame* frame, int x, int y) {
 
     glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
+    VertexLoader::setupVAOAttribs<SimpleVertex>();
     glBindVertexArray(0);
 
 }
@@ -442,7 +442,7 @@ void AssetManager::generateFramebuffer(Frame* frame, GLuint* ftexture_, int x, i
 
     glBufferData(GL_ARRAY_BUFFER, 36*sizeof(float), &screenquad[0], GL_STATIC_DRAW);
     
-    VertexLoader::setupVAOAttribs(VERTEX_SIMPLEVERTEX);
+    VertexLoader::setupVAOAttribs<SimpleVertex>();
     glBindVertexArray(0);
      
 }

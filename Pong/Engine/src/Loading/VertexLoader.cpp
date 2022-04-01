@@ -101,54 +101,6 @@ void VertexLoader::loadTextData(const std::string& text, float fontsize, float l
     loadTextDataAbstraction(text, fontsize, linespace, 0, vao, vbo, ebo, numIndices, map, position, false);
 }
 
-void VertexLoader::setupVAOAttribs(VertexType vt) {
-    auto setVertexAttribsFloat = [] (int vertexSize, std::vector<int>& numFloats, std::vector<int>& offsets) {
-        if (numFloats.size() == offsets.size()) {
-            for (int i = 0; i < numFloats.size(); i++) {
-                glVertexAttribPointer(i, numFloats.at(i), GL_FLOAT, GL_FALSE,vertexSize, (void*)(offsets.at(i)));
-                glEnableVertexAttribArray(i);
-            }
-        }
-    };
-    
-    switch (vt) {
-        case VERTEX_SIMPLEVERTEX: {
-            std::vector<int> numFloats = {3,2,1};
-            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(sizeof(glm::vec2) + sizeof(glm::vec3))};
-            setVertexAttribsFloat(sizeof(SimpleVertex), numFloats, offsets);
-            break;
-        }
-            
-        case VERTEX_VERTEX: {
-            std::vector<int> numFloats = {3,3,2};
-            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3))};
-            setVertexAttribsFloat(sizeof(Vertex), numFloats, offsets);
-            break;
-        }
-            
-        case VERTEX_TBNVERTEX: {
-            std::vector<int> numFloats = {3,3,2,3,3};
-            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
-            setVertexAttribsFloat(sizeof(TBNVertex), numFloats, offsets);
-            break;
-        }
-            
-        case VERTEX_TBNBWVERTEX: {
-            std::vector<int> numFloats = {3,3,2,3,3};
-            std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
-            setVertexAttribsFloat(sizeof(TBNBWVertex), numFloats, offsets);
-            
-            glVertexAttribIPointer(5, MAX_BONE_WEIGHTS, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(5);
-            
-            glVertexAttribPointer(6, MAX_BONE_WEIGHTS, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(MAX_BONE_WEIGHTS*sizeof(int)+4*sizeof(glm::vec3)+sizeof(glm::vec2)));
-            glEnableVertexAttribArray(6);
-            
-            break;
-        }
-            
-    }
-}
 
 void VertexLoader::load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position) {
     
@@ -188,7 +140,11 @@ void VertexLoader::loadModelSimple(std::string filePath, unsigned int vao, unsig
 
 void VertexLoader::loadModel(std::string filePath_, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices, bool& deleteDataOnDestruct) {
     loadModelAbstraction<TBNBWVertex>(filePath_, vao, vbo, ebo, numIndices, deleteDataOnDestruct, true);
-}  
+}
+
+void VertexLoader::loadModelMultiMat(const std::string filePath, GraphicsObject& go) {
+    loadModelAbstraction<TBNMVertex>(filePath, go.VAO, go.VBO, go.EBO, go.numIndices, go.deleteDataOnDestruct, true);
+}
 
 void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePath_) {
     
@@ -246,6 +202,58 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<S
             indices.push_back(ind);
         }
     }
+    vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
+    indexOffset += mesh->mNumVertices;
+}
+
+void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNMVertex>& vertices, std::vector<GLuint>& indices) {
+    auto loadVec3 = [] (glm::vec3& vec3, aiVector3D* vec3src, int i) {
+        vec3.x = vec3src[i].x;
+        vec3.y = vec3src[i].y;
+        vec3.z = vec3src[i].z;
+    };
+    std::vector<TBNMVertex> newVertices;
+    newVertices.reserve(mesh->mNumVertices);
+    
+    if (mesh->mMaterialIndex >= 0) {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        Material m;
+        loadMaterialTextures(m, material);
+    }
+     
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
+        glm::vec3 pos_;
+        loadVec3(pos_, mesh->mVertices, i);
+        
+        glm::vec3 norm_;
+        loadVec3(norm_, mesh->mNormals, i);
+        
+        glm::vec3 Tan_;
+        loadVec3(Tan_, mesh->mTangents, i);
+        
+        glm::vec3 BiTan_;
+        loadVec3(BiTan_, mesh->mBitangents, i);
+        
+        glm::vec2 texCoords_;
+        if (mesh->mTextureCoords[0]) {
+            texCoords_.x = mesh->mTextureCoords[0][i].x;
+            texCoords_.y = mesh->mTextureCoords[0][i].y;
+        } else {
+            texCoords_ = glm::vec2(0.0f, 0.0f);
+        }
+  
+        newVertices.emplace_back(pos_, norm_, texCoords_, Tan_, BiTan_, 0);
+    }
+    
+    indices.reserve(indices.size() + mesh->mNumFaces);
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++) {
+            GLuint ind = face.mIndices[j] + indexOffset;
+            indices.push_back(ind);
+        }
+    }
+    
     vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
     indexOffset += mesh->mNumVertices;
 }

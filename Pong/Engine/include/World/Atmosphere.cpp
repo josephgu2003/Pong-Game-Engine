@@ -8,7 +8,10 @@
 #include "Atmosphere.hpp"
 #include "Renderer.hpp"
 #include "VertexLoader.hpp"
+#include "PPointGraphicsComponent.hpp"
 #include "AssetManager.hpp"
+#include "PRefreshComponent.hpp"
+#include "PGraphicsComponent.hpp" 
 
 Atmosphere::Atmosphere() : GraphicsObject(DRAW_OPAQUE) {
     VertexLoader::loadSimpleCube(VAO, VBO, EBO, numIndices);
@@ -17,12 +20,31 @@ Atmosphere::Atmosphere() : GraphicsObject(DRAW_OPAQUE) {
     skyColor = glm::vec3(0.6, 0.6, 1.0);
     shader->use();
     shader->setUniform("skyColor", skyColor);
+    makeStars();
 } 
 
 void Atmosphere::draw(Renderer *r) {
         r->renderSky(this);
-}
+    if (stars) {
+        stars->tick(); 
+        r->renderStars(stars->getComponent<GraphicsComponent>());
+    }
+} 
 
+void Atmosphere::makeStars() {
+    Material starMat; 
+    int numParticles = 1000;
+    stars = std::make_unique<ParticleSystem>(numParticles, 100.0);
+    Shader* shader = new Shader("Resources/Engine/Stars.vs", "Resources/Engine/Stars.fs");
+    std::shared_ptr<GraphicsComponent> pgc =  std::make_shared<PPointGraphicsComponent>(*stars.get(), numParticles, 0.0007, shader, starMat);
+    pgc->setColor(2.5, 2.5, 10.0); 
+    stars->addComp(pgc);
+    stars->addComponent<PRefreshComponent>(*stars.get(), 5.0, 150, 0.2, glm::vec3(2,2,2), glm::vec3(0.0, 0.01, 0.0), glm::vec3(0.0, 0.04, 0.0));
+    stars->getComponent<PRefreshComponent>()->refreshAll();
+    stars->setPos(glm::vec3(0, 0, 0)); 
+    stars->deleteComponent(stars->getComponent<PRefreshComponent>());
+} 
+ 
 glm::vec3 Atmosphere::getSkyColor() {
     return skyColor;
 } 

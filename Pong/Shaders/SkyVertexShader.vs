@@ -9,5 +9,5 @@ uniform mat4 viewProjMat2;
     {
         TexVec = aPos;
         vec4 pos = viewProjMat2 * vec4(aPos.x , aPos.y, aPos.z, 1.0);
-        gl_Position = pos.xyww;
+        gl_Position = pos.xyww; 
     }

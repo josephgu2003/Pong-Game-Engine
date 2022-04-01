@@ -60,7 +60,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
               
         case PROP_MOUNT: {
             Material map;
-            //  AssetManager::loadTexture("Resources/Map/8grass.png", &map.diffuse, true);
+            
             AssetManager::loadTexture("Resources/Map/tree/source/treediffuse.png", &map.diffuse, true);
             
             Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
@@ -184,7 +184,7 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             prop->addComp(gc);
             prop->bakeRotation(glm::vec3(90, 0 , 0));
             break;
-        }
+        } 
             
         case PROP_AURORA: {
             Material map; 
@@ -270,6 +270,24 @@ std::shared_ptr<Prop> PropFactory::makeProp(int pe) {
             gc->initModel("Resources/Map/BlueSnowFlower/flower_blue.fbx");
             prop->addComp(gc);
             prop->bakeRotation(glm::vec3(-90, 0, 0));
+            break;
+        }
+            
+        case PROP_TOWN: {
+            Material map;
+
+            AssetManager::loadTexture("Resources/great-mountain/textures/mountain_diffuse.jpg", &map.diffuse, true);
+            AssetManager::loadTexture(TEX_BLANK_NORMALS, &map.normMap, false);
+         
+            Shader* shader = new Shader("Shaders/ActorVertexShader.vs",  "Shaders/ActorFragmentShader.fs");
+            shader->use();
+            shader->setUniform("size", 1.0f);
+            shader->setUniform("brightness", 0.0f); 
+              
+            std::shared_ptr<GraphicsComponent> gc =  std::make_shared<GraphicsComponent>(*(prop.get()), shader, map, DRAW_OPAQUE);
+            static_pointer_cast<GraphicsComponent>(gc)->initModel("Resources/Map/FirstTown/town.fbx"); 
+            prop->addComp(gc);
+          //  prop->bakeRotation(glm::vec3(-90.0f, 0, 0));
             break;
         }
 

@@ -89,13 +89,13 @@ GameLevel* makeMainMenu(Game* g) {
     g->getUI()->clear();
     GameLevel* lvl = new GameLevel(g->getRenderer(), 1, "mainmenu");
     auto ut = std::make_shared<uiText>("Press enter to begin", -0.3f, -0.8f,DEFAULT_FONTSIZE * 1.2f, DEFAULT_LINESPACE);
-    g->getUI()->insertNode(ut);
-      
-    std::vector<std::string> lines = {"The cycles of the world are driven by the flow of Mana.", "Spring blooms into summer, summer hardens into fall, fall gives birth to winter, and spring emerges again.", "Because humans live in the cycles of the world, there are always a few who can glimpse into the flow.", "They let themselves into the current and stood at the shore of mortal and the unknown.", "Thus they became known as Shorewalkers.", "But as they were still human, they were not free of the violence hidden in the human heart.", "To gain the upper hand in conflict, they sought to calculate the workings of Mana and nature using the Mathematical Arts.", "The world of Shorewalkers became bound by the laws of Mathematics.", "But from time to time, there are some individuals who, tired of the black and white world, open their imaginations and take a step in a new direction…"};
+    g->getUI()->insertNode(ut); 
     
+    std::vector<std::string> lines = {"Men and beasts are not so different.", "Strong eats weak, thus it has always been.", "In this chaotic human world, the strong are the Shorewalkers, the rare few who can perceive the cycles of Mana.", "To those who stand at the shore between mortal and unknown, what are ordinary lives?", "A thousand years ago, a Shorewalker genious wrote the first Theorem, and from then on the world was never the same.", "Strength is a number, so strength derives from exceptional comprehension of the Mathematical Arts.", "And so the whole human world became bounded by Mathematical Arts of the Shorewalkers.", "But from time to time, there are a few, who tired of the black and white world, strike out on a different path..."}; 
+         
     for (int i = 0; i < lines.size(); i++) {
         auto ut = std::make_shared<uiText>(lines.at(i), -0.65, -0.1, DEFAULT_FONTSIZE, DEFAULT_LINESPACE * 2.0, 1.0);
-        ut->initPeriodicFadeFunction(2.0f + i * 8.0f, 9.0f + i * 8.0f, 0.5f, lines.size() * 9.0f);
+        ut->initPeriodicFadeFunction(2.0f + i * 5.0f, 7.0f + i * 5.0f, 0.5f, lines.size() * 7.0f);
         g->getUI()->insertNode(ut);
     }
      
@@ -103,12 +103,13 @@ GameLevel* makeMainMenu(Game* g) {
     ih.clear(); 
     loadMainMenuDefaultCallbacks(&ih);
     ih.setHandlerMode(KCALL_DEFAULT);
-     
+      
     PropFactory pf;
-   // auto particles = pf.makeParticles(PE_FIREWORKS, lvl->getWorld(0).getCameraRef().lock()->getPos() + 20.0f * lvl->getWorld(0).getCameraRef().lock()->getDir());
     auto prop = pf.makeProp(PROP_AURORA);
     prop->setPos(lvl->getWorld(0).getCameraRef().lock()->getPos() + 20.0f * lvl->getWorld(0).getCameraRef().lock()->getDir() + glm::vec3(0.0, 30.0f, 20.0f));
     lvl->getWorld(0).insert(prop);
+     
+    lvl->getWorld(0).getAtmosphere().setSkyColor(glm::vec3(0.05, 0.05, 0.08));
     return lvl;
 }
 
@@ -153,7 +154,6 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
     });
 
     
-#define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."
      
     ih->setOneTapCallback(GLFW_KEY_Z, [](Game* game){
         if (auto ph = game->getPlayerHero()) { 
@@ -171,7 +171,7 @@ void loadMainGameDefaultCallbacks(InputHandler* ih) {
             if (comb) comb->newAbility<ChargedSlash>(&ph->getWorld(), ph, 1.5);
             else {
                 ph->addComponent<CombatComponent>(*ph);
-                ph->getComponent<AnimComponent>()->playAnim("DrawWeapon",false);
+                ph->getComponent<AnimComponent>()->playAnim("SlowDraw",false);
             }
         }
     });
@@ -264,9 +264,9 @@ void MyGame::setupLvlBuilder() {
         player->getComponent<InventoryComponent>()->addObserver(inventory);
         ui->insertNode(inventory);
         
-      //  auto dpt = std::make_shared<DevPosTracker>(0.6,0.8, 0.5,0.5);
-       // player->addObserver(dpt);
-      //  ui->insertNode(dpt);
+        auto dpt = std::make_shared<DevPosTracker>(0.6,0.8, 0.5,0.5);
+        player->addObserver(dpt);
+        ui->insertNode(dpt);
         
       //  DirectionalLight            dl2(glm::vec3(0.205,0.16,0.14),glm::vec3(0.46,0.39,0.38),glm::vec3(1.3,1.3,1.4),glm::vec3(-1,-1,0));
           
@@ -297,4 +297,5 @@ void MyGame::setupLvlBuilder() {
     registerGameLevelCreate("mainmenu", GameLevelCreate(makeMainMenu));
 }
 
- 
+
+#define POEM "I was asked - \"Do you have dreams?\"", "No...", "...Yes? Lost. Searching. Searching.", "Searching with colorful moonlight always overhead,","Yet my eyes were always down, scouring that dark canvas.","Too late, gaze up at the painted moon.", "A flash of inspiration, and the coldness of regret.","Is it too late? The moon is going away soon.","A brush dipped in lost dreams refound,", "But a hand still with regretfulness.","If only I had a pond, so that by its reflection,","I would have seen the moon's beauty sooner.","A brush, a canvas, a horizon","An artist dreaming of the moon."

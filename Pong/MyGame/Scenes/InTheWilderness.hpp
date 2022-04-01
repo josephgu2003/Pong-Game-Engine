@@ -22,6 +22,8 @@ static const DirectionalLight sunset(glm::vec3(0.07,0.04,0.04),glm::vec3(0.8, 0.
 
 static const DirectionalLight earlyNight(glm::vec3(0.05,0.04,0.05),glm::vec3(0.35, 0.28, 0.33), glm::vec3(0.8,0.6,0.8),glm::vec3(-1,-1,0));
 
+static const DirectionalLight midNight(glm::vec3(0.02,0.01,0.03),glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0,0.0,0.0),glm::vec3(-1,-1,0));
+
 class InTheWilderness : public MyScript {
 private:
     std::set<std::string> paintedSubjects;

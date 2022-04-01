@@ -76,10 +76,19 @@ void WorldEditor::notify(const Subject &subject, GameEvent ge) {
         if (key == GLFW_KEY_M) {
             auto a = static_cast<Actor*>(actor);
             PropFactory pf;
+            auto tree = pf.makeProp(PROP_TOWN);
+            tree->setPos(a->getPos() + glm::vec3(0, 0, 0));
+            a->getWorld().insert(tree);
+        }
+        
+        if (key == GLFW_KEY_N) {
+            auto a = static_cast<Actor*>(actor);
+            PropFactory pf; 
             auto tree = pf.makeProp(PROP_MT);
             tree->setPos(a->getPos() + glm::vec3(0, 10, 0));
             a->getWorld().insert(tree);
         }
     }
 } 
+ 
  

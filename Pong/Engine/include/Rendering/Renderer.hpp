@@ -108,6 +108,8 @@ public:
     void renderGeneric(GraphicsObject* go);
     void renderAdditiveBlend(GraphicsObject* r);
     void renderSoftParticles(GraphicsObject* go);
+    void renderStars(GraphicsObject* go);
+    void setViewProj2(GraphicsObject* go);
 };
 #endif /* Renderer_hpp */
  

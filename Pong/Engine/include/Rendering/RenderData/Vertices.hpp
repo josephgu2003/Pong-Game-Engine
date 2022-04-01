@@ -16,7 +16,7 @@
 struct AnyVertex {};
 
 enum VertexType {
-    VERTEX_VERTEX, VERTEX_SIMPLEVERTEX, VERTEX_TBNVERTEX, VERTEX_TBNBWVERTEX
+    VERTEX_VERTEX, VERTEX_SIMPLEVERTEX, VERTEX_TBNVERTEX, VERTEX_TBNBWVERTEX, VERTEX_TBNMVERTEX
 };
 
 struct PosVertex : AnyVertex {
@@ -33,8 +33,8 @@ struct Vertex : AnyVertex {
     glm::vec3 Pos;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
-    Vertex( glm::vec3 Pos_,
-           glm::vec3 Normal_,
+    Vertex( const glm::vec3& Pos_,
+           const glm::vec3& Normal_,
            glm::vec2 TexCoords_) {
         Pos = Pos_;
         Normal = Normal_;
@@ -47,11 +47,11 @@ struct Vertex : AnyVertex {
 
 struct TBNVertex : AnyVertex {
     TBNVertex();
-    TBNVertex(    glm::vec3 Pos, 
-              glm::vec3 Normal,
-              glm::vec2 TexCoords,
-              glm::vec3 Tan,
-              glm::vec3 BiTan);
+    TBNVertex(const glm::vec3& Pos_,
+              const glm::vec3& Normal_,
+              const glm::vec2& TexCoords_,
+              const glm::vec3& Tan,
+              const glm::vec3& BiTan);
     glm::vec3 Pos;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
@@ -59,13 +59,28 @@ struct TBNVertex : AnyVertex {
     glm::vec3 BiTan;
 };
 
+struct TBNMVertex : AnyVertex {
+    TBNMVertex();
+    TBNMVertex(const glm::vec3& Pos_,
+              const glm::vec3& Normal_,
+              const glm::vec2& TexCoords_,
+               const glm::vec3& Tan,
+               const glm::vec3& BiTan, unsigned int matIndex);
+    glm::vec3 Pos;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+    glm::vec3 Tan;
+    glm::vec3 BiTan;
+    unsigned int matIndex;
+};
+
 struct TBNBWVertex : AnyVertex {
     TBNBWVertex();
-    TBNBWVertex(    glm::vec3 Pos,
-              glm::vec3 Normal,
-              glm::vec2 TexCoords,
-              glm::vec3 Tan,
-              glm::vec3 BiTan, int* boneIDs, float* boneWeights);
+    TBNBWVertex(const glm::vec3& Pos_,
+              const glm::vec3& Normal_,
+              const glm::vec2& TexCoords_,
+                const glm::vec3& Tan,
+                const glm::vec3& BiTan, int* boneIDs, float* boneWeights);
     glm::vec3 Pos;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
@@ -76,8 +91,8 @@ struct TBNBWVertex : AnyVertex {
 };
 
 struct SimpleVertex : AnyVertex {
-    SimpleVertex(    glm::vec3 Pos,
-              glm::vec2 TexCoords, int arraytexID_);
+    SimpleVertex(    const glm::vec3& Pos_,
+              const glm::vec2& TexCoords_, int arraytexID_);
     glm::vec3 Pos;
     glm::vec2 TexCoords;
     float arraytexID;

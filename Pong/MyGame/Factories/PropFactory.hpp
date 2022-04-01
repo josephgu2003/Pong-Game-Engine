@@ -25,7 +25,8 @@ enum PropEnum {
     PROP_IMPRISONMENT,
     PROP_PINE,
     PROP_MT,
-    PROP_SNOW_FLOWER_BLUE
+    PROP_SNOW_FLOWER_BLUE,
+    PROP_TOWN
 };
 
 class PropFactory {

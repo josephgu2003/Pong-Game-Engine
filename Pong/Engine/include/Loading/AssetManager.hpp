@@ -6,7 +6,7 @@
 //
 
 #ifndef AssetManager_hpp
-#define AssetManager_hpp
+#define AssetManager_hpp 
 
 #include "Filepaths.hpp"
 #include <GL/glew.h>
@@ -104,10 +104,6 @@ public:
 
     static void loadTexture(const char* filePath, Texture* texture, bool srgb);
     static void loadCubeMapTexture(Texture* texture, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ);
-
-   // static void loadModel(const char* filePath, Model*& model);
-
-   // static void loadModel(const char* filePath, Model*& model, AnimComponent* anim);
 
     static void generateFramebuffer(Frame* frame, GLenum internalFormat, int x, int y);
 

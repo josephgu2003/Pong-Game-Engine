@@ -57,18 +57,10 @@ private:
     GraphicsObject &operator=(const GraphicsObject &) = delete;
     bool movedFrom = false;
 protected:
-    bool deleteDataOnDestruct = true;
     std::vector<TextureAnimation> textureAnimations;
     Material map;
     DrawPass drawPass;
     Shader* shader = NULL;
-    GLuint VAO; // vertex "type"
-    GLuint instanceVBO;
-    GLuint VBO; // vertex data
-    GLuint EBO; // vertex data
-    GLuint numIndices; // vertex data
-    GLuint instanceCount;
-    GLenum drawTarget;
     void setSingularMaterial(const Material& map);
     Material& getSingularMaterial();
     void updateVertexBuffer(VertexMesh* vm);
@@ -82,6 +74,14 @@ protected:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 public:
+    bool deleteDataOnDestruct = true;
+    GLuint VAO; // vertex "type"
+    GLuint instanceVBO;
+    GLuint VBO; // vertex data
+    GLuint EBO; // vertex data
+    GLuint numIndices; // vertex data
+    GLuint instanceCount;
+    GLenum drawTarget;
     static int nonHolders;
     GraphicsObject(GraphicsObject&& other) {
         textureAnimations = other.textureAnimations;

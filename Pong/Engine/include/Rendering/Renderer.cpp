@@ -315,16 +315,10 @@ void Renderer::renderSky(GraphicsObject* sky) {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDepthMask(GL_FALSE);
-
-    Shader* skyShader = sky->getShader();
     
     bindGraphicsObject(sky);
     
-    glUniform1f(glGetUniformLocation(skyShader->ID, "brightness"), 1.0); // more spagghetti sigh
-    
-    glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
-    camViewMat = projMat * camViewMat;
-    glUniformMatrix4fv(glGetUniformLocation(skyShader->ID, "viewProjMat2"), 1, GL_FALSE, glm::value_ptr(camViewMat));
+    setViewProj2(sky);
 
   //  glDrawElements(GL_TRIANGLES, sky->getNumIndices(), GL_UNSIGNED_INT, (void*)(0));
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -333,6 +327,23 @@ void Renderer::renderSky(GraphicsObject* sky) {
     glDisable(GL_CULL_FACE);
 }
 
+void Renderer::renderStars(GraphicsObject* r) {
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE); 
+    bindGraphicsObject(r);
+    setViewProj2(r);
+    glDrawElementsInstanced(r->getDrawTarget(), r->getNumIndices(), GL_UNSIGNED_INT, (void*) 0, r->getInstanceCount());
+    r->unbind();
+    glDepthMask(GL_TRUE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Renderer::setViewProj2(GraphicsObject* go) {
+    glm::mat4 camViewMat = glm::mat4(glm::mat3(viewMat));
+    camViewMat = projMat * camViewMat; 
+    go->getShader()->use(); 
+    go->getShader()->setUniform("viewProjMat2", camViewMat);
+}
   
 void Renderer::bindTextures(Shader* shader, Material& map) {
     if (map.diffuse.id != -1) {

@@ -42,15 +42,17 @@ private:
     static int boneCounter;
     
     static std::map<std::string, VertexData> loadedVertexData;
-
      
     static glm::vec3 calcNormalWithHeights(float cH, float dH, float uH, float rH, float lH);
     static void BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                             const aiScene* scene);
-
+    
     static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNBWVertex>& vertices,  std::vector<GLuint>& indices);
 
     static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices,  std::vector<GLuint>& indices);
+    
+    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNMVertex>& vertices,  std::vector<GLuint>& indices);
+    
     static void setVertexBoneData(TBNBWVertex* v, int id, float weight);
     static void reset();
     static bool loadAlreadyLoadedData(const std::string& name, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices);
@@ -63,11 +65,12 @@ public:
     static void loadSimpleCube(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModel(std::string filePath, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices, bool& deleteDataOnDestruct);
     static void loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
+    static void loadModelMultiMat(const std::string filePath, GraphicsObject& go);
     static void loadModelAnimations(AnimComponent* anim_, std::string filePath_);
     static void loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadTextData(const std::string& s, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
     static void loadTextData(const std::string& s, float fontsize, float linespace, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
-    static void setupVAOAttribs(VertexType vt);
+ 
     static void setupVAOAttribsInstancing(int firstAttribLocation, const std::vector<int>& layout);
     static void load2DQuadData(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, glm::vec2 dimensions, glm::vec2 position);
     static void loadMapChunk(float heightMesh[CHUNK_DIM_PXLS][CHUNK_DIM_PXLS], const unsigned short* heightMap, int imageWidth, int imageHeight, int chunkX, int chunkY, glm::vec2 originPos, glm::vec3 scaling, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
@@ -78,12 +81,14 @@ public:
     
     template<typename T>
     static void loadModelAbstraction(std::string filePath_, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices, bool& deleteDataOnDestruct, bool useLoadedData) {
+        
         if (useLoadedData) {
             if (loadAlreadyLoadedData(filePath_, vao, vbo, ebo, numIndices)) {
                 deleteDataOnDestruct = false;
                 return;
             }
         }
+        
         Assimp::Importer importer;
         importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
         const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
@@ -134,25 +139,69 @@ public:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), eboDrawMode);
         
         numIndices = indices.size();
-        VertexType vType = VERTEX_SIMPLEVERTEX;
-
-        if (typeid(T) == typeid(SimpleVertex)) {
-            vType = VERTEX_SIMPLEVERTEX;
-        }
-        if (typeid(T) == typeid(TBNVertex)) {
-            vType = VERTEX_TBNVERTEX;
-        }
-        if (typeid(T) == typeid(TBNBWVertex)) { 
-            vType = VERTEX_TBNBWVERTEX;
-        }
-        if (typeid(T) == typeid(Vertex)) {
-            vType = VERTEX_VERTEX;
-        }
- 
-        setupVAOAttribs(vType);
+        
+        setupVAOAttribs<T>();
         glBindVertexArray(0);
     }
+    
+    template <typename T>
+    static void setupVAOAttribs() {
+        
+    }
+    
+    
+    static void setupVAOAttribsFromLayout (int vertexSize, std::vector<int>& numFloats, std::vector<int>& offsets) {
+        if (numFloats.size() == offsets.size()) {
+            for (int i = 0; i < numFloats.size(); i++) {
+                glVertexAttribPointer(i, numFloats.at(i), GL_FLOAT, GL_FALSE,vertexSize, (void*)(offsets.at(i)));
+                glEnableVertexAttribArray(i);
+            }
+        }
+    }
 
-}; 
+};
+
+template <>
+inline void VertexLoader::setupVAOAttribs<SimpleVertex>() {
+    std::vector<int> numFloats = {3,2,1};
+    std::vector<int> offsets = {0, (sizeof(glm::vec3)),(sizeof(glm::vec2) + sizeof(glm::vec3))};
+    setupVAOAttribsFromLayout(sizeof(SimpleVertex), numFloats, offsets);
+}
+ 
+template <>
+inline void VertexLoader::setupVAOAttribs<Vertex>() {
+    std::vector<int> numFloats = {3,3,2};
+    std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3))};
+    setupVAOAttribsFromLayout(sizeof(Vertex), numFloats, offsets);
+}
+
+template <>
+inline void VertexLoader::setupVAOAttribs<TBNVertex>() {
+    std::vector<int> numFloats = {3,3,2,3,3};
+    std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
+    setupVAOAttribsFromLayout(sizeof(TBNVertex), numFloats, offsets);
+}
+
+template <>
+inline void VertexLoader::setupVAOAttribs<TBNMVertex>() {
+    std::vector<int> numFloats = {3,3,2,3,3};
+    std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
+    setupVAOAttribsFromLayout(sizeof(TBNVertex), numFloats, offsets);
+    glVertexAttribIPointer(5, 1, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(5);
+}
+
+template <>
+inline void VertexLoader::setupVAOAttribs<TBNBWVertex>() {
+    std::vector<int> numFloats = {3,3,2,3,3};
+    std::vector<int> offsets = {0, (sizeof(glm::vec3)),(2*sizeof(glm::vec3)), (2*sizeof(glm::vec3)+sizeof(glm::vec2)),(3*sizeof(glm::vec3)+sizeof(glm::vec2))};
+    setupVAOAttribsFromLayout(sizeof(TBNBWVertex), numFloats, offsets);
+    
+    glVertexAttribIPointer(5, MAX_BONE_WEIGHTS, GL_INT, sizeof(TBNBWVertex), (void*)(4*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(5);
+    
+    glVertexAttribPointer(6, MAX_BONE_WEIGHTS, GL_FLOAT, GL_FALSE, sizeof(TBNBWVertex), (void*)(MAX_BONE_WEIGHTS*sizeof(int)+4*sizeof(glm::vec3)+sizeof(glm::vec2)));
+    glEnableVertexAttribArray(6);
+}
   
 #endif /* VertexLoader_hpp */

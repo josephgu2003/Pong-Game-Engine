@@ -9,7 +9,7 @@
 #define AssetManager_hpp 
 
 #include "Filepaths.hpp"
-#include <GL/glew.h>
+#include "Material.hpp"
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
@@ -53,20 +53,6 @@ struct DoubleFrame {
     int height;
 };
 
-struct Texture {
-    GLuint id = -1;
-    std::string path;
-    glm::vec3 dimensions;
-    GLenum textureTarget;
-};
-
-struct Material {
-    Texture diffuse;
-    Texture specular;
-    Texture normMap;
-    Texture alphaMap;
-    float shininess = 0.5;
-};
 
 struct HeightMap {
     unsigned short* heightMap = NULL;

@@ -97,7 +97,7 @@ public:
     void updateAllUniblocks();
     void renderSky(GraphicsObject* r); 
     Renderer();
-    ~Renderer();
+    ~Renderer(); 
     void setCamera(Camera* camera_);
     void loadSkyBoxData();
     void renderInitial();

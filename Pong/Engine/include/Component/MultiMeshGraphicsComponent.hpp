@@ -13,12 +13,14 @@
 
 class MultiMeshGraphicsComponent : public GraphicsComponent {
 private:
-    MultiMeshGraphicsComponent* next = nullptr;
+    std::vector<GraphicsObject> meshes;
 public:
     MultiMeshGraphicsComponent(Componentable& actor, Shader* shader, DrawPass dp);
     virtual ~MultiMeshGraphicsComponent();
     
     void initModel(const std::string& model) override;
+    
+    void addMesh(GraphicsObject go);
 };
 
 #endif /* MultiMeshGraphicsComponent_hpp */

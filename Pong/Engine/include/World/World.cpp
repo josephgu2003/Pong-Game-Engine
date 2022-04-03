@@ -41,7 +41,7 @@ void World::drawAll() {
     
     mapManager.drawChunks(renderer);
         
-    worldRenderingManager.drawAll(renderer);
+    graphicalScene.drawAll(renderer);
     
     for (auto i = components.begin(); i != components.end(); i++) {
         if (auto wss = dynamic_pointer_cast<WorldSubSystem>((*i))) wss->drawAll(renderer);

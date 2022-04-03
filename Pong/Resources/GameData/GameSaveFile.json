@@ -135,7 +135,7 @@
             "WorldID": 0
         },
         {
-            "Completed": false,
+            "Completed": true,
             "FactoryEnum": "In the Wilderness",
             "Position": [
                 10.0,

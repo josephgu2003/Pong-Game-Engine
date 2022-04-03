@@ -21,7 +21,7 @@
 #include "Prop.hpp"
 #include "Componentable.hpp"
 #include "Behaviour.hpp"
-#include "WorldRenderingManager.hpp"
+#include "GraphicalScene.hpp"
 #include "WorldSubSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "DirectionalLight.hpp"
@@ -39,7 +39,7 @@ typedef std::function<std::shared_ptr<WorldSubSystem>(World& w)> addSubSystem; /
 class World : public Componentable {
 private:
     DirectionalLight dl;
-    WorldRenderingManager worldRenderingManager;
+    GraphicalScene graphicalScene;
     MapManager mapManager;
     AbilityManager abilityManager;
     std::shared_ptr<CollisionSystem> collisionSystem;
@@ -62,13 +62,13 @@ private:
     
     template <typename T>
     inline void insertGraphicsToManager(const std::shared_ptr<T>& c) {
-     std::weak_ptr<GraphicsObject> gc;
-     if (c->template getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
-         worldRenderingManager.insertGraphicsComponent(gc);
+     std::weak_ptr<GraphicsComponent> gc;
+     if (c->template getComponentRef<GraphicsComponent>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+         graphicalScene.insertGraphicsComponent(gc);
      }
         std::weak_ptr<LightComponent> lc;
         if (c->template getComponentRef<LightComponent>(lc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
-            worldRenderingManager.insertLightComponent(lc);
+            graphicalScene.insertLightComponent(lc);
         } 
     }
     
@@ -81,13 +81,13 @@ private:
     }
     
     inline void insertGraphicsToManager(const std::shared_ptr<Componentable>& c) {
-        std::weak_ptr<GraphicsObject> gc;
-        if (c->getComponentRef<GraphicsObject>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
-            worldRenderingManager.insertGraphicsComponent(gc);
+        std::weak_ptr<GraphicsComponent> gc;
+        if (c->getComponentRef<GraphicsComponent>(gc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
+            graphicalScene.insertGraphicsComponent(gc);
         }
         std::weak_ptr<LightComponent> lc;
         if (c->getComponentRef<LightComponent>(lc)) { // this could get bad with a different component fetching mechanism (type id with map to components)
-            worldRenderingManager.insertLightComponent(lc);
+            graphicalScene.insertLightComponent(lc);
         }
     }
     

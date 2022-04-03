@@ -5,9 +5,9 @@
 //  Created by Joseph Gu on 12/12/21. 
 //
 
-#include "WorldRenderingManager.hpp" 
+#include "GraphicalScene.hpp" 
  
-bool WorldRenderingManager::isInstancedObjHere(GraphicsObject* gc) {
+bool GraphicalScene::isInstancedObjHere(GraphicsObject* gc) {
     if (gc->isInstanced()) {  
         for (auto instancedobj : instancedObjects) { 
             if (auto x = instancedobj.lock()) {
@@ -20,11 +20,11 @@ bool WorldRenderingManager::isInstancedObjHere(GraphicsObject* gc) {
     return false; 
 }
 
-void WorldRenderingManager::insertLightComponent(const std::weak_ptr<LightComponent>& gc) {
+void GraphicalScene::insertLightComponent(const std::weak_ptr<LightComponent>& gc) {
     lights.emplace_back(gc);
 }
  
-void WorldRenderingManager::insertGraphicsComponent(const std::weak_ptr<GraphicsObject>& gc) {
+void GraphicalScene::insertGraphicsComponent(const std::weak_ptr<GraphicsObject>& gc) {
     if(isInstancedObjHere(gc.lock().get())) {
         return;
     }
@@ -44,7 +44,7 @@ void WorldRenderingManager::insertGraphicsComponent(const std::weak_ptr<Graphics
     }
 }
 
-void WorldRenderingManager::drawAll(Renderer *r) {
+void GraphicalScene::drawAll(Renderer *r) {
     for (auto it = lights.begin(); it != lights.end(); it++) {
         if (auto x = (*it).lock()) {
             x->updateRenderer(r);

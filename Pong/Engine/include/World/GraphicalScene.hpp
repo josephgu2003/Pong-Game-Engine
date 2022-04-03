@@ -15,7 +15,7 @@
 
 class Renderer;
 
-class WorldRenderingManager {
+class GraphicalScene {
     std::vector<std::weak_ptr<GraphicsObject>> opaqueObjects;
     std::vector<std::weak_ptr<GraphicsObject>> transparentObjects;
     std::vector<std::weak_ptr<GraphicsObject>> instancedObjects;

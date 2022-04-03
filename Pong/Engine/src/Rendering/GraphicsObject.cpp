@@ -9,7 +9,7 @@
 #include "Shader.hpp"
 #include "VertexLoader.hpp"
 
-int GraphicsObject::nonHolders = 0;
+int GraphicsObject::nonHolders = 0; 
 DrawPass GraphicsObject::getDrawPass() {
     return drawPass;
 }

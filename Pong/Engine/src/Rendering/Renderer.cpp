@@ -62,10 +62,12 @@ Renderer::Renderer() {
     frustrumFar = DEFAULT_FRUSTRUM_FAR;
     
     window = glfwGetCurrentContext();
+    
     blurShader = new Shader("Shaders/UI.vs","Shaders/BloomFShader.fs");
     frameShader = new Shader("Shaders/UI.vs", "Shaders/FBufferFShader.fs");
     
     viewMat = glm::mat4(1);
+    
     float ratio = (WINDOW_WIDTH)/(WINDOW_HEIGHT);
     projMat = glm::perspective(glm::radians(fieldOfView), ratio, frustrumNear, frustrumFar); 
     timeT = 0; 
@@ -294,7 +296,7 @@ void Renderer::renderFinal() {
     
     glActiveTexture(GL_TEXTURE2);
     glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture1"), 2);
-   glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
+    glBindTexture(GL_TEXTURE_2D, frame1.ftexture);
      
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(glGetUniformLocation(frameShader->ID, "fbotexture"), 0);

@@ -14,12 +14,13 @@ MultiMeshGraphicsComponent::MultiMeshGraphicsComponent(Componentable& actor, Sha
 
 void MultiMeshGraphicsComponent::initModel(const std::string& model) {
    // need to load model data to vao vbo, 
-//   VertexLoader::loadModel(model, VAO, VBO, EBO, numIndices, );
+    VertexLoader::loadMultiMeshModel(model, VAO, VBO, EBO, numIndices, deleteDataOnDestruct, this);
 }
 
 MultiMeshGraphicsComponent::~MultiMeshGraphicsComponent() {
     
 }
- 
 
-
+void MultiMeshGraphicsComponent::addMesh(GraphicsObject go) {
+    meshes.push_back(go);
+}

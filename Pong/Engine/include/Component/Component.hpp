@@ -26,14 +26,15 @@ public:
     virtual ~Component() {
         
     }
-    
+     
     int getUpdatePriority() {
         return updatePriority;
     }
 
-    virtual void tick() = 0;
+    virtual void tick() = 0; 
     
     Componentable* getParentObject();
+
 };
 
 #endif /* Component_hpp */

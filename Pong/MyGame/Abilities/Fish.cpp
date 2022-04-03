@@ -14,8 +14,8 @@ Fish::Fish(World* world_, Actor* actor_, float duration_) : Ability(world_, acto
     fish = factory.makeActor(ACTOR_FISH);
     fish->setPos(actor->getPos() + actor->getDir() + glm::vec3(0,1,0));
 }
-
-Fish::~Fish() {
+ 
+Fish::~Fish() { 
     world->deleteX<Actor>(fish.get());
 } 
  

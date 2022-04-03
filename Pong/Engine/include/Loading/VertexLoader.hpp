@@ -18,6 +18,7 @@
 
 struct Material; 
 class MeshComponent;
+class MultiMeshGraphicsComponent;
 
 struct VertexData {
     unsigned int vao;
@@ -36,6 +37,13 @@ struct VertexData {
 };
 class VertexLoader {
 private:
+    template <typename T>
+    struct IntermediateMesh {
+        Material mat;
+        std::vector<T> vertices;
+        std::vector<GLuint> indices;
+        int indexOffset;
+    };
     static int indexOffset;
     static std::map<std::string, BoneInfoMap> loadedBoneDataMaps;
     static BoneInfoMap inProgBoneMap;
@@ -47,16 +55,70 @@ private:
     static void BoneWeightVertices(std::vector<TBNBWVertex>& vertices, aiMesh* mesh,
                             const aiScene* scene);
     
-    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNBWVertex>& vertices,  std::vector<GLuint>& indices);
+    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<IntermediateMesh<TBNBWVertex>>& meshes, bool doMultiMeshing);
 
-    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices,  std::vector<GLuint>& indices);
+    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<IntermediateMesh<SimpleVertex>>& meshes, bool doMultiMeshing);
     
-    static void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNMVertex>& vertices,  std::vector<GLuint>& indices);
+    static void processMesh(aiMesh* mesh, const aiScene* scene,std::vector<IntermediateMesh<TBNVertex>>& meshes, bool doMultiMeshing);
     
     static void setVertexBoneData(TBNBWVertex* v, int id, float weight);
     static void reset();
     static bool loadAlreadyLoadedData(const std::string& name, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices);
     static void loadTextDataAbstraction(const std::string& s, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position, bool useMaxLineLength);
+    
+    typename<typename T>
+    void VertexLoader::processMeshAbstraction(aiMesh* mesh, const aiScene* scene, std::vector<IntermediateMesh<T>>& meshes, bool doMultiMeshing) {
+        
+        IntermediateMesh<T>* target = nullptr;
+        
+        if (meshes.size() == 0) {
+            meshes.push_back(IntermediateMesh<T>());
+        }
+        
+        target = &meshes.at(0);
+        
+        if (doMultiMeshing) {
+            Material m;
+            if (mesh->mMaterialIndex >= 0) {
+                aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+                loadMaterialTextures(m, material);
+            }
+            for (auto& intermediateMesh : meshes) {
+                if (intermediateMesh.mat == m) {
+                    target = &intermediateMesh;
+                    break;
+                }
+            }
+        }
+        
+        assert(target!=NULL);
+        
+        std::vector<T>& vertices = target->vertices;
+        std::vector<GLuint>& indices = target->indices;
+        
+        int firstIndex = vertices.size();
+        
+        vertices.reserve(vertices.size() + mesh->mNumVertices);
+        
+        for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
+            addVertex<T>(vertices, i, mesh);
+        }
+        
+        indices.reserve(indices.size() + mesh->mNumFaces);
+        int offset = target->indexOffset;
+        for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
+            aiFace face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; j++) {
+                GLuint ind = face.mIndices[j] + offset;
+                indices.push_back(ind);
+            }
+        }
+        
+        postProcessMesh(vertices, mesh, firstIndex);
+        target->indexOffset += mesh->mNumVertices;
+    }
+
+    
 public:
     static void ConvertMatrixToGLMFormat(const aiMatrix4x4& from, glm::mat4& to);
     static void loadMaterialTextures(Material& mat, aiMaterial* material);
@@ -66,6 +128,7 @@ public:
     static void loadModel(std::string filePath, unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& numIndices, bool& deleteDataOnDestruct);
     static void loadModelSimple(std::string filePath, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadModelMultiMat(const std::string filePath, GraphicsObject& go);
+    static void loadMultiMeshModel(const std::string filePath, MultiMeshGraphicsComponent* gc);
     static void loadModelAnimations(AnimComponent* anim_, std::string filePath_);
     static void loadPoint(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices);
     static void loadTextData(const std::string& s, float fontsize, float linespace, float maxlinelength, unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int& numIndices, Material& map, glm::vec2 position);
@@ -99,12 +162,11 @@ public:
             return;
         }
         
-        std::vector<T> vertices;
-        std::vector<GLuint> indices;
+        std::vector<IntermediateMesh<SimpleVertex>> meshes;
         
-        processNode<T>(scene->mRootNode, scene, vertices, indices);
+        processNode<T>(scene->mRootNode, scene, meshes);
         
-        fillVertexData<T>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
+        fillVertexData<T>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, meshes.at(0).vertices, meshes.at(0).indices);
         loadedVertexData.emplace(filePath_, VertexData(vao, vbo, ebo, numIndices));
 
         if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
@@ -116,15 +178,15 @@ public:
     }
     
     template<typename T>
-    static void processNode(aiNode* node, const aiScene* scene, std::vector<T>& vertices,  std::vector<GLuint>& indices) {
+    static void processNode(aiNode* node, const aiScene* scene, std::vector<IntermediateMesh<SimpleVertex>>& meshes, bool doMultiMeshing) {
         //load each mesh from node
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            processMesh(mesh, scene, vertices, indices); // should be figured out by function overloading
+            processMeshAbstraction<T>(mesh, scene, meshes, doMultiMeshing); // should be figured out by function overloading
         }
         for(unsigned int i = 0; i < node->mNumChildren; i++)
         {
-            processNode<T>(node->mChildren[i], scene, vertices, indices);
+            processNode<T>(node->mChildren[i], scene, meshes, doMultiMeshing);
         }
     }
     

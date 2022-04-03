@@ -172,10 +172,36 @@ void VertexLoader::loadModelAnimations(AnimComponent* anim_, std::string filePat
 }
 
 
-void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<SimpleVertex>& vertices, std::vector<GLuint>& indices) {
+void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<IntermediateMesh<SimpleVertex>>& meshes, bool doMultiMeshing) {
     
-    std::vector<SimpleVertex> newVertices;
-    newVertices.reserve(mesh->mNumVertices);
+    IntermediateMesh<SimpleVertex>* target = nullptr;
+    
+    if (meshes.size() == 0) {
+        meshes.push_back(IntermediateMesh<SimpleVertex>());
+    }
+    
+    target = &meshes.at(0);
+    
+    if (doMultiMeshing) {
+        Material m;
+        if (mesh->mMaterialIndex >= 0) {
+            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+            loadMaterialTextures(m, material);
+        }
+        for (auto& intermediateMesh : meshes) {
+            if (intermediateMesh.mat == m) {
+                target = &intermediateMesh;
+                break;
+            }
+        }
+    }
+    
+    assert(target!=NULL);
+    
+    std::vector<SimpleVertex>& vertices = target->vertices;
+    std::vector<GLuint>& indices = target->indices;
+    vertices.reserve(vertices.size() + mesh->mNumVertices);
+    
     for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
         glm::vec3 pos_;
         pos_.x = mesh->mVertices[i].x;
@@ -191,74 +217,22 @@ void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<S
         }
         
         SimpleVertex v(pos_, texCoords_, 0.0f);
-        newVertices.push_back(v);
+        vertices.push_back(v);
     }
     
     indices.reserve(indices.size() + mesh->mNumFaces);
+    int offset = target->indexOffset;
     for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
         aiFace face = mesh->mFaces[i];
         for (unsigned int j = 0; j < face.mNumIndices; j++) {
-            GLuint ind = face.mIndices[j] + indexOffset;
+            GLuint ind = face.mIndices[j] + offset;
             indices.push_back(ind);
         }
     }
-    vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
-    indexOffset += mesh->mNumVertices;
+    target->indexOffset += mesh->mNumVertices;
 }
 
-void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNMVertex>& vertices, std::vector<GLuint>& indices) {
-    auto loadVec3 = [] (glm::vec3& vec3, aiVector3D* vec3src, int i) {
-        vec3.x = vec3src[i].x;
-        vec3.y = vec3src[i].y;
-        vec3.z = vec3src[i].z;
-    };
-    std::vector<TBNMVertex> newVertices;
-    newVertices.reserve(mesh->mNumVertices);
-    
-    if (mesh->mMaterialIndex >= 0) {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        Material m;
-        loadMaterialTextures(m, material);
-    }
-     
-    for(unsigned int i = 0; i < mesh->mNumVertices; i++) { //iterate over mesh vertices
-        glm::vec3 pos_;
-        loadVec3(pos_, mesh->mVertices, i);
-        
-        glm::vec3 norm_;
-        loadVec3(norm_, mesh->mNormals, i);
-        
-        glm::vec3 Tan_;
-        loadVec3(Tan_, mesh->mTangents, i);
-        
-        glm::vec3 BiTan_;
-        loadVec3(BiTan_, mesh->mBitangents, i);
-        
-        glm::vec2 texCoords_;
-        if (mesh->mTextureCoords[0]) {
-            texCoords_.x = mesh->mTextureCoords[0][i].x;
-            texCoords_.y = mesh->mTextureCoords[0][i].y;
-        } else {
-            texCoords_ = glm::vec2(0.0f, 0.0f);
-        }
-  
-        newVertices.emplace_back(pos_, norm_, texCoords_, Tan_, BiTan_, 0);
-    }
-    
-    indices.reserve(indices.size() + mesh->mNumFaces);
-    for(unsigned int i = 0; i < mesh->mNumFaces; i++) { // iterate over mesh faces
-        aiFace face = mesh->mFaces[i];
-        for (unsigned int j = 0; j < face.mNumIndices; j++) {
-            GLuint ind = face.mIndices[j] + indexOffset;
-            indices.push_back(ind);
-        }
-    }
-    
-    vertices.insert(vertices.end(), newVertices.begin(), newVertices.end());
-    indexOffset += mesh->mNumVertices;
-}
-
-void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<TBNBWVertex>& vertices, std::vector<GLuint>& indices) {
+void VertexLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<IntermediateMesh<TBNBWVertex>>, bool doMultiMeshing) {
     auto loadVec3 = [] (glm::vec3& vec3, aiVector3D* vec3src, int i) {
         vec3.x = vec3src[i].x;
         vec3.y = vec3src[i].y;
@@ -757,4 +731,33 @@ void VertexLoader::loadSimpleCube(unsigned int vao, unsigned int vbo, unsigned i
     glEnableVertexAttribArray(0);
     
     glBindVertexArray(0);
+}
+
+void VertexLoader::loadMultiMeshModel(const std::string filePath, MultiMeshGraphicsComponent* gc) {
+    
+    Assimp::Importer importer;
+    importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
+    const aiScene* scene = importer.ReadFile(filePath_,  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
+    
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        std::string s = "ERROR::ASSIMP::" + std::string(importer.GetErrorString()) + "\n";
+        printf("%s", s.c_str());
+        return;
+    }
+    
+    std::vector<IntermediateMesh<TBNVertex> meshes;
+    
+    // fill out vertex/indices containers grouped by material
+    
+    processNode<T>(scene->mRootNode, meshes, true);
+    
+    fillVertexData<T>(vao, vbo, ebo, numIndices, GL_STATIC_DRAW, GL_STATIC_DRAW, vertices, indices);
+    loadedVertexData.emplace(filePath_, VertexData(vao, vbo, ebo, numIndices));
+
+    if (loadedBoneDataMaps.find(filePath_) == loadedBoneDataMaps.end()) {
+        loadedBoneDataMaps.insert(std::pair<std::string, BoneInfoMap>(filePath_, inProgBoneMap));
+    }
+    
+    reset(); //might have other erferences to this
+    deleteDataOnDestruct = false;
 }

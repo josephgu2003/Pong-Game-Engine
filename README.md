@@ -1,5 +1,5 @@
 
-This project is under construction - constantly receiving reworks
+This is one of my earliest projects so the file organization + GitHub page is really messy, never got around to fixing it. The engine code is in the Engine folder.
 
 EXTERNAL ART CREDITS
 

@@ -1,5 +1,5 @@
 
-This is one of my earliest projects so the file organization + GitHub page is really messy, never got around to fixing it. I accidentally put some external libraries in the same folders as my code (is that bad?) but the credits are below. The engine code is in the Engine folder.
+This is one of my earliest projects so the file organization + GitHub page is really messy. I accidentally put some external libraries in the same folders as my code (nlohmann json and stb_image, I think that's it), so FYI those are third party libraries. The engine code is in the Engine folder.
 
 Enjoy some pictures:
 <img width="646" alt="Screen Shot 2022-03-21 at 3 34 23 PM" src="https://user-images.githubusercontent.com/82850040/190192402-0b8231ab-bb5c-47f1-9be2-35f1f97d2c2f.png">
@@ -28,7 +28,16 @@ Phoenix : Original model phoenix bird  by (c)  NORBERTO-3D, available under CC-B
 
 Sunny sky: The Chayed: https://opengameart.org/content/sky-box-sunny-day , © under CC-BY 3.0
 
-EXTERNAL LIBRARY CREDITS OpenGL - Graphics API GLFW - graphics GLEW - graphics Assimp - model loading stb_image - image loading Irrklang - audio Truetype - font loading nlohmann JSON - json serialization glm - math
+EXTERNAL LIBRARY CREDITS 
+OpenGL - Graphics API 
+GLFW - graphics 
+GLEW - graphics
+Assimp - model loading
+stb_image - image loading
+Irrklang - audio
+Truetype - font loading
+nlohmann JSON - json serialization 
+glm - math
 
 SOFTWARES USED FOR ART Blender GIMP
 
